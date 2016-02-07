@@ -29,8 +29,10 @@ public class CameraMovement : MonoBehaviour {
     }*/
 
 
-    void FixedUpdate()
+    void Update()
     {
+
+
         // The standard position of the camera is the relative position of the camera from the player.
         Vector3 standardPos = player.position + relCameraPos;
 
@@ -43,15 +45,15 @@ public class CameraMovement : MonoBehaviour {
         // The first is the standard position of the camera.
         checkPoints[0] = standardPos;
 
-        checkPoints[1] = Vector3.Lerp(standardPos, abovePos, 0.1f);
-        checkPoints[2] = Vector3.Lerp(standardPos, abovePos, 0.2f);
-        checkPoints[3] = Vector3.Lerp(standardPos, abovePos, 0.3f);
-        checkPoints[4] = Vector3.Lerp(standardPos, abovePos, 0.4f);
-        checkPoints[5] = Vector3.Lerp(standardPos, abovePos, 0.5f);
-        checkPoints[6] = Vector3.Lerp(standardPos, abovePos, 0.6f);
-        checkPoints[7] = Vector3.Lerp(standardPos, abovePos, 0.7f);
-        checkPoints[8] = Vector3.Lerp(standardPos, abovePos, 0.8f);
-        checkPoints[9] = Vector3.Lerp(standardPos, abovePos, 0.9f);
+        checkPoints[1] = Vector3.Slerp(standardPos, abovePos, 0.1f);
+        checkPoints[2] = Vector3.Slerp(standardPos, abovePos, 0.2f);
+        checkPoints[3] = Vector3.Slerp(standardPos, abovePos, 0.3f);
+        checkPoints[4] = Vector3.Slerp(standardPos, abovePos, 0.4f);
+        checkPoints[5] = Vector3.Slerp(standardPos, abovePos, 0.5f);
+        checkPoints[6] = Vector3.Slerp(standardPos, abovePos, 0.6f);
+        checkPoints[7] = Vector3.Slerp(standardPos, abovePos, 0.7f);
+        checkPoints[8] = Vector3.Slerp(standardPos, abovePos, 0.8f);
+        checkPoints[9] = Vector3.Slerp(standardPos, abovePos, 0.9f);
 
         // The last is the abovePos.
         checkPoints[10] = abovePos;
@@ -65,11 +67,11 @@ public class CameraMovement : MonoBehaviour {
                 break;
         }
 
-        // Lerp the camera's position between it's current position and it's new position.
-        transform.position = Vector3.Lerp(transform.position, newPos, smooth * Time.deltaTime);
+        // Slerp the camera's position between it's current position and it's new position.
+        transform.position = Vector3.Slerp(transform.position, newPos, smooth * Time.deltaTime);
 
         // Make sure the camera is looking at the player.
-        SmoothLookAt();
+        SmoothLookAt(player);
     }
 
 
@@ -90,15 +92,15 @@ public class CameraMovement : MonoBehaviour {
     }
 
 
-    void SmoothLookAt()
-    {
+    void SmoothLookAt(Transform pos){
+
         // Create a vector from the camera towards the player.
-        Vector3 relPlayerPosition = player.position - transform.position;
+        Vector3 relPlayerPosition = pos.position - transform.position;
 
         // Create a rotation based on the relative position of the player being the forward vector.
         Quaternion lookAtRotation = Quaternion.LookRotation(relPlayerPosition, Vector3.up);
 
-        // Lerp the camera's rotation between it's current rotation and the rotation that looks at the player.
-        transform.rotation = Quaternion.Lerp(transform.rotation, lookAtRotation, smooth * Time.deltaTime);
+        // Slerp the camera's rotation between it's current rotation and the rotation that looks at the player.
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookAtRotation, smooth * Time.deltaTime);
     }
 }
