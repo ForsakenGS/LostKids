@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -19,7 +20,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void GoToScene(string sc) {
-		Application.LoadLevel (sc);
+        SceneManager.LoadScene(sc);
+
 	}
 }
 
