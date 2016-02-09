@@ -13,6 +13,10 @@ public class CharacterMovement : MonoBehaviour {
 	public float extraGravity= 1.2f;
 	public float crouchingSpeed = 4000f;
 	public float turnSmoothing = 15f;
+	[HideInInspector]
+	public float speedModifier;
+	[HideInInspector]
+	public float jumpImpulseModifier;
 
 	private Rigidbody rigBody;
 	private Collider standingColl;
@@ -32,12 +36,13 @@ public class CharacterMovement : MonoBehaviour {
 		// Variables
 		characterState = State.Standing;
 		startJump = false;
+		speedModifier = 1.0f;
+		jumpImpulseModifier = 1.0f;
 	}
 
 	// Called at a fixed interval. Physics code here!
 	void FixedUpdate () {
 		Vector3 forceToApply = new Vector3();
-		ForceMode fMode = ForceMode.Force;
 		float speed = 0.0f;
 
 		// Decide force to apply depending on current player's state
@@ -45,8 +50,7 @@ public class CharacterMovement : MonoBehaviour {
 		case State.Jumping:
 			if (startJump) {
 				// Impulse to jump
-				forceToApply += new Vector3(0, jumpingImpulse, 0);
-				fMode = ForceMode.Impulse;
+				forceToApply += new Vector3(0, jumpImpulseModifier * jumpingImpulse, 0);
 				startJump = false;
 			} else {
 				// Extra gravity to fall down quickly
@@ -70,7 +74,7 @@ public class CharacterMovement : MonoBehaviour {
 		}
 		// Force relativily applied to camera's field of view
 		forceToApply = GetVectorRelativeToObject(forceToApply, CameraManager.CurrentCamera().transform);
-		rigBody.AddForce(forceToApply * speed, ForceMode.Force);
+		rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
 	}
 
 	// Return the given vector relative to the given camera 
@@ -95,6 +99,14 @@ public class CharacterMovement : MonoBehaviour {
 		objectRelativeVector += new Vector3(0,inputVector.y,0);
 
 		return objectRelativeVector;	
+	}
+
+	// Make the character to da an extra jump
+	public void ExtraJump (float modif) {
+		if ((characterState.Equals(State.Jumping))) {
+			jumpImpulseModifier = modif;
+			startJump = true;
+		}
 	}
 
 	// Enter collision detection
@@ -124,12 +136,14 @@ public class CharacterMovement : MonoBehaviour {
 			characterState = State.Crouching;
 			standingColl.enabled = false;
 			crouchingColl.enabled = true;
+			transform.Translate(new Vector3(0, -0.5f,0));
 			transform.localScale -= new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
 		} else if ((characterState.Equals(State.Crouching)) && (Input.GetButtonDown("Crouch"))) {
 			// Crouching => Standing
 			characterState = State.Standing;
 			standingColl.enabled = true;
 			crouchingColl.enabled = false;
+			transform.Translate(new Vector3(0, 0.5f,0));
 			transform.localScale += new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
 		} else if ((characterState.Equals(State.Standing)) && (Input.GetButtonDown("Jump"))) {
 			// Standing => Jumping
