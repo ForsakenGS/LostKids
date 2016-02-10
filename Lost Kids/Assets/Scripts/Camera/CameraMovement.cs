@@ -3,23 +3,48 @@ using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
 
-    public float smooth = 1.5f;         // The relative speed at which the camera will catch up.
+    //Velocidad con la que la cámara seguirá al jugador. Más es más rápido 
+    public float smooth = 1.5f;
 
+    //Referencia al jugador
+    private Transform player;
 
-    private Transform player;           // Reference to the player's transform.
-    private Vector3 relCameraPos;       // The relative position of the camera from the player.
-    private float relCameraPosMag;      // The distance of the camera from the player.
-    private Vector3 newPos;             // The position the camera is trying to reach.
+    //Posición relativa de la camara desde el jugador
+    private Vector3 relCameraPos;
 
+    //Distancia cámara-jugador
+    private float relCameraPosMag;
+
+    //Nueva posición que tendrá la cámara
+    private Vector3 newPos;
+
+    //"Radio" del jugador
+    public float playerRadius = 0.5f;
+
+    //Vector de las posiciones de la cámara para seguir al jugador.
+    private Vector3[] cameraPoints;
+
+    //Numero de puntos de cámara para seguir al jugador.
+    public int numCameraPoints = 11;
+
+    private float deltaCameraPoints;
 
     void Awake()
     {
-        // Setting up the reference.
+        
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        // Setting the relative position as the initial relative position of the camera in the scene.
+        //Calcula la posición relativa de la cámara
         relCameraPos = transform.position - player.position;
-        relCameraPosMag = relCameraPos.magnitude - 0.5f;
+
+        //Calcula la distancia del vector entre la cámara del jugador + un ajuste del tamaño del mismo
+        relCameraPosMag = relCameraPos.magnitude - playerRadius;
+
+        //Inicializa el vector de puntos de cámara
+        cameraPoints = new Vector3[numCameraPoints];
+
+        //Incremento entre puntos de cámara
+        deltaCameraPoints = 1.0f / (numCameraPoints - 1);
     }
 
     /*void Update() {
@@ -32,75 +57,69 @@ public class CameraMovement : MonoBehaviour {
     void Update()
     {
 
-
-        // The standard position of the camera is the relative position of the camera from the player.
+        //Posición actual de la cámara
         Vector3 standardPos = player.position + relCameraPos;
 
-        // The abovePos is directly above the player at the same distance as the standard position.
+        //Posición encima del jugador de la cámara
         Vector3 abovePos = player.position + Vector3.up * relCameraPosMag;
 
-        // An array of 5 points to check if the camera can see the player.
-        Vector3[] checkPoints = new Vector3[11];
+        //Iterador para rellenar el vector de puntos de cámara
+        float ite = 0.0f;
 
-        // The first is the standard position of the camera.
-        checkPoints[0] = standardPos;
-
-        checkPoints[1] = Vector3.Slerp(standardPos, abovePos, 0.1f);
-        checkPoints[2] = Vector3.Slerp(standardPos, abovePos, 0.2f);
-        checkPoints[3] = Vector3.Slerp(standardPos, abovePos, 0.3f);
-        checkPoints[4] = Vector3.Slerp(standardPos, abovePos, 0.4f);
-        checkPoints[5] = Vector3.Slerp(standardPos, abovePos, 0.5f);
-        checkPoints[6] = Vector3.Slerp(standardPos, abovePos, 0.6f);
-        checkPoints[7] = Vector3.Slerp(standardPos, abovePos, 0.7f);
-        checkPoints[8] = Vector3.Slerp(standardPos, abovePos, 0.8f);
-        checkPoints[9] = Vector3.Slerp(standardPos, abovePos, 0.9f);
-
-        // The last is the abovePos.
-        checkPoints[10] = abovePos;
-
-        // Run through the check points...
-        for (int i = 0; i < checkPoints.Length; i++)
+        //Recorremos el vector de los puntos de cámara y se comprueba si se puede ver al jugador desde cada punto mediante rayos
+        for (int i = 0; i < cameraPoints.Length; i++)
         {
-            // ... if the camera can see the player...
-            if (ViewingPosCheck(checkPoints[i]))
-                // ... break from the loop.
+
+            //Se va desplazando la cámara siguiendo la curva
+            cameraPoints[i] = Vector3.Slerp(standardPos, abovePos, ite += deltaCameraPoints);
+
+            //Si se puede ver al jugador terminamos el bucle
+            if (ViewingPosCheck(cameraPoints[i])) {
+
+                //Si ha chocado con el jugador se actualiza la nueva posición de la cámara
+                newPos = cameraPoints[i];
                 break;
+            }
         }
 
-        // Slerp the camera's position between it's current position and it's new position.
+        //Actualizamos la posición de la cámara entre su posición actual y la nueva posición
         transform.position = Vector3.Slerp(transform.position, newPos, smooth * Time.deltaTime);
 
-        // Make sure the camera is looking at the player.
+        //Hacemos que la cámara mire al jugador
         SmoothLookAt(player);
     }
 
-
+    //Función para comprobar si la posición de la cámara con respecto al jugador es válida mediante el lanzamiento de rayos
     bool ViewingPosCheck(Vector3 checkPos)
     {
         RaycastHit hit;
 
-        // If a raycast from the check position to the player hits something...
-        if (Physics.Raycast(checkPos, player.position - checkPos, out hit, relCameraPosMag))
-            // ... if it is not the player...
-            if (hit.transform != player)
-                // This position isn't appropriate.
+        //Si el rayo entre la cámara y el jugador choca con algo
+        if (Physics.Raycast(checkPos, player.position - checkPos, out hit, relCameraPosMag)) {
+
+            //Si no es el jugador la posición es inválida y devuelve false
+            if (hit.transform != player) {
+                
                 return false;
 
-        // If we haven't hit anything or we've hit the player, this is an appropriate position.
-        newPos = checkPos;
+            }
+
+        }
+
+        //Si se encuentra una posición válida se devuelve true
         return true;
     }
 
-
+    //Función para mirar suavemente al jugador
     void SmoothLookAt(Transform pos){
 
-        // Create a vector from the camera towards the player.
+        //Se calcula la posición relativa del jugador a la cámara
         Vector3 relPlayerPosition = pos.position - transform.position;
 
-        // Create a rotation based on the relative position of the player being the forward vector.
+        //Crea la rotación entre la posición relativa del jugador y el vector Up para bajar la cámara al jugador
         Quaternion lookAtRotation = Quaternion.LookRotation(relPlayerPosition, Vector3.up);
 
-        // Slerp the camera's rotation between it's current rotation and the rotation that looks at the player.
+        //Actualiza la rotación de la cámara entre la actual y la nueva rotación
         transform.rotation = Quaternion.Slerp(transform.rotation, lookAtRotation, smooth * Time.deltaTime);
     }
 }

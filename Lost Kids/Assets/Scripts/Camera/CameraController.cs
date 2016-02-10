@@ -2,20 +2,30 @@
 
 public class CameraController : MonoBehaviour {
 
+    //Array con las cámaras de la escena
     public GameObject[] cameras;
 
+    //Habitación de inicio y actual
     public int currentRoom = 0;
+
+    //Habitación a la que se está cambiando
     private int nextRoom;
 
+    //Cámara que realizará la transición
     public GameObject transitionCamera;
 
-    private bool isChangingCameras;
+    //Script de transición de la cámara
     private TransitionCamera scTransitionCamera;
+
+    //Indica si se está realizando la transición
+    private bool isChangingCameras;
 
 
    void Start() {
+
         isChangingCameras = false;
         scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
+
     }
 
 
@@ -43,15 +53,6 @@ public class CameraController : MonoBehaviour {
             //Se comienza la transicion
             scTransitionCamera.StartSlerping(cameras[nextRoom].transform.position);
             
-
-            
-            /*cameras[currentRoom].SetActive(false);
-
-            //Se activa la cámara de la nueva habitación
-            cameras[nextRoom].SetActive(!cameras[nextRoom].activeSelf);
-
-            //Actualizamos la nueva habitación
-            currentRoom = nextRoom;*/
         }
 
         
