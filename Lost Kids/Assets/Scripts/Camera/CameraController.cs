@@ -75,5 +75,14 @@ public class CameraController : MonoBehaviour {
         
     }
 
+    public GameObject CurrentCamera()
+    {
+        if(isChangingCameras)
+        {
+            return transitionCamera;
+        }
+        return cameras[currentRoom];
+    }
+
 
 }

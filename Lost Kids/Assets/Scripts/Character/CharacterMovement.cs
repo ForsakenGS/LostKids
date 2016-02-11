@@ -18,6 +18,8 @@ public class CharacterMovement : MonoBehaviour {
 	[HideInInspector]
 	public float jumpImpulseModifier;
 
+    private CameraController cameraController;
+
 	private Rigidbody rigBody;
 	private Collider standingColl;
 	private Collider crouchingColl;
@@ -38,6 +40,10 @@ public class CharacterMovement : MonoBehaviour {
 		startJump = false;
 		speedModifier = 1.0f;
 		jumpImpulseModifier = 1.0f;
+
+        //Referente to camera controller
+        cameraController = GameObject.FindGameObjectWithTag("CameraController").GetComponent<CameraController>();
+
 	}
 
 	// Called at a fixed interval. Physics code here!
@@ -73,7 +79,7 @@ public class CharacterMovement : MonoBehaviour {
 			Rotating(horizontal, vertical);
 		}
 		// Force relativily applied to camera's field of view
-		forceToApply = GetVectorRelativeToObject(forceToApply, CameraManager.CurrentCamera().transform);
+		forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
 		rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
 	}
 
