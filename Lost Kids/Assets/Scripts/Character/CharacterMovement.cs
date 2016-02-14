@@ -4,7 +4,7 @@ using System.Collections;
 /* Class to control the movement of a character getting player's controls from InputManager */
 public class CharacterMovement : MonoBehaviour {
 	/* Different states for the character: Standing - Jumping - Crouching */
-	private enum State {Standing, Jumping, Crouching}
+	public enum State {Standing, Jumping, Crouching}
 
 	// Speed & impulse for each possible state
 	public float standingSpeed = 8000f;
@@ -13,6 +13,7 @@ public class CharacterMovement : MonoBehaviour {
 	public float extraGravity= 1.2f;
 	public float crouchingSpeed = 4000f;
 	public float turnSmoothing = 15f;
+	public float groundCheckDistance = 1.2f;
 	[HideInInspector]
 	public float speedModifier;
 	[HideInInspector]
@@ -43,7 +44,24 @@ public class CharacterMovement : MonoBehaviour {
 
         //Referente to camera controller
         cameraController = GameObject.FindGameObjectWithTag("CameraController").GetComponent<CameraController>();
+	}
 
+	// Check if the character is over the floor by using a raycast
+	bool CharacterIsGrounded() {
+		// helper to visualise the ground check ray in the scene view
+		#if UNITY_EDITOR
+		Debug.DrawLine(transform.position + (Vector3.up * 0.1f), transform.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance));
+		#endif
+
+		return (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, groundCheckDistance));
+	}
+
+	// Make the character to da an extra jump
+	public void ExtraJump (float modif) {
+		if ((characterState.Equals(State.Jumping))) {
+			jumpImpulseModifier = modif;
+			startJump = true;
+		}
 	}
 
 	// Called at a fixed interval. Physics code here!
@@ -107,21 +125,18 @@ public class CharacterMovement : MonoBehaviour {
 		return objectRelativeVector;	
 	}
 
-	// Make the character to da an extra jump
-	public void ExtraJump (float modif) {
-		if ((characterState.Equals(State.Jumping))) {
-			jumpImpulseModifier = modif;
-			startJump = true;
-		}
+	// Return if the character state is 'Jumping'
+	public bool IsJumping () {
+		return characterState.Equals(State.Jumping);
 	}
 
-	// Enter collision detection
-	void OnCollisionEnter (Collision col) {
-		if ((characterState.Equals(State.Jumping)) && (col.gameObject.CompareTag("Floor"))) {
-			// Jumping => Standing
-			characterState = State.Standing;
-		}
-	}
+//	// Enter collision detection
+//	void OnCollisionEnter (Collision col) {
+//		if ((characterState.Equals(State.Jumping)) && (col.gameObject.CompareTag("Floor"))) {
+//			// Jumping => Standing
+//			characterState = State.Standing;
+//		}
+//	}
 
 	// Change character's rotation to make it look at the direction it is going
 	void Rotating (float horizontal, float vertical) {
@@ -155,6 +170,10 @@ public class CharacterMovement : MonoBehaviour {
 			// Standing => Jumping
 			characterState = State.Jumping;
 			startJump = true;
+		} else if ((characterState.Equals(State.Jumping)) && (CharacterIsGrounded())) {
+			// Jumping => Standing
+			characterState = State.Standing;
+			GetComponent<MultipleJumpAbility>().jumpNumber = 0; // CAMBIAR!
 		}
 	}
 }
