@@ -27,6 +27,7 @@ public class CameraMovement : MonoBehaviour {
     //Numero de puntos de cámara para seguir al jugador.
     public int numCameraPoints = 11;
 
+    //Incremento relativo entre las posiciones de las cámaras.
     private float deltaCameraPoints;
 
     void Awake()
@@ -54,7 +55,7 @@ public class CameraMovement : MonoBehaviour {
     }*/
 
 
-    void Update()
+    void FixedUpdate()
     {
 
         //Posición actual de la cámara

@@ -7,7 +7,7 @@ public class MultipleJumpAbility : CharacterAbility {
 	public int possibleJumps = 2;
 	public float jumpImpulseModifier = 1.0f;
 
-	public int jumpNumber;
+	private int jumpNumber;
 	private CharacterMovement charMovement;
 
 	// Use this for initialization
@@ -21,15 +21,15 @@ public class MultipleJumpAbility : CharacterAbility {
 		return false;
 	}
 
-//	// Enter collision detection
-//	void OnCollisionEnter (Collision col) {
-//		if (active) {
-//			// If player is jumping and touches the floor, restart jump counter
-//			if ((jumpNumber > 0) && (col.gameObject.CompareTag("Floor"))) {
-//				jumpNumber = 0;
-//			}
-//		}
-//	}
+	// Enter collision detection
+	void OnCollisionEnter (Collision col) {
+		if (active) {
+			// If player is jumping and touches the floor, restart jump counter
+			if ((jumpNumber > 0) && (col.gameObject.CompareTag("Floor"))) {
+				jumpNumber = 0;
+			}
+		}
+	}
 
 	// Start the execution of the ability (in this case, it has no sense so return 'false')
 	public override bool StartExecution () {
