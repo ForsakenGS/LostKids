@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour {
 
     }
 
-
+    //Función para cambiar entre cámaras. Recibe como parámetro el índice de la próxima habitación.
     public void ChangeCamera(int nextRoom) {
 
         //Si pasamos de habitación se desactiva la camara de la habitación actual y se activa la de transicion
@@ -37,7 +37,7 @@ public class CameraController : MonoBehaviour {
             cameras[currentRoom].SetActive(false);
             transitionCamera.SetActive(true);
             
-            //Si no se están cambiando las cámaras. Se coloca la transicion en la cámara actual
+            //Si no se están cambiando las cámaras. Se coloca la camara de transicion en la cámara actual
             if(!isChangingCameras) {
                 transitionCamera.transform.position = cameras[currentRoom].transform.position;
                 transitionCamera.transform.rotation = cameras[currentRoom].transform.rotation;
@@ -73,6 +73,16 @@ public class CameraController : MonoBehaviour {
         cameras[nextRoom].SetActive(true);
 
         
+    }
+
+    //Función para devolver la cámara actual o la de transición si se está realizando ésta última
+    public GameObject CurrentCamera()
+    {
+        if(isChangingCameras)
+        {
+            return transitionCamera;
+        }
+        return cameras[currentRoom];
     }
 
 
