@@ -71,7 +71,6 @@ public class CameraController : MonoBehaviour {
 
         //Se activa la nueva camara
         cameras[nextRoom].SetActive(true);
-
         
     }
 
