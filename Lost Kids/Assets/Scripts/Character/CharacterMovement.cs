@@ -58,6 +58,10 @@ public class CharacterMovement : MonoBehaviour {
 				// Impulse to jump
 				forceToApply += new Vector3(0, jumpImpulseModifier * jumpingImpulse, 0);
 				startJump = false;
+				// Reset jumpImpulseModifier
+				if (jumpImpulseModifier != 1.0f) {
+					jumpImpulseModifier = 1.0f;
+				}
 			} else {
 				// Extra gravity to fall down quickly
 				forceToApply += new Vector3(0, -1 * extraGravity, 0);
@@ -76,11 +80,13 @@ public class CharacterMovement : MonoBehaviour {
 		float vertical = Input.GetAxis("Vertical");
 		if ((horizontal != 0f) || (vertical != 0f)) {
 			forceToApply += new Vector3(horizontal, 0, vertical);
-			Rotating(horizontal, vertical);
 		}
 		// Force relativily applied to camera's field of view
 		forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
-		rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
+		if (!forceToApply.Equals(Vector3.zero)) {
+			rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
+			Rotating(forceToApply.x, forceToApply.z);
+		}
 	}
 
 	// Return the given vector relative to the given camera 
