@@ -8,11 +8,6 @@ public abstract class CharacterAbility : MonoBehaviour {
 
 	// Activate the ability for the character, deactivating the rest of them
 	public void ActivateAbility() {
-		// Deactivate other character's abilities
-//		foreach (CharacterAbility ca in GetComponents<CharacterAbility>()) {
-//			ca.DeactivateAbility();
-//		}
-		// Ability activation
 		active = true;
 	}
 

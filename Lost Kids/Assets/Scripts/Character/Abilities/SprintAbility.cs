@@ -41,22 +41,6 @@ public class SprintAbility : CharacterAbility {
 
 	// Update is called once per frame
 	void Update () {
-		// Ability activation
-		if (Input.GetButtonDown("ChangeAbility")) {
-			if (active) {
-				DeactivateAbility();
-			} else {
-				ActivateAbility();
-			}
-		}
-		// Sprint execution
-		if ((active) && (Input.GetButtonDown("UseAbility"))) {
-			if (!execution) {
-				StartExecution();
-			} else {
-				EndExecution();
-			}
-		}
 		// Ability time control
 		if (execution) {
 			// Executing, so decrease time
