@@ -90,6 +90,7 @@ public class Door : MonoBehaviour, IActivable {
     public void CloseDoor()
     {
         //Se cancela un movimiento previo y se mueve la puerta a su posicion de cierre
+        isOpen = false;
         StopAllCoroutines();
         StartCoroutine(MoveDoor(startPosition));
 

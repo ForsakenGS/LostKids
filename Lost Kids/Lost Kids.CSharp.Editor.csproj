@@ -105,8 +105,6 @@
     <Compile Include="Assets\Editor\Puzzle1Editor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Prefabs\TEMP\Edu\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
-    <None Include="Assets\Prefabs\TEMP\Edu\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
