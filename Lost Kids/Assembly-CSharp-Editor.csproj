@@ -6,10 +6,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{F283BAAC-4261-9338-9697-E73511310887}</ProjectGuid>
+    <ProjectGuid>{F23C934F-A49D-31EB-F9E2-0E4F44B392BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>Assets</BaseDirectory>
@@ -45,42 +45,50 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\RockActivator.cs" />
-     <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
-     <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
-     <Compile Include="Assets\Scripts\Camera\CameraTrigger.cs" />
-     <Compile Include="Assets\Scripts\Camera\TransitionCamera.cs" />
-     <Compile Include="Assets\Scripts\Character\Abilities\CharacterAbility.cs" />
-     <Compile Include="Assets\Scripts\Character\Abilities\MultipleJumpAbility.cs" />
-     <Compile Include="Assets\Scripts\Character\Abilities\SprintAbility.cs" />
-     <Compile Include="Assets\Scripts\Character\CharacterMovement.cs" />
-     <Compile Include="Assets\Scripts\Enemies\KillerSphere.cs" />
-     <Compile Include="Assets\Scripts\Game\CameraManager.cs" />
-     <Compile Include="Assets\Scripts\Game\GameManager.cs" />
-     <Compile Include="Assets\Scripts\Messages\ILockeable.cs" />
-     <Compile Include="Assets\Scripts\Messages\LockeableObject.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerUse.cs" />
-     <Compile Include="Assets\Scripts\PuzzleObjects\Button.cs" />
-     <Compile Include="Assets\Scripts\PuzzleObjects\Door.cs" />
-     <Compile Include="Assets\Scripts\PuzzleObjects\IActivable.cs" />
-     <Compile Include="Assets\Scripts\PuzzleObjects\Lever.cs" />
-     <Compile Include="Assets\Scripts\PuzzleObjects\Puzzle1.cs" />
-     <Compile Include="Assets\Scripts\PuzzleObjects\PuzzleManagerBase.cs" />
-     <Compile Include="Assets\Scripts\PuzzleObjects\UsableObject.cs" />
+     <Compile Include="Assets\Editor\ButtonEditor.cs" />
+     <Compile Include="Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
+     <Compile Include="Assets\Editor\LeverEditor.cs" />
+     <Compile Include="Assets\Editor\Puzzle1Editor.cs" />
      <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
+ <Reference Include="UnityEditor.Advertisements">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
+ </Reference>
+ <Reference Include="nunit.framework">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/EditorTestsRunner/Editor/nunit.framework.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.EditorTestsRunner">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/EditorTestsRunner/Editor/UnityEditor.EditorTestsRunner.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
+ <Reference Include="UnityEditor.UI">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Networking">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.TreeEditor">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{7C05730F-9A93-2B27-5F39-BC6F5C4A6FC4}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-CSharp.csproj">
+      <Project>{F283BAAC-4261-9338-9697-E73511310887}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
