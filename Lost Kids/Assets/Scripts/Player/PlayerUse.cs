@@ -22,34 +22,29 @@ public class PlayerUse : MonoBehaviour {
 	
 	}
 
-    void FixedUpdate()
+    public void Use()
     {
-        //Se captura la tecla de uso
-        use = Input.GetKey(KeyCode.F);
-        if (use)
+		use = true;
+        //Se lanza un rayo hacia delante, sumando cierta altura para no lanzarlo desde el suelo
+        Ray usingRay = new Ray(this.transform.position + Vector3.up, this.transform.forward);
+
+        //Debug para poder visualizar el rayo en el inspector
+        Debug.DrawLine(this.transform.position + Vector3.up, this.transform.position + Vector3.up+this.transform.forward*useDistance,Color.red);
+
+        RaycastHit hit;
+        if (Physics.Raycast(usingRay, out hit, useDistance))
         {
-            //Se lanza un rayo hacia delante, sumando cierta altura para no lanzarlo desde el suelo
-            Ray usingRay = new Ray(this.transform.position + Vector3.up, this.transform.forward);
-
-            //Debug para poder visualizar el rayo en el inspector
-            Debug.DrawLine(this.transform.position + Vector3.up, this.transform.position + Vector3.up+this.transform.forward*useDistance,Color.red);
-
-            RaycastHit hit;
-            if (Physics.Raycast(usingRay, out hit, useDistance))
+            Debug.Log("rayo toca algo");
+            if (hit.collider.tag.Equals("Usable"))
             {
-                Debug.Log("rayo toca algo");
-                if (hit.collider.tag.Equals("Usable"))
+                //Se obtiene la normal del HIT para saber que parte del objeto ha encontrado el usable.
+                //Solo se permite usar los objetos desde la parte de atras ( la normal en z es negativa )
+                if (hit.normal.z < 0)
                 {
-                    //Se obtiene la normal del HIT para saber que parte del objeto ha encontrado el usable.
-                    //Solo se permite usar los objetos desde la parte de atras ( la normal en z es negativa )
-                    if (hit.normal.z < 0)
-                    {
-                        Debug.Log("Intentando usar");
-                        hit.collider.gameObject.GetComponent<UsableObject>().Use();
-                    }
+                    Debug.Log("Intentando usar");
+                    hit.collider.gameObject.GetComponent<UsableObject>().Use();
                 }
             }
-
         }
     }
 }

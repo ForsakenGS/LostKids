@@ -13,6 +13,7 @@ public class CharacterMovement : MonoBehaviour {
 	public float extraGravity= 1.2f;
 	public float crouchingSpeed = 4000f;
 	public float turnSmoothing = 15f;
+	public float groundCheckDistance = 1.2f;
 	[HideInInspector]
 	public float speedModifier;
 	[HideInInspector]
@@ -25,6 +26,7 @@ public class CharacterMovement : MonoBehaviour {
 	private Collider crouchingColl;
 	private State characterState;
 	private bool startJump;
+	private float speed;
 
 	// Use this for initialization
 	void Start () {
@@ -40,54 +42,73 @@ public class CharacterMovement : MonoBehaviour {
 		startJump = false;
 		speedModifier = 1.0f;
 		jumpImpulseModifier = 1.0f;
+		speed = 0f;
 
         //Referente to camera controller
         cameraController = GameObject.FindGameObjectWithTag("CameraController").GetComponent<CameraController>();
+	}
 
+	// Check if the character is over the floor by using a raycast
+	bool CharacterIsGrounded() {
+		// helper to visualise the ground check ray in the scene view
+		#if UNITY_EDITOR
+		Debug.DrawLine(transform.position + (Vector3.up * 0.1f), transform.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance));
+		#endif
+
+		return (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, groundCheckDistance));
 	}
 
 	// Called at a fixed interval. Physics code here!
 	void FixedUpdate () {
-		Vector3 forceToApply = new Vector3();
-		float speed = 0.0f;
-
-		// Decide force to apply depending on current player's state
-		switch (characterState) {
-		case State.Jumping:
-			if (startJump) {
-				// Impulse to jump
-				forceToApply += new Vector3(0, jumpImpulseModifier * jumpingImpulse, 0);
-				startJump = false;
-				// Reset jumpImpulseModifier
-				if (jumpImpulseModifier != 1.0f) {
-					jumpImpulseModifier = 1.0f;
-				}
-			} else {
-				// Extra gravity to fall down quickly
-				forceToApply += new Vector3(0, -1 * extraGravity, 0);
-			}
-			speed = jumpingSpeed;
-			break;
-		case State.Crouching:
-			speed = crouchingSpeed;
-			break;
-		case State.Standing:
-			speed = standingSpeed;
-			break;
-		}
-		// Character's movement
-		float horizontal = Input.GetAxis("Horizontal");
-		float vertical = Input.GetAxis("Vertical");
-		if ((horizontal != 0f) || (vertical != 0f)) {
-			forceToApply += new Vector3(horizontal, 0, vertical);
-		}
-		// Force relativily applied to camera's field of view
-		forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
-		if (!forceToApply.Equals(Vector3.zero)) {
+		if (!CharacterIsGrounded()) {
+			// Extra gravity to fall down quickly
+			Vector3 forceToApply = new Vector3(0, -1 * extraGravity, 0);
 			rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
-			Rotating(forceToApply.x, forceToApply.z);
 		}
 	}
+
+	// Called at a fixed interval. Physics code here!
+//	void FixedUpdate () {
+//		Vector3 forceToApply = new Vector3();
+//		float speed = 0.0f;
+//
+//		// Decide force to apply depending on current player's state
+//		switch (characterState) {
+//		case State.Jumping:
+//			if (startJump) {
+//				// Impulse to jump
+//				forceToApply += new Vector3(0, jumpImpulseModifier * jumpingImpulse, 0);
+//				startJump = false;
+//				// Reset jumpImpulseModifier
+//				if (jumpImpulseModifier != 1.0f) {
+//					jumpImpulseModifier = 1.0f;
+//				}
+//			} else {
+//				// Extra gravity to fall down quickly
+//				forceToApply += new Vector3(0, -1 * extraGravity, 0);
+//			}
+//			speed = jumpingSpeed;
+//			break;
+//		case State.Crouching:
+//			speed = crouchingSpeed;
+//			break;
+//		case State.Standing:
+//			speed = standingSpeed;
+//			break;
+//		}
+//		// Character's movement
+//		float horizontal = Input.GetAxis("Horizontal");
+//		float vertical = Input.GetAxis("Vertical");
+//		if ((horizontal != 0f) || (vertical != 0f)) {
+//			forceToApply += new Vector3(horizontal, 0, vertical);
+//		}
+//		// Force relativily applied to camera's field of view
+//		forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
+//		if (!forceToApply.Equals(Vector3.zero)) {
+//			rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
+//			Rotating(forceToApply.x, forceToApply.z);
+//		}
+//	}
 
 	// Return the given vector relative to the given camera 
 	Vector3 GetVectorRelativeToObject(Vector3 inputVector, Transform camera) {
@@ -121,14 +142,6 @@ public class CharacterMovement : MonoBehaviour {
 		}
 	}
 
-	// Enter collision detection
-	void OnCollisionEnter (Collision col) {
-		if ((characterState.Equals(State.Jumping)) && (col.gameObject.CompareTag("Floor"))) {
-			// Jumping => Standing
-			characterState = State.Standing;
-		}
-	}
-
 	// Change character's rotation to make it look at the direction it is going
 	void Rotating (float horizontal, float vertical) {
 		// Create a rotation based on the horizontal and vertical inputs
@@ -139,28 +152,99 @@ public class CharacterMovement : MonoBehaviour {
 		// Change the players rotation to this new rotation.
 		rigBody.MoveRotation(newRotation);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		// Changing character's state
-		if ((characterState.Equals(State.Standing)) && (Input.GetButtonDown("Crouch"))) {
+
+	public void JumpButton () {
+		if ((characterState.Equals(State.Standing)) && (Input.GetButtonDown("Jump"))) {
+			// Standing => Jumping
+			characterState = State.Jumping;
+			startJump = true;
+		}
+	}
+
+	public void CrouchButton () {
+		if (characterState.Equals(State.Standing)) {
 			// Standing => Crouching
 			characterState = State.Crouching;
 			standingColl.enabled = false;
 			crouchingColl.enabled = true;
 			transform.Translate(new Vector3(0, -0.5f,0));
 			transform.localScale -= new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
-		} else if ((characterState.Equals(State.Crouching)) && (Input.GetButtonDown("Crouch"))) {
+		} else if (characterState.Equals(State.Crouching)) {
 			// Crouching => Standing
 			characterState = State.Standing;
 			standingColl.enabled = true;
 			crouchingColl.enabled = false;
 			transform.Translate(new Vector3(0, 0.5f,0));
 			transform.localScale += new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
-		} else if ((characterState.Equals(State.Standing)) && (Input.GetButtonDown("Jump"))) {
-			// Standing => Jumping
-			characterState = State.Jumping;
-			startJump = true;
 		}
+	}
+
+	public void MoveCharacter (float horizontal, float vertical) {
+		Vector3 forceToApply = new Vector3();
+
+		// Decide force to apply depending on current player's state
+		switch (characterState) {
+		case State.Jumping:
+			if (startJump) {
+				// Impulse to jump
+				forceToApply += new Vector3(0, jumpImpulseModifier * jumpingImpulse, 0);
+				startJump = false;
+				// Reset jumpImpulseModifier
+				if (jumpImpulseModifier != 1.0f) {
+					jumpImpulseModifier = 1.0f;
+				}
+			}
+			speed = jumpingSpeed;
+			break;
+		case State.Crouching:
+			speed = crouchingSpeed;
+			break;
+		case State.Standing:
+			speed = standingSpeed;
+			break;
+		}
+		// Character's movement
+		if ((horizontal != 0f) || (vertical != 0f)) {
+			forceToApply += new Vector3(horizontal, 0, vertical);
+		}
+		// Force relativily applied to camera's field of view
+		forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
+		if (!forceToApply.Equals(Vector3.zero)) {
+			rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
+			Rotating(forceToApply.x, forceToApply.z);
+		}
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		// Changing character's state
+		if ((characterState.Equals(State.Jumping)) & (CharacterIsGrounded())) {
+			// Jumping => Standing
+			characterState = State.Standing;
+			GetComponent<MultipleJumpAbility>().jumpNumber = 0;  //CAMBIAR!
+		}
+//		if ((characterState.Equals(State.Standing)) && (Input.GetButtonDown("Crouch"))) {
+//			// Standing => Crouching
+//			characterState = State.Crouching;
+//			standingColl.enabled = false;
+//			crouchingColl.enabled = true;
+//			transform.Translate(new Vector3(0, -0.5f,0));
+//			transform.localScale -= new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
+//		} else if ((characterState.Equals(State.Crouching)) && (Input.GetButtonDown("Crouch"))) {
+//			// Crouching => Standing
+//			characterState = State.Standing;
+//			standingColl.enabled = true;
+//			crouchingColl.enabled = false;
+//			transform.Translate(new Vector3(0, 0.5f,0));
+//			transform.localScale += new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
+//		} else if ((characterState.Equals(State.Standing)) && (Input.GetButtonDown("Jump"))) {
+//			// Standing => Jumping
+//			characterState = State.Jumping;
+//			startJump = true;
+//		} else if ((characterState.Equals(State.Jumping)) & (CharacterIsGrounded())) {
+//			// Jumping => Standing
+//			characterState = State.Standing;
+//			GetComponent<MultipleJumpAbility>().jumpNumber = 0;  //CAMBIAR!
+//		}
 	}
 }
