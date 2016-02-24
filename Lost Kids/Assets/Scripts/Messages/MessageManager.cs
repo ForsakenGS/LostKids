@@ -10,14 +10,20 @@ public class MessageManager : MonoBehaviour {
     public TextAsset messageFile;
 
     public Text msg;
+    public RawImage img;
 
     public float normalLetterSpeed;
-
     public float fastLetterSpeed;
+    private float letterSpeed;
 
-	// Use this for initialization
-	void Start () {
+    public delegate void LockUnlockAction();
+    public static event LockUnlockAction LockUnlockEvent;
+
+    // Use this for initialization
+    void Start () {
         messages = new ArrayList();
+
+        letterSpeed = normalLetterSpeed;
 
         FillMessages();
 	}
@@ -42,9 +48,10 @@ public class MessageManager : MonoBehaviour {
 
         msg.text = string.Empty;
 
-        StartCoroutine(TypeText(index));
+        LockUnlockEvent();
 
-        //BroadcastMessage("Lock");
+        StartCoroutine(TypeText(index));        
+        
     }
 
     IEnumerator TypeText(int index) {
@@ -57,7 +64,7 @@ public class MessageManager : MonoBehaviour {
             char[] line = lines[i].ToCharArray();
             for (int j = 0; j < line.Length; j++) {
                 msg.text += line[j];
-                yield return new WaitForSeconds(normalLetterSpeed);
+                yield return new WaitForSeconds(letterSpeed);
             }
                 
             if (i < lines.Length - 1)
@@ -67,6 +74,18 @@ public class MessageManager : MonoBehaviour {
         }
 
         yield return 0;
+    }
+
+    public void SkipText() {
+        if(letterSpeed == normalLetterSpeed) {
+            letterSpeed = fastLetterSpeed;
+        } else {
+            letterSpeed = normalLetterSpeed;
+            LockUnlockEvent();
+            img.gameObject.SetActive(false);
+            msg.gameObject.SetActive(false);
+            
+        }
     }
 
 
