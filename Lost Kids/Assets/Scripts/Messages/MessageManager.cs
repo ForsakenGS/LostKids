@@ -19,8 +19,17 @@ public class MessageManager : MonoBehaviour {
     public delegate void LockUnlockAction();
     public static event LockUnlockAction LockUnlockEvent;
 
+    private enum State { FastMessage, EndMessage, NextMessage };
+    private State messageState;
+    private int nextIndex;
+
     // Use this for initialization
     void Start () {
+
+        nextIndex = 0;
+
+        messageState = State.FastMessage;
+
         messages = new ArrayList();
 
         letterSpeed = normalLetterSpeed;
@@ -46,7 +55,8 @@ public class MessageManager : MonoBehaviour {
     public void ShowMessage(int index) {
         Debug.Log(messages[index]);
 
-        msg.text = string.Empty;
+        img.gameObject.SetActive(true);
+        msg.gameObject.SetActive(true);
 
         LockUnlockEvent();
 
@@ -55,6 +65,9 @@ public class MessageManager : MonoBehaviour {
     }
 
     IEnumerator TypeText(int index) {
+
+        msg.text = string.Empty;
+
         string aux = (string)messages[index];
 
         string[] lines = aux.Split('@');
@@ -62,30 +75,47 @@ public class MessageManager : MonoBehaviour {
         for (int i = 0; i < lines.Length; i++)
         {
             char[] line = lines[i].ToCharArray();
-            for (int j = 0; j < line.Length; j++) {
-                msg.text += line[j];
-                yield return new WaitForSeconds(letterSpeed);
-            }
+            if(line.Length != 1) {
+                for (int j = 0; j < line.Length; j++) {
+                    msg.text += line[j];
+                    yield return new WaitForSeconds(letterSpeed);
+                }
                 
-            if (i < lines.Length - 1)
-            {
                 msg.text += "\n";
+                
+            } else {
+                int.TryParse(line[0].ToString(), out nextIndex);
+                messageState = State.NextMessage;
             }
+        }
+
+        if(!messageState.Equals(State.NextMessage)) {
+            messageState = State.EndMessage;
         }
 
         yield return 0;
     }
 
     public void SkipText() {
-        if(letterSpeed == normalLetterSpeed) {
-            letterSpeed = fastLetterSpeed;
-        } else {
-            letterSpeed = normalLetterSpeed;
-            LockUnlockEvent();
-            img.gameObject.SetActive(false);
-            msg.gameObject.SetActive(false);
-            
-        }
+
+        switch(messageState) {
+            case State.FastMessage:
+                letterSpeed = fastLetterSpeed;
+                break;
+            case State.EndMessage:
+                messageState = State.FastMessage;
+                letterSpeed = normalLetterSpeed;
+                LockUnlockEvent();
+                img.gameObject.SetActive(false);
+                msg.gameObject.SetActive(false);
+                break;
+            case State.NextMessage:
+                messageState = State.FastMessage;
+                letterSpeed = normalLetterSpeed;
+                StartCoroutine(TypeText(nextIndex));
+                break;
+        }  
+    
     }
 
 
