@@ -55,6 +55,7 @@ public class InputManager : MonoBehaviour {
 				playerUse.Use();
 			}
 		} else {
+            //Pasar mensajes
             if(Input.GetButtonDown("Jump")) {
                 messageManager.SkipText();
             }

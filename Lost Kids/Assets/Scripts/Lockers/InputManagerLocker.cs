@@ -9,11 +9,13 @@ public class InputManagerLocker : MonoBehaviour, ILockeable {
         scInputManager = GetComponent<InputManager>();
     }
 
+    //Al activarse el script se añade la función Lock
     void OnEnable()
     {
         MessageManager.LockUnlockEvent += Lock;
     }
 
+    //Al desactivarse el script se desuscriben las funciones
     void OnDisable()
     {
         MessageManager.LockUnlockEvent -= Unlock;
