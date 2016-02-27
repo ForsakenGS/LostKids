@@ -72,16 +72,18 @@
     <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraTrigger.cs" />
     <Compile Include="Assets\Scripts\Camera\TransitionCamera.cs" />
+    <Compile Include="Assets\Scripts\Character\Abilities\AbilityController.cs" />
     <Compile Include="Assets\Scripts\Character\Abilities\CharacterAbility.cs" />
     <Compile Include="Assets\Scripts\Character\Abilities\MultipleJumpAbility.cs" />
     <Compile Include="Assets\Scripts\Character\Abilities\SprintAbility.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterMovement.cs" />
     <Compile Include="Assets\Scripts\Game\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Game\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Game\InputManager.cs" />
     <Compile Include="Assets\Scripts\Messages\ILockeable.cs" />
     <Compile Include="Assets\Scripts\Messages\LockeableObject.cs" />
+    <Compile Include="Assets\Scripts\Player\CharacterManager.cs" />
     <Compile Include="Assets\Scripts\Player\CharacterStatus.cs" />
-    <Compile Include="Assets\Scripts\Player\CharacterStatusManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerUse.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\BreakableObject.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\BreakableWood.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="Assets\Scripts\PuzzleObjects\IBreakable.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\Lever.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\MortalZone.cs" />
+    <Compile Include="Assets\Scripts\PuzzleObjects\MovingPlatform.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\Neko.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\PushableObject.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\Puzzle1.cs" />

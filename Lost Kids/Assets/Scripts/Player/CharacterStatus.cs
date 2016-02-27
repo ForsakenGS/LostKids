@@ -3,24 +3,31 @@ using System.Collections;
 
 public class CharacterStatus : MonoBehaviour {
 
-    public GameObject characterStatusManager;
-    private CharacterStatusManager statusManager;
+    //Referencia al manager de personajes
+    public GameObject characterManagerPrefab;
+    private CharacterManager characterManager;
 
+    //Habitacion en la que se encuentra el personaje
     public int actualRoom = 0;
 
-    private bool isAlive
+    //Estado del personaje
+    private bool isAlive;
+
+
+    // Use this for initialization
+    void Awake()
     {
-        set; get;
+        if (characterManagerPrefab == null)
+        {
+            characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
+        }
+        characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
     }
 
 	// Use this for initialization
 	void Start () {
         isAlive = true;
-        if(characterStatusManager==null)
-        {
-            characterStatusManager = GameObject.FindGameObjectWithTag("CharacterStatusManager");
-        }
-        statusManager = characterStatusManager.GetComponent<CharacterStatusManager>();
+
 
     }
 	
@@ -39,9 +46,12 @@ public class CharacterStatus : MonoBehaviour {
         GetComponent<Renderer>().enabled = false;
         //Animacion, Efectos, Cambio de imagen.....
         GetComponent<Renderer>().enabled = false; //Temporal
-        statusManager.CharacterKilled(this);    
+        characterManager.CharacterKilled(this);    
     }
 
+    /// <summary>
+    /// Resucita al personaje
+    /// </summary>
     public void Ressurect()
     {
         isAlive = true;
@@ -49,11 +59,20 @@ public class CharacterStatus : MonoBehaviour {
         //Animacion, Efectos, Cambio de imagen.....
     }
 
+    /// <summary>
+    /// Devuelve true si el personaje esta disponible para su manejo
+    /// Puede encontrarse indisponible si esta muerto, o asustado
+    /// </summary>
+    /// <returns></returns>
     public bool IsAvailable()
     {
         return isAlive;
     }
 
+    /// <summary>
+    /// Devuelve true si el personaje esta vivo
+    /// </summary>
+    /// <returns></returns>
     public bool IsAlive()
     {
         return isAlive;

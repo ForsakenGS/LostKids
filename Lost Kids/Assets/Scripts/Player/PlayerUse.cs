@@ -34,14 +34,12 @@ public class PlayerUse : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(usingRay, out hit, useDistance))
         {
-            Debug.Log("rayo toca algo");
             if (hit.collider.tag.Equals("Usable"))
             {
                 //Se obtiene la normal del HIT para saber que parte del objeto ha encontrado el usable.
                 //Solo se permite usar los objetos desde la parte de atras ( la normal en z es negativa )
                 if (hit.normal.z < 0)
                 {
-                    Debug.Log("Intentando usar");
                     hit.collider.gameObject.GetComponent<UsableObject>().Use();
                 }
             }

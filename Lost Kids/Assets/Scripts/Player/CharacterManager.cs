@@ -2,25 +2,30 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CharacterStatusManager : MonoBehaviour {
+public class CharacterManager : MonoBehaviour {
 
+    /// <summary>
+    /// Evento para informar del cambio del personaje activo a otros scripts
+    /// </summary>
+    public delegate void CharacterChanged();
+    public static event CharacterChanged ActiveCharacterChangedEvent;
 
+    //lista de personajes
     public List<GameObject> characterList;
 
+    //Checkpoint inicial
     public GameObject initialCheckPoint;
 
+    //Checkpoint activo
     private CheckPoint activeCheckPoint;
 
-    private GameObject activeCharacter
-    {
-        set; get;
-    }
+    //Personaje activo
+    private GameObject activeCharacter;
 
-    public GameObject CameraController;
-
-    private CameraController cameraManager;
-
+    //Listado de estado de los personajes
     private List<CharacterStatus> characterStatusList;
+
+
 
     
 	// Use this for initialization
@@ -32,11 +37,7 @@ public class CharacterStatusManager : MonoBehaviour {
         {
             characterStatusList.Add(characterList[i].GetComponent<CharacterStatus>());
         }
-        if(CameraController==null)
-        {
-            CameraController = GameObject.FindGameObjectWithTag("CameraController");
-        }
-        cameraManager = CameraController.GetComponent<CameraController>();
+
 	
 	}
 	
@@ -100,8 +101,11 @@ public class CharacterStatusManager : MonoBehaviour {
         if (IsAvailable(index))
         {
             activeCharacter = characterList[index];
-            //InputManager.setActiveCharacter(activeCharacter);
-            cameraManager.ChangeCamera(characterStatusList[index].actualRoom);
+            if (ActiveCharacterChangedEvent != null)
+            {
+                ActiveCharacterChangedEvent();
+            }
+
             
         }
     }
@@ -156,6 +160,15 @@ public class CharacterStatusManager : MonoBehaviour {
             characterStatusList[i].Ressurect();
             ActivateCharacter(0);
         }
+    }
+
+    /// <summary>
+    /// Devuelve el gameobject correspondiente al personaje activo
+    /// </summary>
+    /// <returns>gameobject correspondiente al personaje activo</returns>
+    public GameObject GetActiveCharacter()
+    {
+        return activeCharacter;
     }
 
 

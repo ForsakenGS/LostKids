@@ -4,28 +4,32 @@ using System.Collections.Generic;
 
 public class CheckPoint : MonoBehaviour {
 
-    public GameObject characterStatusManager;
-    private CharacterStatusManager statusManager;
+    public GameObject characterManagerPrefab;
+    private CharacterManager characterManager;
     public List<GameObject> spawnZones;
     private Neko neko;
 
+    //Habitacion en la que se encuentra
     public int room;
 
-    bool isActive
+    //Flag de Checkpoint activo
+    bool isActive;
+
+    void Awake()
     {
-        set; get;
+        isActive = false;
+        if (characterManagerPrefab == null)
+        {
+            characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
+        }
+        characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
+        neko = GetComponentInChildren<Neko>();
     }
 
     // Use this for initialization
     void Start()
     {
-        isActive = false;
-        if (characterStatusManager == null)
-        {
-            characterStatusManager = GameObject.FindGameObjectWithTag("CharacterStatusManager");
-        }
-        statusManager = characterStatusManager.GetComponent<CharacterStatusManager>();
-        neko = GetComponentInChildren<Neko>();
+        
         
 
     }
@@ -50,7 +54,7 @@ public class CheckPoint : MonoBehaviour {
                 {
                     Activate();
                 }
-                statusManager.CheckPointActivation();
+                characterManager.CheckPointActivation();
             }
 
         }
@@ -63,7 +67,7 @@ public class CheckPoint : MonoBehaviour {
     public void Activate()
     {
         isActive = true;
-        statusManager.SetActiveCheckPoint(this);
+        characterManager.SetActiveCheckPoint(this);
         neko.Show();
     }
 

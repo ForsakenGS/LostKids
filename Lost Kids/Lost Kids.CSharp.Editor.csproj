@@ -102,6 +102,7 @@
     <Compile Include="Assets\Editor\ButtonEditor.cs" />
     <Compile Include="Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
     <Compile Include="Assets\Editor\LeverEditor.cs" />
+    <Compile Include="Assets\Editor\MovingPlatformEditor.cs" />
     <Compile Include="Assets\Editor\Puzzle1Editor.cs" />
   </ItemGroup>
   <ItemGroup>
