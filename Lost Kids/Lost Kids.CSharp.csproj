@@ -57,6 +57,12 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -80,8 +86,11 @@
     <Compile Include="Assets\Scripts\Game\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Game\GameManager.cs" />
     <Compile Include="Assets\Scripts\Game\InputManager.cs" />
+    <Compile Include="Assets\Scripts\Lockers\InputManagerLocker.cs" />
     <Compile Include="Assets\Scripts\Messages\ILockeable.cs" />
     <Compile Include="Assets\Scripts\Messages\LockeableObject.cs" />
+    <Compile Include="Assets\Scripts\Messages\MessageManager.cs" />
+    <Compile Include="Assets\Scripts\Messages\MessageTrigger.cs" />
     <Compile Include="Assets\Scripts\Player\CharacterManager.cs" />
     <Compile Include="Assets\Scripts\Player\CharacterStatus.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPush.cs" />
@@ -107,6 +116,7 @@
     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
+    <None Include="Assets\messages.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
