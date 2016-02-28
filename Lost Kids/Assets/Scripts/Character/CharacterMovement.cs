@@ -208,33 +208,51 @@ public class CharacterMovement : MonoBehaviour {
 			forceToApply += new Vector3(horizontal, 0, vertical);
 
             //PARCHE PARA EMPUJAR OBJETOS
-            if(GetComponent<PlayerPush>().GetUse())
+            if(GetComponent<PlayerPush>().IsPhushing())
             {
                 Vector3 normal = GetComponent<PlayerPush>().GetPushNormal();
                 if(Mathf.Abs(horizontal)>Mathf.Abs(vertical))
                 {
                     normal.z = 0;
-                    normal.x *= horizontal;
+
+                    if (normal.x > 0)
+                    {
+                        normal.x *= -horizontal;
+                    }
+                    else if(normal.x<0)
+                    {
+                        normal.x *= horizontal;
+                    }
+
+
+                    
                 }
                 else
                 {
                     normal.x = 0;
-                    normal.z *= vertical;
+                    if (normal.z > 0)
+                    {
+                        normal.z *= -vertical;
+                    }
+                    else if (normal.z < 0)
+                    {
+                        normal.z *= vertical;
+                    }
                 }
                 forceToApply = normal.normalized;
             }
 		}
         // Force relativily applied to camera's field of view
-        //PARCHE PARA EMPUJAR OBJETOS
-        if (!GetComponent<PlayerPush>().GetUse())
+        //PARCHE PARA EMPUJAR OBJETOS , DEBERIA SER UN NUEVO ESTADO
+        if (!GetComponent<PlayerPush>().IsPhushing())
         {
             forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
         }
         if (!forceToApply.Equals(Vector3.zero))
         {
             rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
-            //PARCHE PARA EMPUJAR OBJETOS
-            if (!GetComponent<PlayerPush>().GetUse())
+            //PARCHE PARA EMPUJAR OBJETOS, DEBERIA SER UN NUEVO ESTADO
+            if (!GetComponent<PlayerPush>().IsPhushing())
             { 
                 Rotating(forceToApply.x, forceToApply.z);
             }
