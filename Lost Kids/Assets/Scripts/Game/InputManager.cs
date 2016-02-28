@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InputManager : MonoBehaviour, ILockeable {
-	private bool locked;
+public class InputManager : MonoBehaviour {
+	public bool locked;
 	private CharacterMovement charMov;
 	private AbilityController abilityControl;
 	private PlayerUse playerUse;
+    private MessageManager messageManager;
 
 	// Use this for initialization
 	void Start () {
@@ -14,6 +15,7 @@ public class InputManager : MonoBehaviour, ILockeable {
 		charMov = player.GetComponent<CharacterMovement>();
 		abilityControl = player.GetComponent<AbilityController>();
 		playerUse = player.GetComponent<PlayerUse>();
+        messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
 	}
 
 	// Manage inputs that produce physics
@@ -32,14 +34,6 @@ public class InputManager : MonoBehaviour, ILockeable {
 				charMov.MoveCharacter(horizontal, vertical);
 			}
 		}
-	}
-
-	public void Lock () {
-		locked = true;
-	}
-
-	public void Unlock () {
-		locked = false;
 	}
 	
 	// Manage general inputs
@@ -60,6 +54,11 @@ public class InputManager : MonoBehaviour, ILockeable {
 			if (Input.GetButton("Use")) {
 				playerUse.Use();
 			}
-		}
+		} else {
+            //Pasar mensajes
+            if(Input.GetButtonDown("Jump")) {
+                messageManager.SkipText();
+            }
+        }
 	}
 }
