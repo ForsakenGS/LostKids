@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraTrigger.cs" />
      <Compile Include="Assets\Scripts\Camera\TransitionCamera.cs" />
+     <Compile Include="Assets\Scripts\Character\Abilities\AbilityController.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\CharacterAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\MultipleJumpAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\SprintAbility.cs" />
@@ -57,8 +58,11 @@
      <Compile Include="Assets\Scripts\Enemies\KillerSphere.cs" />
      <Compile Include="Assets\Scripts\Game\CameraManager.cs" />
      <Compile Include="Assets\Scripts\Game\GameManager.cs" />
+     <Compile Include="Assets\Scripts\Game\InputManager.cs" />
      <Compile Include="Assets\Scripts\Messages\ILockeable.cs" />
      <Compile Include="Assets\Scripts\Messages\LockeableObject.cs" />
+     <Compile Include="Assets\Scripts\Messages\MessageManager.cs" />
+     <Compile Include="Assets\Scripts\Messages\MessageTrigger.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerUse.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\Button.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\Door.cs" />
@@ -71,6 +75,7 @@
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
+     <None Include="Assets\messages.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
