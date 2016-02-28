@@ -64,41 +64,44 @@ public class MovingPlatform : MonoBehaviour,IActivable {
     private bool resetting;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
 
         //Se genera el camino de puntos
         path = new Vector3[points.Length];
 
         //Se guardan las posiciones de los puntos del camino
-        for (int i=0; i<points.Length;i++)
+        for (int i = 0; i < points.Length; i++)
         {
             path[i] = points[i].transform.position;
         }
 
         //Se genera el array de velocidades
-        if(speedMode.Equals(speedModes.Constant))
+        if (speedMode.Equals(speedModes.Constant))
         {
-            for(int i=0;i<pointSpeed.Length;i++)
+            for (int i = 0; i < pointSpeed.Length; i++)
             {
                 pointSpeed[i] = moveSpeed;
             }
         }
 
         //Se genera el array de paradas
-        if(delayMode.Equals(delayModes.Continuous))
+        if (delayMode.Equals(delayModes.Continuous))
         {
             for (int i = 0; i < pointDelay.Length; i++)
             {
                 pointDelay[i] = 0;
             }
         }
-  
 
-        currentNode = 1;
-        target = path[currentNode];
-        if(isActive || resetting)
-        {
-            StartCoroutine(Move(target));
+        if (points.Length > 0)
+        { 
+            currentNode = 1;
+            target = path[currentNode];
+            if (isActive || resetting)
+            {
+                StartCoroutine(Move(target));
+            }
         }
 
 

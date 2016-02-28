@@ -206,12 +206,38 @@ public class CharacterMovement : MonoBehaviour {
 		// Character's movement
 		if ((horizontal != 0f) || (vertical != 0f)) {
 			forceToApply += new Vector3(horizontal, 0, vertical);
+
+            //PARCHE PARA EMPUJAR OBJETOS
+            if(GetComponent<PlayerPush>().GetUse())
+            {
+                Vector3 normal = GetComponent<PlayerPush>().GetPushNormal();
+                if(Mathf.Abs(horizontal)>Mathf.Abs(vertical))
+                {
+                    normal.z = 0;
+                    normal.x *= horizontal;
+                }
+                else
+                {
+                    normal.x = 0;
+                    normal.z *= vertical;
+                }
+                forceToApply = normal.normalized;
+            }
 		}
-		// Force relativily applied to camera's field of view
-		forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
-		if (!forceToApply.Equals(Vector3.zero)) {
-			rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
-			Rotating(forceToApply.x, forceToApply.z);
+        // Force relativily applied to camera's field of view
+        //PARCHE PARA EMPUJAR OBJETOS
+        if (!GetComponent<PlayerPush>().GetUse())
+        {
+            forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
+        }
+        if (!forceToApply.Equals(Vector3.zero))
+        {
+            rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
+            //PARCHE PARA EMPUJAR OBJETOS
+            if (!GetComponent<PlayerPush>().GetUse())
+            { 
+                Rotating(forceToApply.x, forceToApply.z);
+            }
 		}
 	}
 	

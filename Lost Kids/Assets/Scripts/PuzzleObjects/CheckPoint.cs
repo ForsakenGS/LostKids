@@ -4,9 +4,14 @@ using System.Collections.Generic;
 
 public class CheckPoint : MonoBehaviour {
 
+    //Referencia al character manager
     public GameObject characterManagerPrefab;
     private CharacterManager characterManager;
+
+    //Lista de zonas donde aparecen los personajes al resucitar
     public List<GameObject> spawnZones;
+
+    //Referencia al gato sobre el checkpoint
     private Neko neko;
 
     //Habitacion en la que se encuentra
@@ -18,10 +23,7 @@ public class CheckPoint : MonoBehaviour {
     void Awake()
     {
         isActive = false;
-        if (characterManagerPrefab == null)
-        {
-            characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
-        }
+        
         characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         neko = GetComponentInChildren<Neko>();
     }
@@ -29,8 +31,12 @@ public class CheckPoint : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        
-        
+        if (characterManagerPrefab == null)
+        {
+            characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
+            characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
+        }
+
 
     }
 

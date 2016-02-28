@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\Messages\LockeableObject.cs" />
     <Compile Include="Assets\Scripts\Player\CharacterManager.cs" />
     <Compile Include="Assets\Scripts\Player\CharacterStatus.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerPush.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerUse.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\BreakableObject.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\BreakableWood.cs" />
