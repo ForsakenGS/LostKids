@@ -18,7 +18,7 @@ public class TransitionCamera : MonoBehaviour {
 
     //Controlador de la cámara y posición del jugador objetivo
     private CameraManager scCameraManager;
-    private Transform player;
+    private GameObject activePlayer;
 
     //Suavidad de la transición
     public float smooth = 8.0f;
@@ -30,11 +30,12 @@ public class TransitionCamera : MonoBehaviour {
 
         scCameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
         characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
+
     }
 
     void Start() {
 
-        //this.gameObject.SetActive(false);
+        RefreshPlayer();
 
     }
 
@@ -85,7 +86,7 @@ public class TransitionCamera : MonoBehaviour {
         }
 
         //Se mira al jugador
-        SmoothLookAt(player);
+        SmoothLookAt(activePlayer);
     }
 
     /*
@@ -110,11 +111,11 @@ public class TransitionCamera : MonoBehaviour {
     }
 
     //Función para mirar suavemente al jugador
-    void SmoothLookAt(Transform pos)
+    void SmoothLookAt(GameObject pos)
     {
 
         //Se calcula la posición relativa del jugador a la cámara
-        Vector3 relPlayerPosition = pos.position - transform.position;
+        Vector3 relPlayerPosition = pos.transform.position - transform.position;
 
         //Crea la rotación entre la posición relativa del jugador y el vector Up para bajar la cámara al jugador
         Quaternion lookAtRotation = Quaternion.LookRotation(relPlayerPosition, Vector3.up);
@@ -124,7 +125,7 @@ public class TransitionCamera : MonoBehaviour {
     }
 
     private void RefreshPlayer() {
-        player = characterManager.GetActiveCharacter().transform;
+        activePlayer = characterManager.GetActiveCharacter();
     }
 
 }

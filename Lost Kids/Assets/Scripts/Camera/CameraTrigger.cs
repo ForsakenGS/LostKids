@@ -15,7 +15,7 @@ public class CameraTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         GameObject activeCharacter = characterManager.GetActiveCharacter();
-        if(other.Equals(activeCharacter)) {
+        if(other.gameObject.Equals(activeCharacter)) {
 
             //Se activa el cambio de cámara
             cameraManager.ChangeCamera(room);
