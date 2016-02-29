@@ -49,6 +49,7 @@
      <Compile Include="Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
      <Compile Include="Assets\Editor\LeverEditor.cs" />
      <Compile Include="Assets\Editor\MessageTriggerEditor.cs" />
+     <Compile Include="Assets\Editor\MovingPlatformEditor.cs" />
      <Compile Include="Assets\Editor\Puzzle1Editor.cs" />
      <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
