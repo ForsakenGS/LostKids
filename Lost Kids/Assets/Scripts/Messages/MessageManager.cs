@@ -87,7 +87,9 @@ public class MessageManager : MonoBehaviour {
         text.gameObject.SetActive(true);
 
         //Se bloquea el resto del juego
-        LockUnlockEvent();
+        if(LockUnlockEvent != null) {
+            LockUnlockEvent();
+        }
 
         //Se llama a la función para extraer el mensaje
         getMessage(index);
@@ -98,7 +100,6 @@ public class MessageManager : MonoBehaviour {
     /// <summary>
     /// Extrae el mensaje de la línea pasada por defecto
     /// </summary>
-    /// <returns></returns>
     private void getMessage(int index) {
 
         //Carga el mensaje pasado por indice
@@ -169,12 +170,18 @@ public class MessageManager : MonoBehaviour {
                 break;
             //Si está en el estado de fin de mensaje
             case State.EndMessage:
+                
                 //Se cambia al estado por defecto
                 messageState = State.FastMessage;
+                
                 //Se recupera la velocidad de letra
                 letterSpeed = normalLetterSpeed;
+                
                 //Se desbloquea el resto del juego
-                LockUnlockEvent();
+                if(LockUnlockEvent != null) {
+                    LockUnlockEvent();
+                }
+                
                 //Se oculta la interfaz de mensajes
                 frame.gameObject.SetActive(false);
                 text.gameObject.SetActive(false);
@@ -183,8 +190,10 @@ public class MessageManager : MonoBehaviour {
             case State.NextMessage:
                 //Se cambia al estado por defecto
                 messageState = State.FastMessage;
+                
                 //Se recupera la velocidad de letra
                 letterSpeed = normalLetterSpeed;
+                
                 //Se incrementan los índicas
                 startIndex += 4;
                 endIndex += 4;

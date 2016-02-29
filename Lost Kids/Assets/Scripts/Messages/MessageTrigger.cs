@@ -5,6 +5,8 @@ public class MessageTrigger : MonoBehaviour {
 
     private MessageManager messageManager;
 
+    private CharacterManager characterManager;
+
     /// <summary>
     /// Tipo de salto de mensajes:
     /// Unique: Se muestra una vez y no se vuelve a mostrar
@@ -29,12 +31,13 @@ public class MessageTrigger : MonoBehaviour {
     // Use this for initialization
     void Start () {
         messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
+        characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
         messageShown = false;
     }
 	
     void OnTriggerEnter(Collider other) {
         //Si se trata del jugador activo
-        if(other.CompareTag("Player")) {
+        if(other.Equals(characterManager.GetActiveCharacter())) {
             //Si el tipo de trigger es único y no se ha mostrado el mensaje se llama a mostrar mensaje
             if(type.Equals(MessageChecker.Unique) && !messageShown) {
                 messageShown = true;

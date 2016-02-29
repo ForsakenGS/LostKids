@@ -20,15 +20,34 @@ public class CameraController : MonoBehaviour {
     //Indica si se está realizando la transición
     private bool isChangingCameras;
 
+    private CharacterStatus characterStatus;
+
 
    void Start() {
 
         isChangingCameras = false;
         scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
+        characterStatus = GameObject.FindGameObjectWithTag("CharacterStatus").GetComponent<CharacterStatus>();
+
 
     }
 
+    //Al activarse el script se añade la función ChangeCamera
+    void OnEnable()
+    {
+        CharacterManager.ActiveCharacterChangedEvent += CameraToActivePlayer;
+    }
 
+    //Al desactivarse el script se desuscriben las funciones
+    void OnDisable()
+    {
+        CharacterManager.ActiveCharacterChangedEvent -= CameraToActivePlayer;
+    }
+
+    /// <summary>
+    /// Cambia la camara activa por la correspondiente a la habitacion pasada como parámetro
+    /// </summary>
+    /// <param name="nextRoom">indice de la habitación a activar</param>
     public void ChangeCamera(int nextRoom) {
 
         //Si pasamos de habitación se desactiva la camara de la habitación actual y se activa la de transicion
@@ -74,6 +93,9 @@ public class CameraController : MonoBehaviour {
         
     }
 
+    /// <summary>
+    /// Devuelve la cámara activa
+    /// </summary>
     public GameObject CurrentCamera()
     {
         if(isChangingCameras)
@@ -81,6 +103,11 @@ public class CameraController : MonoBehaviour {
             return transitionCamera;
         }
         return cameras[currentRoom];
+    }
+
+    //Funcion que se activa con el evento de cambio de personaje
+    private void CameraToActivePlayer() {
+        ChangeCamera(characterStatus.currentRoom);
     }
 
 
