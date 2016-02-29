@@ -15,7 +15,7 @@ public class MessageManager : MonoBehaviour {
     public Text text;
 
     //Marco del texto en pantalla
-    public RawImage img;
+    public RawImage frame;
 
     //Lineas del mensaje
     private string[] lines;
@@ -83,7 +83,7 @@ public class MessageManager : MonoBehaviour {
     public void ShowMessage(int index) {
 
         //Se activan el marco y el texto
-        img.gameObject.SetActive(true);
+        frame.gameObject.SetActive(true);
         text.gameObject.SetActive(true);
 
         //Se bloquea el resto del juego
@@ -176,7 +176,7 @@ public class MessageManager : MonoBehaviour {
                 //Se desbloquea el resto del juego
                 LockUnlockEvent();
                 //Se oculta la interfaz de mensajes
-                img.gameObject.SetActive(false);
+                frame.gameObject.SetActive(false);
                 text.gameObject.SetActive(false);
                 break;
             //Si está en el estado de siguiente mensaje
