@@ -8,7 +8,7 @@ public class CharacterStatus : MonoBehaviour {
     private CharacterManager characterManager;
 
     //Habitacion en la que se encuentra el personaje
-    public int actualRoom = 0;
+    public int currentRoom = 0;
 
     //Estado del personaje
     private bool isAlive;
