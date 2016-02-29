@@ -38,7 +38,9 @@ public class CharacterManager : MonoBehaviour {
             characterStatusList.Add(characterList[i].GetComponent<CharacterStatus>());
         }
 
-	
+        ActivateCharacter(0);
+
+
 	}
 	
 	// Update is called once per frame

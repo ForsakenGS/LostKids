@@ -17,21 +17,37 @@ public class TransitionCamera : MonoBehaviour {
     private Vector3 endPosition;
 
     //Controlador de la cámara y posición del jugador objetivo
-    private CameraController scCameraController;
+    private CameraManager scCameraManager;
     private Transform player;
 
     //Suavidad de la transición
     public float smooth = 8.0f;
 
-    void Awake() {
+    private CharacterManager characterManager;
 
+    void Awake() {
         isSlerping = false;
 
-        scCameraController = GameObject.FindGameObjectWithTag("CameraController").GetComponent<CameraController>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        scCameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
+        characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
+    }
 
-        this.gameObject.SetActive(false);
+    void Start() {
 
+        //this.gameObject.SetActive(false);
+
+    }
+
+    //Al activarse el script se añade la función ChangeCamera
+    void OnEnable()
+    {
+        CharacterManager.ActiveCharacterChangedEvent += RefreshPlayer;
+    }
+
+    //Al desactivarse el script se desuscriben las funciones
+    void OnDisable()
+    {
+        CharacterManager.ActiveCharacterChangedEvent -= RefreshPlayer;
     }
 
 
@@ -64,7 +80,7 @@ public class TransitionCamera : MonoBehaviour {
                 
                 isSlerping = false;
                 //Se llama al fin del cambio de cámaras
-                scCameraController.FinishChangingCameras();
+                scCameraManager.FinishChangingCameras();
             }
         }
 
@@ -105,6 +121,10 @@ public class TransitionCamera : MonoBehaviour {
 
         //Actualiza la rotación de la cámara entre la actual y la nueva rotación
         transform.rotation = Quaternion.Slerp(transform.rotation, lookAtRotation, smooth * Time.deltaTime);
+    }
+
+    private void RefreshPlayer() {
+        player = characterManager.GetActiveCharacter().transform;
     }
 
 }

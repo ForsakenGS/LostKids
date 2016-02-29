@@ -22,11 +22,13 @@ public class CharacterStatus : MonoBehaviour {
             characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
         }
         characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
+
+        isAlive = true;
     }
 
 	// Use this for initialization
 	void Start () {
-        isAlive = true;
+        
 
 
     }

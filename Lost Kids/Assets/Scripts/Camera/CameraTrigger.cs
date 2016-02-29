@@ -3,26 +3,25 @@ using System.Collections;
 
 public class CameraTrigger : MonoBehaviour {
 
-    private CameraController cameraController;
-    private CharacterStatus characterStatus;
+    private CameraManager cameraManager;
     private CharacterManager characterManager;
     public int room;
 
 	// Use this for initialization
 	void Start () {
-        cameraController = GameObject.FindGameObjectWithTag("CameraController").GetComponent<CameraController>();
-        characterStatus = GameObject.FindGameObjectWithTag("CharacterStatus").GetComponent<CharacterStatus>();
+        cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
         characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
 	}
 
     void OnTriggerEnter(Collider other) {
-        if(other.Equals(characterManager.GetActiveCharacter())) {
+        GameObject activeCharacter = characterManager.GetActiveCharacter();
+        if(other.Equals(activeCharacter)) {
 
             //Se activa el cambio de cámara
-            cameraController.ChangeCamera(room);
+            cameraManager.ChangeCamera(room);
 
             //Se actualiza la nueva habitacion en el character status
-            characterStatus.currentRoom = room;
+            activeCharacter.GetComponent<CharacterStatus>().currentRoom = room;
 
         }
     }

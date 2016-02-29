@@ -19,7 +19,7 @@ public class CharacterMovement : MonoBehaviour {
 	[HideInInspector]
 	public float jumpImpulseModifier;
 
-    private CameraController cameraController;
+    private CameraManager cameraManager;
 
 	private Rigidbody rigBody;
 	private Collider standingColl;
@@ -45,7 +45,7 @@ public class CharacterMovement : MonoBehaviour {
 		speed = 0f;
 
         //Referente to camera controller
-        cameraController = GameObject.FindGameObjectWithTag("CameraController").GetComponent<CameraController>();
+        cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
 	}
 
 	// Check if the character is over the floor by using a raycast
@@ -103,7 +103,7 @@ public class CharacterMovement : MonoBehaviour {
 //			forceToApply += new Vector3(horizontal, 0, vertical);
 //		}
 //		// Force relativily applied to camera's field of view
-//		forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
+//		forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
 //		if (!forceToApply.Equals(Vector3.zero)) {
 //			rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
 //			Rotating(forceToApply.x, forceToApply.z);
@@ -246,7 +246,7 @@ public class CharacterMovement : MonoBehaviour {
         //PARCHE PARA EMPUJAR OBJETOS , DEBERIA SER UN NUEVO ESTADO
         if (!GetComponent<PlayerPush>().IsPhushing())
         {
-            forceToApply = GetVectorRelativeToObject(forceToApply, cameraController.CurrentCamera().transform);
+            forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
         }
         if (!forceToApply.Equals(Vector3.zero))
         {

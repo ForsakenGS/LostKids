@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class CameraManager : MonoBehaviour {
 
     //Array con las cámaras de la escena
     public GameObject[] cameras;
@@ -20,14 +20,14 @@ public class CameraController : MonoBehaviour {
     //Indica si se está realizando la transición
     private bool isChangingCameras;
 
-    private CharacterStatus characterStatus;
+    private CharacterManager characterManager;
 
 
    void Start() {
 
         isChangingCameras = false;
         scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
-        characterStatus = GameObject.FindGameObjectWithTag("CharacterStatus").GetComponent<CharacterStatus>();
+        characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
 
 
     }
@@ -107,7 +107,7 @@ public class CameraController : MonoBehaviour {
 
     //Funcion que se activa con el evento de cambio de personaje
     private void CameraToActivePlayer() {
-        ChangeCamera(characterStatus.currentRoom);
+        ChangeCamera(characterManager.GetActiveCharacter().GetComponent<CharacterStatus>().currentRoom);
     }
 
 
