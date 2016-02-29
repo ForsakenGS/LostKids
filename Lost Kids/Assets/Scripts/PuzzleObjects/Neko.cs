@@ -24,6 +24,7 @@ public class Neko : MonoBehaviour {
 
     public void Hide()
     {
+        visible = false;
         GetComponent<Renderer>().enabled = false;
     }
 }

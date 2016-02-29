@@ -57,12 +57,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -74,7 +68,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
+    <Compile Include="Assets\Scripts\Camera\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraTrigger.cs" />
     <Compile Include="Assets\Scripts\Camera\TransitionCamera.cs" />
@@ -83,7 +77,7 @@
     <Compile Include="Assets\Scripts\Character\Abilities\MultipleJumpAbility.cs" />
     <Compile Include="Assets\Scripts\Character\Abilities\SprintAbility.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterMovement.cs" />
-    <Compile Include="Assets\Scripts\Game\CameraManager.cs" />
+    <Compile Include="Assets\Scripts\Enemies\KillerSphere.cs" />
     <Compile Include="Assets\Scripts\Game\GameManager.cs" />
     <Compile Include="Assets\Scripts\Game\InputManager.cs" />
     <Compile Include="Assets\Scripts\Lockers\InputManagerLocker.cs" />
@@ -109,6 +103,7 @@
     <Compile Include="Assets\Scripts\PuzzleObjects\PushableObject.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\Puzzle1.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\PuzzleManagerBase.cs" />
+    <Compile Include="Assets\Scripts\PuzzleObjects\RockActivator.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\UsableObject.cs" />
   </ItemGroup>
   <ItemGroup>

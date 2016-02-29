@@ -20,26 +20,28 @@ public class CharacterManager : MonoBehaviour {
     private CheckPoint activeCheckPoint;
 
     //Personaje activo
-    private GameObject activeCharacter;
+    private static GameObject activeCharacter;
 
     //Listado de estado de los personajes
     private List<CharacterStatus> characterStatusList;
 
 
 
-    
-	// Use this for initialization
-	void Start () {
+    void Awake()
+    {
         characterStatusList = new List<CharacterStatus>();
-        activeCheckPoint = initialCheckPoint.GetComponent<CheckPoint>() ;
-        activeCheckPoint.Activate();
-        for(int i=0;i<characterList.Count;i++)
+        activeCheckPoint = initialCheckPoint.GetComponent<CheckPoint>();
+        for (int i = 0; i < characterList.Count; i++)
         {
             characterStatusList.Add(characterList[i].GetComponent<CharacterStatus>());
         }
-
+    }
+	// Use this for initialization
+	void Start () {
+       
+        activeCheckPoint.Activate();
+       
         ActivateCharacter(0);
-
 
 	}
 	
@@ -171,6 +173,11 @@ public class CharacterManager : MonoBehaviour {
     public GameObject GetActiveCharacter()
     {
         return activeCharacter;
+    }
+
+    public static bool IsActiveCharacter(GameObject obj)
+    {
+        return obj.Equals(activeCharacter);
     }
 
 

@@ -51,8 +51,9 @@ public class CheckPoint : MonoBehaviour {
     /// <param name="col"></param>
     void OnTriggerEnter(Collider col)
     {
+        //col.gameObject.CompareTag("Player")
         
-        if (col.gameObject.CompareTag("Player"))
+        if (CharacterManager.IsActiveCharacter(col.gameObject))
         {
             if (col.gameObject.GetComponent<CharacterStatus>().IsAvailable())
             {

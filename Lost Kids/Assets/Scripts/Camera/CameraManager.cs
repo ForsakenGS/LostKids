@@ -23,7 +23,7 @@ public class CameraManager : MonoBehaviour {
     private CharacterManager characterManager;
 
 
-   void Start() {
+   void Awake() {
 
         isChangingCameras = false;
         scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
