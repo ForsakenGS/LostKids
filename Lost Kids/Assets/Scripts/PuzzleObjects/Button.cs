@@ -54,7 +54,7 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnTriggerEnter(Collider col)
     {
-        if(col.gameObject.tag.Equals("Player"))
+        if(col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable"))
         {
             StopAllCoroutines();
 
@@ -69,7 +69,7 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnTriggerExit(Collider col)
     {
-        if (col.gameObject.tag.Equals("Player"))
+        if (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable"))
         {
             if(isMoving || type.Equals(Usables.Hold))
             {
