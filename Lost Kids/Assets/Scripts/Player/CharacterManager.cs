@@ -35,6 +35,7 @@ public class CharacterManager : MonoBehaviour {
         {
             characterStatusList.Add(characterList[i].GetComponent<CharacterStatus>());
         }
+        activeCharacter = characterList[0];
     }
 	// Use this for initialization
 	void Start () {
@@ -162,15 +163,16 @@ public class CharacterManager : MonoBehaviour {
         for(int i=0; i<characterList.Count;i++)
         {
             characterStatusList[i].Ressurect();
-            ActivateCharacter(0);
+            
         }
+        ActivateCharacter(0);
     }
 
     /// <summary>
     /// Devuelve el gameobject correspondiente al personaje activo
     /// </summary>
     /// <returns>gameobject correspondiente al personaje activo</returns>
-    public GameObject GetActiveCharacter()
+    public static GameObject GetActiveCharacter()
     {
         return activeCharacter;
     }

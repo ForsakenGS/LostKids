@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour {
 
 	// Update references to current character
 	void CharacterComponentsUpdate () {
-		GameObject player = characterManager.GetActiveCharacter();
+		GameObject player = CharacterManager.GetActiveCharacter();
 		charMov = player.GetComponent<CharacterMovement>();
 		abilityControl = player.GetComponent<AbilityController>();
 		playerUse = player.GetComponent<PlayerUse>();

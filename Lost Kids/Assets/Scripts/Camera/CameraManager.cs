@@ -20,14 +20,12 @@ public class CameraManager : MonoBehaviour {
     //Indica si se está realizando la transición
     private bool isChangingCameras;
 
-    private CharacterManager characterManager;
-
 
    void Awake() {
 
         isChangingCameras = false;
         scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
-        characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
+        //characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
 
 
     }
@@ -107,7 +105,7 @@ public class CameraManager : MonoBehaviour {
 
     //Funcion que se activa con el evento de cambio de personaje
     private void CameraToActivePlayer() {
-        ChangeCamera(characterManager.GetActiveCharacter().GetComponent<CharacterStatus>().currentRoom);
+        ChangeCamera(CharacterManager.GetActiveCharacter().GetComponent<CharacterStatus>().currentRoom);
     }
 
 

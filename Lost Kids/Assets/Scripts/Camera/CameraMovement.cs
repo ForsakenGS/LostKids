@@ -32,9 +32,15 @@ public class CameraMovement : MonoBehaviour {
 
     void Awake()
     {
-        
-        player = GameObject.FindGameObjectWithTag("Player").transform;
 
+    }
+
+    void Start()
+    {
+
+        RefreshPlayer();
+
+        //SE HA MOVIDO DEL AWAKE PARA PODER TENER EL PLAYER
         //Calcula la posición relativa de la cámara
         relCameraPos = transform.position - player.position;
 
@@ -46,13 +52,21 @@ public class CameraMovement : MonoBehaviour {
 
         //Incremento entre puntos de cámara
         deltaCameraPoints = 1.0f / (numCameraPoints - 1);
+
     }
 
-    /*void Update() {
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            player = GameObject.FindGameObjectWithTag("Player2").transform;
-        }
-    }*/
+    //Al activarse el script se añade la función ChangeCamera
+    void OnEnable()
+    {
+        RefreshPlayer();
+        CharacterManager.ActiveCharacterChangedEvent += RefreshPlayer;
+    }
+
+    //Al desactivarse el script se desuscriben las funciones
+    void OnDisable()
+    {
+        CharacterManager.ActiveCharacterChangedEvent -= RefreshPlayer;
+    }
 
 
     void FixedUpdate()
@@ -122,5 +136,13 @@ public class CameraMovement : MonoBehaviour {
 
         //Actualiza la rotación de la cámara entre la actual y la nueva rotación
         transform.rotation = Quaternion.Slerp(transform.rotation, lookAtRotation, smooth * Time.deltaTime);
+    }
+
+    private void RefreshPlayer()
+    {
+
+        if (CharacterManager.GetActiveCharacter() != null) {
+        player = CharacterManager.GetActiveCharacter().transform;
+        }
     }
 }

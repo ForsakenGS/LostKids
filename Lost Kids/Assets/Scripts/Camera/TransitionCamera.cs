@@ -39,9 +39,10 @@ public class TransitionCamera : MonoBehaviour {
 
     }
 
-    //Al activarse el script se añade la función ChangeCamera
+    //Al activarse el script se añade la función RefreshPlayer
     void OnEnable()
     {
+        RefreshPlayer();
         CharacterManager.ActiveCharacterChangedEvent += RefreshPlayer;
     }
 
@@ -125,7 +126,7 @@ public class TransitionCamera : MonoBehaviour {
     }
 
     private void RefreshPlayer() {
-        activePlayer = characterManager.GetActiveCharacter();
+        activePlayer = CharacterManager.GetActiveCharacter();
     }
 
 }

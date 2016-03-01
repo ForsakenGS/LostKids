@@ -37,7 +37,7 @@ public class MessageTrigger : MonoBehaviour {
 	
     void OnTriggerEnter(Collider other) {
         //Si se trata del jugador activo
-        if(other.gameObject.Equals(characterManager.GetActiveCharacter())) {
+        if(other.gameObject.Equals(CharacterManager.GetActiveCharacter())) {
             //Si el tipo de trigger es único y no se ha mostrado el mensaje se llama a mostrar mensaje
             if(type.Equals(MessageChecker.Unique) && !messageShown) {
                 messageShown = true;
