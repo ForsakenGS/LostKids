@@ -3,19 +3,31 @@ using System.Collections;
 
 public class InputManager : MonoBehaviour {
 	public bool locked;
+
 	private CharacterMovement charMov;
 	private AbilityController abilityControl;
 	private PlayerUse playerUse;
     private MessageManager messageManager;
+	private CharacterManager characterManager;
+
+	// Use this for references
+	void Awake () {
+		characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
+		messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
+	}
 
 	// Use this for initialization
 	void Start () {
-		locked = false;
-		GameObject player = GameObject.FindGameObjectWithTag("Player");
+		// Suscripciones a eventos
+		CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
+	}
+
+	// Update references to current character
+	void CharacterComponentsUpdate () {
+		GameObject player = characterManager.GetActiveCharacter();
 		charMov = player.GetComponent<CharacterMovement>();
 		abilityControl = player.GetComponent<AbilityController>();
 		playerUse = player.GetComponent<PlayerUse>();
-        messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
 	}
 
 	// Manage inputs that produce physics
@@ -38,7 +50,16 @@ public class InputManager : MonoBehaviour {
 	
 	// Manage general inputs
 	void Update () {
+		CharacterComponentsUpdate();
 		if (!locked) {
+			// Switch Players Buttons
+			if (Input.GetButtonDown("Player1")) {
+				characterManager.ActivateCharacter(0);
+			} else if (Input.GetButtonDown("Player2")) {
+				characterManager.ActivateCharacter(1);
+			} else if (Input.GetButtonDown("Player3")) {
+				characterManager.ActivateCharacter(2);
+			}
 			// Crouch Button
 			if (Input.GetButtonDown("Crouch")) {
 				charMov.CrouchButton();
