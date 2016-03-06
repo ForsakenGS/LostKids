@@ -24,10 +24,10 @@ public class PlayerUse : MonoBehaviour {
 	
 	}
 
-    public void Use()
+    public bool Use()
     {
 		//Se lanza un rayo hacia delante, sumando cierta altura para no lanzarlo desde el suelo
-        Ray usingRay = new Ray(this.transform.position + Vector3.up*0.2f, this.transform.forward);
+        Ray usingRay = new Ray(this.transform.position - Vector3.up*0.5f, this.transform.forward);
 
         //Debug para poder visualizar el rayo en el inspector
         Debug.DrawLine(this.transform.position + Vector3.up, this.transform.position + Vector3.up*0.2f +this.transform.forward*useDistance,Color.red);
@@ -51,6 +51,7 @@ public class PlayerUse : MonoBehaviour {
                 }
             }
         }
+		return isUsing;
     }
 
     /// <summary>
