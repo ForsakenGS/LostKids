@@ -4,7 +4,8 @@ using System.Collections;
 public class InputManager : MonoBehaviour {
 	public bool locked;
 
-	private CharacterMovement charMov;
+	private CharacterStatus characterStatus;
+	//private CharacterMovement charMov;
 	private AbilityController abilityControl;
 	private PlayerUse playerUse;
     private MessageManager messageManager;
@@ -25,9 +26,10 @@ public class InputManager : MonoBehaviour {
 	// Update references to current character
 	void CharacterComponentsUpdate () {
 		GameObject player = characterManager.GetActiveCharacter();
-		charMov = player.GetComponent<CharacterMovement>();
+		//charMov = player.GetComponent<CharacterMovement>();
 		abilityControl = player.GetComponent<AbilityController>();
 		playerUse = player.GetComponent<PlayerUse>();
+		characterStatus = player.GetComponent<CharacterStatus>();
 	}
 
 	// Manage inputs that produce physics
@@ -36,21 +38,19 @@ public class InputManager : MonoBehaviour {
 			// Character movement
 			float horizontal = Input.GetAxis("Horizontal");
 			float vertical = Input.GetAxis("Vertical");
-			// Jump button
-			bool jump = Input.GetButtonDown("Jump");
-			if (jump) {
-				charMov.JumpButton();
+			if ((horizontal != 0) || (vertical != 0f)) {
+				characterStatus.MovementButtons(horizontal, vertical);
 			}
-			// Apply the movement
-			if ((jump) || (horizontal != 0) || (vertical != 0f)) {
-				charMov.MoveCharacter(horizontal, vertical);
+			// Jump button
+			if (Input.GetButtonDown("Jump")) {
+				characterStatus.JumpButton();
 			}
 		}
 	}
 	
 	// Manage general inputs
 	void Update () {
-		CharacterComponentsUpdate();
+		CharacterComponentsUpdate();	// CAMBIAR!! Quitar esto de aquí y ponerlo en otro sitio para el problema de referencias
 		if (!locked) {
 			// Switch Players Buttons
 			if (Input.GetButtonDown("Player1")) {
@@ -62,7 +62,7 @@ public class InputManager : MonoBehaviour {
 			}
 			// Crouch Button
 			if (Input.GetButtonDown("Crouch")) {
-				charMov.CrouchButton();
+				characterStatus.CrouchButton();
 			}
 			// Abilities Buttons
 			if (Input.GetButtonDown("ChangeAbility")) {
@@ -72,8 +72,8 @@ public class InputManager : MonoBehaviour {
 				abilityControl.UseAbility();
 			}
 			// Use Button
-			if (Input.GetButton("Use")) {
-				playerUse.Use();
+			if (Input.GetButtonDown("Use")) {
+				characterStatus.UseButton();
 			}
 		} else {
             //Pasar mensajes

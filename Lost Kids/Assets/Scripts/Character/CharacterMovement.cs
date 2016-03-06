@@ -7,17 +7,17 @@ public class CharacterMovement : MonoBehaviour {
 	private enum State {Standing, Jumping, Crouching}
 
 	// Speed & impulse for each possible state
-	public float standingSpeed = 8000f;
-	public float jumpingImpulse = 40f;
-	public float jumpingSpeed = 5000f;
-	public float extraGravity= 1.2f;
-	public float crouchingSpeed = 4000f;
+	//public float standingSpeed = 8000f;
+//	public float jumpingImpulse = 40f;
+//	public float jumpingSpeed = 5000f;
+	public float extraGravity= 1200f;
+//	public float crouchingSpeed = 4000f;
 	public float turnSmoothing = 15f;
-	public float groundCheckDistance = 1.2f;
-	[HideInInspector]
-	public float speedModifier;
-	[HideInInspector]
-	public float jumpImpulseModifier;
+	public float groundCheckDistance = 1.45f;
+//	[HideInInspector]
+//	public float speedModifier;
+//	[HideInInspector]
+//	public float jumpImpulseModifier;
 
     private CameraManager cameraManager;
 
@@ -27,6 +27,11 @@ public class CharacterMovement : MonoBehaviour {
 	private State characterState;
 	private bool startJump;
 	private float speed;
+
+	// Use this for references
+	void Awake () {
+		cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -40,16 +45,13 @@ public class CharacterMovement : MonoBehaviour {
 		// Variables
 		characterState = State.Standing;
 		startJump = false;
-		speedModifier = 1.0f;
-		jumpImpulseModifier = 1.0f;
+//		speedModifier = 1.0f;
+//		jumpImpulseModifier = 1.0f;
 		speed = 0f;
-
-        //Referente to camera controller
-        cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
 	}
 
 	// Check if the character is over the floor by using a raycast
-	bool CharacterIsGrounded() {
+	public bool CharacterIsGrounded() {
 		// helper to visualise the ground check ray in the scene view
 		#if UNITY_EDITOR
 		Debug.DrawLine(transform.position + (Vector3.up * 0.1f), transform.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance));
@@ -58,57 +60,31 @@ public class CharacterMovement : MonoBehaviour {
 		return (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, groundCheckDistance));
 	}
 
-	// Called at a fixed interval. Physics code here!
-	void FixedUpdate () {
-		if (!CharacterIsGrounded()) {
-			// Extra gravity to fall down quickly
-			Vector3 forceToApply = new Vector3(0, -1 * extraGravity, 0);
-			rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
+	/// <summary>
+	/// Indica al script que el botón de agachado ha sido pulsado
+	/// </summary>
+	public void Crouch () {
+		// Standing => Crouching
+		standingColl.enabled = false;
+		crouchingColl.enabled = true;
+		transform.Translate(new Vector3(0, -0.5f,0));
+		transform.localScale -= new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
+	}
+
+	/// <summary>
+	/// Hace al personaje dar un doble salto si se encuentra en el aire
+	/// </summary>
+	public void ExtraJump (float modif) {
+		if ((characterState.Equals(State.Jumping))) {
+//			jumpImpulseModifier = modif;
+			startJump = true;
 		}
 	}
 
-	// Called at a fixed interval. Physics code here!
-//	void FixedUpdate () {
-//		Vector3 forceToApply = new Vector3();
-//		float speed = 0.0f;
-//
-//		// Decide force to apply depending on current player's state
-//		switch (characterState) {
-//		case State.Jumping:
-//			if (startJump) {
-//				// Impulse to jump
-//				forceToApply += new Vector3(0, jumpImpulseModifier * jumpingImpulse, 0);
-//				startJump = false;
-//				// Reset jumpImpulseModifier
-//				if (jumpImpulseModifier != 1.0f) {
-//					jumpImpulseModifier = 1.0f;
-//				}
-//			} else {
-//				// Extra gravity to fall down quickly
-//				forceToApply += new Vector3(0, -1 * extraGravity, 0);
-//			}
-//			speed = jumpingSpeed;
-//			break;
-//		case State.Crouching:
-//			speed = crouchingSpeed;
-//			break;
-//		case State.Standing:
-//			speed = standingSpeed;
-//			break;
-//		}
-//		// Character's movement
-//		float horizontal = Input.GetAxis("Horizontal");
-//		float vertical = Input.GetAxis("Vertical");
-//		if ((horizontal != 0f) || (vertical != 0f)) {
-//			forceToApply += new Vector3(horizontal, 0, vertical);
-//		}
-//		// Force relativily applied to camera's field of view
-//		forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
-//		if (!forceToApply.Equals(Vector3.zero)) {
-//			rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
-//			Rotating(forceToApply.x, forceToApply.z);
-//		}
-//	}
+	public void ExtraGravity() {
+		// Extra gravity to fall down quickly
+		rigBody.AddForce(new Vector3(0, -1 * extraGravity, 0), ForceMode.Force);
+	}
 
 	// Return the given vector relative to the given camera 
 	Vector3 GetVectorRelativeToObject(Vector3 inputVector, Transform camera) {
@@ -134,11 +110,134 @@ public class CharacterMovement : MonoBehaviour {
 		return objectRelativeVector;	
 	}
 
-	// Make the character to da an extra jump
-	public void ExtraJump (float modif) {
-		if ((characterState.Equals(State.Jumping))) {
-			jumpImpulseModifier = modif;
-			startJump = true;
+	/// <summary>
+	/// Indica al script que el botón de salto ha sido pulsado
+	/// </summary>
+	public void Jump (float jumpImpulse) {
+		rigBody.AddForce(new Vector3(0, jumpImpulse, 0), ForceMode.Force);
+	}
+
+	public void MoveCharacterAxes (float horizontal, float vertical, float speed, Vector3 normal) {
+		Vector3 forceToApply = new Vector3();
+
+		if ((horizontal != 0f) || (vertical != 0f)) {
+			if (Mathf.Abs(horizontal) > Mathf.Abs(vertical)) {
+				normal.z = 0;
+				if (normal.x > 0) {
+					normal.x *= -horizontal;
+				} else if(normal.x < 0) {
+					normal.x *= horizontal;
+				}
+			} else {
+				normal.x = 0;
+				if (normal.z > 0) {
+					normal.z *= -vertical;
+				} else if (normal.z < 0) {
+					normal.z *= vertical;
+				}
+			}
+			forceToApply = normal.normalized;
+		}
+		if (!forceToApply.Equals(Vector3.zero)) {
+			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
+		}
+	}
+
+	public void MoveCharacterNormal (float horizontal, float vertical, float speed) {
+		Vector3 forceToApply = new Vector3();
+
+		if ((horizontal != 0f) || (vertical != 0f)) {
+			forceToApply += new Vector3(horizontal, 0, vertical);
+			forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
+		}
+		if (!forceToApply.Equals(Vector3.zero)) {
+			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
+			Rotating(forceToApply.x, forceToApply.z);
+		}
+	}
+
+	/// <summary>
+	/// Mueve al personaje según lo indicado en las variables 'horizontal' y 'vertical'. Si 'rotate' es verdadero, rota al personaje.
+	/// </summary>
+	public void MoveCharacter (float horizontal, float vertical, bool rotate) {
+		Vector3 forceToApply = new Vector3();
+
+		// Decide force to apply depending on current player's state
+		switch (characterState) {
+		case State.Jumping:
+			if (startJump) {
+				// Impulse to jump
+//				forceToApply += new Vector3(0, jumpImpulseModifier * jumpingImpulse, 0);
+				startJump = false;
+				// Reset jumpImpulseModifier
+//				if (jumpImpulseModifier != 1.0f) {
+//					jumpImpulseModifier = 1.0f;
+//				}
+			}
+//			speed = jumpingSpeed;
+			break;
+		case State.Crouching:
+//			speed = crouchingSpeed;
+			break;
+		case State.Standing:
+//			speed = standingSpeed;
+			break;
+		}
+		// Character's movement
+		if ((horizontal != 0f) || (vertical != 0f)) {
+			forceToApply += new Vector3(horizontal, 0, vertical);
+
+			//PARCHE PARA EMPUJAR OBJETOS
+			if ((GetComponent<PlayerPush>() != null) && (GetComponent<PlayerPush>().IsPhushing()))
+			{
+				Vector3 normal = GetComponent<PlayerPush>().GetPushNormal();
+				if(Mathf.Abs(horizontal)>Mathf.Abs(vertical))
+				{
+					normal.z = 0;
+
+					if (normal.x > 0)
+					{
+						normal.x *= -horizontal;
+					}
+					else if(normal.x<0)
+					{
+						normal.x *= horizontal;
+					}
+
+
+
+				}
+				else
+				{
+					normal.x = 0;
+					if (normal.z > 0)
+					{
+						normal.z *= -vertical;
+					}
+					else if (normal.z < 0)
+					{
+						normal.z *= vertical;
+					}
+				}
+				forceToApply = normal.normalized;
+			}
+		}
+		// Force relativily applied to camera's field of view
+		//PARCHE PARA EMPUJAR OBJETOS , DEBERIA SER UN NUEVO ESTADO
+		if ((GetComponent<PlayerPush>() != null) || (!GetComponent<PlayerPush>().IsPhushing()))
+		{
+			forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
+		}
+		if (!forceToApply.Equals(Vector3.zero))
+		{
+//			rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
+			//PARCHE PARA EMPUJAR OBJETOS, DEBERIA SER UN NUEVO ESTADO
+			if ((GetComponent<PlayerPush>() != null) || (!GetComponent<PlayerPush>().IsPhushing()))
+			{ 
+				if (rotate) {
+					Rotating(forceToApply.x, forceToApply.z);
+				}
+			}
 		}
 	}
 
@@ -153,142 +252,11 @@ public class CharacterMovement : MonoBehaviour {
 		rigBody.MoveRotation(newRotation);
 	}
 
-	public void JumpButton () {
-		if ((characterState.Equals(State.Standing)) && (Input.GetButtonDown("Jump"))) {
-			// Standing => Jumping
-			characterState = State.Jumping;
-			startJump = true;
-		}
-	}
-
-	public void CrouchButton () {
-		if (characterState.Equals(State.Standing)) {
-			// Standing => Crouching
-			characterState = State.Crouching;
-			standingColl.enabled = false;
-			crouchingColl.enabled = true;
-			transform.Translate(new Vector3(0, -0.5f,0));
-			transform.localScale -= new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
-		} else if (characterState.Equals(State.Crouching)) {
-			// Crouching => Standing
-			characterState = State.Standing;
-			standingColl.enabled = true;
-			crouchingColl.enabled = false;
-			transform.Translate(new Vector3(0, 0.5f,0));
-			transform.localScale += new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
-		}
-	}
-
-	public void MoveCharacter (float horizontal, float vertical) {
-		Vector3 forceToApply = new Vector3();
-
-		// Decide force to apply depending on current player's state
-		switch (characterState) {
-		case State.Jumping:
-			if (startJump) {
-				// Impulse to jump
-				forceToApply += new Vector3(0, jumpImpulseModifier * jumpingImpulse, 0);
-				startJump = false;
-				// Reset jumpImpulseModifier
-				if (jumpImpulseModifier != 1.0f) {
-					jumpImpulseModifier = 1.0f;
-				}
-			}
-			speed = jumpingSpeed;
-			break;
-		case State.Crouching:
-			speed = crouchingSpeed;
-			break;
-		case State.Standing:
-			speed = standingSpeed;
-			break;
-		}
-		// Character's movement
-		if ((horizontal != 0f) || (vertical != 0f)) {
-			forceToApply += new Vector3(horizontal, 0, vertical);
-
-            //PARCHE PARA EMPUJAR OBJETOS
-            if(GetComponent<PlayerPush>().IsPhushing())
-            {
-                Vector3 normal = GetComponent<PlayerPush>().GetPushNormal();
-                if(Mathf.Abs(horizontal)>Mathf.Abs(vertical))
-                {
-                    normal.z = 0;
-
-                    if (normal.x > 0)
-                    {
-                        normal.x *= -horizontal;
-                    }
-                    else if(normal.x<0)
-                    {
-                        normal.x *= horizontal;
-                    }
-
-
-                    
-                }
-                else
-                {
-                    normal.x = 0;
-                    if (normal.z > 0)
-                    {
-                        normal.z *= -vertical;
-                    }
-                    else if (normal.z < 0)
-                    {
-                        normal.z *= vertical;
-                    }
-                }
-                forceToApply = normal.normalized;
-            }
-		}
-        // Force relativily applied to camera's field of view
-        //PARCHE PARA EMPUJAR OBJETOS , DEBERIA SER UN NUEVO ESTADO
-        if (!GetComponent<PlayerPush>().IsPhushing())
-        {
-            forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
-        }
-        if (!forceToApply.Equals(Vector3.zero))
-        {
-            rigBody.AddForce(forceToApply * (speedModifier * speed), ForceMode.Force);
-            //PARCHE PARA EMPUJAR OBJETOS, DEBERIA SER UN NUEVO ESTADO
-            if (!GetComponent<PlayerPush>().IsPhushing())
-            { 
-                Rotating(forceToApply.x, forceToApply.z);
-            }
-		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		// Changing character's state
-		if ((characterState.Equals(State.Jumping)) & (CharacterIsGrounded())) {
-			// Jumping => Standing
-			characterState = State.Standing;
-			GetComponent<MultipleJumpAbility>().jumpNumber = 0;  //CAMBIAR!
-		}
-//		if ((characterState.Equals(State.Standing)) && (Input.GetButtonDown("Crouch"))) {
-//			// Standing => Crouching
-//			characterState = State.Crouching;
-//			standingColl.enabled = false;
-//			crouchingColl.enabled = true;
-//			transform.Translate(new Vector3(0, -0.5f,0));
-//			transform.localScale -= new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
-//		} else if ((characterState.Equals(State.Crouching)) && (Input.GetButtonDown("Crouch"))) {
-//			// Crouching => Standing
-//			characterState = State.Standing;
-//			standingColl.enabled = true;
-//			crouchingColl.enabled = false;
-//			transform.Translate(new Vector3(0, 0.5f,0));
-//			transform.localScale += new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
-//		} else if ((characterState.Equals(State.Standing)) && (Input.GetButtonDown("Jump"))) {
-//			// Standing => Jumping
-//			characterState = State.Jumping;
-//			startJump = true;
-//		} else if ((characterState.Equals(State.Jumping)) & (CharacterIsGrounded())) {
-//			// Jumping => Standing
-//			characterState = State.Standing;
-//			GetComponent<MultipleJumpAbility>().jumpNumber = 0;  //CAMBIAR!
-//		}
+	public void Stand() {
+		// Crouching => Standing
+		standingColl.enabled = true;
+		crouchingColl.enabled = false;
+		transform.Translate(new Vector3(0, 0.5f,0));
+		transform.localScale += new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
 	}
 }
