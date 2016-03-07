@@ -8,7 +8,9 @@ public class BigJumpAbility : CharacterAbility {
 
 	// Finish the execution of the ability (in this case, it has no sense so return 'false')
 	public override bool EndExecution () {
-		return false;
+		execution = false;
+
+		return execution;
 	}
 
 	// Start the execution of the ability (in this case, it has no sense so return 'false')
