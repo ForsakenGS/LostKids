@@ -54,7 +54,6 @@
      <Compile Include="Assets\Scripts\Character\Abilities\BigJumpAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\BreakAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\CharacterAbility.cs" />
-     <Compile Include="Assets\Scripts\Character\Abilities\MultipleJumpAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\PushAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\SprintAbility.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterMovement.cs" />
