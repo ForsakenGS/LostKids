@@ -3,11 +3,8 @@ using System.Collections;
 
 public class InputManager : MonoBehaviour {
 	public bool locked;
-
 	private CharacterStatus characterStatus;
-	//private CharacterMovement charMov;
 	private AbilityController abilityControl;
-	private PlayerUse playerUse;
     private MessageManager messageManager;
 	private CharacterManager characterManager;
 
@@ -19,15 +16,17 @@ public class InputManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		// Suscripciones a eventos
-		CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
+        // Inicialización variables
+        locked = false;
+        CharacterComponentsUpdate();
+        // Suscripciones a eventos
+        CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
 	}
 
 	// Update references to current character
 	void CharacterComponentsUpdate () {
 		GameObject player = CharacterManager.GetActiveCharacter();
 		abilityControl = player.GetComponent<AbilityController>();
-		playerUse = player.GetComponent<PlayerUse>();
 		characterStatus = player.GetComponent<CharacterStatus>();
 	}
 
@@ -46,10 +45,17 @@ public class InputManager : MonoBehaviour {
 			}
 		}
 	}
+    /// <summary>
+    /// Función para bloquear/desbloquear la lectura de 
+    /// </summary>
+    /// <param name="lockVar"></param>
+    public void SetLock(bool lockVar) {
+        locked = lockVar;
+    }
 	
 	// Manage general inputs
 	void Update () {
-		CharacterComponentsUpdate();	// CAMBIAR!! Quitar esto de aquí y ponerlo en otro sitio para el problema de referencias
+		//CharacterComponentsUpdate();	// CAMBIAR!! Quitar esto de aquí y ponerlo en otro sitio para el problema de referencias
 		if (!locked) {
 			// Switch Players Buttons
 			if (Input.GetButtonDown("Player1")) {

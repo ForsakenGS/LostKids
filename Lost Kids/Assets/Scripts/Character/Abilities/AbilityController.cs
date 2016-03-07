@@ -7,6 +7,7 @@ public class AbilityController : MonoBehaviour {
 	private CharacterAbility activeAbility;
 	private CharacterStatus characterStatus;
 
+    // Use this for references
 	void Awake() {
 		CharacterAbility[] abilities = GetComponents<CharacterAbility>();
 		ability1 = abilities[0];
