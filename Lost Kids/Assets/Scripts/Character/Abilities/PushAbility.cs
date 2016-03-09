@@ -13,14 +13,13 @@ public class PushAbility : CharacterAbility {
 	/// </summary>
 	/// <returns><c>true</c>, si se pudo parar la ejecución, <c>false</c> si no fue posible.</returns>
 	public override bool EndExecution () {
-		bool ended = execution;
 		if (execution) {
 			execution = false;
 			targetTransform.parent = null;
 			pushNormal = Vector3.zero;
 		}
 
-		return ended;
+		return !execution;
 	}
 
 	/// <summary>
@@ -39,7 +38,9 @@ public class PushAbility : CharacterAbility {
 	public override bool StartExecution () {
 		bool started = !execution;
 		if (!execution) {
-			Ray detectRay = new Ray(this.transform.position + Vector3.up*altura, this.transform.forward * pushDistance);
+            // Consumo de energía inicial
+            energy -= initialConsumption;
+            Ray detectRay = new Ray(this.transform.position + Vector3.up*altura, this.transform.forward * pushDistance);
 			// helper to visualise the ground check ray in the scene view
 			#if UNITY_EDITOR
 			Debug.DrawRay(detectRay.origin, detectRay.direction, Color.green, 1);

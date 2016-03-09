@@ -39,7 +39,7 @@ public class BreakableWood : BreakableObject {
         //Animacion de romperse
         //Destroy(this.gameObject,tiempo de animacion);
         //Destroy(this.gameObject);
-        StartCoroutine(gameObject.GetComponent <TriangleExplosion>().SplitMesh(true));
+        StartCoroutine(gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
     }
 
 }

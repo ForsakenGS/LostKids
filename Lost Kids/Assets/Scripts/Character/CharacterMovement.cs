@@ -58,12 +58,11 @@ public class CharacterMovement : MonoBehaviour {
             }
             // helper to visualise the ground check ray in the scene view
             #if UNITY_EDITOR
-            Debug.DrawLine(ray, ray + (Vector3.down * groundCheckDistance), Color.blue, 10000);
+            Debug.DrawLine(ray, ray + (Vector3.down * groundCheckDistance), Color.blue, 1000);
             #endif
             // Lanza el rayo y comprueba si colisiona con otro objeto
             grounded = (Physics.Raycast(ray, Vector3.down, groundCheckDistance));
             rayCnt += 1;
-            Debug.Log(rayCnt + ":" + ray);
         } while ((!grounded) && (rayCnt < 5));
 
         return grounded;
@@ -103,7 +102,7 @@ public class CharacterMovement : MonoBehaviour {
 			objectRelativeVector = relativeRight + relativeForward;
 			// Normalizing vector
 			if (objectRelativeVector.magnitude > 1f) {
-				objectRelativeVector.Normalize();	
+				objectRelativeVector.Normalize();
 			}
 		}
 		// Set original y-coordinate, because height in world is not camera depending
@@ -122,20 +121,26 @@ public class CharacterMovement : MonoBehaviour {
 	public void MoveCharacterAxes (float horizontal, float vertical, float speed, Vector3 normal) {
 		Vector3 forceToApply = new Vector3();
 
-		if ((horizontal != 0f) || (vertical != 0f)) {
-			if (Mathf.Abs(horizontal) > Mathf.Abs(vertical)) {
+        if ((horizontal != 0f) || (vertical != 0f)) {
+            // Movimiento relativo a la cámara
+            Vector3 relativeMove = GetVectorRelativeToObject(new Vector3(horizontal, 0, vertical), cameraManager.CurrentCamera().transform);
+            horizontal = relativeMove.x;
+            vertical = relativeMove.z;
+            if (Mathf.Abs(horizontal) > Mathf.Abs(vertical)) {
+                // Movimiento horizontal
 				normal.z = 0;
 				if (normal.x > 0) {
-					normal.x *= -horizontal;
-				} else if(normal.x < 0) {
 					normal.x *= horizontal;
+				} else if(normal.x < 0) {
+					normal.x *= -horizontal;
 				}
 			} else {
+                // Movimiento vertical
 				normal.x = 0;
 				if (normal.z > 0) {
-					normal.z *= -vertical;
-				} else if (normal.z < 0) {
 					normal.z *= vertical;
+				} else if (normal.z < 0) {
+					normal.z *= -vertical;
 				}
 			}
 			forceToApply = normal.normalized;

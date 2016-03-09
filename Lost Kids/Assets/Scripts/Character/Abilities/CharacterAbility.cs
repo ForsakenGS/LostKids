@@ -1,65 +1,135 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-/* Abstract class to define an ability for the character */
+/// <summary>
+/// Clase abstracta para definir el comportamiento general de cualquier habilidad de personaje. Además de los parámetros generales,
+/// declara un par de métodos para activar/desactivar una habilidad, dos métodos abstractos para el comienzo y fin de la habilidad
+/// y toda la funcionalidad necesaria para el control de la energía y el tiempo en el método Update.
+/// </summary>
 public abstract class CharacterAbility : MonoBehaviour {
-	public bool active = false;
-	public bool execution = false;
-	public float duration;
-	public float timeToRestore;
+    /// <summary>
+    /// Energía máxima de la habilidad
+    /// </summary>
+    public float maxEnergy = 10;
+    /// <summary>
+    /// Consumo de energía inicial necesario para la ejecución de la habilidad
+    /// </summary>
+    public float initialConsumption = 5;
+    /// <summary>
+    /// Multiplicador del consumo de energía durante la ejecución
+    /// </summary>
+    public float normalConsumption = 1;
+    /// <summary>
+    /// Tiempo necesario para restaurar por completo la energía, desde 0 a maxEnergy
+    /// </summary>
+    public float timeToRestoreEnergy = 5;
+    /// <summary>
+    /// Tiempo de ejecución de la habilidad
+    /// </summary>
+    public float executionTime = 1;
 
-	protected CharacterStatus characterStatus;
-	protected CharacterMovement characterMovement;
-	protected float executionTimeLeft;
+    // Parámetros básicos de la habilidad
+    protected bool active;
+    protected bool execution;
+    public float energy;
+    protected CharacterStatus characterStatus;
+    protected CharacterMovement characterMovement;
 
-	void Awake() {
-		characterStatus = GetComponent<CharacterStatus>();
-		characterMovement = GetComponent<CharacterMovement>();
-	}
+    private float initExecutionTime;
 
-	void Start() {
-		executionTimeLeft = 0.0f;
-	}
+    // Use this for references
+    void Awake() {
+        characterStatus = GetComponent<CharacterStatus>();
+        characterMovement = GetComponent<CharacterMovement>();
+    }
 
-	// Activate the ability for the character, deactivating the rest of them
-	public void ActivateAbility() {
-		active = true;
-	}
+    // Use this for initialization
+    void Start() {
+        active = false;
+        execution = false;
+        energy = 0.0f;
+        initExecutionTime = executionTime;
+    }
 
-	// Deactivate the ability for the character
-	public void DeactivateAbility() {
-		active = false;
-		if (execution) {
-			EndExecution();
-		}
-	}
+    /// <summary>
+    /// Activa la habilidad
+    /// </summary>
+    public void ActivateAbility() {
+        active = true;
+    }
 
-	public abstract bool EndExecution ();
+    /// <summary>
+    /// Comprueba si existe suficiente energía para comenzar a usar una habilidad
+    /// </summary>
+    /// <returns><c>true</c> si es posible iniciarla, <c>false</c> si no es posible</returns>
+    public bool CanBeStarted() {
+        return (energy >= initialConsumption);
+    }
 
-	public abstract bool StartExecution ();
+    /// <summary>
+    /// Desactiva la habilidad, terminando su ejecución en caso de ser necesario
+    /// </summary>
+    public void DeactivateAbility() {
+        active = false;
+        if (execution) {
+            characterStatus.EndAbility(this);
+            EndExecution();
+        }
+    }
 
-	void Update() {
-		// Control del tiempo de habilidad
-		if (duration > 0) {
-			if (execution) {
-				// En ejecución, luego se decrementa el tiempo restante
-				executionTimeLeft -= Time.deltaTime;
-				if (executionTimeLeft <= 0.0) {
-					// La habilidad debe terminar su ejecución
-					Debug.Log("c");
-					GetComponent<AbilityController>().UseAbility();
-				}
-			} else if (executionTimeLeft < duration) {
-				// No en ejecución y el tiempo restante no está completo, luego se va recuperando
-				if (timeToRestore == 0) {
-					executionTimeLeft = duration;
-				} else {
-					executionTimeLeft += ((Time.deltaTime / timeToRestore) * duration);
-				}
-				if (executionTimeLeft > duration) {
-					executionTimeLeft = duration;
-				}
-			}
-		}
-	}
+    public abstract bool EndExecution();
+
+    public abstract bool StartExecution();
+
+    /// <summary>
+    /// Permite conocer si la habilidad está activa o no
+    /// </summary>
+    /// <returns><c>true</c> si la habilidad está activa, <c>false</c> si no lo está</returns>
+    public bool IsActive() {
+        return active;
+    }
+
+    /// <summary>
+    /// Permite conocer si la habilidad está en ejecución o no
+    /// </summary>
+    /// <returns><c>true</c> si la habilidad está en ejecución, <c>false</c> si no lo está</returns>
+    public bool IsExecuting() {
+        return execution;
+    }
+
+    // Update is called once per frame
+    void Update() {
+        // Control del tiempo de habilidad
+        if (execution) {
+            // En ejecución
+            if (normalConsumption > 0) {
+                // Se decrementa la energía
+                energy -= Time.deltaTime * normalConsumption;
+                if (energy <= 0.0) {
+                    // La habilidad debe terminar su ejecución
+                    GetComponent<AbilityController>().UseAbility();
+                }
+            } else {
+                // Se decrementa el tiempo de ejecución
+                if (initExecutionTime > 0) {
+                    executionTime -= Time.deltaTime;
+                    if (executionTime <= 0.0) {
+                        // La habilidad debe terminar su ejecución
+                        GetComponent<AbilityController>().UseAbility();
+                        // Reinicia contador de tiempo
+                        executionTime = initExecutionTime;
+                    }
+                }
+            }
+        } else if (energy < maxEnergy) {
+            // No en ejecución y el tiempo restante no está completo, luego se va recuperando
+            if (timeToRestoreEnergy == 0) {
+                energy = maxEnergy;
+            } else {
+                energy += ((Time.deltaTime / timeToRestoreEnergy) * maxEnergy);
+            }
+            if (energy > maxEnergy) {
+                energy = maxEnergy;
+            }
+        }
+    }
 }
