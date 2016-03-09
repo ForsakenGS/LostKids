@@ -35,7 +35,7 @@ public class MultipleJumpAbility : CharacterAbility {
 				jumpNumber += 1;
 			} else if (jumpNumber < possibleJumps) {
 				// Extra jump
-				charMovement.ExtraJump(jumpImpulseModifier);
+				//charMovement.ExtraJump(jumpImpulseModifier);
 				jumpNumber += 1;
 			}
 		}
