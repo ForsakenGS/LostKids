@@ -29,6 +29,10 @@ public class Button : UsableObject {
 
     private bool isMoving = false;
 
+    private bool isUsing = false;
+
+    private AudioLoader audioLoader;
+
 
     // Use this for initialization
     new void Start()
@@ -39,6 +43,8 @@ public class Button : UsableObject {
         //Almacena posiciones iniciales y finales ( activado y desactivado )
         startPosition = this.transform.position;
         endPosition = this.transform.position - new Vector3(0, pushDeph, 0);
+
+        audioLoader = GetComponent<AudioLoader>();
 
     }
 
@@ -54,7 +60,7 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnTriggerEnter(Collider col)
     {
-        if(col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable"))
+        if(CharacterManager.IsActiveCharacter(col.gameObject) || col.gameObject.tag.Equals("Pushable"))
         {
             StopAllCoroutines();
 
@@ -69,7 +75,7 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnTriggerExit(Collider col)
     {
-        if (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable"))
+        if (CharacterManager.IsActiveCharacter(col.gameObject) || col.gameObject.tag.Equals("Pushable"))
         {
             if(isMoving || type.Equals(Usables.Hold))
             {
@@ -84,11 +90,16 @@ public class Button : UsableObject {
     /// </summary>
     new public void Use()
     {
-        //Comportamiento generico de un usable. (Activar objeto o notificar al puzzle segun situacion)
+        if(!isUsing) {
+            
+            isUsing = true;
 
-        base.Use();
+            //Comportamiento generico de un usable. (Activar objeto o notificar al puzzle segun situacion)
+            base.Use();
 
-        //Es necesario añadir funcionalidad adicional como Sonido o animaciones
+            //Es necesario añadir funcionalidad adicional como Sonido o animaciones
+            StartCoroutine(AudioManager.PlayDuringTime(audioLoader.GetSound("Shout"), false,1));
+        }
     }
 
 
@@ -98,6 +109,10 @@ public class Button : UsableObject {
     /// </summary>
     new public void CancelUse()
     {
+        isUsing = false;
+
+        //AudioManager.Play(audioLoader.GetSound("Complain"), false);
+
         //Comportamiento base generico para todos los objetos usables
         base.CancelUse();
 
