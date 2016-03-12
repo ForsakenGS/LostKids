@@ -78,7 +78,13 @@ public abstract class CharacterAbility : MonoBehaviour {
 
     public abstract bool EndExecution();
 
-    public abstract bool StartExecution();
+    public float GetAvailableEnergy() {
+        return energy;
+    }
+
+    public float GetMaxEnergy() {
+        return maxEnergy;
+    }
 
     /// <summary>
     /// Permite conocer si la habilidad está activa o no
@@ -95,6 +101,8 @@ public abstract class CharacterAbility : MonoBehaviour {
     public bool IsExecuting() {
         return execution;
     }
+
+    public abstract bool StartExecution();
 
     // Update is called once per frame
     void Update() {

@@ -36,7 +36,6 @@ public class PushAbility : CharacterAbility {
 	/// </summary>
 	/// <returns><c>true</c>, si se pudo iniciar la ejecución, <c>false</c> si no fue posible.</returns>
 	public override bool StartExecution () {
-		bool started = !execution;
 		if (!execution) {
             // Consumo de energía inicial
             energy -= initialConsumption;

@@ -8,6 +8,12 @@ using System.Collections;
 /// con el personaje.
 /// </summary>
 public class AbilityController : MonoBehaviour {
+    /// <summary>
+    /// Evento para informar del cambio de habilidad activa a otros scripts
+    /// </summary>
+    public delegate void AbilityChanged();
+    public static event AbilityChanged ActiveAbilityChangedEvent;
+
     private CharacterAbility ability1;
     private CharacterAbility ability2;
     private CharacterAbility activeAbility;
@@ -23,6 +29,7 @@ public class AbilityController : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        // Activa la habilidad 1
         activeAbility = ability1;
         ability1.ActivateAbility();
     }
@@ -38,7 +45,24 @@ public class AbilityController : MonoBehaviour {
             activeAbility = ability1;
         }
         activeAbility.ActivateAbility();
+        // Lanza el evento de cambio de habilidad
+        if (ActiveAbilityChangedEvent != null) {
+            ActiveAbilityChangedEvent();
+        }
         Debug.Log("ActiveAbility:" + activeAbility.GetType());
+    }
+
+    /// <summary>
+    /// Permite conocer el índice de la habilidad activa del personaje
+    /// </summary>
+    /// <returns><c>1</c> si se trata de la primera habilidad, <c>2</c> si es la segunda</returns>
+    public int GetActiveAbilityIndex() {
+        int res = 1;
+        if ((activeAbility != null) && (activeAbility.Equals(ability2))) {
+            res = 2;
+        }
+
+        return res;
     }
 
     /// <summary>

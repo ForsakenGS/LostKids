@@ -40,7 +40,7 @@ public class InputManager : MonoBehaviour {
                 characterStatus.MovementButtons(horizontal, vertical);
             }
             // Jump button
-            if (Input.GetButtonDown("Jump")) {
+            if (Input.GetButton("Jump")) {
                 characterStatus.JumpButton();
             }
         }

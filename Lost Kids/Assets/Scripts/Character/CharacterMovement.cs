@@ -58,7 +58,7 @@ public class CharacterMovement : MonoBehaviour {
             }
             // helper to visualise the ground check ray in the scene view
             #if UNITY_EDITOR
-            Debug.DrawLine(ray, ray + (Vector3.down * groundCheckDistance), Color.blue, 1000);
+            Debug.DrawLine(ray, ray + (Vector3.down * groundCheckDistance), Color.blue, 1);
             #endif
             // Lanza el rayo y comprueba si colisiona con otro objeto
             grounded = (Physics.Raycast(ray, Vector3.down, groundCheckDistance));
