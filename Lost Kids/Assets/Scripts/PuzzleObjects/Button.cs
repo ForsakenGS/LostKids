@@ -98,7 +98,7 @@ public class Button : UsableObject {
             base.Use();
 
             //Es necesario añadir funcionalidad adicional como Sonido o animaciones
-            StartCoroutine(AudioManager.PlayDuringTime(audioLoader.GetSound("Shout"), false,1));
+            StartCoroutine(AudioManager.FadePlay(audioLoader.GetSound("Shout"), false,0.1f));
         }
     }
 

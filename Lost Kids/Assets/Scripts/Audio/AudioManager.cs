@@ -13,9 +13,10 @@ public class AudioManager : MonoBehaviour {
     /// </summary>
     /// <param name="source">AudioSource que se desea reproducir</param>
     /// <param name="loop">Indica si se trata de un bucle</param>
-    public static void Play(AudioSource source, bool loop) {
+    public static void Play(AudioSource source, bool loop, float volume) {
 
         source.loop = loop;
+        source.volume = volume;
         source.Play();
 
     }
@@ -26,7 +27,8 @@ public class AudioManager : MonoBehaviour {
     /// <param name="source">AudioSource que se desea reproducir</param>
     /// <param name="loop">Indica si se trata de un bucle</param>
     /// <param name="delay"> Tiempo de espera hasta reproducir el sonido</param>
-    public static IEnumerator PlayDelayed(AudioSource source, bool loop, float delay) {
+    /// <param name="volume">Volumen del audio</param>
+    public static IEnumerator PlayDelayed(AudioSource source, bool loop, float delay, float volume) {
 
         //Tiempo desde el inicio
         float timeSinceStarted = Time.time;
@@ -45,7 +47,7 @@ public class AudioManager : MonoBehaviour {
 
         //Cuando haya pasado el tiempo se reproduce el sonido
         if(currentTime >= endTime) {
-            Play(source, loop);
+            Play(source, loop, volume);
         }
 
         yield return 0;
@@ -58,13 +60,14 @@ public class AudioManager : MonoBehaviour {
     /// <param name="source">AudioSource que se desea reproducir</param>
     /// <param name="loop">Indica si se trata de un bucle</param>
     /// <param name="time"> Tiempo de duración de la reproducción del sonido</param>
-    public static IEnumerator PlayDuringTime(AudioSource source, bool loop, float time) {
+    /// <param name="volume">Volumen del audio</param>
+    public static IEnumerator PlayDuringTime(AudioSource source, bool loop, float time, float volume) {
 
         float timeSinceStarted = Time.time;
         float endTime = timeSinceStarted + time;
         float currentTime = timeSinceStarted;
 
-        Play(source, loop);
+        Play(source, loop, volume);
 
         while (currentTime < endTime) {
             currentTime += Time.deltaTime;
@@ -73,6 +76,27 @@ public class AudioManager : MonoBehaviour {
 
         if(currentTime >= endTime) {
             Stop(source);
+        }
+
+        yield return 0;
+
+    }
+
+    /// <summary>
+    /// Reproduce un audio simple o en bucle con un volumen incremental a su inicio durante un tiempo
+    /// </summary>
+    /// <param name="source">AudioSource que se desea reproducir</param>
+    /// <param name="loop">Indica si se trata de un bucle</param>
+    /// <param name="deltaVolume">Incremento de volumen</param>
+    public static IEnumerator FadePlay(AudioSource source, bool loop, float deltaVolume) {
+
+        source.volume = 0;
+
+        Play(source, loop, 0);
+
+        while ( source.volume < 1) {
+            source.volume += deltaVolume * Time.deltaTime;
+            yield return null;
         }
 
         yield return 0;
@@ -133,6 +157,28 @@ public class AudioManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// Pausa un audio con un volumen decremental durante un tiempo
+    /// </summary>
+    /// <param name="source">AudioSource que se desea reproducir</param>
+    /// <param name="deltaVolume">Decremento de volumen</param>
+    public static IEnumerator FadePause(AudioSource source, float deltaVolume)
+    {
+
+        while (source.volume > 0)
+        {
+            source.volume -= deltaVolume * Time.deltaTime;
+            yield return null;
+        }
+
+        if(source.volume <= 0) {
+            Pause(source);
+        }
+
+        yield return 0;
+
+    }
+
+    /// <summary>
     /// Reanuda un sonido
     /// </summary>
     /// <param name="source">AudioSource que se desea reanudar</param>
@@ -171,6 +217,28 @@ public class AudioManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// Reanuda un audio con un volumen incremental durante un tiempo
+    /// </summary>
+    /// <param name="source">AudioSource que se desea reproducir</param>
+    /// <param name="deltaVolume">Decremento de volumen</param>
+    public static IEnumerator FadeResume(AudioSource source, float deltaVolume)
+    {
+
+        source.volume = 0;
+
+        Resume(source);
+
+        while (source.volume < 1)
+        {
+            source.volume += deltaVolume * Time.deltaTime;
+            yield return null;
+        }
+
+        yield return 0;
+
+    }
+
+    /// <summary>
     /// Para un sonido
     /// </summary>
     /// <param name="source">AudioSource que se desea parar</param>
@@ -206,6 +274,30 @@ public class AudioManager : MonoBehaviour {
         }
 
         yield return 0;
+    }
+
+
+    /// <summary>
+    /// Para un audio con un volumen decremental durante un tiempo
+    /// </summary>
+    /// <param name="source">AudioSource que se desea reproducir</param>
+    /// <param name="deltaVolume">Decremento de volumen</param>
+    public static IEnumerator FadeStop(AudioSource source, float deltaVolume)
+    {
+
+        while (source.volume > 0)
+        {
+            source.volume -= deltaVolume * Time.deltaTime;
+            yield return null;
+        }
+
+        if (source.volume <= 0)
+        {
+            Stop(source);
+        }
+
+        yield return 0;
+
     }
 
 }
