@@ -98,7 +98,7 @@ public class Button : UsableObject {
             base.Use();
 
             //Es necesario añadir funcionalidad adicional como Sonido o animaciones
-            StartCoroutine(AudioManager.FadePlay(audioLoader.GetSound("Shout"), false,0.1f));
+            AudioManager.Play(audioLoader.GetSound("ButtonDown"), false, 1);
         }
     }
 
@@ -111,7 +111,7 @@ public class Button : UsableObject {
     {
         isUsing = false;
 
-        //AudioManager.Play(audioLoader.GetSound("Complain"), false);
+        AudioManager.Play(audioLoader.GetSound("ButtonUp"), false, 1);
 
         //Comportamiento base generico para todos los objetos usables
         base.CancelUse();
