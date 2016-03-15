@@ -13,6 +13,8 @@ public class CharacterMovement : MonoBehaviour {
 	private Collider standingColl;
 	private Collider crouchingColl;
 
+    private AudioLoader audioLoader;
+
 	// Use this for references
 	void Awake () {
 		cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
@@ -26,6 +28,8 @@ public class CharacterMovement : MonoBehaviour {
 	void Start () {
 		standingColl.enabled = true;
 		crouchingColl.enabled = false;
+
+        audioLoader = GetComponent<AudioLoader>();
 	}
 
     /// <summary>
@@ -117,6 +121,7 @@ public class CharacterMovement : MonoBehaviour {
 	/// </summary>
 	public void Jump (float jumpImpulse) {
 		rigBody.AddForce(new Vector3(0, jumpImpulse, 0), ForceMode.Force);
+        AudioManager.Play(audioLoader.GetSound("Jump"), false, 1);
 	}
 
 	public void MoveCharacterAxes (float horizontal, float vertical, float speed, Vector3 normal) {
@@ -152,10 +157,19 @@ public class CharacterMovement : MonoBehaviour {
 			forceToApply += new Vector3(horizontal, 0, vertical);
 			forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
 		}
-		if (!forceToApply.Equals(Vector3.zero)) {
+
+        AudioSource source = audioLoader.GetSound("Steps");
+
+        if (!forceToApply.Equals(Vector3.zero)) {
 			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
 			Rotating(forceToApply.x, forceToApply.z);
-		}
+
+            if(!source.isPlaying) {
+                AudioManager.Play(source, true, 1);
+            }
+        } else {
+            AudioManager.Stop(source);
+        }
 	}
 
 	// Change character's rotation to make it look at the direction it is going

@@ -29,7 +29,7 @@ public class Button : UsableObject {
 
     private bool isMoving = false;
 
-    private bool isUsing = false;
+    private bool inUse= false;
 
     private AudioLoader audioLoader;
 
@@ -90,9 +90,9 @@ public class Button : UsableObject {
     /// </summary>
     new public void Use()
     {
-        if(!isUsing) {
+        if(!inUse) {
             
-            isUsing = true;
+            inUse = true;
 
             //Comportamiento generico de un usable. (Activar objeto o notificar al puzzle segun situacion)
             base.Use();
@@ -109,7 +109,7 @@ public class Button : UsableObject {
     /// </summary>
     new public void CancelUse()
     {
-        isUsing = false;
+        inUse = false;
 
         AudioManager.Play(audioLoader.GetSound("ButtonUp"), false, 1);
 

@@ -161,11 +161,9 @@ public class AudioManager : MonoBehaviour {
     /// </summary>
     /// <param name="source">AudioSource que se desea reproducir</param>
     /// <param name="deltaVolume">Decremento de volumen</param>
-    public static IEnumerator FadePause(AudioSource source, float deltaVolume)
-    {
+    public static IEnumerator FadePause(AudioSource source, float deltaVolume) {
 
-        while (source.volume > 0)
-        {
+        while (source.volume > 0) {
             source.volume -= deltaVolume * Time.deltaTime;
             yield return null;
         }
@@ -195,8 +193,8 @@ public class AudioManager : MonoBehaviour {
     /// </summary>
     /// <param name="source">AudioSource que se desea reanudar</param>
     /// <param name="delay">Tiempo de espera hasta reanudar el sonido</param>
-    public static IEnumerator Resume(AudioSource source, float delay)
-    {
+    public static IEnumerator Resume(AudioSource source, float delay) {
+
         if (!source.isPlaying) {
 
             float timeSinceStarted = Time.time;
@@ -221,15 +219,13 @@ public class AudioManager : MonoBehaviour {
     /// </summary>
     /// <param name="source">AudioSource que se desea reproducir</param>
     /// <param name="deltaVolume">Decremento de volumen</param>
-    public static IEnumerator FadeResume(AudioSource source, float deltaVolume)
-    {
+    public static IEnumerator FadeResume(AudioSource source, float deltaVolume) {
 
         source.volume = 0;
 
         Resume(source);
 
-        while (source.volume < 1)
-        {
+        while (source.volume < 1) {
             source.volume += deltaVolume * Time.deltaTime;
             yield return null;
         }
@@ -282,17 +278,14 @@ public class AudioManager : MonoBehaviour {
     /// </summary>
     /// <param name="source">AudioSource que se desea reproducir</param>
     /// <param name="deltaVolume">Decremento de volumen</param>
-    public static IEnumerator FadeStop(AudioSource source, float deltaVolume)
-    {
+    public static IEnumerator FadeStop(AudioSource source, float deltaVolume) {
 
-        while (source.volume > 0)
-        {
+        while (source.volume > 0) {
             source.volume -= deltaVolume * Time.deltaTime;
             yield return null;
         }
 
-        if (source.volume <= 0)
-        {
+        if (source.volume <= 0) {
             Stop(source);
         }
 

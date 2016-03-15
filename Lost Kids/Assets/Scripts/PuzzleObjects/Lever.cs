@@ -31,9 +31,9 @@ public class Lever : UsableObject {
     {
         //Comportamiento generico de un usable. (Activar objeto o notificar al puzzle segun situacion)
         Debug.Log("hola");
-        base.Use();
 
-        Debug.Log("hola");
+        base.Use();
+        
 
         //Es necesario añadir funcionalidad adicional como Sonido o animaciones
         AudioManager.Play(audioLoader.GetSound("LeverOn"), false, 1);
