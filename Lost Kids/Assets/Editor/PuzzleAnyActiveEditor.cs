@@ -7,9 +7,9 @@ using System.Reflection;
 /// <summary>
 /// Editor personalizado que muestra/oculta el campo de tiempo cuando se activa/desactiva el tipo Timed
 /// </summary>
-[CustomEditor(typeof(Puzzle1))]
+[CustomEditor(typeof(PuzzleAnyActive))]
 [CanEditMultipleObjects]
-public class Puzzle1Editor : Editor
+public class PuzzleAnyActiveEditor : Editor
 {
 
     //Add the ShowOnEnum methods in here

@@ -27,8 +27,8 @@ public class Button : UsableObject {
     //Posicion auxiliar de comienzo cuando se activa/desactiva
     private Vector3 beginPosition;
 
+    //Variable para estado de moviemiento
     private bool isMoving = false;
-
 
     // Use this for initialization
     new void Start()
@@ -84,9 +84,11 @@ public class Button : UsableObject {
     /// </summary>
     new public void Use()
     {
-        //Comportamiento generico de un usable. (Activar objeto o notificar al puzzle segun situacion)
-
-        base.Use();
+        if (!onUse)
+        {
+            base.Use();
+        }
+        
 
         //Es necesario añadir funcionalidad adicional como Sonido o animaciones
     }
@@ -98,6 +100,7 @@ public class Button : UsableObject {
     /// </summary>
     new public void CancelUse()
     {
+        
         //Comportamiento base generico para todos los objetos usables
         base.CancelUse();
 

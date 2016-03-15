@@ -79,7 +79,7 @@ public class CharacterStatus : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        Debug.Log(characterName.ToString() + " -> " + characterState.ToString());
+        //Debug.Log(characterName.ToString() + " -> " + characterState.ToString());
     }
 
     void FixedUpdate() {

@@ -73,12 +73,11 @@ public abstract class UsableObject : MonoBehaviour {
     /// <summary>
     /// Activacion del objeto
     /// </summary>
-    public void  Use()
+    public virtual void  Use()
     {
         if (!onUse)
         {
             onUse = true;
-            Debug.Log("Usable Activado");
 
             //Si no forma parte de un puzzle, activa su objetivo
             if (!inPuzzle)

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// Hereda  variables y funcionalidades de la clase PuzzleManagerBase
 /// Define la logica de puzzle basico, que requiere todos sus elementos activos al mismo tiempo
 /// </summary>
-public class Puzzle1 : PuzzleManagerBase {
+public class PuzzleAnyActive : PuzzleManagerBase {
 
     //Mapa del estado de los objetos ( activo/inactivo)
     Dictionary<UsableObject, bool> usablesState;
@@ -40,7 +40,7 @@ public class Puzzle1 : PuzzleManagerBase {
         usablesState[sender] = status;
 
         //Si todos los elementos estan activos, se resuelve el puzzle
-        if(AllActive())
+        if(AnyActive())
         {
             Solve();
         }
@@ -53,17 +53,17 @@ public class Puzzle1 : PuzzleManagerBase {
     }
 
     /// <summary>
-    /// Comprueba si toda la lista de objetos estan activados
+    /// Comprueba si toda la alguno de objetos estan activados
     /// </summary>
     /// <returns>true cuando todos los objetos estan activos</returns>
-    bool AllActive()
+    bool AnyActive()
     {
-        bool active = true;
+        bool active = false;
         foreach(bool value in usablesState.Values)
         {
-            if(!value)
+            if(value)
             {
-                active = false;
+                active = true;
             }
         }
         return active;
@@ -80,12 +80,14 @@ public class Puzzle1 : PuzzleManagerBase {
         {
             solved = true;
             targetActivable.Activate();
+
+            //Si se trata de un puzzle Timed, se resetea en un tiempo
+            if (type.Equals(puzzleType.Timed))
+            {
+                Invoke("Reset", activeTime);
+            }
         }
-        //Si se trata de un puzzle Timed, se resetea en un tiempo
-        if(type.Equals(puzzleType.Timed))
-        {
-            Invoke("Reset", activeTime);
-        }
+        
     }
 
     /// <summary>

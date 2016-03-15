@@ -177,6 +177,11 @@ public class CharacterManager : MonoBehaviour {
         return activeCharacter;
     }
 
+    /// <summary>
+    /// Comprueba si el objeto introducido por parametro es el personaje activo
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     public static bool IsActiveCharacter(GameObject obj)
     {
         return obj.Equals(activeCharacter);

@@ -23,11 +23,13 @@ public class Lever : UsableObject {
     /// Metodo que se activa al usar el objeto. Incluye un comportamiento base generico
     /// y comportamiendo especifico para el objeto
     /// </summary>
-    new public void Use()
+    override public void Use()
     {
         //Comportamiento generico de un usable. (Activar objeto o notificar al puzzle segun situacion)
-
-        base.Use();
+        if (!onUse)
+        {
+            base.Use();
+        }
         
         //Es necesario añadir funcionalidad adicional como Sonido o animaciones
     }
