@@ -37,6 +37,7 @@ public class CharacterManager : MonoBehaviour {
         }
         activeCharacter = characterList[0];
     }
+
 	// Use this for initialization
 	void Start () {
 
@@ -112,7 +113,10 @@ public class CharacterManager : MonoBehaviour {
     {
         if (IsAvailable(index))
         {
+            activeCharacter.GetComponent<AudioListener>().enabled = false;
             activeCharacter = characterList[index];
+            activeCharacter.GetComponent<AudioListener>().enabled = true;
+
             if (ActiveCharacterChangedEvent != null)
             {
 

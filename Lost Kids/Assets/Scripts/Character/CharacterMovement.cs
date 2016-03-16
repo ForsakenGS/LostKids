@@ -3,17 +3,19 @@ using System.Collections;
 
 /* Class to control the movement of a character getting player's controls from InputManager */
 public class CharacterMovement : MonoBehaviour {
-    // Speed & impulse for each possible state
-    public float extraGravity = 1200f;
-    public float turnSmoothing = 15f;
-    public float groundCheckDistance = 1.45f;
+	// Speed & impulse for each possible state
+	public float extraGravity= 1200f;
+	public float turnSmoothing = 15f;
+	public float groundCheckDistance = 1.45f;
 
     private CameraManager cameraManager;
-    private Rigidbody rigBody;
-    private Collider standingColl;
-    private Collider crouchingColl;
+	private Rigidbody rigBody;
+	private Collider standingColl;
+	private Collider crouchingColl;
 
     private AudioLoader audioLoader;
+
+    private AudioSource stepSound;
 
 	// Use this for references
 	void Awake () {
@@ -30,7 +32,17 @@ public class CharacterMovement : MonoBehaviour {
 		crouchingColl.enabled = false;
 
         audioLoader = GetComponent<AudioLoader>();
+
+        stepSound = audioLoader.GetSound("Steps");
 	}
+
+    void Update() {
+        if (stepSound.isPlaying) {
+            if (rigBody.velocity.Equals(Vector3.zero)) {
+                stepSound.Stop();
+            }
+        }
+    }
 
     /// <summary>
     /// Comprueba si el personaje tiene algún objeto bajo sus pies mediante el lanzamiento de hasta 5 rayos
@@ -62,32 +74,32 @@ public class CharacterMovement : MonoBehaviour {
             }
             // helper to visualise the ground check ray in the scene view
             #if UNITY_EDITOR
-            Debug.DrawLine(ray, ray + (Vector3.down * groundCheckDistance), Color.blue, 1);
+            Debug.DrawLine(ray, ray + (Vector3.down * groundCheckDistance), Color.blue, 10000);
             #endif
             // Lanza el rayo y comprueba si colisiona con otro objeto
             grounded = (Physics.Raycast(ray, Vector3.down, groundCheckDistance));
             rayCnt += 1;
+            Debug.Log(rayCnt + ":" + ray);
         } while ((!grounded) && (rayCnt < 5));
 
         return grounded;
-    }
+	}
 
-    /// <summary>
-    /// Indica al script que el botón de agachado ha sido pulsado
-    /// </summary>
-    public void Crouch() {
-        // Standing => Crouching
-        standingColl.enabled = false;
-        crouchingColl.enabled = true;
-        transform.Translate(new Vector3(0, -0.5f, 0));
-        transform.localScale -= new Vector3(0, 0.5f, 0); // CAMBIAR! No se debe modificar el tamaño del objeto
-    }
+	/// <summary>
+	/// Indica al script que el botón de agachado ha sido pulsado
+	/// </summary>
+	public void Crouch () {
+		// Standing => Crouching
+		standingColl.enabled = false;
+		crouchingColl.enabled = true;
+		transform.Translate(new Vector3(0, -0.5f,0));
+		transform.localScale -= new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
+	}
 
     /// <summary>
     /// Provoca un efecto de gravedad extra sobre el personaje
     /// </summary>
 	public void ExtraGravity() {
-
 		// Extra gravity to fall down quickly
 		rigBody.AddForce(new Vector3(0, -1 * extraGravity, 0), ForceMode.Force);
 	}
@@ -167,17 +179,13 @@ public class CharacterMovement : MonoBehaviour {
 			forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
 		}
 
-        AudioSource source = audioLoader.GetSound("Steps");
-
         if (!forceToApply.Equals(Vector3.zero)) {
 			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
 			Rotating(forceToApply.x, forceToApply.z);
 
-            if(!source.isPlaying) {
-                AudioManager.Play(source, true, 1);
+            if(!stepSound.isPlaying) {
+                AudioManager.Play(stepSound, true, 1);
             }
-        } else {
-            AudioManager.Stop(source);
         }
 	}
 
@@ -199,5 +207,4 @@ public class CharacterMovement : MonoBehaviour {
 		transform.Translate(new Vector3(0, 0.5f,0));
 		transform.localScale += new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
 	}
-
 }
