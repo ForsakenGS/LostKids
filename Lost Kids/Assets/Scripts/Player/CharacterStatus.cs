@@ -84,7 +84,7 @@ public class CharacterStatus : MonoBehaviour {
                 }
                 break;
         }
-        Debug.Log(characterName.ToString() + " -> " + characterState.ToString());
+        //Debug.Log(characterName.ToString() + " -> " + characterState.ToString());
     }
 
     void FixedUpdate() {
