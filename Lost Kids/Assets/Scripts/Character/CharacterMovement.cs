@@ -13,20 +13,24 @@ public class CharacterMovement : MonoBehaviour {
     private Collider standingColl;
     private Collider crouchingColl;
 
-    // Use this for references
-    void Awake() {
-        cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
+    private AudioLoader audioLoader;
+
+	// Use this for references
+	void Awake () {
+		cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
         rigBody = GetComponent<Rigidbody>();
         Collider[] colliders = GetComponents<Collider>();
         standingColl = colliders[0];
         crouchingColl = colliders[1];
     }
 
-    // Use this for initialization
-    void Start() {
-        standingColl.enabled = true;
-        crouchingColl.enabled = false;
-    }
+	// Use this for initialization
+	void Start () {
+		standingColl.enabled = true;
+		crouchingColl.enabled = false;
+
+        audioLoader = GetComponent<AudioLoader>();
+	}
 
     /// <summary>
     /// Comprueba si el personaje tiene algún objeto bajo sus pies mediante el lanzamiento de hasta 5 rayos
@@ -83,102 +87,117 @@ public class CharacterMovement : MonoBehaviour {
     /// Provoca un efecto de gravedad extra sobre el personaje
     /// </summary>
 	public void ExtraGravity() {
-        // Extra gravity to fall down quickly
-        rigBody.AddForce(new Vector3(0, -1 * extraGravity, 0), ForceMode.Force);
-    }
 
-    // Return the given vector relative to the given camera 
-    Vector3 GetVectorRelativeToObject(Vector3 inputVector, Transform camera) {
-        Vector3 objectRelativeVector = Vector3.zero;
-        if (inputVector != Vector3.zero) {
-            // Forward vector for camera's field of view
-            Vector3 forward = camera.TransformDirection(Vector3.forward);
-            forward.y = 0f;
-            forward.Normalize();
-            // Calculate new vector
-            Vector3 right = new Vector3(forward.z, 0.0f, -forward.x);
-            Vector3 relativeRight = inputVector.x * right;
-            Vector3 relativeForward = inputVector.z * forward;
-            objectRelativeVector = relativeRight + relativeForward;
-            // Normalizing vector
-            if (objectRelativeVector.magnitude > 1f) {
-                objectRelativeVector.Normalize();
-            }
-        }
-        // Set original y-coordinate, because height in world is not camera depending
-        objectRelativeVector += new Vector3(0, inputVector.y, 0);
+		// Extra gravity to fall down quickly
+		rigBody.AddForce(new Vector3(0, -1 * extraGravity, 0), ForceMode.Force);
+	}
 
-        return objectRelativeVector;
-    }
+	// Return the given vector relative to the given camera 
+	Vector3 GetVectorRelativeToObject(Vector3 inputVector, Transform camera) {
+		Vector3 objectRelativeVector = Vector3.zero;
+		if (inputVector != Vector3.zero) {
+			// Forward vector for camera's field of view
+			Vector3 forward = camera.TransformDirection(Vector3.forward);
+			forward.y = 0f;
+			forward.Normalize();
+			// Calculate new vector
+			Vector3 right = new Vector3(forward.z, 0.0f, -forward.x);
+			Vector3 relativeRight = inputVector.x * right;
+			Vector3 relativeForward = inputVector.z * forward;
+			objectRelativeVector = relativeRight + relativeForward;
+			// Normalizing vector
+			if (objectRelativeVector.magnitude > 1f) {
+				objectRelativeVector.Normalize();	
+			}
+		}
+		// Set original y-coordinate, because height in world is not camera depending
+		objectRelativeVector += new Vector3(0,inputVector.y,0);
 
-    /// <summary>
-    /// Indica al script que el botón de salto ha sido pulsado
-    /// </summary>
-    public void Jump(float jumpImpulse) {
-        rigBody.AddForce(new Vector3(0, jumpImpulse, 0), ForceMode.Force);
-    }
+		return objectRelativeVector;	
+	}
 
-    public void MoveCharacterAxes(float horizontal, float vertical, float speed, Vector3 normal) {
-        Vector3 forceToApply = new Vector3();
+	/// <summary>
+	/// Indica al script que el botón de salto ha sido pulsado
+	/// </summary>
+	public void Jump (float jumpImpulse) {
+		rigBody.AddForce(new Vector3(0, jumpImpulse, 0), ForceMode.Force);
+        AudioManager.Play(audioLoader.GetSound("Jump"), false, 1);
+	}
 
-        if ((horizontal != 0f) || (vertical != 0f)) {
-            // Movimiento relativo a la cámara
-            Vector3 relativeMove = GetVectorRelativeToObject(new Vector3(horizontal, 0, vertical), cameraManager.CurrentCamera().transform);
-            horizontal = relativeMove.x;
-            vertical = relativeMove.z;
-            if (Mathf.Abs(horizontal) > Mathf.Abs(vertical)) {
-                // Movimiento horizontal
-                normal.z = 0;
-                if (normal.x > 0) {
-                    normal.x *= horizontal;
-                } else if (normal.x < 0) {
-                    normal.x *= -horizontal;
-                }
-            } else {
-                // Movimiento vertical
-                normal.x = 0;
-                if (normal.z > 0) {
-                    normal.z *= vertical;
-                } else if (normal.z < 0) {
-                    normal.z *= -vertical;
-                }
-            }
-            forceToApply = normal.normalized;
-        }
+	public void MoveCharacterAxes (float horizontal, float vertical, float speed, Vector3 normal) {
+		Vector3 forceToApply = new Vector3();
+
+		if ((horizontal != 0f) || (vertical != 0f)) {
+			if (Mathf.Abs(horizontal) > Mathf.Abs(vertical)) {
+				normal.z = 0;
+				if (normal.x > 0) {
+					normal.x *= -horizontal;
+				} else if(normal.x < 0) {
+					normal.x *= horizontal;
+				}
+			} else {
+				normal.x = 0;
+				if (normal.z > 0) {
+					normal.z *= -vertical;
+				} else if (normal.z < 0) {
+					normal.z *= vertical;
+				}
+			}
+			forceToApply = normal.normalized;
+		}
+
+        AudioSource source = audioLoader.GetSound("Push");
+
         if (!forceToApply.Equals(Vector3.zero)) {
-            rigBody.AddForce(forceToApply * speed, ForceMode.Force);
-        }
-    }
+			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
 
-    public void MoveCharacterNormal(float horizontal, float vertical, float speed) {
-        Vector3 forceToApply = new Vector3();
-
-        if ((horizontal != 0f) || (vertical != 0f)) {
-            forceToApply += new Vector3(horizontal, 0, vertical);
-            forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
+            if (!source.isPlaying) {
+                AudioManager.Play(source, true, 1);
+            }
+        } else {
+            AudioManager.Stop(source);
         }
+	}
+
+	public void MoveCharacterNormal (float horizontal, float vertical, float speed) {
+		Vector3 forceToApply = new Vector3();
+
+		if ((horizontal != 0f) || (vertical != 0f)) {
+			forceToApply += new Vector3(horizontal, 0, vertical);
+			forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
+		}
+
+        AudioSource source = audioLoader.GetSound("Steps");
+
         if (!forceToApply.Equals(Vector3.zero)) {
-            rigBody.AddForce(forceToApply * speed, ForceMode.Force);
-            Rotating(forceToApply.x, forceToApply.z);
+			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
+			Rotating(forceToApply.x, forceToApply.z);
+
+            if(!source.isPlaying) {
+                AudioManager.Play(source, true, 1);
+            }
+        } else {
+            AudioManager.Stop(source);
         }
-    }
+	}
 
-    // Change character's rotation to make it look at the direction it is going
-    void Rotating(float horizontal, float vertical) {
-        // Create a rotation based on the horizontal and vertical inputs
-        Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
-        Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
-        // Create a rotation that is an increment closer to the target rotation from the player's rotation.
-        Quaternion newRotation = Quaternion.Lerp(rigBody.rotation, targetRotation, turnSmoothing * Time.deltaTime);
-        // Change the players rotation to this new rotation.
-        rigBody.MoveRotation(newRotation);
-    }
+	// Change character's rotation to make it look at the direction it is going
+	void Rotating (float horizontal, float vertical) {
+		// Create a rotation based on the horizontal and vertical inputs
+		Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
+		Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+		// Create a rotation that is an increment closer to the target rotation from the player's rotation.
+		Quaternion newRotation = Quaternion.Lerp(rigBody.rotation, targetRotation, turnSmoothing * Time.deltaTime);
+		// Change the players rotation to this new rotation.
+		rigBody.MoveRotation(newRotation);
+	}
 
-    public void Stand() {
-        // Crouching => Standing
-        standingColl.enabled = true;
-        crouchingColl.enabled = false;
-        transform.Translate(new Vector3(0, 0.5f, 0));
-        transform.localScale += new Vector3(0, 0.5f, 0); // CAMBIAR! No se debe modificar el tamaño del objeto
-    }
+	public void Stand() {
+		// Crouching => Standing
+		standingColl.enabled = true;
+		crouchingColl.enabled = false;
+		transform.Translate(new Vector3(0, 0.5f,0));
+		transform.localScale += new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
+	}
+
 }

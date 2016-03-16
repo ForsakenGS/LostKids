@@ -1,13 +1,8 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RockActivator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Character\Abilities\SprintAbility.cs">
     <Files>
-      <File FileName="Assets\RockActivator.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Enemies\KillerSphere.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Character\CharacterMovement.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Game\GameManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player\PlayerUse.cs" Line="1" Column="1" />
-      <File FileName="..\..\proyectoUnityTLK\Assets\Scripts\Enemies\WallMovement.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Character\Abilities\SprintAbility.cs" Line="17" Column="16" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

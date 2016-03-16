@@ -23,13 +23,11 @@ public class TransitionCamera : MonoBehaviour {
     //Suavidad de la transición
     public float smooth = 8.0f;
 
-    private CharacterManager characterManager;
 
     void Awake() {
         isSlerping = false;
 
         scCameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
-        characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
 
     }
 

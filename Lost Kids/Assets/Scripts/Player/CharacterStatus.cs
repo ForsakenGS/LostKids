@@ -43,6 +43,8 @@ public class CharacterStatus : MonoBehaviour {
     public State initialCharacterState;
     public CharacterName characterName;
 
+    private AudioLoader audioLoader;
+
     // Use this for initialization
     void Awake() {
         if (characterManagerPrefab == null) {
@@ -53,9 +55,12 @@ public class CharacterStatus : MonoBehaviour {
         playerUse = GetComponent<PlayerUse>();
     }
 
-    // Use this for initialization
-    void Start() {
-        characterState = initialCharacterState;
+	// Use this for initialization
+	void Start() {
+		characterState = initialCharacterState;
+
+        audioLoader = GetComponent<AudioLoader>();
+
     }
 
     // Update is called once per frame
@@ -225,6 +230,7 @@ public class CharacterStatus : MonoBehaviour {
             ResurrectCharacterEvent(gameObject);
         }
         //Animacion, Efectos, Cambio de imagen.....
+        AudioManager.Play(audioLoader.GetSound("Resurrect"), false, 1);
     }
 
     /// <summary>
