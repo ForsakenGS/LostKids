@@ -43,10 +43,15 @@ public class CharacterManager : MonoBehaviour {
         audioLoader = GetComponent<AudioLoader>();
        
         activeCheckPoint.Activate();
-       
-        ActivateCharacter(0);
 
-	}
+        activeCharacter = characterList[0];
+        if (ActiveCharacterChangedEvent != null) {
+
+            ActiveCharacterChangedEvent();
+
+        }
+
+    }
 	
 	// Update is called once per frame
 	void Update () {

@@ -31,6 +31,8 @@ public class CharacterStatus : MonoBehaviour {
 	public State initialCharacterState;
 	public CharacterName characterName;
 
+    private AudioLoader audioLoader;
+
     // Use this for initialization
     void Awake() {
         if (characterManagerPrefab == null) {
@@ -44,6 +46,8 @@ public class CharacterStatus : MonoBehaviour {
 	// Use this for initialization
 	void Start() {
 		characterState = initialCharacterState;
+
+        audioLoader = GetComponent<AudioLoader>();
     }
 
 	// Se lanza cuando el jugador entra en contacto con otro objeto del juego con Collider. Detecta el final de los saltos.
@@ -192,6 +196,7 @@ public class CharacterStatus : MonoBehaviour {
 		characterState = State.Standing;
         GetComponent<Renderer>().enabled = true;
         //Animacion, Efectos, Cambio de imagen.....
+        AudioManager.Play(audioLoader.GetSound("Resurrect"), false, 1);
     }
 
     /// <summary>

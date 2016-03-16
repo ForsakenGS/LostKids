@@ -145,9 +145,18 @@ public class CharacterMovement : MonoBehaviour {
 			}
 			forceToApply = normal.normalized;
 		}
-		if (!forceToApply.Equals(Vector3.zero)) {
+
+        AudioSource source = audioLoader.GetSound("Push");
+
+        if (!forceToApply.Equals(Vector3.zero)) {
 			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
-		}
+
+            if (!source.isPlaying) {
+                AudioManager.Play(source, true, 1);
+            }
+        } else {
+            AudioManager.Stop(source);
+        }
 	}
 
 	public void MoveCharacterNormal (float horizontal, float vertical, float speed) {
