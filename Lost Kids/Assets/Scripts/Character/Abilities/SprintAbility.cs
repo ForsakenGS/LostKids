@@ -20,7 +20,7 @@ public class SprintAbility : CharacterAbility {
 		if (!execution) {
 			execution = true;
             started = true;
-            energy -= initialConsumption;
+            AddEnergy(-initialConsumption);
 			characterStatus.standingSpeed *= speedModifier;
 		}
 

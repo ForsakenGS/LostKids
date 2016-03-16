@@ -38,7 +38,7 @@ public class PushAbility : CharacterAbility {
 	public override bool StartExecution () {
 		if (!execution) {
             // Consumo de energía inicial
-            energy -= initialConsumption;
+            AddEnergy(-initialConsumption);
             Ray detectRay = new Ray(this.transform.position + Vector3.up*altura, this.transform.forward * pushDistance);
 			// helper to visualise the ground check ray in the scene view
 			#if UNITY_EDITOR

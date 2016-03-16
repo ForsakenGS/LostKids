@@ -11,8 +11,9 @@ public class AbilityController : MonoBehaviour {
     /// <summary>
     /// Evento para informar del cambio de habilidad activa a otros scripts
     /// </summary>
-    public delegate void AbilityChanged();
-    public static event AbilityChanged ActiveAbilityChangedEvent;
+    public delegate void AbilityChanged(CharacterAbility abilityaffected);
+    public static event AbilityChanged SelectedAbilityEvent;
+    public static event AbilityChanged ModifiedAbilityEnergyEvent;
 
     private CharacterAbility ability1;
     private CharacterAbility ability2;
@@ -32,6 +33,10 @@ public class AbilityController : MonoBehaviour {
         // Activa la habilidad 1
         activeAbility = ability1;
         ability1.ActivateAbility();
+        // Lanza el evento de habilidad seleccionada
+        if (SelectedAbilityEvent != null) {
+            SelectedAbilityEvent(ability1);
+        }
     }
 
     /// <summary>
@@ -45,24 +50,18 @@ public class AbilityController : MonoBehaviour {
             activeAbility = ability1;
         }
         activeAbility.ActivateAbility();
-        // Lanza el evento de cambio de habilidad
-        if (ActiveAbilityChangedEvent != null) {
-            ActiveAbilityChangedEvent();
+        // Lanza el evento de habilidad seleccionada
+        if (SelectedAbilityEvent != null) {
+            SelectedAbilityEvent(activeAbility);
         }
-        Debug.Log("ActiveAbility:" + activeAbility.GetType());
     }
 
     /// <summary>
-    /// Permite conocer el índice de la habilidad activa del personaje
+    /// Permite conocer la habilidad activa del personaje
     /// </summary>
-    /// <returns><c>1</c> si se trata de la primera habilidad, <c>2</c> si es la segunda</returns>
-    public int GetActiveAbilityIndex() {
-        int res = 1;
-        if ((activeAbility != null) && (activeAbility.Equals(ability2))) {
-            res = 2;
-        }
-
-        return res;
+    /// <returns>El componente <c>CharacterAbility</c> referente a la habilidad activa</returns>
+    public CharacterAbility GetActiveAbility() {
+        return activeAbility;
     }
 
     /// <summary>

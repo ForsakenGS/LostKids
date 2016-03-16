@@ -1,7 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Clase con la que que se realiza un control general sobre el comportamiento de cada personaje. Básicamente, implementa una
+/// máquina de estados, las acciones a llevar a cabo durante los estados y las diferentes posibles transferencias.
+/// </summary>
 public class CharacterStatus : MonoBehaviour {
+    /// <summary>
+    /// Evento para informar del cambio en la vida del personaje
+    /// </summary>
+    public delegate void CharacterLifeChanged(GameObject character);
+    public static event CharacterLifeChanged KillCharacterEvent;
+    public static event CharacterLifeChanged ResurrectCharacterEvent;
+
+
     /// <summary>
     /// Clase para definir los diferentes estados en los que se puede encontrar un personaje
     /// </summary>
@@ -46,43 +58,32 @@ public class CharacterStatus : MonoBehaviour {
         characterState = initialCharacterState;
     }
 
-    // Se lanza cuando el jugador entra en contacto con otro objeto del juego con Collider. Detecta el final de los saltos.
-    void OnCollisionEnter(Collision col) {
+    // Update is called once per frame
+    void Update() {
+        bool groundedCharacter = characterMovement.CharacterIsGrounded();
         switch (characterState) {
+            case State.Jumping:
+                if (groundedCharacter) {
+                    characterState = State.Standing;
+                }
+                break;
             case State.BigJumping:
-                if (characterMovement.CharacterIsGrounded()) {
+                if (groundedCharacter) {
                     GetComponent<AbilityController>().UseAbility();
                     characterState = State.Standing;
                 }
                 break;
-            case State.Jumping:
-                if (characterMovement.CharacterIsGrounded()) {
-                    characterState = State.Standing;
-                }
-                break;
-        }
-    }
-
-    // Se lanza cuando el jugador deja de estar en contacto con otro objeto del juego con Collider. Detecta la caída libre del personaje
-    void OnCollisionExit(Collision col) {
-        switch (characterState) {
-            case State.BigJumping:
-            case State.Jumping:
-                break;
             default:    // CAMBIAR!! Hay que hacerlo para cada estado
-                if (!characterMovement.CharacterIsGrounded()) {
+                if (!groundedCharacter) {
                     characterState = State.Jumping;
                 }
                 break;
         }
-    }
-
-    // Update is called once per frame
-    void Update() {
         Debug.Log(characterName.ToString() + " -> " + characterState.ToString());
     }
 
     void FixedUpdate() {
+        // Aplica gravedad extra sobre el personaje si se encuentra en el aire
         if (characterState.Equals(State.BigJumping) || characterState.Equals(State.Jumping)) {
             characterMovement.ExtraGravity();
         }
@@ -97,6 +98,9 @@ public class CharacterStatus : MonoBehaviour {
         GetComponent<Renderer>().enabled = false; //Temporal
         GetComponent<Rigidbody>().isKinematic = true;
         characterManager.CharacterKilled(this);
+        if (KillCharacterEvent != null) {
+            KillCharacterEvent(gameObject);
+        }
     }
 
     /// <summary>
@@ -144,25 +148,36 @@ public class CharacterStatus : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Función para indicar que alguno de los botones de movimiento ha sido pulsado, realizando el correspondiende movimiento y 
+    /// variando la velocidad en función del estado en que se encuentre el personaje.
+    /// </summary>
+    /// <param name="horizontal">Movimiento sobre el eje X a aplicar sobre el personaje</param>
+    /// <param name="vertical">Movimiento sobre el eje Z a aplicar sobre el personaje</param>
     public void MovementButtons(float horizontal, float vertical) {
         switch (characterState) {
-            case State.Crouching:
-                characterMovement.MoveCharacterNormal(horizontal, vertical, crouchingSpeed);
+            case State.Standing:
+            case State.Sprint:
+                characterMovement.MoveCharacterNormal(horizontal, vertical, standingSpeed);
                 break;
             case State.Jumping:
             case State.BigJumping:
                 characterMovement.MoveCharacterNormal(horizontal, vertical, jumpingSpeed);
                 break;
+            case State.Crouching:
+                characterMovement.MoveCharacterNormal(horizontal, vertical, crouchingSpeed);
+                break;
             case State.Pushing:
                 characterMovement.MoveCharacterAxes(horizontal, vertical, pushingSpeed, GetComponent<PushAbility>().GetPushNormal());
-                break;
-            case State.Sprint:
-            case State.Standing:
-                characterMovement.MoveCharacterNormal(horizontal, vertical, standingSpeed);
                 break;
         }
     }
 
+    /// <summary>
+    /// Comprueba si es posible comenzar la ejecución de una habilidad concreta, modificando el estado en que se encuentra el personaje
+    /// </summary>
+    /// <param name="ability">Habilidad que se desea iniciar a ejecutar</param>
+    /// <returns><c>true</c> si es posible iniciar la habilidad, en cuyo caso modifica además el estado del personaje; <c>false</c> en otro caso</returns>
     public bool CanStartAbility(CharacterAbility ability) {
         bool res = characterState.Equals(State.Standing);
         if (res) {
@@ -185,6 +200,10 @@ public class CharacterStatus : MonoBehaviour {
         return res;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ability">Habilidad cuya ejecución se desea finalizar</param>
     public void EndAbility(CharacterAbility ability) {
         switch (ability.GetType().ToString()) {
             case "BreakAbility":
@@ -202,12 +221,14 @@ public class CharacterStatus : MonoBehaviour {
         characterState = State.Standing;
         GetComponent<Renderer>().enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
+        if (ResurrectCharacterEvent != null) {
+            ResurrectCharacterEvent(gameObject);
+        }
         //Animacion, Efectos, Cambio de imagen.....
     }
 
     /// <summary>
-    /// Devuelve true si el personaje esta disponible para su manejo
-    /// Puede encontrarse indisponible si esta muerto, o asustado
+    /// Devuelve true si el personaje esta disponible para su manejo. Puede encontrarse indisponible si esta muerto, o asustado
     /// </summary>
     /// <returns></returns>
     public bool IsAvailable() {

@@ -32,7 +32,7 @@ public class BigJumpAbility : CharacterAbility {
 		if (!execution) {
 			execution = true;
             started = true;
-            energy -= initialConsumption;
+            AddEnergy(-initialConsumption);
 			characterMovement.Jump(jumpImpulseModifier * characterStatus.jumpImpulse);
 		}
 
