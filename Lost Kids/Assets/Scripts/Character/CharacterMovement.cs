@@ -16,6 +16,7 @@ public class CharacterMovement : MonoBehaviour {
     private AudioLoader audioLoader;
 
     private AudioSource stepSound;
+    private AudioSource jumpSound;
 
 	// Use this for references
 	void Awake () {
@@ -34,7 +35,8 @@ public class CharacterMovement : MonoBehaviour {
         audioLoader = GetComponent<AudioLoader>();
 
         stepSound = audioLoader.GetSound("Steps");
-	}
+        jumpSound = audioLoader.GetSound("Jump");
+    }
 
     void Update() {
         if (stepSound.isPlaying) {
@@ -79,7 +81,7 @@ public class CharacterMovement : MonoBehaviour {
             // Lanza el rayo y comprueba si colisiona con otro objeto
             grounded = (Physics.Raycast(ray, Vector3.down, groundCheckDistance));
             rayCnt += 1;
-            Debug.Log(rayCnt + ":" + ray);
+
         } while ((!grounded) && (rayCnt < 5));
 
         return grounded;
@@ -133,7 +135,7 @@ public class CharacterMovement : MonoBehaviour {
 	/// </summary>
 	public void Jump (float jumpImpulse) {
 		rigBody.AddForce(new Vector3(0, jumpImpulse, 0), ForceMode.Force);
-        AudioManager.Play(audioLoader.GetSound("Jump"), false, 1);
+        AudioManager.Play(jumpSound, false, 1);
 	}
 
 	public void MoveCharacterAxes (float horizontal, float vertical, float speed, Vector3 normal) {

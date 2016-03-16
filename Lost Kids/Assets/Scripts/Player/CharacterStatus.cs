@@ -64,27 +64,31 @@ public class CharacterStatus : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         bool groundedCharacter = characterMovement.CharacterIsGrounded();
-        switch (characterState) {
+        switch (characterState)
+        {
             case State.Jumping:
-                if (groundedCharacter) {
+                if (groundedCharacter)
+                {
                     characterState = State.Standing;
                 }
                 break;
             case State.BigJumping:
-                if (groundedCharacter) {
+                if (groundedCharacter)
+                {
                     GetComponent<AbilityController>().UseAbility();
                     characterState = State.Standing;
                 }
                 break;
             default:    // CAMBIAR!! Hay que hacerlo para cada estado
-                if (!groundedCharacter) {
+                if (!groundedCharacter)
+                {
                     characterState = State.Jumping;
                 }
                 break;
         }
-
     }
 
     void FixedUpdate() {
