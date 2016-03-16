@@ -68,6 +68,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Audio\AudioLoader.cs" />
+    <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraTrigger.cs" />
@@ -76,6 +79,7 @@
     <Compile Include="Assets\Scripts\Character\Abilities\BigJumpAbility.cs" />
     <Compile Include="Assets\Scripts\Character\Abilities\BreakAbility.cs" />
     <Compile Include="Assets\Scripts\Character\Abilities\CharacterAbility.cs" />
+    <Compile Include="Assets\Scripts\Character\Abilities\MultipleJumpAbility.cs" />
     <Compile Include="Assets\Scripts\Character\Abilities\PushAbility.cs" />
     <Compile Include="Assets\Scripts\Character\Abilities\SprintAbility.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterMovement.cs" />
@@ -85,6 +89,7 @@
     <Compile Include="Assets\Scripts\Game\DataManager.cs" />
     <Compile Include="Assets\Scripts\Game\GameData.cs" />
     <Compile Include="Assets\Scripts\Game\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Game\HUDManager.cs" />
     <Compile Include="Assets\Scripts\Game\InputManager.cs" />
     <Compile Include="Assets\Scripts\Game\PersistenceTest.cs" />
     <Compile Include="Assets\Scripts\Lockers\InputManagerLocker.cs" />
@@ -108,6 +113,7 @@
     <Compile Include="Assets\Scripts\PuzzleObjects\IBreakable.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\Lever.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\MortalZone.cs" />
+    <Compile Include="Assets\Scripts\PuzzleObjects\MortalZone2.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\MovingBlock.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\MovingPlatform.cs" />
     <Compile Include="Assets\Scripts\PuzzleObjects\Neko.cs" />
@@ -122,10 +128,13 @@
     <Compile Include="Assets\Scripts\iTween.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Shaders\AlphaTexture.shader" />
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
+    <None Include="Assets\TSF\Shaders\TSF.shader" />
+    <None Include="Assets\TSF\Shaders\TSFOutline.shader" />
     <None Include="Assets\messages.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

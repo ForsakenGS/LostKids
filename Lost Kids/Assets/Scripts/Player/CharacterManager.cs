@@ -25,7 +25,7 @@ public class CharacterManager : MonoBehaviour {
     //Listado de estado de los personajes
     private List<CharacterStatus> characterStatusList;
 
-
+    private AudioLoader audioLoader;
 
     void Awake()
     {
@@ -37,14 +37,22 @@ public class CharacterManager : MonoBehaviour {
         }
         activeCharacter = characterList[0];
     }
+
 	// Use this for initialization
 	void Start () {
+
+        audioLoader = GetComponent<AudioLoader>();
        
         activeCheckPoint.Activate();
-       
-        ActivateCharacter(0);
 
-	}
+        activeCharacter = characterList[0];
+        if (ActiveCharacterChangedEvent != null) {
+
+            ActiveCharacterChangedEvent();
+
+        }
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -105,13 +113,20 @@ public class CharacterManager : MonoBehaviour {
     {
         if (IsAvailable(index))
         {
+            activeCharacter.GetComponent<AudioListener>().enabled = false;
             activeCharacter = characterList[index];
+            activeCharacter.GetComponent<AudioListener>().enabled = true;
+
             if (ActiveCharacterChangedEvent != null)
             {
+
                 ActiveCharacterChangedEvent();
+
+                AudioManager.Play(audioLoader.GetSound("ChangeCharacter"), false, 1);
+
             }
 
-            
+
         }
     }
 

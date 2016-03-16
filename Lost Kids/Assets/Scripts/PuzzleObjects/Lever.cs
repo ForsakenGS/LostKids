@@ -8,10 +8,14 @@ using System;
 /// </summary>
 public class Lever : UsableObject {
 
+    private AudioLoader audioLoader;
+
     // Use this for initialization
     new void Start () {
         //Se llama al start de UsableObject
         base.Start();
+
+        audioLoader = GetComponent<AudioLoader>();
     }
 	
 	// Update is called once per frame
@@ -26,12 +30,15 @@ public class Lever : UsableObject {
     override public void Use()
     {
         //Comportamiento generico de un usable. (Activar objeto o notificar al puzzle segun situacion)
+
         if (!onUse)
         {
             base.Use();
         }
         
+
         //Es necesario añadir funcionalidad adicional como Sonido o animaciones
+        AudioManager.Play(audioLoader.GetSound("LeverOn"), false, 1);
     }
 
     /// <summary>
@@ -43,6 +50,7 @@ public class Lever : UsableObject {
         base.CancelUse();
 
         //Es necesario añadir funcionalidad adicional como Sonido o animaciones
+        AudioManager.Play(audioLoader.GetSound("LeverOff"), false, 1);
     }
 
 }

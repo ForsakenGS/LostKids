@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 
 public class CharacterInventory : MonoBehaviour {
+    /// <summary>
+    /// Evento para informar del cambio en el inventorio
+    /// </summary>
+    public delegate void InventoryChanged(string obj);
+    public static event InventoryChanged ObjectAddedEvent;
+    public static event InventoryChanged ObjectRemovedEvent;
+    public static event InventoryChanged ObjectRequestedEvent;
+
     // Tamaño del inventario
     public int size = 1;
 
@@ -22,6 +30,9 @@ public class CharacterInventory : MonoBehaviour {
         bool res = (objects.Count < size);
         if (res) {
             objects.Add(obj.objectName);
+            if (ObjectAddedEvent != null) {
+                ObjectAddedEvent(obj.objectName);
+            }
         }
 
         return res;
@@ -36,8 +47,19 @@ public class CharacterInventory : MonoBehaviour {
         bool res = objects.Contains(objName);
         if (res) {
             objects.Remove(objName);
+            if (ObjectRemovedEvent != null) {
+                ObjectRemovedEvent(objName);
+            }
+        } else {
+            if (ObjectRequestedEvent != null) {
+                ObjectRequestedEvent(objName);
+            }
         }
 
         return res;
+    }
+
+    public bool HasObject (string objName) {
+        return objects.Contains(objName);
     }
 }

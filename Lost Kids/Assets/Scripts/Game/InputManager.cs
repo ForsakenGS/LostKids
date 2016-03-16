@@ -7,6 +7,9 @@ public class InputManager : MonoBehaviour {
     private AbilityController abilityControl;
     private MessageManager messageManager;
     private CharacterManager characterManager;
+    private float horizontalButton;
+    private float verticalButton;
+    private bool jumpButton;
 
     // Use this for references
     void Awake() {
@@ -18,6 +21,9 @@ public class InputManager : MonoBehaviour {
     void Start() {
         // Inicialización variables
         locked = false;
+        horizontalButton = 0.0f;
+        verticalButton = 0.0f;
+        jumpButton = false;
         CharacterComponentsUpdate();
         // Suscripciones a eventos
         CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
@@ -34,14 +40,15 @@ public class InputManager : MonoBehaviour {
     void FixedUpdate() {
         if (!locked) {
             // Character movement
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
-            if ((horizontal != 0) || (vertical != 0f)) {
-                characterStatus.MovementButtons(horizontal, vertical);
+            if ((horizontalButton != 0) || (verticalButton != 0f)) {
+                characterStatus.MovementButtons(horizontalButton, verticalButton);
+                horizontalButton = 0.0f;
+                verticalButton = 0.0f;
             }
             // Jump button
-            if (Input.GetButtonDown("Jump")) {
+            if (jumpButton) {
                 characterStatus.JumpButton();
+                jumpButton = false;
             }
         }
     }
@@ -78,6 +85,13 @@ public class InputManager : MonoBehaviour {
             // Use Button
             if (Input.GetButtonDown("Use")) {
                 characterStatus.UseButton();
+            }
+            // Movement buttons
+            horizontalButton = Input.GetAxis("Horizontal");
+            verticalButton = Input.GetAxis("Vertical");
+            // Jump button
+            if (Input.GetButtonDown("Jump")) {
+                jumpButton = true;
             }
         } else {
             //Pasar mensajes

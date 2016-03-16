@@ -32,7 +32,7 @@ public class BreakAbility : CharacterAbility {
         bool started = !execution;
         if (!execution){
             // Consumo de energía inicial
-            energy -= initialConsumption;
+            AddEnergy(-initialConsumption);
             execution = true;
             Ray detectRay = new Ray(this.transform.position + Vector3.up * height, this.transform.forward * breakDistance);
             // helper to visualise the ground check ray in the scene view

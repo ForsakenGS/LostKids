@@ -7,6 +7,12 @@
 /// </summary>
 public abstract class CharacterAbility : MonoBehaviour {
     /// <summary>
+    /// Evento para informar del cambio de energía de una habilidad
+    /// </summary>
+    //public delegate void AbilityChanged(CharacterAbility abilityAffected);
+    public static event AbilityController.AbilityChanged ModifiedAbilityEnergyEvent;
+
+    /// <summary>
     /// Energía máxima de la habilidad
     /// </summary>
     public float maxEnergy = 10;
@@ -50,6 +56,16 @@ public abstract class CharacterAbility : MonoBehaviour {
         initExecutionTime = executionTime;
     }
 
+    protected void AddEnergy(float energyModif) {
+        energy += energyModif;
+        if (energy > maxEnergy) {
+            energy = maxEnergy;
+        }
+        if (ModifiedAbilityEnergyEvent != null) {
+            ModifiedAbilityEnergyEvent(this);
+        }
+    }
+
     /// <summary>
     /// Activa la habilidad
     /// </summary>
@@ -78,7 +94,13 @@ public abstract class CharacterAbility : MonoBehaviour {
 
     public abstract bool EndExecution();
 
-    public abstract bool StartExecution();
+    public float GetAvailableEnergy() {
+        return energy;
+    }
+
+    public float GetMaxEnergy() {
+        return maxEnergy;
+    }
 
     /// <summary>
     /// Permite conocer si la habilidad está activa o no
@@ -96,6 +118,8 @@ public abstract class CharacterAbility : MonoBehaviour {
         return execution;
     }
 
+    public abstract bool StartExecution();
+
     // Update is called once per frame
     void Update() {
         // Control del tiempo de habilidad
@@ -103,7 +127,7 @@ public abstract class CharacterAbility : MonoBehaviour {
             // En ejecución
             if (normalConsumption > 0) {
                 // Se decrementa la energía
-                energy -= Time.deltaTime * normalConsumption;
+                AddEnergy(-(Time.deltaTime * normalConsumption));
                 if (energy <= 0.0) {
                     // La habilidad debe terminar su ejecución
                     GetComponent<AbilityController>().UseAbility();
@@ -123,12 +147,9 @@ public abstract class CharacterAbility : MonoBehaviour {
         } else if (energy < maxEnergy) {
             // No en ejecución y el tiempo restante no está completo, luego se va recuperando
             if (timeToRestoreEnergy == 0) {
-                energy = maxEnergy;
+                AddEnergy(maxEnergy);
             } else {
-                energy += ((Time.deltaTime / timeToRestoreEnergy) * maxEnergy);
-            }
-            if (energy > maxEnergy) {
-                energy = maxEnergy;
+                AddEnergy((Time.deltaTime / timeToRestoreEnergy) * maxEnergy);
             }
         }
     }
