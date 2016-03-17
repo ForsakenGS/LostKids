@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-/* Class to define the ability of sprint */
+﻿/* Class to define the ability of sprint */
 public class SprintAbility : CharacterAbility {
 	// Speed modifier
 	public float speedModifier = 2.0f;
@@ -19,9 +16,11 @@ public class SprintAbility : CharacterAbility {
 
 	// Start the execution of the ability, setting the speed modifier
 	public override bool StartExecution () {
-		bool started = !execution;
-		if ((!execution) && (executionTimeLeft > 0)) {
+		bool started = false;
+		if (!execution) {
 			execution = true;
+            started = true;
+            AddEnergy(-initialConsumption);
 			characterStatus.standingSpeed *= speedModifier;
 		}
 

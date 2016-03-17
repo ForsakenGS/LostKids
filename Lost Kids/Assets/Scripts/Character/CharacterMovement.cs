@@ -13,6 +13,11 @@ public class CharacterMovement : MonoBehaviour {
 	private Collider standingColl;
 	private Collider crouchingColl;
 
+    private AudioLoader audioLoader;
+
+    private AudioSource stepSound;
+    private AudioSource jumpSound;
+
 	// Use this for references
 	void Awake () {
 		cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
@@ -26,7 +31,20 @@ public class CharacterMovement : MonoBehaviour {
 	void Start () {
 		standingColl.enabled = true;
 		crouchingColl.enabled = false;
-	}
+
+        audioLoader = GetComponent<AudioLoader>();
+
+        stepSound = audioLoader.GetSound("Steps");
+        jumpSound = audioLoader.GetSound("Jump");
+    }
+
+    void Update() {
+        if (stepSound.isPlaying) {
+            if (rigBody.velocity.Equals(Vector3.zero)) {
+                stepSound.Stop();
+            }
+        }
+    }
 
     /// <summary>
     /// Comprueba si el personaje tiene algún objeto bajo sus pies mediante el lanzamiento de hasta 5 rayos
@@ -58,12 +76,12 @@ public class CharacterMovement : MonoBehaviour {
             }
             // helper to visualise the ground check ray in the scene view
             #if UNITY_EDITOR
-            Debug.DrawLine(ray, ray + (Vector3.down * groundCheckDistance), Color.blue, 10000);
+//Debug.DrawLine(ray, ray + (Vector3.down * groundCheckDistance), Color.blue, 10000);
             #endif
             // Lanza el rayo y comprueba si colisiona con otro objeto
             grounded = (Physics.Raycast(ray, Vector3.down, groundCheckDistance));
             rayCnt += 1;
-            Debug.Log(rayCnt + ":" + ray);
+
         } while ((!grounded) && (rayCnt < 5));
 
         return grounded;
@@ -117,6 +135,7 @@ public class CharacterMovement : MonoBehaviour {
 	/// </summary>
 	public void Jump (float jumpImpulse) {
 		rigBody.AddForce(new Vector3(0, jumpImpulse, 0), ForceMode.Force);
+        AudioManager.Play(jumpSound, false, 1);
 	}
 
 	public void MoveCharacterAxes (float horizontal, float vertical, float speed, Vector3 normal) {
@@ -140,9 +159,18 @@ public class CharacterMovement : MonoBehaviour {
 			}
 			forceToApply = normal.normalized;
 		}
-		if (!forceToApply.Equals(Vector3.zero)) {
+
+        AudioSource source = audioLoader.GetSound("Push");
+
+        if (!forceToApply.Equals(Vector3.zero)) {
 			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
-		}
+
+            if (!source.isPlaying) {
+                AudioManager.Play(source, true, 1);
+            }
+        } else {
+            AudioManager.Stop(source);
+        }
 	}
 
 	public void MoveCharacterNormal (float horizontal, float vertical, float speed) {
@@ -152,10 +180,15 @@ public class CharacterMovement : MonoBehaviour {
 			forceToApply += new Vector3(horizontal, 0, vertical);
 			forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
 		}
-		if (!forceToApply.Equals(Vector3.zero)) {
+
+        if (!forceToApply.Equals(Vector3.zero)) {
 			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
 			Rotating(forceToApply.x, forceToApply.z);
-		}
+
+            if(!stepSound.isPlaying) {
+                AudioManager.Play(stepSound, true, 1);
+            }
+        }
 	}
 
 	// Change character's rotation to make it look at the direction it is going

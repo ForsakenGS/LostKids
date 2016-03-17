@@ -3,58 +3,44 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class TriangleExplosion : MonoBehaviour
+public class TriangleExplosion : MonoBehaviour {
 
-{
+    public IEnumerator SplitMesh(bool destroy) {
 
-    public IEnumerator SplitMesh(bool destroy)
-    {
-
-        if (GetComponent<MeshFilter>() == null || GetComponent<SkinnedMeshRenderer>() == null)
-        {
+        if (GetComponent<MeshFilter>() == null || GetComponent<SkinnedMeshRenderer>() == null) {
             yield return null;
         }
 
-        if (GetComponent<Collider>())
-        {
+        if (GetComponent<Collider>()) {
             GetComponent<Collider>().enabled = false;
         }
 
         Mesh M = new Mesh();
-        if (GetComponent<MeshFilter>())
-        {
+        if (GetComponent<MeshFilter>()) {
             M = GetComponent<MeshFilter>().mesh;
-        }
-        else if (GetComponent<SkinnedMeshRenderer>())
-        {
+        } else if (GetComponent<SkinnedMeshRenderer>()) {
             M = GetComponent<SkinnedMeshRenderer>().sharedMesh;
         }
 
         Material[] materials = new Material[0];
-        if (GetComponent<MeshRenderer>())
-        {
+        if (GetComponent<MeshRenderer>()) {
             materials = GetComponent<MeshRenderer>().materials;
-        }
-        else if (GetComponent<SkinnedMeshRenderer>())
-        {
+        } else if (GetComponent<SkinnedMeshRenderer>()) {
             materials = GetComponent<SkinnedMeshRenderer>().materials;
         }
 
         Vector3[] verts = M.vertices;
         Vector3[] normals = M.normals;
         Vector2[] uvs = M.uv;
-        for (int submesh = 0; submesh < M.subMeshCount; submesh++)
-        {
+        for (int submesh = 0; submesh < M.subMeshCount; submesh++) {
 
             int[] indices = M.GetTriangles(submesh);
 
-            for (int i = 0; i < indices.Length; i += 3)
-            {
+            for (int i = 0; i < indices.Length; i += 3) {
                 Vector3[] newVerts = new Vector3[3];
                 Vector3[] newNormals = new Vector3[3];
                 Vector2[] newUvs = new Vector2[3];
-                for (int n = 0; n < 3; n++)
-                {
+                for (int n = 0; n < 3; n++) {
                     int index = indices[i + n];
                     newVerts[n] = verts[index];
                     newUvs[n] = uvs[index];
@@ -84,8 +70,7 @@ public class TriangleExplosion : MonoBehaviour
         GetComponent<Renderer>().enabled = false;
 
         yield return new WaitForSeconds(1.0f);
-        if (destroy == true)
-        {
+        if (destroy == true) {
             Destroy(gameObject);
         }
 
