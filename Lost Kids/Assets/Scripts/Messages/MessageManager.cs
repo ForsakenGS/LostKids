@@ -15,7 +15,10 @@ public class MessageManager : MonoBehaviour {
     public Text text;
 
     //Marco del texto en pantalla
-    public RawImage frame;
+    public Image frame;
+
+    //Imagen del kodama
+    public Image kodama;
 
     //Lineas del mensaje
     private string[] lines;
@@ -33,6 +36,10 @@ public class MessageManager : MonoBehaviour {
     public delegate void LockUnlockAction();
     public static event LockUnlockAction LockUnlockEvent;
 
+    private AudioLoader audioLoader;
+    //Array con los efectos de sonido
+    private ArrayList messagesSfxs;
+
     /// <summary>
     /// Maquina de estados para el MessageManager
     /// FastMessage: Es el estado por defecto, se activa cuando el jugador pulsa la tecla por primera vez
@@ -44,6 +51,16 @@ public class MessageManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+
+        audioLoader = GetComponent<AudioLoader>();
+        messagesSfxs = new ArrayList();
+
+        //Rellenamos el array de efectos de sonido
+        messagesSfxs.Add(audioLoader.GetSound("Message1"));
+        messagesSfxs.Add(audioLoader.GetSound("Message2"));
+        messagesSfxs.Add(audioLoader.GetSound("Message3"));
+        messagesSfxs.Add(audioLoader.GetSound("Message4"));
+        messagesSfxs.Add(audioLoader.GetSound("Message5"));
 
         //Estado inicial
         messageState = State.FastMessage;
@@ -85,6 +102,7 @@ public class MessageManager : MonoBehaviour {
         //Se activan el marco y el texto
         frame.gameObject.SetActive(true);
         text.gameObject.SetActive(true);
+        kodama.gameObject.SetActive(true);
 
         //Se bloquea el resto del juego
         if(LockUnlockEvent != null) {
@@ -116,7 +134,7 @@ public class MessageManager : MonoBehaviour {
         } else {
             endIndex = 4;
         }
-        
+
         //Se inicia la corrutina para ir mostrando el mensaje letra por letra
         StartCoroutine(TypeText());
     }
@@ -127,6 +145,9 @@ public class MessageManager : MonoBehaviour {
     /// <returns></returns>
     IEnumerator TypeText() {
 
+        //Se reproduce un sonido de mensaje aleatorio
+        AudioManager.PlayRandomizeSfx(messagesSfxs);
+
         //Se limpia el mensaje en pantalla
         text.text = string.Empty;
 
@@ -136,7 +157,7 @@ public class MessageManager : MonoBehaviour {
             //Se extrae la linea como array de caracteres
             char[] line = lines[i].ToCharArray();
             
-            //Se recorrela linea y se va añadiendo letra a letra con un retraso de la velocidad de letra
+            //Se recorre la linea y se va añadiendo letra a letra con un retraso de la velocidad de letra
             for (int j = 0; j < line.Length; j++) {
                 text.text += line[j];
                 yield return new WaitForSeconds(letterSpeed);
@@ -185,6 +206,7 @@ public class MessageManager : MonoBehaviour {
                 //Se oculta la interfaz de mensajes
                 frame.gameObject.SetActive(false);
                 text.gameObject.SetActive(false);
+                kodama.gameObject.SetActive(false);
                 break;
             //Si está en el estado de siguiente mensaje
             case State.NextMessage:

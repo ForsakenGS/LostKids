@@ -108,12 +108,13 @@ public class AudioManager : MonoBehaviour {
     /// </summary>
     /// <param name="source">AudioSource que se desea reproducir</param>
     /// <param name="clips">Array con los distintos efectos de sonido entre los que se randomizará el sonido</param>
-    public static void PlayRandomizeSfx(AudioSource source, AudioClip[] clips) {
+    public static void PlayRandomizeSfx(ArrayList sources) {
 
         //Genera un índice dentro de los distintos efectos de sonido
-        int randomIndex = Random.Range(0, clips.Length);
+        int randomIndex = Random.Range(0, sources.Count);
 
-        source.clip = clips[randomIndex];
+        AudioSource source = (AudioSource) sources[randomIndex];
+       
         source.Play();
 
     }
