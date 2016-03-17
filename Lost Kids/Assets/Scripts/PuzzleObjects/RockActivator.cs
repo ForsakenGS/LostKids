@@ -19,5 +19,6 @@ public class RockActivator : MonoBehaviour {
 		if (other.gameObject.tag == "Player") {
 			rock.GetComponent<KillerSphere> ().enabled = true;
 			wall.GetComponent<MeshRenderer> ().enabled = false;
+			wall.GetComponent<BoxCollider> ().isTrigger = true;
 		}}
 }
