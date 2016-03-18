@@ -32,6 +32,9 @@ public class Button : UsableObject {
 
     private AudioLoader audioLoader;
 
+    private AudioSource buttonUpSound;
+    private AudioSource buttonDownSound;
+
     // Use this for initialization
     new void Start()
     {
@@ -43,6 +46,9 @@ public class Button : UsableObject {
         endPosition = this.transform.position - new Vector3(0, pushDeph, 0);
 
         audioLoader = GetComponent<AudioLoader>();
+
+        buttonUpSound = audioLoader.GetSound("ButtonUp");
+        buttonDownSound = audioLoader.GetSound("ButtonDown");
 
     }
 
@@ -86,16 +92,16 @@ public class Button : UsableObject {
     /// Metodo que se activa al usar el objeto. Incluye un comportamiento base generico
     /// y comportamiendo especifico para el objeto
     /// </summary>
-    new public void Use()
+    override public void Use()
     {
-
+     
         if(!onUse) {
-
+            
             //Comportamiento generico de un usable. (Activar objeto o notificar al puzzle segun situacion)
             base.Use();
 
             //Es necesario añadir funcionalidad adicional como Sonido o animaciones
-            AudioManager.Play(audioLoader.GetSound("ButtonDown"), false, 1);
+            AudioManager.Play(buttonDownSound, false, 1);
         }
     }
 
@@ -104,18 +110,18 @@ public class Button : UsableObject {
     /// Metodo que se activa al usar el objeto. Incluye un comportamiento base generico
     /// y comportamiendo especifico para el objeto
     /// </summary>
-    new public void CancelUse()
+    override public void CancelUse()
     {
+        if(onUse) {
+            AudioManager.Play(buttonUpSound, false, 1);
 
-        AudioManager.Play(audioLoader.GetSound("ButtonUp"), false, 1);
+            //Comportamiento base generico para todos los objetos usables
+            base.CancelUse();
 
-        //Comportamiento base generico para todos los objetos usables
-        base.CancelUse();
-
-        //Comportamiento especifico para cada objeto. Incluir ademas animaciones, sonidos...
-        StopAllCoroutines();
-        StartCoroutine(Move(startPosition));
-
+            //Comportamiento especifico para cada objeto. Incluir ademas animaciones, sonidos...
+            StopAllCoroutines();
+            StartCoroutine(Move(startPosition));
+        }
     }
 
     /// <summary>

@@ -13,7 +13,7 @@ public abstract class BreakableObject : MonoBehaviour, IBreakable {
         Destroy(gameObject);
     }
 
-    public void TakeHit()
+    public virtual void TakeHit()
     {
         currentHitPoints--;
         if(currentHitPoints <= 0)

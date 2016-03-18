@@ -12,10 +12,20 @@ public class PuzzleAllActive : PuzzleManagerBase {
 
     //Mapa del estado de los objetos ( activo/inactivo)
     Dictionary<UsableObject, bool> usablesState;
+
+    private AudioLoader audioLoader;
+
+    private AudioSource successSound;
+    private AudioSource failSound;
+
     // Use this for initialization
     new void Start () {
         //Inicializacion basica del manager
         base.Start();
+
+        audioLoader = GetComponent<AudioLoader>();
+        successSound = audioLoader.GetSound("Success");
+        failSound = audioLoader.GetSound("Fail");
 
         //Inicializacion del mapa de estado de objetos a false
         usablesState = new Dictionary<UsableObject, bool>();
@@ -40,7 +50,7 @@ public class PuzzleAllActive : PuzzleManagerBase {
         usablesState[sender] = status;
 
         //Si todos los elementos estan activos, se resuelve el puzzle
-        if(AllActive())
+        if (AllActive())
         {
             Solve();
         }
@@ -58,6 +68,7 @@ public class PuzzleAllActive : PuzzleManagerBase {
     /// <returns>true cuando todos los objetos estan activos</returns>
     bool AllActive()
     {
+       
         bool active = true;
         foreach(bool value in usablesState.Values)
         {
@@ -76,8 +87,11 @@ public class PuzzleAllActive : PuzzleManagerBase {
     /// </summary>
     public override void Solve()
     {
+        
         if (!solved)
         {
+            AudioManager.Play(successSound, false, 1);
+
             solved = true;
             targetActivable.Activate();
             //Si se trata de un puzzle Timed, se resetea en un tiempo
@@ -97,6 +111,13 @@ public class PuzzleAllActive : PuzzleManagerBase {
         //Si esta resuelto, cancela la activacion del resultado
         if(solved)
         {
+
+            if(successSound.isPlaying) {
+                AudioManager.Stop(successSound);
+            }
+
+            AudioManager.Play(failSound, false, 1);
+
             targetActivable.CancelActivation();
         }
         solved = false;

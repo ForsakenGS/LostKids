@@ -45,6 +45,9 @@ public class CharacterStatus : MonoBehaviour {
 
     private AudioLoader audioLoader;
 
+    private AudioSource resurrectSound;
+    private AudioSource dieSound;
+
     // Use this for initialization
     void Awake() {
         if (characterManagerPrefab == null) {
@@ -53,6 +56,7 @@ public class CharacterStatus : MonoBehaviour {
         characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         characterMovement = GetComponent<CharacterMovement>();
         playerUse = GetComponent<PlayerUse>();
+        
     }
 
 	// Use this for initialization
@@ -61,6 +65,8 @@ public class CharacterStatus : MonoBehaviour {
 
         audioLoader = GetComponent<AudioLoader>();
 
+        resurrectSound = audioLoader.GetSound("Resurrect");
+        dieSound = audioLoader.GetSound("Die");
     }
 
     // Update is called once per frame
@@ -104,6 +110,9 @@ public class CharacterStatus : MonoBehaviour {
     public void Kill() {
         characterState = State.Dead;
         //Animacion, Efectos, Cambio de imagen.....
+
+        AudioManager.Play(dieSound, false, 1);
+
         GetComponent<Renderer>().enabled = false; //Temporal
         GetComponent<Rigidbody>().isKinematic = true;
         characterManager.CharacterKilled(this);
@@ -234,7 +243,7 @@ public class CharacterStatus : MonoBehaviour {
             ResurrectCharacterEvent(gameObject);
         }
         //Animacion, Efectos, Cambio de imagen.....
-        AudioManager.Play(audioLoader.GetSound("Resurrect"), false, 1);
+        AudioManager.Play(resurrectSound, false, 1);
     }
 
     /// <summary>

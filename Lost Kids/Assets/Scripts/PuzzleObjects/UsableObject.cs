@@ -102,7 +102,7 @@ public abstract class UsableObject : MonoBehaviour {
     /// <summary>
     /// Cancela la activacion del objeto
     /// </summary>
-    public void CancelUse()
+    public virtual void CancelUse()
     {
         if (onUse)
         {
