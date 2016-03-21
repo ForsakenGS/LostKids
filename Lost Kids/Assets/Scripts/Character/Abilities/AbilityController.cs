@@ -8,12 +8,11 @@ using System.Collections;
 /// con el personaje.
 /// </summary>
 public class AbilityController : MonoBehaviour {
+	public delegate void AbilityChanged(CharacterAbility abilityaffected);
     /// <summary>
     /// Evento para informar del cambio de habilidad activa a otros scripts
     /// </summary>
-    public delegate void AbilityChanged(CharacterAbility abilityaffected);
     public static event AbilityChanged SelectedAbilityEvent;
-    public static event AbilityChanged ModifiedAbilityEnergyEvent;
 
     private CharacterAbility ability1;
     private CharacterAbility ability2;
@@ -43,17 +42,20 @@ public class AbilityController : MonoBehaviour {
     /// Cambia la habilidad del personaje que está seleccionada
     /// </summary>
     public void ChangeAbility() {
-        activeAbility.DeactivateAbility();
-        if (activeAbility.Equals(ability1)) {
-            activeAbility = ability2;
-        } else {
-            activeAbility = ability1;
-        }
-        activeAbility.ActivateAbility();
-        // Lanza el evento de habilidad seleccionada
-        if (SelectedAbilityEvent != null) {
-            SelectedAbilityEvent(activeAbility);
-        }
+		// Intenta desactivar la habilidad actual
+		if (activeAbility.DeactivateAbility ()) {
+			// Elige la habilidad a activar y procede con su activación
+			if (activeAbility.Equals (ability1)) {
+				activeAbility = ability2;
+			} else {
+				activeAbility = ability1;
+			}
+			activeAbility.ActivateAbility();
+			// Lanza el evento de habilidad seleccionada
+			if (SelectedAbilityEvent != null) {
+				SelectedAbilityEvent(activeAbility);
+			}
+		}
     }
 
     /// <summary>
