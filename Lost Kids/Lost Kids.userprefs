@@ -1,15 +1,16 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PuzzleObjects\Door.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scroll.cs">
     <Files>
+      <File FileName="Assets\Scripts\Player\CharacterManager.cs" Line="116" Column="1" />
       <File FileName="Assets\Scripts\PuzzleObjects\Door.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\PuzzleObjects\RockActivator.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Enemies\KillerSphere.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\PuzzleObjects\Button.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player\CharacterManager.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Character\Abilities\SprintAbility.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Player\CharacterStatus.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\PuzzleObjects\CheckPoint.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scroll.cs" Line="15" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
