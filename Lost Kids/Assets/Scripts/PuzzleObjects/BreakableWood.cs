@@ -6,10 +6,16 @@ using System.Collections;
 /// </summary>
 public class BreakableWood : BreakableObject {
 
+    private AudioLoader audioLoader;
+
+    private AudioSource woodBreakSound;
+
 	// Use this for initialization
 	void Start () {
-	
-	}
+        audioLoader = GetComponent<AudioLoader>();
+
+        woodBreakSound = audioLoader.GetSound("WoodBreak");
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -20,7 +26,7 @@ public class BreakableWood : BreakableObject {
     /// Metodo llamado al recibir un golpe del jugador
     /// Cuando los puntos de golpe lleguen a 0, se destruye el objeto
     /// </summary>
-    public new void TakeHit()
+    public override void TakeHit()
     {
 
         //Animacion, cambio de aspecto
@@ -39,6 +45,9 @@ public class BreakableWood : BreakableObject {
         //Animacion de romperse
         //Destroy(this.gameObject,tiempo de animacion);
         //Destroy(this.gameObject);
+
+        AudioManager.Play(woodBreakSound, false, 1);
+
         StartCoroutine(gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
     }
 

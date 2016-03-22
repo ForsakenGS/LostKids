@@ -17,6 +17,7 @@ public class CharacterMovement : MonoBehaviour {
 
     private AudioSource stepSound;
     private AudioSource jumpSound;
+    private AudioSource pushSound;
 
 	// Use this for references
 	void Awake () {
@@ -36,6 +37,7 @@ public class CharacterMovement : MonoBehaviour {
 
         stepSound = audioLoader.GetSound("Steps");
         jumpSound = audioLoader.GetSound("Jump");
+        pushSound = audioLoader.GetSound("Push");
     }
 
     void Update() {
@@ -43,7 +45,13 @@ public class CharacterMovement : MonoBehaviour {
             if (rigBody.velocity.Equals(Vector3.zero)) {
                 stepSound.Stop();
             }
+        }else if(pushSound) {
+            if(pushSound.isPlaying && rigBody.velocity.Equals(Vector3.zero)) {
+                pushSound.Stop();
+            }
         }
+
+        
     }
 
     /// <summary>
@@ -160,16 +168,13 @@ public class CharacterMovement : MonoBehaviour {
 			forceToApply = normal.normalized;
 		}
 
-        AudioSource source = audioLoader.GetSound("Push");
-
         if (!forceToApply.Equals(Vector3.zero)) {
 			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
 
-            if (!source.isPlaying) {
-                AudioManager.Play(source, true, 1);
+            if (!pushSound.isPlaying) {
+                AudioManager.Stop(stepSound);
+                AudioManager.Play(pushSound, true, 1);
             }
-        } else {
-            AudioManager.Stop(source);
         }
 	}
 

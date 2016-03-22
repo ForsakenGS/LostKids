@@ -7,9 +7,8 @@
 /// </summary>
 public abstract class CharacterAbility : MonoBehaviour {
     /// <summary>
-    /// Evento para informar del cambio de energía de una habilidad
+	/// Evento para informar que la energía de la habilidad se ha visto modificada
     /// </summary>
-    //public delegate void AbilityChanged(CharacterAbility abilityAffected);
     public static event AbilityController.AbilityChanged ModifiedAbilityEnergyEvent;
 
     /// <summary>
@@ -32,11 +31,15 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// Tiempo de ejecución de la habilidad
     /// </summary>
     public float executionTime = 1;
+	/// <summary>
+	/// Determina si la ejecución de la habilidad es bloqueante; es decir, no permite el cambio a otra habilidad.
+	/// </summary>
+	public bool blockingExecution;
 
     // Parámetros básicos de la habilidad
-    protected bool active;
+    public bool active;
     protected bool execution;
-    public float energy;
+    protected float energy;
     protected CharacterStatus characterStatus;
     protected CharacterMovement characterMovement;
 
@@ -50,8 +53,6 @@ public abstract class CharacterAbility : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        active = false;
-        execution = false;
         energy = 0.0f;
         initExecutionTime = executionTime;
     }
@@ -82,14 +83,24 @@ public abstract class CharacterAbility : MonoBehaviour {
     }
 
     /// <summary>
-    /// Desactiva la habilidad, terminando su ejecución en caso de ser necesario
+    /// Desactiva la habilidad si es posible, terminando su ejecución en caso de ser necesario
     /// </summary>
-    public void DeactivateAbility() {
-        active = false;
-        if (execution) {
-            characterStatus.EndAbility(this);
-            EndExecution();
-        }
+	/// <returns><c>true</c> si se ha podido desactivar, <c>false</c> si no ha sido posible</returns>
+    public bool DeactivateAbility() {
+		bool res = active;
+		if (execution) {
+			if (!blockingExecution) {
+				characterStatus.EndAbility (this);
+				res = EndExecution ();
+			} else {
+				res = false;
+			}
+		} 
+		if (res) {
+			active = false;
+		}
+
+		return res;
     }
 
     public abstract bool EndExecution();

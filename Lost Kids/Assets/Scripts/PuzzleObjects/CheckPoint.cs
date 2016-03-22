@@ -20,6 +20,10 @@ public class CheckPoint : MonoBehaviour {
     //Flag de Checkpoint activo
     bool isActive;
 
+    private AudioLoader audioLoader;
+
+    private AudioSource checkPointSound;
+
     void Awake()
     {
         isActive = false;
@@ -36,6 +40,10 @@ public class CheckPoint : MonoBehaviour {
             characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
             characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         }
+
+        audioLoader = GetComponent<AudioLoader>();
+
+        checkPointSound = audioLoader.GetSound("CheckPoint");
 
 
     }
@@ -59,6 +67,7 @@ public class CheckPoint : MonoBehaviour {
             {
                 if (!isActive)
                 {
+                    Debug.Log(isActive);
                     Activate();
                 }
                 characterManager.CheckPointActivation();
@@ -69,13 +78,21 @@ public class CheckPoint : MonoBehaviour {
     }
 
     /// <summary>
-    /// Desactiva el checkpoint y notifica el cambio al manager
+    /// Activa el checkpoint y notifica el cambio al manager
     /// </summary>
     public void Activate()
     {
-        isActive = true;
-        characterManager.SetActiveCheckPoint(this);
-        neko.Show();
+        
+        if(!isActive) {
+            isActive = true;
+
+            if(checkPointSound) {
+                AudioManager.Play(checkPointSound,false,1);
+            }
+
+            characterManager.SetActiveCheckPoint(this);
+            neko.Show();
+        }
     }
 
     /// <summary>

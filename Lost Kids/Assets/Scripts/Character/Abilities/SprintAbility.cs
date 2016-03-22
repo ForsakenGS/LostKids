@@ -1,12 +1,22 @@
-﻿/* Class to define the ability of sprint */
+﻿/// <summary>
+/// Implementa la habilidad del sprint. Al heredar de ‘CharacterAbility’ debe implementar los métodos EndExecution(), con el
+/// que actualiza el valor de la variable ejecución y reestablece la velocidad originaldel personaje, y StartExecution(), que 
+/// modifica la velocidad del personaje según speedModifier y decrementa la energía de la habilidad.
+/// </summary>
 public class SprintAbility : CharacterAbility {
-	// Speed modifier
+	/// <summary>
+	/// Modificador de velocidad sobre la establecida por defecto
+	/// </summary>
 	public float speedModifier = 2.0f;
 
-	// Finish the execution of the ability, restoring the speed modifier
+	/// <summary>
+	/// Termina la ejecución de la habilidad, reestableciendo la velocidad del personaje
+	/// </summary>
+	/// <returns><c>true</c>, si la ejecución se terminó realmente, <c>false</c> en otro caso.</returns>
 	public override bool EndExecution () {
 		bool ended = execution;
 		if (execution) {
+			// Se para la ejecución de la habilidad
 			execution = false;
 			characterStatus.standingSpeed /= speedModifier;
 		}
@@ -14,10 +24,14 @@ public class SprintAbility : CharacterAbility {
 		return ended;
 	}
 
-	// Start the execution of the ability, setting the speed modifier
+	/// <summary>
+	/// Comienza la ejecución de la habilidad, aumentando la velocidad del personaje
+	/// </summary>
+	/// <returns><c>true</c>, si la habilidad se inició con éxito, <c>false</c> si no fue posible.</returns>
 	public override bool StartExecution () {
 		bool started = false;
 		if (!execution) {
+			// Comienza la ejecución de la habilidad
 			execution = true;
             started = true;
             AddEnergy(-initialConsumption);

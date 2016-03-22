@@ -10,12 +10,18 @@ public class Lever : UsableObject {
 
     private AudioLoader audioLoader;
 
+    private AudioSource leverOnSound;
+    private AudioSource leverOffSound;
+
     // Use this for initialization
     new void Start () {
         //Se llama al start de UsableObject
         base.Start();
 
         audioLoader = GetComponent<AudioLoader>();
+
+        leverOnSound = audioLoader.GetSound("LeverOn");
+        leverOffSound = audioLoader.GetSound("LeverOff");
     }
 	
 	// Update is called once per frame
@@ -34,23 +40,25 @@ public class Lever : UsableObject {
         if (!onUse)
         {
             base.Use();
-        }
-        
 
-        //Es necesario añadir funcionalidad adicional como Sonido o animaciones
-        AudioManager.Play(audioLoader.GetSound("LeverOn"), false, 1);
+            //Es necesario añadir funcionalidad adicional como Sonido o animaciones
+            AudioManager.Play(leverOnSound, false, 1);
+
+        }
     }
 
     /// <summary>
     /// Metodo que se activa al dejar de usar el objeto. Incluye un comportamiento base generico
     /// y comportamiendo especifico para el objeto
     /// </summary>
-    new public void CancelUse()
+    override public void CancelUse()
     {
-        base.CancelUse();
+        if(onUse) {
+            base.CancelUse();
 
-        //Es necesario añadir funcionalidad adicional como Sonido o animaciones
-        AudioManager.Play(audioLoader.GetSound("LeverOff"), false, 1);
+            //Es necesario añadir funcionalidad adicional como Sonido o animaciones
+            AudioManager.Play(leverOffSound, false, 1);
+        }
     }
 
 }

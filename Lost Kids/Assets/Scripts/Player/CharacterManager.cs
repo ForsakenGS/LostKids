@@ -27,6 +27,8 @@ public class CharacterManager : MonoBehaviour {
 
     private AudioLoader audioLoader;
 
+    private AudioSource changeCharacterSound;
+
     void Awake()
     {
         characterStatusList = new List<CharacterStatus>();
@@ -42,7 +44,9 @@ public class CharacterManager : MonoBehaviour {
 	void Start () {
 
         audioLoader = GetComponent<AudioLoader>();
-       
+
+        changeCharacterSound = audioLoader.GetSound("ChangeCharacter");
+
         activeCheckPoint.Activate();
 
         activeCharacter = characterList[0];
@@ -122,7 +126,7 @@ public class CharacterManager : MonoBehaviour {
 
                 ActiveCharacterChangedEvent();
 
-                AudioManager.Play(audioLoader.GetSound("ChangeCharacter"), false, 1);
+                AudioManager.Play(changeCharacterSound, false, 1);
 
             }
 

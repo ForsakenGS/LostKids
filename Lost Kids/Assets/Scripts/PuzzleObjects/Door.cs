@@ -36,12 +36,21 @@ public class Door : MonoBehaviour, IActivable {
     private Vector3 beginPosition;
 
 
+    private AudioLoader audioLoader;
+
+    private AudioSource openSound;
+    private AudioSource closeSound;
 
 
 
     // Use this for initialization
     void Start()
     {
+
+        audioLoader = GetComponent<AudioLoader>();
+        openSound = audioLoader.GetSound("Open");
+        closeSound = audioLoader.GetSound("Close");
+
         //Se guarda la posicion inicial de la puerta
         startPosition = this.transform.position;
         //Se calcula un offset ( distancia a la que se movera) en funcion al tamaño y direccion de apertura
@@ -78,17 +87,26 @@ public class Door : MonoBehaviour, IActivable {
 
     public void OpenDoor()
     {
+
         if (!isOpen)
         {
+            AudioManager.Play(openSound, false, 1);
+
             //Se cancela un movimiento previo y se mueve la puerta a su posicion de apertura
             StopAllCoroutines();
             StartCoroutine(MoveDoor(endPosition));
+
         }
 
     }
 
     public void CloseDoor()
     {
+        if(openSound.isPlaying) {
+            AudioManager.Stop(openSound);
+        }
+        AudioManager.Play(closeSound, false, 1);
+
         //Se cancela un movimiento previo y se mueve la puerta a su posicion de cierre
         isOpen = false;
         StopAllCoroutines();
@@ -105,6 +123,7 @@ public class Door : MonoBehaviour, IActivable {
     {
         isMoving = true;
         beginPosition = transform.position;
+        
         float t = 0;
         while (t < 1f) // Hasta que no acabe el frame no permite otro movimiento
         {
@@ -123,6 +142,8 @@ public class Door : MonoBehaviour, IActivable {
         {
             isOpen = false;
         }
+
+        
         yield return 0;
 
     }
