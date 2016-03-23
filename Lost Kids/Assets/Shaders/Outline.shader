@@ -3,15 +3,15 @@ Shader "Custom/Outline"
     Properties 
     {
 
-		[MaterialToggle(_TEX_ON)] _DetailTex ("Enable Detail texture", Float) = 0 	//1
+		[MaterialToggle(_TEX_ON)] _DetailTex ("Enable Detail texture", Float) = 1 	//1
 		_MainTex ("Detail", 2D) = "white" {}        								//2
 		_ToonShade ("Shade", 2D) = "white" {}  										//3
 		[MaterialToggle(_COLOR_ON)] _TintColor ("Enable Color Tint", Float) = 0 	//4
 		_Color ("Base Color", Color) = (1,1,1,1)									//5	
 		[MaterialToggle(_VCOLOR_ON)] _VertexColor ("Enable Vertex Color", Float) = 0//6        
 		_Brightness ("Brightness 1 = neutral", Float) = 1.0							//7	
-		_OutlineColor ("Outline Color", Color) = (0.5,0.5,0.5,1.0)					//10
-		_Outline ("Outline width", Float) = 0.01									//11
+		_OutlineColor ("Outline Color", Color) = (0.0,0.0,0.0,1.0)					//10
+		_Outline ("Outline width", Float) = 3.0									//11
 
     }
  
@@ -21,11 +21,10 @@ Shader "Custom/Outline"
 		LOD 250 
         Lighting Off
         Fog { Mode Off }        
-        
-		UsePass "Custom/CelShading/BASE"
 
         Pass
         {
+			Name "OUTLINE1"
             Cull Front
             ZWrite On
             CGPROGRAM
