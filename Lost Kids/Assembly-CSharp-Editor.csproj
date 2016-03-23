@@ -51,7 +51,12 @@
      <Compile Include="Assets\Editor\MessageTriggerEditor.cs" />
      <Compile Include="Assets\Editor\MovingPlatformEditor.cs" />
      <Compile Include="Assets\Editor\Puzzle1Editor.cs" />
+     <Compile Include="Assets\Editor\PuzzleAllActiveEditor.cs" />
+     <Compile Include="Assets\Editor\PuzzleAnyActiveEditor.cs" />
+     <None Include="Assets\TSF\Shaders\TSFOutline.shader" />
+     <None Include="Assets\TSF\Shaders\TSF.shader" />
      <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
+     <None Include="Assets\Shaders\AlphaTexture.shader" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
