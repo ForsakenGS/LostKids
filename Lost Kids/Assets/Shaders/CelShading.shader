@@ -8,7 +8,7 @@ Shader "Custom/CelShading"
 		[MaterialToggle(_COLOR_ON)] _TintColor ("Enable Color Tint", Float) = 0 	//4
 		_Color ("Base Color", Color) = (1,1,1,1)									//5	
 		[MaterialToggle(_VCOLOR_ON)] _VertexColor ("Enable Vertex Color", Float) = 0//6        
-		_Brightness ("Brightness 1 = neutral", Float) = 1.0							//7
+		_Brightness ("Brightness 1 = neutral", Float) = 1.0							//7	
     }
    
     Subshader 
@@ -20,6 +20,8 @@ Shader "Custom/CelShading"
 		Lighting Off
 		Fog { Mode Off }
 		
+		UsePass "Custom/Outline/OTL"
+
         Pass 
         {
             Name "BASE"
@@ -37,7 +39,7 @@ Shader "Custom/CelShading"
                 sampler2D _MainTex;
 				half4 _MainTex_ST;
 				#endif
-
+				
                 struct appdata_base0 
 				{
 					float4 vertex : POSITION;
@@ -82,7 +84,7 @@ Shader "Custom/CelShading"
 					#else
 					fixed4 toonShade = tex2D( _ToonShade, i.uvn );
 					#endif
-
+					
 					#if _TEX_ON
 					fixed4 detail = tex2D ( _MainTex, i.uv );
 					return  toonShade * detail*_Brightness;
@@ -93,7 +95,7 @@ Shader "Custom/CelShading"
             ENDCG
         }
 
-		UsePass "Custom/Outline/OUTLINE1"
+		
     }
     Fallback "Legacy Shaders/Diffuse"
 }

@@ -15,10 +15,10 @@ Shader "Custom/CelShadingAlpha"
    
     Subshader 
     {
-    	Tags { "RenderType"="Opaque" "Queue" = "AlphaTest" }
+    	Tags { "RenderType"="Opaque" }
 		LOD 250
     	ZWrite On
-	   	Cull Back
+	   	//Cull Back
 		Lighting Off
 		Fog { Mode Off }
 		
@@ -39,9 +39,11 @@ Shader "Custom/CelShadingAlpha"
                 sampler2D _MainTex;
 				half4 _MainTex_ST;
 				#endif
-				
-				sampler2D _AlphaTex;
 
+				sampler2D _AlphaTex;
+				half4 _AlphaTex_ST;
+				float _Cutoff;
+				
                 struct appdata_base0 
 				{
 					float4 vertex : POSITION;
@@ -57,7 +59,7 @@ Shader "Custom/CelShadingAlpha"
                     #endif
                     half2 uvn : TEXCOORD1;
 
-					half2 uvA: TEXCOORD2;
+					half2 auv : TEXCOORD2;
                  };
                
                 v2f vert (appdata_base0 v)
@@ -71,9 +73,12 @@ Shader "Custom/CelShadingAlpha"
                      #if _TEX_ON
                     o.uv = TRANSFORM_TEX ( v.texcoord, _MainTex );
                     #endif
+
+					o.auv = TRANSFORM_TEX(v.texcoord, _AlphaTex);
                     return o;
                 }
 
+				
               	sampler2D _ToonShade;
                 fixed _Brightness;
                 
@@ -89,10 +94,12 @@ Shader "Custom/CelShadingAlpha"
 					fixed4 toonShade = tex2D( _ToonShade, i.uvn );
 					#endif
 
-					fixed4 aTex = tex2D(_AlphaTex, i.uvA);
-
-					toonShade.a = aTex.a;
-
+					float4 textureColor = tex2D(_AlphaTex, i.auv);
+					if(textureColor.a < _Cutoff){
+					//if (textureColor.b < _Cutoff || textureColor.r < _Cutoff || textureColor.g < _Cutoff){
+						discard;
+					}
+					
 					#if _TEX_ON
 					fixed4 detail = tex2D ( _MainTex, i.uv );
 					return  toonShade * detail*_Brightness;
@@ -102,8 +109,6 @@ Shader "Custom/CelShadingAlpha"
                 }
             ENDCG
         }
-
-		UsePass "Custom/Outline/OUTLINE1"
     }
     Fallback "Legacy Shaders/Diffuse"
 }
