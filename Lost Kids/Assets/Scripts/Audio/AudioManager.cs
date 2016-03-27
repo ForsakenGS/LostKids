@@ -3,10 +3,23 @@ using System.Collections;
 
 public class AudioManager : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	    
-	}
+    public static AudioManager instance = null;
+
+    void Awake() {
+
+        if (instance == null) {
+
+            instance = this;
+
+        } else if (instance != this){
+
+            Destroy (gameObject);
+
+        }
+            
+        DontDestroyOnLoad (gameObject);
+
+    }
 
     /// <summary>
     /// Reproduce un audio simple o en bucle

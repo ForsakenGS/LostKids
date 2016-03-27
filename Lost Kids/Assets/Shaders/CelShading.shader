@@ -16,7 +16,7 @@ Shader "Custom/CelShading"
     	Tags { "RenderType"="Opaque" }
 		LOD 250
     	ZWrite On
-	   	Cull Back
+	   	Cull Off
 		Lighting Off
 		Fog { Mode Off }
 		

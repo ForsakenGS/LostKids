@@ -18,13 +18,13 @@ Shader "Custom/CelShadingAlpha"
     	Tags { "RenderType"="Opaque" }
 		LOD 250
     	ZWrite On
-	   	//Cull Back
+	   	Cull Off
 		Lighting Off
 		Fog { Mode Off }
 		
         Pass 
         {
-            Name "BASE"
+            Name "CSA"
             CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
@@ -95,13 +95,15 @@ Shader "Custom/CelShadingAlpha"
 					#endif
 
 					float4 textureColor = tex2D(_AlphaTex, i.auv);
-					if(textureColor.a < _Cutoff){
-					//if (textureColor.b < _Cutoff || textureColor.r < _Cutoff || textureColor.g < _Cutoff){
+					if (textureColor.r < _Cutoff) {
+						//if (textureColor.b < _Cutoff || textureColor.r < _Cutoff || textureColor.g < _Cutoff){
 						discard;
+						//detail.a = textureColor.a;
 					}
 					
 					#if _TEX_ON
 					fixed4 detail = tex2D ( _MainTex, i.uv );
+					
 					return  toonShade * detail*_Brightness;
 					#else
 					return  toonShade * _Brightness;
@@ -109,6 +111,8 @@ Shader "Custom/CelShadingAlpha"
                 }
             ENDCG
         }
+
+		//UsePass "Custom/Outline/OTL"
     }
     Fallback "Legacy Shaders/Diffuse"
 }
