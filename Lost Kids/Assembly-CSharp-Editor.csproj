@@ -53,14 +53,18 @@
      <Compile Include="Assets\Editor\Puzzle1Editor.cs" />
      <Compile Include="Assets\Editor\PuzzleAllActiveEditor.cs" />
      <Compile Include="Assets\Editor\PuzzleAnyActiveEditor.cs" />
+     <None Include="Assets\Shaders\CelShadingAlpha.shader" />
      <None Include="Assets\TSF\Shaders\TSFOutline.shader" />
      <None Include="Assets\TSF\Shaders\TSF.shader" />
+     <None Include="Assets\Shaders\Outline.shader" />
      <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
      <None Include="Assets\Shaders\AlphaTexture.shader" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
+     <None Include="Assets\Shaders\CelShading.shader" />
      <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
      <None Include="Assets\messages.txt" />
+     <None Include="Assets\Shaders\Alpha.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>

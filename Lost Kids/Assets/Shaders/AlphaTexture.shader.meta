@@ -1,10 +1,7 @@
 fileFormatVersion: 2
-guid: a413fd6c9a388404c9c90378a9c60837
-labels:
-- cellshading
-- cell
-- toon
-- toonshader
+guid: 57a287ea72737ed4cb56a3c3f8d769e0
+timeCreated: 1457563893
+licenseType: Free
 ShaderImporter:
   defaultTextures: []
   userData: 
