@@ -1,15 +1,42 @@
 fileFormatVersion: 2
-guid: d9e37cd0258a03b4ba08eaeb4b147c9a
-timeCreated: 1458730332
+guid: 7ee6f95189eabbb49bf42e2c5e519704
+timeCreated: 1459185874
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Plane001
+    100004: Plane002
+    100006: Plane003
+    100008: Plane004
+    100010: Plane005
+    100012: Plane006
     400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Tsurubebi
+    400002: Plane001
+    400004: Plane002
+    400006: Plane003
+    400008: Plane004
+    400010: Plane005
+    400012: Plane006
+    2300000: Plane001
+    2300002: Plane002
+    2300004: Plane003
+    2300006: Plane004
+    2300008: Plane005
+    2300010: Plane006
+    3300000: Plane001
+    3300002: Plane002
+    3300004: Plane003
+    3300006: Plane004
+    3300008: Plane005
+    3300010: Plane006
+    4300000: Plane001
+    4300002: Plane002
+    4300004: Plane003
+    4300006: Plane004
+    4300008: Plane005
+    4300010: Plane006
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -35,7 +62,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 2
+    globalScale: 35
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
@@ -51,7 +78,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 60
+    normalSmoothAngle: 180
     normalImportMode: 1
     tangentImportMode: 3
   importAnimation: 1

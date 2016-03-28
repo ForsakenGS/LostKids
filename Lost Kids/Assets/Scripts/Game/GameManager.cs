@@ -7,9 +7,12 @@ public class GameManager : MonoBehaviour {
 
     private AudioLoader audioLoader;
 
+    private GameObject menuMusic;
+
 	// Use this for initialization
 	void Start () {
-        audioLoader = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioLoader>();
+        menuMusic = GameObject.FindGameObjectWithTag("MenuMusic");
+        audioLoader = menuMusic.GetComponent<AudioLoader>();
 	}
 	
 	// Update is called once per frame
@@ -27,18 +30,19 @@ public class GameManager : MonoBehaviour {
 
     public void PrepareScene(string sc) {
         switch(sc) {
-            case "Level1 Corregido":
+            case "Level1":
                 AudioManager.Stop(audioLoader.GetSound("MenuMusic"));
+                Destroy(menuMusic);
                 break;
-            case "options":
+            case "Settings":
                 break;
-            case "credits":
+            case "Credits":
                 break;
-            case "loadScene":
+            case "LoadScene":
                 break;
-            case "menu":
+            case "Menu":
                 break;
-            case "yokai":
+            case "Yokai":
                 break;
             
         }
