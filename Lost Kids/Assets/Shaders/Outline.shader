@@ -23,7 +23,7 @@ Shader "Custom/Outline"
         Lighting Off
         Fog { Mode Off }        
         
-		UsePass "Custom/CelShadingAlpha/CSA"
+		UsePass "Custom/CelShading/CS"
 
         Pass
         {

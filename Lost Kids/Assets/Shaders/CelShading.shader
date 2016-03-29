@@ -20,11 +20,9 @@ Shader "Custom/CelShading"
 		Lighting Off
 		Fog { Mode Off }
 		
-		UsePass "Custom/Outline/OTL"
-
         Pass 
         {
-            Name "BASE"
+            Name "CS"
             CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
