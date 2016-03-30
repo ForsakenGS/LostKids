@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 0d65271dcf5673646b34fb3ee4e09f36
+timeCreated: 1459168680
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 2
+  fontSize: 16
+  forceTextureCase: 3
+  characterSpacing: 1
+  characterPadding: 0
+  includeFontData: 1
+  use2xBehaviour: 0
+  fontNames: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a17e73594f95ce24fa9c527d89fa6451, type: 3}
+  customCharacters: "DavidBelonExp\xF3st"
+  fontRenderingMode: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

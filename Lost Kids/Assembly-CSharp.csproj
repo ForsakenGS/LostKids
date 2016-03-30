@@ -47,6 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Audio\AudioLoader.cs" />
      <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
+     <Compile Include="Assets\Scripts\Audio\MenuMusic.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraManager.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
@@ -71,6 +72,7 @@
      <Compile Include="Assets\Scripts\Game\PersistenceTest.cs" />
      <Compile Include="Assets\Scripts\Lockers\InputManagerLocker.cs" />
      <Compile Include="Assets\Scripts\Menu\Flicker.cs" />
+     <Compile Include="Assets\Scripts\Menu\MenuButton.cs" />
      <Compile Include="Assets\Scripts\Menu\Scroll.cs" />
      <Compile Include="Assets\Scripts\Messages\ILockeable.cs" />
      <Compile Include="Assets\Scripts\Messages\LockeableObject.cs" />
@@ -106,11 +108,14 @@
      <Compile Include="Assets\Scripts\PuzzleObjects\TriangleExplosion.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\UsableObject.cs" />
      <Compile Include="Assets\Scripts\iTween.cs" />
+     <None Include="Assets\Shaders\CelShadingAlpha.shader" />
      <None Include="Assets\TSF\Shaders\TSFOutline.shader" />
      <None Include="Assets\TSF\Shaders\TSF.shader" />
+     <None Include="Assets\Shaders\Outline.shader" />
      <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
      <None Include="Assets\Shaders\AlphaTexture.shader" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
+     <None Include="Assets\Shaders\CelShading.shader" />
      <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
      <None Include="Assets\messages.txt" />

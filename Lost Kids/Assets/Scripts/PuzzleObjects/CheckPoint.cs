@@ -82,8 +82,8 @@ public class CheckPoint : MonoBehaviour {
     /// </summary>
     public void Activate()
     {
-        
-        if(!isActive) {
+        Debug.Log(isActive);
+        if (!isActive) {
             isActive = true;
 
             if(checkPointSound) {

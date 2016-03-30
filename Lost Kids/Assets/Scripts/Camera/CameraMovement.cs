@@ -142,7 +142,8 @@ public class CameraMovement : MonoBehaviour {
     {
 
         if (CharacterManager.GetActiveCharacter() != null) {
-        player = CharacterManager.GetActiveCharacter().transform;
+            player = CharacterManager.GetActiveCharacter().transform;
+            Debug.Log(player.position);
         }
     }
 }

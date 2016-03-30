@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1b6edc48478f95b44a69e876bd5b100c
+labels:
+- cellshading
+- cell
+- toon
+- toonshader
+timeCreated: 1458752875
+licenseType: Free
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
