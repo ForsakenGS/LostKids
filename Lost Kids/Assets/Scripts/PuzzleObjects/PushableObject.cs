@@ -12,6 +12,8 @@ public class PushableObject : MonoBehaviour {
 
     private Rigidbody rigidBody;
 
+    private PushAbility pushAbility;
+
 
 
 	// Use this for initialization
@@ -35,12 +37,14 @@ public class PushableObject : MonoBehaviour {
         {
             rigidBody.isKinematic = true;
             Debug.Log("Vuelve a su estado!");
-        }
+        } 
+        pushAbility = null;
     }
 
-    public void Grab()
+    public void Grab(PushAbility pa)
     {
         rigidBody.isKinematic = false;
+        pushAbility = pa;
     }
 
     private bool IsGrounded()
@@ -70,7 +74,7 @@ public class PushableObject : MonoBehaviour {
                     ray = transform.position + (Vector3.down * size.y / 2) + (Vector3.right * size.x / 2);
                     break;
             }
-            ray.y -= 0.1f;
+            ray.y += 0.05f;
             Debug.DrawLine(ray, ray + (Vector3.down ), Color.blue, 10000);
             // Lanza el rayo y comprueba si colisiona con otro objeto
             grounded = (Physics.Raycast(ray, Vector3.down, 0.1f));
@@ -83,9 +87,17 @@ public class PushableObject : MonoBehaviour {
 
     void OnCollisionExit(Collision col)
     {
-        if(!rigidBody.isKinematic && col.transform.position.y<transform.position.y)
+        if(pushAbility!=null && col.transform.position.y<transform.position.y)
         {
-            Release();
+            pushAbility.ReleaseObject();
+        }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if(pushAbility == null && IsGrounded())
+        {
+            rigidBody.isKinematic = true;
         }
     }
 

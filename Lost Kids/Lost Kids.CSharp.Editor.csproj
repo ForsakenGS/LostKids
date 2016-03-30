@@ -104,10 +104,12 @@
     <Compile Include="Assets\Editor\LeverEditor.cs" />
     <Compile Include="Assets\Editor\MessageTriggerEditor.cs" />
     <Compile Include="Assets\Editor\MovingPlatformEditor.cs" />
+    <Compile Include="Assets\Editor\Puzzle1Editor.cs" />
     <Compile Include="Assets\Editor\PuzzleAllActiveEditor.cs" />
     <Compile Include="Assets\Editor\PuzzleAnyActiveEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Resources\Texts\Text_level1_2.txt" />
     <None Include="Assets\Shaders\AlphaTexture.shader" />
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
@@ -115,6 +117,7 @@
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\TSF\Shaders\TSF.shader" />
     <None Include="Assets\TSF\Shaders\TSFOutline.shader" />
+    <None Include="Assets\Textures\MAXFILES.TXT" />
     <None Include="Assets\messages.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

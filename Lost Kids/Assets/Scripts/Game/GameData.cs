@@ -11,6 +11,9 @@ public class GameData  {
     [SerializeField]
     List<string> collectibles= new List<string>();
 
+    [SerializeField]
+    List<LevelData> levels = new List<LevelData>();
+
     private static GameData instance;
 
     public static GameData Instance
@@ -41,13 +44,21 @@ public class GameData  {
         Debug.Log("Conseguido colectionable " + id);
     }
 
-    public static void UpdateLevels(string level)
+    public static void UpdateLevels(string level, LevelData data)
     {
-        if (!Instance.levelsCompleted.Contains(level))
+        if (Instance.levelsCompleted.Contains(level))
+        {
+            Instance.levels[Instance.levelsCompleted.IndexOf(data.name)] = data;
+        }
+        else
         {
             Instance.levelsCompleted.Add(level);
+            Instance.levels.Add(data);
         }
+
+        DataManager.Save();
     }
+
 
     /// <summary>
     /// Devuelve si el collectible con el id introducido ya ha sido adquirido
@@ -58,5 +69,22 @@ public class GameData  {
     {
 
         return Instance.collectibles.Contains(id);
+    }
+
+    public static LevelData LevelStart(string level)
+    {
+        if(Instance.levelsCompleted.Contains(level))
+        {
+            return Instance.levels[Instance.levelsCompleted.IndexOf(level)];
+        }
+        else
+        {
+            return new LevelData();
+        }
+    }
+
+    public static LevelData getLevelData(string level)
+    {
+        return Instance.levels[Instance.levelsCompleted.IndexOf(level)];
     }
 }

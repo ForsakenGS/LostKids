@@ -88,7 +88,7 @@ public class PushAbility : CharacterAbility {
 
         joint.autoConfigureConnectedAnchor = false;
 
-        origin.z += 0.5f;
+        origin.z += gameObject.GetComponent<Renderer>().bounds.size.z;
         //origin.y = +0.3f;
         target.y=0.35f;
         joint.anchor = origin; //Probablemente no sea necesario cuando se improten bien los modelos
@@ -97,7 +97,7 @@ public class PushAbility : CharacterAbility {
 
         joint.connectedAnchor = target;
 
-        targetGameObject.GetComponent<PushableObject>().Grab();
+        targetGameObject.GetComponent<PushableObject>().Grab(this);
 
         Debug.Log("Punto origen: " + origin + " Punto objetivo: " + target);
 
@@ -108,5 +108,7 @@ public class PushAbility : CharacterAbility {
         Destroy(joint);
 
         targetGameObject.GetComponent<PushableObject>().Release();
+
+        characterStatus.EndAbility(this);
     }
 }

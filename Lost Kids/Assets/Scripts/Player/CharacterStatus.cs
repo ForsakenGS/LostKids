@@ -88,6 +88,14 @@ public class CharacterStatus : MonoBehaviour {
                     characterState = State.Standing;
                 }
                 break;
+            case State.Pushing: //TEMPORAL!! SUelta el objeto si el personaje se cae
+                if (!groundedCharacter)
+                { 
+                    characterState = State.Jumping;
+                    GetComponent<PushAbility>().ReleaseObject();
+                }       
+                break;
+
             default:    // CAMBIAR!! Hay que hacerlo para cada estado
                 if (!groundedCharacter)
                 {

@@ -231,5 +231,14 @@ public class MessageManager : MonoBehaviour {
     
     }
 
+    /// <summary>
+    /// Funcion que devuelve si el mensaje ha terminado de mostrarse
+    /// </summary>
+    /// <returns></returns>
+    public bool MessageEnded()
+    {
+        return messageState.Equals(State.EndMessage);
+    }
+
 
 }

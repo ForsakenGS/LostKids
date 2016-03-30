@@ -13,6 +13,9 @@ public class CharacterManager : MonoBehaviour {
     //lista de personajes
     public List<GameObject> characterList;
 
+    //lista publica de personajes
+    public static List<GameObject> characters;
+
     //Checkpoint inicial
     public GameObject initialCheckPoint;
 
@@ -23,7 +26,7 @@ public class CharacterManager : MonoBehaviour {
     private static GameObject activeCharacter;
 
     //Listado de estado de los personajes
-    private List<CharacterStatus> characterStatusList;
+    private static List<CharacterStatus> characterStatusList;
 
     private AudioLoader audioLoader;
 
@@ -32,10 +35,12 @@ public class CharacterManager : MonoBehaviour {
     void Awake()
     {
         characterStatusList = new List<CharacterStatus>();
+        characters = new List<GameObject>();
         activeCheckPoint = initialCheckPoint.GetComponent<CheckPoint>();
         for (int i = 0; i < characterList.Count; i++)
         {
             characterStatusList.Add(characterList[i].GetComponent<CharacterStatus>());
+            characters.Add(characterList[i]);
         }
         activeCharacter = characterList[0];
     }
@@ -56,6 +61,7 @@ public class CharacterManager : MonoBehaviour {
 
         }
 
+        
     }
 	
 	// Update is called once per frame
@@ -79,8 +85,11 @@ public class CharacterManager : MonoBehaviour {
     /// <param name="cp"></param>
     public void SetActiveCheckPoint(CheckPoint cp)
     {
-        activeCheckPoint.Deactivate();
-        activeCheckPoint = cp;
+        if (activeCheckPoint != cp)
+        {
+            activeCheckPoint.Deactivate();
+            activeCheckPoint = cp;
+        }
     }
 
     /// <summary>
@@ -204,6 +213,11 @@ public class CharacterManager : MonoBehaviour {
     public static bool IsActiveCharacter(GameObject obj)
     {
         return obj.Equals(activeCharacter);
+    }
+
+    public static List<GameObject> GetCharacterList()
+    {
+        return characters;
     }
 
 
