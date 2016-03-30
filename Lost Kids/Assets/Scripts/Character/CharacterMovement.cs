@@ -67,19 +67,19 @@ public class CharacterMovement : MonoBehaviour {
             // Elige el rayo a lanzar
             switch (rayCnt) {
                 case 0:
-                    ray = transform.position + (Vector3.down * 0.2f);
+                    ray = transform.position + (Vector3.up * 0.3f);
                     break;
                 case 1:
-                    ray = transform.position + (Vector3.down * 0.2f) + (Vector3.forward * 0.3f);
+                    ray = transform.position + (Vector3.up * 0.3f) + (Vector3.forward * 0.3f);
                     break;
                 case 2:
-                    ray = transform.position + (Vector3.down * 0.2f) + (Vector3.back * 0.3f);
+                    ray = transform.position + (Vector3.up * 0.3f) + (Vector3.back * 0.3f);
                     break;
                 case 3:
-                    ray = transform.position + (Vector3.down * 0.2f) + (Vector3.left * 0.4f);
+                    ray = transform.position + (Vector3.up * 0.3f) + (Vector3.left * 0.4f);
                     break;
                 case 4:
-                    ray = transform.position + (Vector3.down * 0.2f) + (Vector3.right * 0.4f);
+                    ray = transform.position + (Vector3.up * 0.3f) + (Vector3.right * 0.4f);
                     break;
             }
             // helper to visualise the ground check ray in the scene view
