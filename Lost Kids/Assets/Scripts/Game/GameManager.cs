@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         menuMusic = GameObject.FindGameObjectWithTag("MenuMusic");
-        audioLoader = menuMusic.GetComponent<AudioLoader>();
 	}
 	
 	// Update is called once per frame
@@ -31,7 +30,7 @@ public class GameManager : MonoBehaviour {
     public void PrepareScene(string sc) {
         switch(sc) {
             case "Level1":
-                AudioManager.Stop(audioLoader.GetSound("MenuMusic"));
+                AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
                 Destroy(menuMusic);
                 break;
             case "Settings":

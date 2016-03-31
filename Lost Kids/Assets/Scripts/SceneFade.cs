@@ -16,6 +16,8 @@ public class SceneFade : MonoBehaviour {
 
     public string nextScene;
 
+    private GameManager gameManager;
+
 
     void Awake()
     {
@@ -23,6 +25,10 @@ public class SceneFade : MonoBehaviour {
         fadeInImage.rectTransform.localScale = new Vector2(Screen.width, Screen.height);
         fadeOutImage.rectTransform.localScale = new Vector2(Screen.width, Screen.height);
         */
+    }
+
+    void Start() {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
 
@@ -64,9 +70,10 @@ public class SceneFade : MonoBehaviour {
             fadeInImage.color = Color.Lerp(fadeInImage.color, target, fadeSpeed * Time.deltaTime);
             yield return null;
         }
-        //GameManager.GoToScene(nextScene);
         
-        SceneManager.LoadScene(nextScene);
+        gameManager.PrepareScene(nextScene);
+        
+        //SceneManager.LoadScene(nextScene);
         yield return 0;
     }
 
@@ -94,6 +101,7 @@ public class SceneFade : MonoBehaviour {
 
     public void ChangeScene()
     {
-        SceneManager.LoadScene(nextScene);
+        gameManager.PrepareScene(nextScene);
+        //SceneManager.LoadScene(nextScene);
     }
 }

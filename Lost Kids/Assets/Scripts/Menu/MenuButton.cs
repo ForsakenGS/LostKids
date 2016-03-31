@@ -21,6 +21,6 @@ public class MenuButton : MonoBehaviour {
 
     public void ButtonClicked(string sc) {
         AudioManager.Play(audioLoader.GetSound("Button"), false, 1);
-        gameManager.GoToScene(sc);
+        gameManager.PrepareScene(sc);
     }
 }
