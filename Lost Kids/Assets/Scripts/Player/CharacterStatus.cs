@@ -95,7 +95,16 @@ public class CharacterStatus : MonoBehaviour {
                     GetComponent<PushAbility>().ReleaseObject();
                 }       
                 break;
+            case State.Crouching:
+                if (!groundedCharacter)
+                {                 
+                    characterMovement.Stand();
+                    characterState = State.Jumping;
+                }
+                break;
 
+            case State.Dead:
+                break;
             default:    // CAMBIAR!! Hay que hacerlo para cada estado
                 if (!groundedCharacter)
                 {
@@ -120,6 +129,15 @@ public class CharacterStatus : MonoBehaviour {
         //Animacion, Efectos, Cambio de imagen.....
 
         AudioManager.Play(dieSound, false, 1);
+
+        //Reinicia el transform en caso de morir estando subido a una plataforma
+        transform.parent = null;
+
+        //Si muere mientras empuja un objeto, lo debe soltar
+        if(GetComponent<PushAbility>()!=null)
+        {
+            GetComponent<PushAbility>().ReleaseObject();
+        }
 
         GetComponent<Renderer>().enabled = false; //Temporal
         GetComponent<Rigidbody>().isKinematic = true;

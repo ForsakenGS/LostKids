@@ -19,15 +19,8 @@ public class SceneFade : MonoBehaviour {
     private GameManager gameManager;
 
 
-    void Awake()
-    {
-                /*
-        fadeInImage.rectTransform.localScale = new Vector2(Screen.width, Screen.height);
-        fadeOutImage.rectTransform.localScale = new Vector2(Screen.width, Screen.height);
-        */
-    }
 
-    void Start() {
+    void Awake() {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
@@ -59,29 +52,9 @@ public class SceneFade : MonoBehaviour {
     }
 
 
-    IEnumerator FadeOut()
-    {
-
-        Color target = fadeOutImage.color;
-        target.a = 1;
-        while (fadeOutImage.color.a < 0.95f)
-        {
-            
-            fadeInImage.color = Color.Lerp(fadeInImage.color, target, fadeSpeed * Time.deltaTime);
-            yield return null;
-        }
-        
-        gameManager.PrepareScene(nextScene);
-        
-        //SceneManager.LoadScene(nextScene);
-        yield return 0;
-    }
-
-
     public void StartScene()
     {
         // Fade the texture to clear.
-        //fadeInImage.rectTransform.localScale = new Vector2(Screen.width, Screen.height);
         fadeInImage.enabled = true;
         fadeInImage.canvasRenderer.SetAlpha(1);
         fadeInImage.CrossFadeAlpha(0, fadeSpeed, false);
@@ -91,7 +64,6 @@ public class SceneFade : MonoBehaviour {
     public void EndScene()
     {
         // Make sure the texture is enabled.
-        //fadeOutImage.rectTransform.localScale = new Vector2(Screen.width, Screen.height);
         fadeOutImage.enabled = true;
         fadeOutImage.canvasRenderer.SetAlpha(0.01f);
         // Start fading towards black.
@@ -102,6 +74,5 @@ public class SceneFade : MonoBehaviour {
     public void ChangeScene()
     {
         gameManager.PrepareScene(nextScene);
-        //SceneManager.LoadScene(nextScene);
     }
 }

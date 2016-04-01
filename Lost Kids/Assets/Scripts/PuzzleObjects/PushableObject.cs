@@ -36,7 +36,6 @@ public class PushableObject : MonoBehaviour {
         if (IsGrounded())
         {
             rigidBody.isKinematic = true;
-            Debug.Log("Vuelve a su estado!");
         } 
         pushAbility = null;
     }

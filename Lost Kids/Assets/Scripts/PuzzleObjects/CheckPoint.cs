@@ -95,6 +95,21 @@ public class CheckPoint : MonoBehaviour {
         }
     }
 
+/// <summary>
+/// Activa el checkpoint sin que suene y notifica el cambio al manager
+/// </summary>
+public void ActivateMuted()
+{
+    Debug.Log(isActive);
+    if (!isActive)
+    {
+        isActive = true;
+
+        characterManager.SetActiveCheckPoint(this);
+        neko.Show();
+    }
+}
+
     /// <summary>
     /// Desactiva el checkpoint y oculta al gato
     /// </summary>

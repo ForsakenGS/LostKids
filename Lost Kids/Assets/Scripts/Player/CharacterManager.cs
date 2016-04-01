@@ -52,7 +52,7 @@ public class CharacterManager : MonoBehaviour {
 
         changeCharacterSound = audioLoader.GetSound("ChangeCharacter");
 
-        activeCheckPoint.Activate();
+        activeCheckPoint.ActivateMuted();
 
         activeCharacter = characterList[0];
         if (ActiveCharacterChangedEvent != null) {
