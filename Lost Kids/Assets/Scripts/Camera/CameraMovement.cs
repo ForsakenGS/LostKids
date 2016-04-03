@@ -40,6 +40,9 @@ public class CameraMovement : MonoBehaviour {
 
         RefreshPlayer();
 
+        Debug.Log(player.position);
+        Debug.Log(transform.position);
+
         //SE HA MOVIDO DEL AWAKE PARA PODER TENER EL PLAYER
         //Calcula la posición relativa de la cámara
         relCameraPos = transform.position - player.position;
@@ -58,7 +61,8 @@ public class CameraMovement : MonoBehaviour {
     //Al activarse el script se añade la función ChangeCamera
     void OnEnable()
     {
-        RefreshPlayer();
+        Debug.Log("Hola");
+        //RefreshPlayer();
         CharacterManager.ActiveCharacterChangedEvent += RefreshPlayer;
     }
 

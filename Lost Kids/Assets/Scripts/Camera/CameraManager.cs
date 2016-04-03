@@ -24,7 +24,11 @@ public class CameraManager : MonoBehaviour {
    void Awake() {
 
         isChangingCameras = false;
-        scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
+
+        if(transitionCamera) {
+            scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
+        }
+        
         //characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
 
 
