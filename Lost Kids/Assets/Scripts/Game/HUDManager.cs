@@ -23,7 +23,7 @@ public class HUDManager : MonoBehaviour {
 
     //Use this for references
     void Awake() {
-        Transform trfPH = transform.Find("HUDCanvas").Find("PlayerHabilitiesUI");
+        Transform trfPH = transform.Find("HUDCanvas").Find("PlayerAbilitiesUI");
         // Interfaz personaje Aoi
         aoiUI = trfPH.Find("1AoiUI");
         bigJumpAbilityUI = aoiUI.Find("BigJumpAbility");
@@ -39,10 +39,6 @@ public class HUDManager : MonoBehaviour {
         // Interfaz del inventario
         Transform trfI = transform.Find("HUDCanvas").Find("InventoryUI");
         sakeUI = trfI.Find("SakeBottle");
-    }
-
-    // Use this for initialization
-    void Start() {
         // Oculta la interfaz relativa a los jugadores deshabilitados
         if (aoi == null) {
             DestroyImmediate(aoiUI.gameObject);
@@ -53,6 +49,10 @@ public class HUDManager : MonoBehaviour {
         if (murasaki == null) {
             DestroyImmediate(murasakiUI.gameObject);
         }
+    }
+
+    // Use this for initialization
+    void Start() {
         // Inicialización UI
         TransparencyInitialization();
         selectedCharacter = CharacterManager.GetActiveCharacter();
@@ -97,22 +97,24 @@ public class HUDManager : MonoBehaviour {
     }
 
     void CharacterResurrected(GameObject character) {
-        CharacterSelection(character, true, transparency);
         CharacterSelection(character, false, transparency);
+        CharacterSelection(character, true, transparency);
     }
 
-    void CharacterSelection(GameObject character, bool selected, float alphaSelection) {
+    void CharacterSelection(GameObject character, bool alive, float alphaSelection) {
         // Selecciona la interfaz relativa a la habilidad y modifica su apariencia
         Transform characterUI = GetCharacterUITransform(character);
-        if (selected) {
-            characterUI.Find("Selected").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
+        if (alive) {
+            characterUI.Find("Alive").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
         } else {
-            characterUI.Find("Deselected").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
+            characterUI.Find("Dead").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
         }
     }
 
     void CharacterSelected(GameObject character) {
-        CharacterSelection(selectedCharacter, true, transparency);
+        if (selectedCharacter.GetComponent<CharacterStatus>().IsAlive()) {
+            CharacterSelection(selectedCharacter, true, transparency);
+        }
         selectedCharacter = character;
         CharacterSelection(selectedCharacter, true, 1);
     }
@@ -202,6 +204,33 @@ public class HUDManager : MonoBehaviour {
     IEnumerator ObjectRequestedOff(string obj, float waitTime) {
         yield return new WaitForSeconds(waitTime);
         sakeUI.Find("Empty").GetComponent<CanvasRenderer>().SetAlpha(0);
+    }
+
+    void OnDisable() {
+        // Elimina suscripciones a eventos
+        CharacterManager.ActiveCharacterChangedEvent -= CharacterChanged;
+        AbilityController.SelectedAbilityEvent -= AbilitySelected;
+        CharacterAbility.ModifiedAbilityEnergyEvent -= EnergyModified;
+        CharacterInventory.ObjectAddedEvent -= ObjectAdded;
+        CharacterInventory.ObjectRemovedEvent -= ObjectRemoved;
+        CharacterInventory.ObjectRequestedEvent -= ObjectRequested;
+        CharacterStatus.KillCharacterEvent -= CharacterKilled;
+        CharacterStatus.ResurrectCharacterEvent -= CharacterResurrected;
+    }
+
+    void OnEnable() {
+        // Comprueba si las variables están inicializadas para poder suscribirse a los eventos
+        if ((selectedCharacter != null) && (selectedAbility != null)) {
+            // Suscripciones a eventos
+            CharacterManager.ActiveCharacterChangedEvent += CharacterChanged;
+            AbilityController.SelectedAbilityEvent += AbilitySelected;
+            CharacterAbility.ModifiedAbilityEnergyEvent += EnergyModified;
+            CharacterInventory.ObjectAddedEvent += ObjectAdded;
+            CharacterInventory.ObjectRemovedEvent += ObjectRemoved;
+            CharacterInventory.ObjectRequestedEvent += ObjectRequested;
+            CharacterStatus.KillCharacterEvent += CharacterKilled;
+            CharacterStatus.ResurrectCharacterEvent += CharacterResurrected;
+        }
     }
 
     void ShowEmptyInventoryObject(bool show, string obj) {
