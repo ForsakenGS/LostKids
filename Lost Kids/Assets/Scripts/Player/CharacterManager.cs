@@ -129,6 +129,7 @@ public class CharacterManager : MonoBehaviour {
             activeCharacter.GetComponent<AudioListener>().enabled = false;
             activeCharacter = characterList[index];
             activeCharacter.GetComponent<AudioListener>().enabled = true;
+            activeCharacter.GetComponent<CharacterStatus>().currentRoom = activeCheckPoint.room;
 
             if (ActiveCharacterChangedEvent != null)
             {

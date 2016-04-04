@@ -45,10 +45,12 @@ public class CameraMovement : MonoBehaviour {
 
         //SE HA MOVIDO DEL AWAKE PARA PODER TENER EL PLAYER
         //Calcula la posición relativa de la cámara
-        relCameraPos = transform.position - player.position;
+        /*relCameraPos = transform.position - player.position;
 
         //Calcula la distancia del vector entre la cámara del jugador + un ajuste del tamaño del mismo
-        relCameraPosMag = relCameraPos.magnitude - playerRadius;
+        relCameraPosMag = relCameraPos.magnitude - playerRadius;*/
+
+        UpdateParams();
 
         //Inicializa el vector de puntos de cámara
         cameraPoints = new Vector3[numCameraPoints];
@@ -61,8 +63,8 @@ public class CameraMovement : MonoBehaviour {
     //Al activarse el script se añade la función ChangeCamera
     void OnEnable()
     {
-        Debug.Log("Hola");
-        //RefreshPlayer();
+        UpdateParams();
+        RefreshPlayer();
         CharacterManager.ActiveCharacterChangedEvent += RefreshPlayer;
     }
 
@@ -102,7 +104,7 @@ public class CameraMovement : MonoBehaviour {
         }
 
         //Actualizamos la posición de la cámara entre su posición actual y la nueva posición
-        transform.position = Vector3.Slerp(transform.position, newPos, smooth * Time.deltaTime);
+        //transform.position = Vector3.Slerp(transform.position, newPos, smooth * Time.deltaTime);
 
         //Hacemos que la cámara mire al jugador
         SmoothLookAt(player);
@@ -147,7 +149,26 @@ public class CameraMovement : MonoBehaviour {
 
         if (CharacterManager.GetActiveCharacter() != null) {
             player = CharacterManager.GetActiveCharacter().transform;
+
+            //UpdateParams();
+
             Debug.Log(player.position);
         }
+    }
+
+    public void UpdateParams() {
+
+        /*if(!relCameraPos.Equals(Vector3.zero)) {
+            transform.position = player.position + relCameraPos;
+        }*/
+
+        //Calcula la posición relativa de la cámara
+        relCameraPos = transform.position - player.position;
+
+        
+
+        //Calcula la distancia del vector entre la cámara del jugador + un ajuste del tamaño del mismo
+        relCameraPosMag = relCameraPos.magnitude - playerRadius;
+
     }
 }

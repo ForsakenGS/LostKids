@@ -16,11 +16,13 @@ public class CameraTrigger : MonoBehaviour {
         GameObject activeCharacter = CharacterManager.GetActiveCharacter();
         if(other.gameObject.Equals(activeCharacter)) {
 
+            //Se actualiza la nueva habitacion en el character status
+            activeCharacter.GetComponent<CharacterStatus>().currentRoom = room;
+
             //Se activa el cambio de cámara
             cameraManager.ChangeCamera(room);
 
-            //Se actualiza la nueva habitacion en el character status
-            activeCharacter.GetComponent<CharacterStatus>().currentRoom = room;
+
 
         }
     }
