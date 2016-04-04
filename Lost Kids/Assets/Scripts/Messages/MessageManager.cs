@@ -23,6 +23,9 @@ public class MessageManager : MonoBehaviour {
     //Lineas del mensaje
     private string[] lines;
 
+    // Máximo de caracteres por línea
+    public int maxCharacterLine = 100;
+
     //Indices para recorrer las lineas del mensaje
     private int startIndex;
     private int endIndex;
@@ -50,7 +53,7 @@ public class MessageManager : MonoBehaviour {
     private State messageState;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
 
         audioLoader = GetComponent<AudioLoader>();
         messagesSfxs = new ArrayList();
@@ -72,7 +75,7 @@ public class MessageManager : MonoBehaviour {
 
         //Se cargan los mensajes desde fichero
         FillMessages();
-	}
+    }
 
     /// <summary>
     /// Funcion para llenar los mensajes desde el fichero de texto
@@ -86,9 +89,9 @@ public class MessageManager : MonoBehaviour {
         string[] formatText = fullText.Split("\n"[0]);
 
         //Se añaden las lineas al vector de mensajes
-        for(int i = 0; i < formatText.Length; i++) {
-            messages.Add((string)formatText[i]);
-        }        
+        for (int i = 0; i < formatText.Length; i++) {
+            messages.Add((string) formatText[i]);
+        }
 
     }
 
@@ -105,13 +108,13 @@ public class MessageManager : MonoBehaviour {
         kodama.gameObject.SetActive(true);
 
         //Se bloquea el resto del juego
-        if(LockUnlockEvent != null) {
+        if (LockUnlockEvent != null) {
             LockUnlockEvent();
         }
 
         //Se llama a la función para extraer el mensaje
         getMessage(index);
-        
+
     }
 
 
@@ -121,15 +124,15 @@ public class MessageManager : MonoBehaviour {
     private void getMessage(int index) {
 
         //Carga el mensaje pasado por indice
-        string msg = (string)messages[index];
+        string msg = (string) messages[index];
 
         //Se separa en lineas
-        lines = msg.Split('@');
+        lines = SeparateInLines(msg);
 
         //Se inicializan los índices
         startIndex = 0;
 
-        if(lines.Length <= 4) {
+        if (lines.Length <= 4) {
             endIndex = lines.Length;
         } else {
             endIndex = 4;
@@ -137,6 +140,25 @@ public class MessageManager : MonoBehaviour {
 
         //Se inicia la corrutina para ir mostrando el mensaje letra por letra
         StartCoroutine(TypeText());
+    }
+
+    // Divide un mensaje en distintas líneas atendiendo al número máximo de caracteres por línea
+    string[] SeparateInLines (string msg) {
+        List<string> lines = new List<string>();
+
+        // Divide el mensaje en palabras
+        string[] words = msg.Split(' ');
+        // Inserta las palabras una a una para formar las distintas líneas
+        lines.Insert(0, words[0]);
+        for (int i = 1; i < words.Length; ++i) {
+            if (lines[lines.Count-1].Length + words[i].Length >= maxCharacterLine) {
+                lines.Insert(lines.Count, words[i]);
+            } else {
+                lines[lines.Count - 1] += (" " + words[i]);
+            }
+        }
+
+        return lines.ToArray();
     }
 
     /// <summary>
@@ -152,24 +174,23 @@ public class MessageManager : MonoBehaviour {
         text.text = string.Empty;
 
         //Se recorren los indices para mostrar los mensajes en pantalla
-        for (int i = startIndex; i < endIndex; i++)
-        {
+        for (int i = startIndex; i < endIndex; i++) {
             //Se extrae la linea como array de caracteres
             char[] line = lines[i].ToCharArray();
-            
+
             //Se recorre la linea y se va añadiendo letra a letra con un retraso de la velocidad de letra
             for (int j = 0; j < line.Length; j++) {
                 text.text += line[j];
                 yield return new WaitForSeconds(letterSpeed);
             }
-                
+
             //Se añade el salto de linea
             text.text += "\n";
-          
+
         }
-        
+
         //Si el indice final es menor que el numero de lineas del mensaje se cambia el estado al siguiente mensaje
-        if(endIndex < lines.Length) {
+        if (endIndex < lines.Length) {
             messageState = State.NextMessage;
         } else {//Si no, se cambia al estado del mensaje final
             messageState = State.EndMessage;
@@ -184,25 +205,25 @@ public class MessageManager : MonoBehaviour {
     /// <returns></returns>
     public void SkipText() {
 
-        switch(messageState) {
+        switch (messageState) {
             //Si está en el estado por defecto, se cambia la velocidad de letra
             case State.FastMessage:
                 letterSpeed = fastLetterSpeed;
                 break;
             //Si está en el estado de fin de mensaje
             case State.EndMessage:
-                
+
                 //Se cambia al estado por defecto
                 messageState = State.FastMessage;
-                
+
                 //Se recupera la velocidad de letra
                 letterSpeed = normalLetterSpeed;
-                
+
                 //Se desbloquea el resto del juego
-                if(LockUnlockEvent != null) {
+                if (LockUnlockEvent != null) {
                     LockUnlockEvent();
                 }
-                
+
                 //Se oculta la interfaz de mensajes
                 frame.gameObject.SetActive(false);
                 text.gameObject.SetActive(false);
@@ -212,31 +233,30 @@ public class MessageManager : MonoBehaviour {
             case State.NextMessage:
                 //Se cambia al estado por defecto
                 messageState = State.FastMessage;
-                
+
                 //Se recupera la velocidad de letra
                 letterSpeed = normalLetterSpeed;
-                
+
                 //Se incrementan los índicas
                 startIndex += 4;
                 endIndex += 4;
-                
-                if(endIndex > lines.Length) {
+
+                if (endIndex > lines.Length) {
                     endIndex = lines.Length;
                 }
 
                 //Se inicia la corrutina para mostrar el mensaje letra por letra
                 StartCoroutine(TypeText());
                 break;
-        }  
-    
+        }
+
     }
 
     /// <summary>
     /// Funcion que devuelve si el mensaje ha terminado de mostrarse
     /// </summary>
     /// <returns></returns>
-    public bool MessageEnded()
-    {
+    public bool MessageEnded() {
         return messageState.Equals(State.EndMessage);
     }
 
