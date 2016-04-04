@@ -14,9 +14,11 @@ public class PlayerUse : MonoBehaviour {
 
     private UsableObject objectInUse;
 
+    private Vector3 rayOffset;
+
 	// Use this for initialization
 	void Start () {
-	
+        rayOffset = new Vector3(0, GetComponent<Renderer>().bounds.size.y / 2, 0);
 	}
 	
 	// Update is called once per frame
@@ -27,10 +29,10 @@ public class PlayerUse : MonoBehaviour {
     public bool Use()
     {
 		//Se lanza un rayo hacia delante, sumando cierta altura para no lanzarlo desde el suelo
-        Ray usingRay = new Ray(this.transform.position - Vector3.up*0.5f, this.transform.forward);
+        Ray usingRay = new Ray(this.transform.position + rayOffset, this.transform.forward);
 
         //Debug para poder visualizar el rayo en el inspector
-        Debug.DrawLine(this.transform.position + Vector3.up, this.transform.position + Vector3.up*0.2f +this.transform.forward*useDistance,Color.red);
+        Debug.DrawLine(this.transform.position + rayOffset, this.transform.position + rayOffset +this.transform.forward*useDistance,Color.red);
 
         RaycastHit hit;
         if (Physics.Raycast(usingRay, out hit, useDistance))
