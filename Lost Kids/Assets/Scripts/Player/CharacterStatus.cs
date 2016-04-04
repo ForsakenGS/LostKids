@@ -141,10 +141,10 @@ public class CharacterStatus : MonoBehaviour {
 
         GetComponent<Renderer>().enabled = false; //Temporal
         GetComponent<Rigidbody>().isKinematic = true;
-        characterManager.CharacterKilled(this);
         if (KillCharacterEvent != null) {
             KillCharacterEvent(gameObject);
         }
+        characterManager.CharacterKilled(this);
     }
 
     /// <summary>

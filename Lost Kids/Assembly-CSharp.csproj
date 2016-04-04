@@ -45,8 +45,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Flocking\FlockMember.cs" />
-     <Compile Include="Assets\Flocking\FlockingManager.cs" />
      <Compile Include="Assets\Scripts\Audio\AudioLoader.cs" />
      <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
      <Compile Include="Assets\Scripts\Audio\MenuMusic.cs" />
