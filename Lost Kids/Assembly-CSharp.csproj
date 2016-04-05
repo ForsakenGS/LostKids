@@ -107,6 +107,7 @@
      <Compile Include="Assets\Scripts\PuzzleObjects\PuzzleAnyActive.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\PuzzleManagerBase.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\RockActivator.cs" />
+     <Compile Include="Assets\Scripts\PuzzleObjects\RockDestruction.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\RotatingItem.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\TriangleExplosion.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\UsableObject.cs" />
