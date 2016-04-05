@@ -40,9 +40,6 @@ public class CameraMovement : MonoBehaviour {
 
         RefreshPlayer();
 
-        Debug.Log(player.position);
-        Debug.Log(transform.position);
-
         //SE HA MOVIDO DEL AWAKE PARA PODER TENER EL PLAYER
         //Calcula la posición relativa de la cámara
         /*relCameraPos = transform.position - player.position;
@@ -50,7 +47,7 @@ public class CameraMovement : MonoBehaviour {
         //Calcula la distancia del vector entre la cámara del jugador + un ajuste del tamaño del mismo
         relCameraPosMag = relCameraPos.magnitude - playerRadius;*/
 
-        UpdateParams();
+        //UpdateParams();
 
         //Inicializa el vector de puntos de cámara
         cameraPoints = new Vector3[numCameraPoints];
@@ -63,7 +60,7 @@ public class CameraMovement : MonoBehaviour {
     //Al activarse el script se añade la función ChangeCamera
     void OnEnable()
     {
-        UpdateParams();
+        //UpdateParams();
         RefreshPlayer();
         CharacterManager.ActiveCharacterChangedEvent += RefreshPlayer;
     }
@@ -77,7 +74,7 @@ public class CameraMovement : MonoBehaviour {
 
     void FixedUpdate()
     {
-
+        /*
         //Posición actual de la cámara
         Vector3 standardPos = player.position + relCameraPos;
 
@@ -101,7 +98,7 @@ public class CameraMovement : MonoBehaviour {
                 newPos = cameraPoints[i];
                 break;
             }
-        }
+        }*/
 
         //Actualizamos la posición de la cámara entre su posición actual y la nueva posición
         //transform.position = Vector3.Slerp(transform.position, newPos, smooth * Time.deltaTime);
@@ -151,8 +148,6 @@ public class CameraMovement : MonoBehaviour {
             player = CharacterManager.GetActiveCharacter().transform;
 
             //UpdateParams();
-
-            Debug.Log(player.position);
         }
     }
 
