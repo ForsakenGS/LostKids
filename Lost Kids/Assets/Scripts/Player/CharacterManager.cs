@@ -129,7 +129,7 @@ public class CharacterManager : MonoBehaviour {
             activeCharacter.GetComponent<AudioListener>().enabled = false;
             activeCharacter = characterList[index];
             activeCharacter.GetComponent<AudioListener>().enabled = true;
-            activeCharacter.GetComponent<CharacterStatus>().currentRoom = activeCheckPoint.room;
+            //activeCharacter.GetComponent<CharacterStatus>().currentRoom = activeCheckPoint.room;
 
             if (ActiveCharacterChangedEvent != null)
             {
@@ -151,7 +151,9 @@ public class CharacterManager : MonoBehaviour {
     public void CharacterKilled(CharacterStatus character)
     {
         int index = characterStatusList.IndexOf(character);
+        
         characterList[index].transform.position = activeCheckPoint.GetSpawnZone(index);
+        characterStatusList[index].currentRoom = activeCheckPoint.room;
 
         int nextIndex = NextAvailableCharacter();
         if(nextIndex!=-1)
