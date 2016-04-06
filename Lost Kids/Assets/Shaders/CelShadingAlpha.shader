@@ -2,13 +2,7 @@ Shader "Custom/CelShadingAlpha"
 {
     Properties 
     {
-		[MaterialToggle(_TEX_ON)] _DetailTex ("Enable Detail texture", Float) = 0 	//1
-		_MainTex ("Detail", 2D) = "white" {}        								//2
-		_ToonShade ("Shade", 2D) = "white" {}  										//3
-		[MaterialToggle(_COLOR_ON)] _TintColor ("Enable Color Tint", Float) = 0 	//4
-		_Color ("Base Color", Color) = (1,1,1,1)									//5	
-		[MaterialToggle(_VCOLOR_ON)] _VertexColor ("Enable Vertex Color", Float) = 0//6        
-		_Brightness ("Brightness 1 = neutral", Float) = 1.0							//7	
+		_MainTex ("Detail", 2D) = "white" {} 
 		_AlphaTex("Alpha Texture", 2D) = "black"{}
 		_Cutoff("Alpha Cutoff", Range(0, 1)) = 0.5
     }
@@ -31,14 +25,9 @@ Shader "Custom/CelShadingAlpha"
                 #pragma fragmentoption ARB_precision_hint_fastest
                 #include "UnityCG.cginc"
                 #pragma glsl_no_auto_normalization
-                #pragma multi_compile _TEX_OFF _TEX_ON
-                #pragma multi_compile _COLOR_OFF _COLOR_ON
 
-                
-                #if _TEX_ON
                 sampler2D _MainTex;
 				half4 _MainTex_ST;
-				#endif
 
 				sampler2D _AlphaTex;
 				half4 _AlphaTex_ST;
@@ -54,11 +43,8 @@ Shader "Custom/CelShadingAlpha"
                  struct v2f 
                  {
                     float4 pos : SV_POSITION;
-                    #if _TEX_ON
                     half2 uv : TEXCOORD0;
-                    #endif
                     half2 uvn : TEXCOORD1;
-
 					half2 auv : TEXCOORD2;
                  };
                
@@ -70,49 +56,28 @@ Shader "Custom/CelShadingAlpha"
 					normalize(n);
                     n = n * float3(0.5,0.5,0.5) + float3(0.5,0.5,0.5);
                     o.uvn = n.xy;
-                     #if _TEX_ON
                     o.uv = TRANSFORM_TEX ( v.texcoord, _MainTex );
-                    #endif
 
 					o.auv = TRANSFORM_TEX(v.texcoord, _AlphaTex);
                     return o;
                 }
 
-				
-              	sampler2D _ToonShade;
-                fixed _Brightness;
-                
-                #if _COLOR_ON
-                fixed4 _Color;
-                #endif
                 
                 fixed4 frag (v2f i) : COLOR
                 {
-					#if _COLOR_ON
-					fixed4 toonShade = tex2D( _ToonShade, i.uvn )*_Color;
-					#else
-					fixed4 toonShade = tex2D( _ToonShade, i.uvn );
-					#endif
 
 					float4 textureColor = tex2D(_AlphaTex, i.auv);
-					if (textureColor.r < _Cutoff) {
-						//if (textureColor.b < _Cutoff || textureColor.r < _Cutoff || textureColor.g < _Cutoff){
+					if (textureColor.b < _Cutoff && textureColor.r < _Cutoff && textureColor.g < _Cutoff){
 						discard;
-						//detail.a = textureColor.a;
 					}
 					
-					#if _TEX_ON
 					fixed4 detail = tex2D ( _MainTex, i.uv );
-					
-					return  toonShade * detail*_Brightness;
-					#else
-					return  toonShade * _Brightness;
-					#endif
+					return  detail;
+		
                 }
             ENDCG
         }
 
-		//UsePass "Custom/Outline/OTL"
     }
     Fallback "Legacy Shaders/Diffuse"
 }
