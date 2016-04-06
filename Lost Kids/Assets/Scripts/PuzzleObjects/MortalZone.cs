@@ -20,4 +20,15 @@ public class MortalZone : MonoBehaviour {
             col.gameObject.GetComponent<CharacterStatus>().Kill();
         }
     }
+
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            col.gameObject.GetComponent<CharacterStatus>().Kill();
+        }
+    }
+
+
 }

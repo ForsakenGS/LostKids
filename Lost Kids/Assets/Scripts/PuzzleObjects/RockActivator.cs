@@ -2,11 +2,13 @@
 using System.Collections;
 
 public class RockActivator : MonoBehaviour {
-	public GameObject wall;
 	public GameObject rock;
+
+    private RockController rockController;
 
 	// Use this for initialization
 	void Start () {
+        rockController = rock.GetComponent<RockController>();
 	
 	}
 	
@@ -15,10 +17,14 @@ public class RockActivator : MonoBehaviour {
 	
 	}
 
-	void OnTriggerEnter (Collider other){
-		if (other.gameObject.tag == "Player") {
-			rock.GetComponent<KillerSphere> ().enabled = true;
-			wall.GetComponent<MeshRenderer> ().enabled = false;
-			wall.GetComponent<BoxCollider> ().isTrigger = true;
-		}}
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            if (rockController.isEnabled && !rockController.active)
+            {
+                rock.GetComponent<RockController>().Activate();
+            }
+        }
+    }
 }
