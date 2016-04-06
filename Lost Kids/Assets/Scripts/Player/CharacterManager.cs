@@ -114,7 +114,7 @@ public class CharacterManager : MonoBehaviour {
     /// <returns>true si el personaje esta disponible</returns>
     public bool IsAvailable(int index)
     {
-        return characterStatusList[index].IsAvailable();
+        return ((index < characterStatusList.Count) && (characterStatusList[index].IsAvailable()));
     }
 
     /// <summary>
