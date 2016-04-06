@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PushAbility : CharacterAbility {
 	public float pushDistance = 2.0f;
-	public float altura = -0.5f;
+	public float altura = 0.5f;
 
 	private Transform targetTransform;
     private GameObject targetGameObject;
@@ -11,6 +11,11 @@ public class PushAbility : CharacterAbility {
 
     CharacterJoint joint;
 
+
+    void Start()
+    {
+        altura = GetComponent<Renderer>().bounds.size.y / 2;
+    }
     /// <summary>
     /// Finaliza la ejecución de la habilidad de empujar
     /// </summary>
@@ -47,7 +52,7 @@ public class PushAbility : CharacterAbility {
             Ray detectRay = new Ray(this.transform.position + Vector3.up*altura, this.transform.forward * pushDistance);
 			// helper to visualise the ground check ray in the scene view
 			#if UNITY_EDITOR
-			Debug.DrawRay(detectRay.origin, detectRay.direction, Color.green, 1);
+			Debug.DrawRay(detectRay.origin, detectRay.direction, Color.green, pushDistance);
 			#endif
 			// Detecta el objeto situado delante del personaje
 			RaycastHit hitInfo;
@@ -62,10 +67,18 @@ public class PushAbility : CharacterAbility {
 					//Se obtiene la normal de la direccion por donde se agarra el objeto
 					pushNormal = hitInfo.normal;
 					targetTransform = hitInfo.collider.transform;
-					//Se coloca el personaje alineado con el objeto y el objeto se marca como hijo del jugador
-					this.transform.position = targetTransform.position + 2 * hitInfo.normal;
+					//Se coloca el personaje alineado con el objeto y se rota para que mire a el
+                    //Posicion
+                    Vector3 newPosition= hitInfo.collider.transform.position + (hitInfo.collider.bounds.size.z/2 +GetComponent<CapsuleCollider>().radius) * hitInfo.normal;
+                    newPosition.y = transform.position.y;
+                    this.transform.position = newPosition;
+                    //Rotacion
+                    Vector3 lookPosition = hitInfo.collider.transform.position;
+                    lookPosition.y = transform.position.y;
+                    this.transform.LookAt(lookPosition);
 
-                    //targetTransform.parent = this.transform; //Version antigua
+
+                    //Se crea un joint fisico para enlazar los objetos
                     GrabObject(hitInfo.collider.gameObject,transform.InverseTransformPoint(detectRay.origin),targetTransform.InverseTransformPoint(hitInfo.point));
 
                 } else {
@@ -86,16 +99,19 @@ public class PushAbility : CharacterAbility {
 
         Rigidbody targetRigidBody = targetGameObject.GetComponent<Rigidbody>();
 
-        joint.autoConfigureConnectedAnchor = false;
+        joint.autoConfigureConnectedAnchor = true;
+        //Al final todo esto ha sio pa mierda porque ha funcionado el autoconfigure
+        //No seran necesarios los parametros de la funcion, pero hasta que se confirme que es estable se mantiene
 
-        origin.z += gameObject.GetComponent<Renderer>().bounds.size.z;
+        //origin= this.transform.position + Vector3.up * altura;
+        //origin.z += GetComponent<CapsuleCollider>().radius;
         //origin.y = +0.3f;
-        target.y=0.35f;
-        joint.anchor = origin; //Probablemente no sea necesario cuando se improten bien los modelos
+        //target.y=0.35f;
+        //joint.anchor = origin; //Probablemente no sea necesario cuando se improten bien los modelos
 
         joint.connectedBody = targetRigidBody;
 
-        joint.connectedAnchor = target;
+        //joint.connectedAnchor = target;
 
         targetGameObject.GetComponent<PushableObject>().Grab(this);
 

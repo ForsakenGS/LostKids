@@ -40,15 +40,24 @@ public class PlayerUse : MonoBehaviour {
             if (hit.collider.tag.Equals("Usable"))
             {
                 //Se obtiene la normal del HIT para saber que parte del objeto ha encontrado el usable.
-                //Solo se permite usar los objetos desde la parte de atras ( la normal en z es negativa )
-                if (hit.normal.z < 0)
+                //Solo se permite usar los objetos desde la parte de atras ( un angulo de 180 respecto al frente )
+                Vector3 normalLocal= hit.transform.TransformDirection(hit.normal);
+                float angle = Vector3.Angle(hit.normal, hit.transform.forward);
+                if (Mathf.Approximately(angle, 180))
+                    
                 {
                     objectInUse = hit.collider.gameObject.GetComponent<UsableObject>();
                     objectInUse.Use();
                     if (objectInUse.type.Equals(UsableObject.Usables.Hold))
                     {
                         isUsing = true;
-                        this.transform.position = hit.collider.transform.position + 2 * hit.normal;
+                        Vector3 frontPosition = hit.point + GetComponent<CapsuleCollider>().radius * hit.normal;
+                        Vector3 lookPosition = hit.point;
+                        lookPosition.y = transform.position.y;
+                        frontPosition.y = transform.position.y;
+                        this.transform.position = frontPosition;
+
+                        this.transform.LookAt(lookPosition);
                     }
                 }
             }
