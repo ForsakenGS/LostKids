@@ -25,13 +25,14 @@ public class AbilityController : MonoBehaviour {
         ability1 = abilities[0];
         ability2 = abilities[1];
         characterStatus = GetComponent<CharacterStatus>();
+        // Activa la habilidad 1
+        activeAbility = ability1;
+        activeAbility.ActivateAbility();
     }
 
     // Use this for initialization
     void Start() {
-        // Activa la habilidad 1
-        activeAbility = ability1;
-        ability1.ActivateAbility();
+        
         // Lanza el evento de habilidad seleccionada
         //if (SelectedAbilityEvent != null) {
             //SelectedAbilityEvent(ability1);
