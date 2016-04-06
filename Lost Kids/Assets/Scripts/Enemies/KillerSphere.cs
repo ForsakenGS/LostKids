@@ -5,7 +5,7 @@ public class KillerSphere : MonoBehaviour {
 	public int force;
 
 	// Use this for initialization
-	void Start () {
+	void OnEnable () {
 		GetComponent<Rigidbody> ().AddForce (force * transform.forward);
 	}
 	

@@ -43,7 +43,9 @@ public class GameManager : MonoBehaviour {
                 break;
             case "Yokai":
                 break;
-            
+            case "Exit":
+                ExitApplication();
+                break;
         }
 
         SceneManager.LoadScene(sc);
