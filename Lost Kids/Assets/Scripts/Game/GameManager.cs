@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour {
                 AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
                 Destroy(menuMusic);
                 break;
+            case "Level2":
+                break;
             case "Settings":
                 break;
             case "Credits":
