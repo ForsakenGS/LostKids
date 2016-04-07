@@ -125,6 +125,7 @@ public class PushAbility : CharacterAbility {
         if (targetGameObject != null)
         {
             targetGameObject.GetComponent<PushableObject>().Release();
+            EndExecution();
             characterStatus.EndAbility(this);
         }
 

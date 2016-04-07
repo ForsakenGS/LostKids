@@ -153,8 +153,9 @@ public class CharacterStatus : MonoBehaviour {
 	public void JumpButton() {
         switch (characterState) {
             case State.Standing:
-                characterMovement.Jump(jumpImpulse);
                 characterState = State.Jumping;
+                characterMovement.Jump(jumpImpulse);
+                
                 break;
         }
     }
