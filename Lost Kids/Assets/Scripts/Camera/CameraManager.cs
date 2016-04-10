@@ -20,17 +20,17 @@ public class CameraManager : MonoBehaviour {
     //Indica si se está realizando la transición
     private bool isChangingCameras;
 
+    //Evento delegado para lanzar el evento de bloqueo y desbloqueo del juego mientras se cambian las cámaras
+    public delegate void LockUnlockAction();
+    public static event LockUnlockAction LockUnlockEvent;
 
-   void Awake() {
+    void Awake() {
 
         isChangingCameras = false;
 
         if(transitionCamera) {
             scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
         }
-        
-        //characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
-
 
     }
 
@@ -54,6 +54,9 @@ public class CameraManager : MonoBehaviour {
 
         //Si pasamos de habitación se desactiva la camara de la habitación actual y se activa la de transicion
         if(currentRoom != nextRoom) {
+
+            Debug.Log("Bloqueo");
+            LockUnlockEvent();
 
             cameras[currentRoom].SetActive(false);
             transitionCamera.SetActive(true);
@@ -92,6 +95,9 @@ public class CameraManager : MonoBehaviour {
 
         //Se activa la nueva camara
         cameras[nextRoom].SetActive(true);
+
+        Debug.Log("Desbloqueo");
+        LockUnlockEvent();
         
     }
 
