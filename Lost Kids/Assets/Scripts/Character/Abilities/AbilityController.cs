@@ -32,7 +32,6 @@ public class AbilityController : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        
         // Lanza el evento de habilidad seleccionada
         //if (SelectedAbilityEvent != null) {
             //SelectedAbilityEvent(ability1);
