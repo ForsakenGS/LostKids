@@ -31,13 +31,14 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// Tiempo de ejecución de la habilidad
     /// </summary>
     public float executionTime = 1;
-	/// <summary>
-	/// Determina si la ejecución de la habilidad es bloqueante; es decir, no permite el cambio a otra habilidad.
-	/// </summary>
-	public bool blockingExecution;
+    /// <summary>
+    /// Determina si la ejecución de la habilidad es bloqueante; es decir, no permite el cambio a otra habilidad.
+    /// </summary>
+    public bool fixedExecutionTime = false;
 
     // Parámetros básicos de la habilidad
-    public bool active;
+    protected bool active;
+    protected AudioLoader audioLoader;
     protected bool execution;
     protected float energy;
     protected CharacterStatus characterStatus;
@@ -49,10 +50,15 @@ public abstract class CharacterAbility : MonoBehaviour {
     void Awake() {
         characterStatus = GetComponent<CharacterStatus>();
         characterMovement = GetComponent<CharacterMovement>();
+        audioLoader = GetComponent<AudioLoader>();
     }
 
     // Use this for initialization
     void Start() {
+        AbilityInitialization();
+    }
+
+    protected void AbilityInitialization() {
         energy = 0.0f;
         initExecutionTime = executionTime;
     }
@@ -87,20 +93,20 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// </summary>
 	/// <returns><c>true</c> si se ha podido desactivar, <c>false</c> si no ha sido posible</returns>
     public bool DeactivateAbility() {
-		bool res = active;
-		if (execution) {
-			if (!blockingExecution) {
-				characterStatus.EndAbility (this);
-				res = EndExecution ();
-			} else {
-				res = false;
-			}
-		} 
-		if (res) {
-			active = false;
-		}
+        bool res = active;
+        if (execution) {
+            if (!fixedExecutionTime) {
+                characterStatus.EndAbility(this);
+                res = EndExecution();
+            } else {
+                res = false;
+            }
+        }
+        if (res) {
+            active = false;
+        }
 
-		return res;
+        return res;
     }
 
     public abstract bool EndExecution();
@@ -135,29 +141,28 @@ public abstract class CharacterAbility : MonoBehaviour {
     void Update() {
         // Control del tiempo de habilidad
         if (execution) {
-            // En ejecución
-            if (normalConsumption > 0) {
+            // Consumo durante ejecución
+            if (normalConsumption > 0.0f) {
                 // Se decrementa la energía
                 AddEnergy(-(Time.deltaTime * normalConsumption));
                 if (energy <= 0.0) {
                     // La habilidad debe terminar su ejecución
                     GetComponent<AbilityController>().UseAbility();
                 }
-            } else {
-                // Se decrementa el tiempo de ejecución
-                if (initExecutionTime > 0) {
-                    executionTime -= Time.deltaTime;
-                    if (executionTime <= 0.0) {
-                        // La habilidad debe terminar su ejecución
-                        GetComponent<AbilityController>().UseAbility();
-                        // Reinicia contador de tiempo
-                        executionTime = initExecutionTime;
-                    }
+            }
+            // Se decrementa el tiempo de ejecución
+            if ((executionTime > 0.0f) && (initExecutionTime > 0.0f)) {
+                executionTime -= Time.deltaTime;
+                if ((fixedExecutionTime) && (executionTime <= 0.0f)) {
+                    // La habilidad debe terminar su ejecución
+                    GetComponent<AbilityController>().UseAbility();
+                    // Reinicia contador de tiempo
+                    executionTime = initExecutionTime;
                 }
             }
         } else if (energy < maxEnergy) {
-            // No en ejecución y el tiempo restante no está completo, luego se va recuperando
-            if (timeToRestoreEnergy == 0) {
+            // No en ejecución y la energía restante no está completa, luego se va recuperando
+            if (timeToRestoreEnergy == 0.0f) {
                 AddEnergy(maxEnergy);
             } else {
                 AddEnergy((Time.deltaTime / timeToRestoreEnergy) * maxEnergy);
