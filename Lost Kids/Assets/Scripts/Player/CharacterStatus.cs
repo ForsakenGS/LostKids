@@ -127,6 +127,14 @@ public class CharacterStatus : MonoBehaviour {
                     characterState = State.Jumping;
                 }
                 break;
+            case State.Dead:
+            case State.AstralProjection:
+                break;
+            default:
+                if (!characterMovement.CharacterIsGrounded()) {
+                    characterState = State.Jumping;
+                }
+                break;
         }
     }
 

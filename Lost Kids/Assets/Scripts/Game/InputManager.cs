@@ -64,11 +64,11 @@ public class InputManager : MonoBehaviour {
     void Update() {
         if (!locked) {
             // Switch Players Buttons
-            if (Input.GetButtonDown("Player1")) {
+            if ((Input.GetAxis("Player1_Axis") > 0) || (Input.GetButtonDown("Player1"))) {
                 characterManager.ActivateCharacter(0);
-            } else if (Input.GetButtonDown("Player2")) {
+            } else if ((Input.GetAxis("Player2_Axis") > 0) || (Input.GetButtonDown("Player2"))) {
                 characterManager.ActivateCharacter(1);
-            } else if (Input.GetButtonDown("Player3")) {
+            } else if ((Input.GetAxis("Player3_Axis") > 0) || (Input.GetButtonDown("Player3"))) {
                 characterManager.ActivateCharacter(2);
             }
             // Crouch Button
