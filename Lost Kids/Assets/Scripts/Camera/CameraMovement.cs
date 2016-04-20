@@ -38,7 +38,7 @@ public class CameraMovement : MonoBehaviour {
     void Start()
     {
 
-        RefreshPlayer();
+        //RefreshPlayer();
 
         //SE HA MOVIDO DEL AWAKE PARA PODER TENER EL PLAYER
         //Calcula la posición relativa de la cámara
@@ -61,7 +61,7 @@ public class CameraMovement : MonoBehaviour {
     void OnEnable()
     {
         //UpdateParams();
-        RefreshPlayer();
+        //RefreshPlayer();
         CharacterManager.ActiveCharacterChangedEvent += RefreshPlayer;
     }
 
@@ -74,12 +74,12 @@ public class CameraMovement : MonoBehaviour {
 
     void FixedUpdate()
     {
-        /*
+        
         //Posición actual de la cámara
         Vector3 standardPos = player.position + relCameraPos;
 
         //Posición encima del jugador de la cámara
-        Vector3 abovePos = player.position + Vector3.up * relCameraPosMag;
+        Vector3 abovePos = standardPos;//player.position + Vector3.up * relCameraPosMag;
 
         //Iterador para rellenar el vector de puntos de cámara
         float ite = 0.0f;
@@ -98,13 +98,13 @@ public class CameraMovement : MonoBehaviour {
                 newPos = cameraPoints[i];
                 break;
             }
-        }*/
+        }
 
         //Actualizamos la posición de la cámara entre su posición actual y la nueva posición
-        //transform.position = Vector3.Slerp(transform.position, newPos, smooth * Time.deltaTime);
+        transform.position = Vector3.Slerp(transform.position, newPos, smooth * Time.deltaTime);
 
         //Hacemos que la cámara mire al jugador
-        SmoothLookAt(player);
+        //SmoothLookAt(player);
     }
 
     //Función para comprobar si la posición de la cámara con respecto al jugador es válida mediante el lanzamiento de rayos
@@ -147,7 +147,7 @@ public class CameraMovement : MonoBehaviour {
         if (CharacterManager.GetActiveCharacter() != null) {
             player = CharacterManager.GetActiveCharacter().transform;
 
-            //UpdateParams();
+            UpdateParams();
         }
     }
 
