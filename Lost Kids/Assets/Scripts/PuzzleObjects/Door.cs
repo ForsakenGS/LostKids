@@ -42,6 +42,8 @@ public class Door : MonoBehaviour, IActivable {
     private AudioSource closeSound;
 
 
+    public GameObject ownCamera;
+
 
     // Use this for initialization
     void Start()
@@ -153,8 +155,18 @@ public class Door : MonoBehaviour, IActivable {
     /// </summary>
     public void Activate()
     {
-        //Es necesario incluir el metodo dentro dentro de activate, para poder referenciar de manera generica al script
-        OpenDoor();
+        if(ownCamera != null) {
+
+            //Fundido en negro
+            //Cambio de camara
+            //Fuera Fundido en negro
+            //Abrir puerta
+
+        }else {
+            //Es necesario incluir el metodo dentro dentro de activate, para poder referenciar de manera generica al script
+            OpenDoor();
+        }
+        
     }
 
     /// <summary>

@@ -17,7 +17,7 @@ public class CharacterStatus : MonoBehaviour {
     /// <summary>
     /// Clase para definir los diferentes estados en los que se puede encontrar un personaje
     /// </summary>
-    public enum State { Breaking, Crouching, Dead, BigJumping, Jumping, Pushing, Scared, Sprint, Standing, Using }
+    public enum State { AstralProjection, Breaking, Crouching, Dead, BigJumping, Jumping, Pushing, Scared, Sprint, Standing, Telekinesis, Using }
     /// <summary>
     /// Clase para definir los diferentes personajes que pueden implementar una máquina de estados
     /// </summary>
@@ -29,6 +29,7 @@ public class CharacterStatus : MonoBehaviour {
     private CharacterMovement characterMovement;
     private PlayerUse playerUse;
 
+    public float astralSpeed = 0.0f;
     public float standingSpeed = 8000f;
     public float jumpImpulse = 200000f;
     public float jumpingSpeed = 5000f;
@@ -56,58 +57,81 @@ public class CharacterStatus : MonoBehaviour {
         characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         characterMovement = GetComponent<CharacterMovement>();
         playerUse = GetComponent<PlayerUse>();
-        
+
     }
 
-	// Use this for initialization
-	void Start() {
-		characterState = initialCharacterState;
-
+    // Use this for initialization
+    void Start() {
+        characterState = initialCharacterState;
         audioLoader = GetComponent<AudioLoader>();
-
         resurrectSound = audioLoader.GetSound("Resurrect");
         dieSound = audioLoader.GetSound("Die");
     }
 
+    /// <summary>
+    /// Comprueba si es posible comenzar la ejecución de una habilidad concreta, modificando el estado en que se encuentra el personaje
+    /// </summary>
+    /// <param name="ability">Habilidad que se desea iniciar a ejecutar</param>
+    /// <returns><c>true</c> si es posible iniciar la habilidad, en cuyo caso modifica además el estado del personaje; <c>false</c> en otro caso</returns>
+    public bool CanStartAbility(CharacterAbility ability) {
+        bool res = characterState.Equals(State.Standing);
+        if (res) {
+            switch (ability.GetType().ToString()) {
+                case "AstralProjectionAbility":
+                    characterState = State.AstralProjection;
+                    break;
+                case "BigJumpAbility":
+                    characterState = State.BigJumping;
+                    break;
+                case "BreakAbility":
+                    characterState = State.Breaking;
+                    break;
+                case "PushAbility":
+                    characterState = State.Pushing;
+                    break;
+                case "SprintAbility":
+                    characterState = State.Sprint;
+                    break;
+                case "TelekinesisAbility":
+                    characterState = State.Telekinesis;
+                    break;
+            }
+        }
+
+        return res;
+    }
+
     // Update is called once per frame
-    void Update()
-    {
-        bool groundedCharacter = characterMovement.CharacterIsGrounded();
-        switch (characterState)
-        {
+    void Update() {
+        switch (characterState) {
             case State.Jumping:
-                if (groundedCharacter)
-                {
+                if (characterMovement.CharacterIsGrounded()) {
                     characterState = State.Standing;
                 }
                 break;
             case State.BigJumping:
-                if (groundedCharacter)
-                {
+                if (characterMovement.CharacterIsGrounded()) {
                     GetComponent<AbilityController>().UseAbility();
                     characterState = State.Standing;
                 }
                 break;
             case State.Pushing: //TEMPORAL!! SUelta el objeto si el personaje se cae
-                if (!groundedCharacter)
-                { 
+                if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Jumping;
                     GetComponent<PushAbility>().ReleaseObject();
-                }       
+                }
                 break;
             case State.Crouching:
-                if (!groundedCharacter)
-                {                 
+                if (!characterMovement.CharacterIsGrounded()) {
                     characterMovement.Stand();
                     characterState = State.Jumping;
                 }
                 break;
-
             case State.Dead:
+            case State.AstralProjection:
                 break;
-            default:    // CAMBIAR!! Hay que hacerlo para cada estado
-                if (!groundedCharacter)
-                {
+            default:
+                if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Jumping;
                 }
                 break;
@@ -125,26 +149,31 @@ public class CharacterStatus : MonoBehaviour {
     /// Mata al personaje y notifica su nuevo estado al manager, que desactivara su control y lo movera al checkpoint
     /// </summary>
     public void Kill() {
-        characterState = State.Dead;
-        //Animacion, Efectos, Cambio de imagen.....
-
-        AudioManager.Play(dieSound, false, 1);
-
-        //Reinicia el transform en caso de morir estando subido a una plataforma
-        transform.parent = null;
-
-        //Si muere mientras empuja un objeto, lo debe soltar
-        if(GetComponent<PushAbility>()!=null)
-        {
-            GetComponent<PushAbility>().ReleaseObject();
+        switch (characterState) {
+            case State.AstralProjection:
+                // La habilidad debe terminar su ejecución
+                GetComponent<AbilityController>().UseAbility();
+                break;
+            case State.Dead:
+                break;
+            default:
+                characterState = State.Dead;
+                //Animacion, Efectos, Cambio de imagen.....
+                AudioManager.Play(dieSound, false, 1);
+                //Reinicia el transform en caso de morir estando subido a una plataforma
+                transform.parent = null;
+                //Si muere mientras empuja un objeto, lo debe soltar
+                if (GetComponent<PushAbility>() != null) {
+                    GetComponent<PushAbility>().ReleaseObject();
+                }
+                GetComponent<Renderer>().enabled = false; //Temporal
+                GetComponent<Rigidbody>().isKinematic = true;
+                if (KillCharacterEvent != null) {
+                    KillCharacterEvent(gameObject);
+                }
+                characterManager.CharacterKilled(this);
+                break;
         }
-
-        GetComponent<Renderer>().enabled = false; //Temporal
-        GetComponent<Rigidbody>().isKinematic = true;
-        if (KillCharacterEvent != null) {
-            KillCharacterEvent(gameObject);
-        }
-        characterManager.CharacterKilled(this);
     }
 
     /// <summary>
@@ -155,7 +184,6 @@ public class CharacterStatus : MonoBehaviour {
             case State.Standing:
                 characterState = State.Jumping;
                 characterMovement.Jump(jumpImpulse);
-                
                 break;
         }
     }
@@ -169,6 +197,9 @@ public class CharacterStatus : MonoBehaviour {
                 if (playerUse.Use()) {
                     characterState = State.Using;
                 }
+                break;
+            case State.AstralProjection:
+                playerUse.Use();
                 break;
             case State.Using:
                 playerUse.StopUsing();
@@ -209,6 +240,9 @@ public class CharacterStatus : MonoBehaviour {
             case State.BigJumping:
                 characterMovement.MoveCharacterNormal(horizontal, vertical, jumpingSpeed);
                 break;
+            case State.AstralProjection:
+                characterMovement.MoveCharacterNormal(horizontal, vertical, astralSpeed);
+                break;
             case State.Crouching:
                 characterMovement.MoveCharacterNormal(horizontal, vertical, crouchingSpeed);
                 break;
@@ -219,41 +253,16 @@ public class CharacterStatus : MonoBehaviour {
     }
 
     /// <summary>
-    /// Comprueba si es posible comenzar la ejecución de una habilidad concreta, modificando el estado en que se encuentra el personaje
-    /// </summary>
-    /// <param name="ability">Habilidad que se desea iniciar a ejecutar</param>
-    /// <returns><c>true</c> si es posible iniciar la habilidad, en cuyo caso modifica además el estado del personaje; <c>false</c> en otro caso</returns>
-    public bool CanStartAbility(CharacterAbility ability) {
-        bool res = characterState.Equals(State.Standing);
-        if (res) {
-            switch (ability.GetType().ToString()) {
-                case "BigJumpAbility":
-                    characterState = State.BigJumping;
-                    break;
-                case "BreakAbility":
-                    characterState = State.Breaking;
-                    break;
-                case "PushAbility":
-                    characterState = State.Pushing;
-                    break;
-                case "SprintAbility":
-                    characterState = State.Sprint;
-                    break;
-            }
-        }
-
-        return res;
-    }
-
-    /// <summary>
     /// 
     /// </summary>
     /// <param name="ability">Habilidad cuya ejecución se desea finalizar</param>
     public void EndAbility(CharacterAbility ability) {
         switch (ability.GetType().ToString()) {
+            case "AstralProjectionAbility":
             case "BreakAbility":
             case "PushAbility":
             case "SprintAbility":
+            case "TelekinesisAbility":
                 characterState = State.Standing;
                 break;
         }

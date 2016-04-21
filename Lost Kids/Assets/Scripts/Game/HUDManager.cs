@@ -35,7 +35,7 @@ public class HUDManager : MonoBehaviour {
         // Interfaz personaje Murasaki
         murasakiUI = trfPH.Find("3MurasakiUI");
         telekinesisAbilityUI = murasakiUI.Find("TelekinesisAbility");
-        teletransportAbilityUI = murasakiUI.Find("TeletransportAbility");
+        teletransportAbilityUI = murasakiUI.Find("AstralProjectionAbility");
         // Interfaz del inventario
         Transform trfI = transform.Find("HUDCanvas").Find("InventoryUI");
         sakeUI = trfI.Find("SakeBottle");
@@ -144,7 +144,7 @@ public class HUDManager : MonoBehaviour {
             case "TelekinesisAbility":
                 abilityUI = telekinesisAbilityUI;
                 break;
-            case "TeletransportAbility":
+            case "AstralProjectionAbility":
                 abilityUI = teletransportAbilityUI;
                 break;
         }
@@ -268,8 +268,8 @@ public class HUDManager : MonoBehaviour {
         if (murasaki != null) {
             CharacterSelection(murasaki, true, transparency);
             CharacterSelection(murasaki, false, transparency);
-            //AbilitySelection(typeof(TelekinesisAbility), transparency);
-            //AbilitySelection(typeof(TeletransportAbility), transparency);
+            AbilitySelection(typeof(TelekinesisAbility), transparency);
+            AbilitySelection(typeof(AstralProjectionAbility), transparency);
         }
         // InventoryUI
         ShowInventoryObject(false, "SakeBottle");
