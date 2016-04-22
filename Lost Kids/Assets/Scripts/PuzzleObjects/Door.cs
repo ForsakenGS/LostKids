@@ -42,12 +42,31 @@ public class Door : MonoBehaviour, IActivable {
     private AudioSource closeSound;
 
 
-    public GameObject ownCamera;
+    public bool hasFadeCutScene;
+    private ActivableFade activableFade;
+    public GameObject cutSceneCamera;
 
+    public void OnEnable() {
+        if(hasFadeCutScene) {
+            ActivableFade.FadeInOutEvent += OpenDoorCutScene;
+        }
+        
+    }
+
+    public void OnDisable() {
+        if(hasFadeCutScene) {
+            ActivableFade.FadeInOutEvent -= OpenDoorCutScene;
+        }
+        
+    }
 
     // Use this for initialization
     void Start()
     {
+        //Si se va a mostrar un cutscene
+        if(hasFadeCutScene) {
+            activableFade = GetComponent<ActivableFade>();
+        }
 
         audioLoader = GetComponent<AudioLoader>();
         openSound = audioLoader.GetSound("Open");
@@ -155,18 +174,19 @@ public class Door : MonoBehaviour, IActivable {
     /// </summary>
     public void Activate()
     {
-        if(ownCamera != null) {
+        if(hasFadeCutScene) {
 
-            //Fundido en negro
-            //Cambio de camara
-            //Fuera Fundido en negro
-            //Abrir puerta
+            activableFade.StartCutScene(cutSceneCamera);
 
         }else {
             //Es necesario incluir el metodo dentro dentro de activate, para poder referenciar de manera generica al script
             OpenDoor();
         }
         
+    }
+
+    public void OpenDoorCutScene() {
+        OpenDoor();
     }
 
     /// <summary>
