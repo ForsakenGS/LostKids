@@ -54,11 +54,13 @@
      <Compile Include="Assets\Scripts\Camera\CameraTrigger.cs" />
      <Compile Include="Assets\Scripts\Camera\TransitionCamera.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\AbilityController.cs" />
+     <Compile Include="Assets\Scripts\Character\Abilities\AstralProjectionAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\BigJumpAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\BreakAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\CharacterAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\PushAbility.cs" />
      <Compile Include="Assets\Scripts\Character\Abilities\SprintAbility.cs" />
+     <Compile Include="Assets\Scripts\Character\Abilities\TelekinesisAbility.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterMovement.cs" />
      <Compile Include="Assets\Scripts\Character\PlayerPush.cs" />
      <Compile Include="Assets\Scripts\Character\PlayerUse.cs" />
@@ -87,6 +89,7 @@
      <Compile Include="Assets\Scripts\Player\CharacterManager.cs" />
      <Compile Include="Assets\Scripts\Player\CharacterStatus.cs" />
      <Compile Include="Assets\Scripts\PuzzleGenerator.cs" />
+     <Compile Include="Assets\Scripts\PuzzleObjects\AstralProjectionWall.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\BreakableObject.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\BreakableWood.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\Button.cs" />
@@ -111,6 +114,7 @@
      <Compile Include="Assets\Scripts\PuzzleObjects\RockActivator.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\RockDestruction.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\RotatingItem.cs" />
+     <Compile Include="Assets\Scripts\PuzzleObjects\TelekinesisObject.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\TriangleExplosion.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\UsableObject.cs" />
      <Compile Include="Assets\Scripts\PuzzleSettings.cs" />
@@ -120,6 +124,7 @@
      <Compile Include="Assets\Scripts\iTween.cs" />
      <Compile Include="Assets\Tooltip.cs" />
      <Compile Include="Assets\Tooltip1.cs" />
+     <Compile Include="Assets\TooltipCamera.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />

@@ -3,12 +3,14 @@ using System.Collections;
 
 public class Tooltip : MonoBehaviour {
 	public GameObject canvas;
-	private CameraManager cameraManager;
+	//private CameraManager cameraManager;
 
 	// Use this for initialization
 	void Start () {
-		cameraManager=GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
-		transform.LookAt (cameraManager.CurrentCamera().transform);
+		//Vector3 relativeCameraPos = cameraManager.CurrentCamera().transform.position;
+		//transform.localRotation =Quaternion.LookRotation(relativeCameraPos );
+		//cameraManager=GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
+		//transform.LookAt (cameraManager.CurrentCamera().transform);
 	}
 	
 	// Update is called once per frame
