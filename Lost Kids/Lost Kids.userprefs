@@ -1,10 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Tooltip.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\theLostKids\Assets\Scripts\Enemies\BillboardPlane.cs">
     <Files>
-      <File FileName="Assets\Tooltip.cs" Line="11" Column="74" />
-      <File FileName="Assets\Tooltip1.cs" Line="1" Column="1" />
-      <File FileName="Assets\TooltipCamera.cs" Line="10" Column="3" />
+      <File FileName="..\..\theLostKids\Assets\Scripts\Enemies\Billboard.cs" Line="16" Column="9" />
+      <File FileName="..\..\theLostKids\Assets\Scripts\Enemies\BillboardPlane.cs" Line="18" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

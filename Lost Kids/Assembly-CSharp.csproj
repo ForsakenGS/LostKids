@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\ActivableFade.cs" />
      <Compile Include="Assets\Scripts\Audio\AudioLoader.cs" />
      <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
      <Compile Include="Assets\Scripts\Audio\MenuMusic.cs" />
@@ -114,7 +115,11 @@
      <Compile Include="Assets\Scripts\PuzzleObjects\RockActivator.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\RockDestruction.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\RotatingItem.cs" />
+     <Compile Include="Assets\Scripts\PuzzleObjects\SpecialTooltip.cs" />
+     <Compile Include="Assets\Scripts\PuzzleObjects\SpecialTooltipCamera.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\TelekinesisObject.cs" />
+     <Compile Include="Assets\Scripts\PuzzleObjects\Tooltip.cs" />
+     <Compile Include="Assets\Scripts\PuzzleObjects\TooltipCamera.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\TriangleExplosion.cs" />
      <Compile Include="Assets\Scripts\PuzzleObjects\UsableObject.cs" />
      <Compile Include="Assets\Scripts\PuzzleSettings.cs" />
@@ -122,9 +127,6 @@
      <Compile Include="Assets\Scripts\StartGame.cs" />
      <Compile Include="Assets\Scripts\TransitionSceneManager.cs" />
      <Compile Include="Assets\Scripts\iTween.cs" />
-     <Compile Include="Assets\Tooltip.cs" />
-     <Compile Include="Assets\Tooltip1.cs" />
-     <Compile Include="Assets\TooltipCamera.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />
