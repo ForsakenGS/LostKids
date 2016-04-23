@@ -124,7 +124,7 @@ public class CharacterManager : MonoBehaviour {
     /// <param name="index">indice del personaje a activar</param>
     public void ActivateCharacter(int index)
     {
-        if (IsAvailable(index))
+        if ((IsAvailable(index)) && (!activeCharacter.Equals(characterList[index])))
         {
             activeCharacter.GetComponent<AudioListener>().enabled = false;
             activeCharacter = characterList[index];

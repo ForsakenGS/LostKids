@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CameraManager : MonoBehaviour {
 
@@ -23,6 +24,9 @@ public class CameraManager : MonoBehaviour {
     //Evento delegado para lanzar el evento de bloqueo y desbloqueo del juego mientras se cambian las cámaras
     public delegate void LockUnlockAction();
     public static event LockUnlockAction LockUnlockEvent;
+
+    public delegate void CutSceneAction();
+    public static event CutSceneAction CutSceneEvent;
 
     void Awake() {
 
@@ -116,6 +120,25 @@ public class CameraManager : MonoBehaviour {
     //Funcion que se activa con el evento de cambio de personaje
     private void CameraToActivePlayer() {
         ChangeCamera(CharacterManager.GetActiveCharacter().GetComponent<CharacterStatus>().currentRoom);
+    }
+
+
+    public void ChangeCameraFade(GameObject cam, float timeCutScene) {
+        LockUnlockEvent();
+        cameras[currentRoom].SetActive(false);
+        cam.SetActive(true);
+        Invoke("FinishCutScene", timeCutScene);
+    }
+
+    private void FinishCutScene() {
+        CutSceneEvent();
+    }
+
+    public void RestoreCamera(GameObject cam) {
+
+        cam.SetActive(false);
+        cameras[currentRoom].SetActive(true);
+        LockUnlockEvent();
     }
 
 
