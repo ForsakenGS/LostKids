@@ -7,9 +7,6 @@ public class SpecialTooltip : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
-		//cameraManager=GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
-		//transform.LookAt (cameraManager.CurrentCamera().transform);
 	}
 	
 	// Update is called once per frame

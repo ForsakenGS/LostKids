@@ -2,11 +2,11 @@
 using System.Collections;
 using UnityEditor;
 
-public class EnumFlags : PropertyAttribute {
+public class Flags : PropertyAttribute {
 
-     public EnumFlags() { }
+     public Flags() { }
 
-    [CustomPropertyDrawer(typeof(EnumFlags))]
+    [CustomPropertyDrawer(typeof(Flags))]
     public class EnumFlagsDrawer : PropertyDrawer   {
 
         public override void OnGUI(Rect _position, SerializedProperty _property, GUIContent _label) {

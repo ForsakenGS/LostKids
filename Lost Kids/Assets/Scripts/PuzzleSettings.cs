@@ -15,7 +15,7 @@ public class PuzzleSettings : MonoBehaviour {
     public enum PuzzleTags { BigJump, Sprint, Push, Break, Telekinesis, Astral, Platforms,
         Sequence, Levers, Buttons, CanDie, DarkFear, WaterFear, TreeFear, Collectibles, Secret };
 
-    [SerializeField]  [EnumFlags] PuzzleTags tags;
+    [SerializeField]  [Flags] PuzzleTags tags;
 
     // Use this for initialization
     void Start () {

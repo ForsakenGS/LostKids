@@ -6,15 +6,12 @@ using System.Collections;
 /// </summary>
 public class BreakableWood : BreakableObject {
 
-    private AudioLoader audioLoader;
 
-    private AudioSource woodBreakSound;
 
 	// Use this for initialization
 	void Start () {
-        audioLoader = GetComponent<AudioLoader>();
+        base.Start();
 
-        woodBreakSound = audioLoader.GetSound("WoodBreak");
     }
 	
 	// Update is called once per frame
@@ -30,11 +27,7 @@ public class BreakableWood : BreakableObject {
     {
 
         //Animacion, cambio de aspecto
-        currentHitPoints--;
-        if (currentHitPoints<=0)
-        {
-            Break();
-        }
+        base.TakeHit();
     }
 
     /// <summary>
@@ -46,9 +39,6 @@ public class BreakableWood : BreakableObject {
         //Destroy(this.gameObject,tiempo de animacion);
         //Destroy(this.gameObject);
 
-        AudioManager.Play(woodBreakSound, false, 1);
-
-        StartCoroutine(gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
     }
 
 }

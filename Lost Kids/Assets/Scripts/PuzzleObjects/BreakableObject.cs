@@ -44,9 +44,12 @@ public abstract class BreakableObject : MonoBehaviour, IBreakable {
     // Use this for initialization
     public void Start () {
         currentHitPoints = maxHitPoints;
-        if (textures[currentHitPoints] != null)
+        if (currentHitPoints > 0)
         {
-            GetComponent<Renderer>().material.mainTexture = textures[currentHitPoints];
+            if (textures[currentHitPoints] != null)
+            {
+                GetComponent<Renderer>().material.mainTexture = textures[currentHitPoints];
+            }
         }
         audioLoader = GetComponent<AudioLoader>();
     }
