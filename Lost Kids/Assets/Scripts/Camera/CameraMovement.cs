@@ -20,6 +20,7 @@ public class CameraMovement : MonoBehaviour {
 
     void Start() {
 
+        RefreshPlayer();
         UpdateParams();
 
     }
