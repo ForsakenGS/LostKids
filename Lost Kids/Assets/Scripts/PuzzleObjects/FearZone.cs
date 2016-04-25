@@ -23,9 +23,7 @@ public class FearZone : MonoBehaviour {
         {
             if (affected.Contains(col.gameObject.name))
             {
-                col.gameObject.GetComponent<CharacterStatus>().SetScared(true);
-
-
+                GetComponentInParent<FearSource>().CharacterOnFearZone(col.gameObject, true);
             }
         }
     }
@@ -34,7 +32,7 @@ public class FearZone : MonoBehaviour {
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            col.gameObject.GetComponent<CharacterStatus>().SetScared(false);
+            GetComponentInParent<FearSource>().CharacterOnFearZone(col.gameObject, false);
         }
     }
 
