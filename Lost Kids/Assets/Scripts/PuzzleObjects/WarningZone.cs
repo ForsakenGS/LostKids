@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 public class WarningZone : MonoBehaviour {
 
-
     private List<string> affected;
+
+    public Sprite tooltipImage;
+    private CharacterIcon icon;
+
     // Use this for initialization
     void Start () {
 
@@ -22,8 +25,9 @@ public class WarningZone : MonoBehaviour {
         {
             if (affected.Contains(col.gameObject.name))
             {
-                //col.gameObject.GetComponent<CharacterStatus>().ShowIcon(Scared,true);
-
+                icon = col.gameObject.GetComponentInChildren<CharacterIcon>();
+                icon.ActiveCanvas(true);
+                icon.SetImage(tooltipImage);
 
             }
         }
@@ -33,7 +37,7 @@ public class WarningZone : MonoBehaviour {
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            //col.gameObject.GetComponent<CharacterStatus>().ShowIcon(Scared,false);
+            icon.ActiveCanvas(false);
         }
     }
 
@@ -57,6 +61,7 @@ public class WarningZone : MonoBehaviour {
 
     public void DisableZone()
     {
+        icon.ActiveCanvas(false);
         GetComponent<Collider>().enabled = false;
     }
 }

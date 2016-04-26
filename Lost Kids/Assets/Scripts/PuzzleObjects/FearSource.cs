@@ -141,4 +141,5 @@ public class FearSource : MonoBehaviour,IActivable {
             scaredCharacters.Remove(st);
         }
     }
-}
+
+ }

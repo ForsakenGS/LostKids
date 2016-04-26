@@ -2,9 +2,12 @@
 using System.Collections;
 
 public class TooltipDetector : MonoBehaviour {
-	public GameObject canvas;
 
+
+    public Sprite tooltipImage;
     public CharacterAbility requiredAbility;
+
+    private CharacterIcon icon;
     //private CameraManager cameraManager;
 
     // Use this for initialization
@@ -17,16 +20,27 @@ public class TooltipDetector : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider other){
-		if (CharacterManager.IsActiveCharacter(other.gameObject)){
-            if(requiredAbility==null || other.gameObject.GetComponent(requiredAbility.GetType())!=null)
-			    canvas.SetActive (true);
-		}
+        if (tooltipImage != null)
+        {
+            if (CharacterManager.IsActiveCharacter(other.gameObject))
+            {
+                if (requiredAbility == null || other.gameObject.GetComponent(requiredAbility.GetType()) != null)
+
+                    icon = other.gameObject.GetComponentInChildren<CharacterIcon>();
+                icon.ActiveCanvas(true);
+                icon.SetImage(tooltipImage);
+
+            }
+        }
 	}
 
 	void OnTriggerExit (Collider other){
-        if (CharacterManager.IsActiveCharacter(other.gameObject))
+        if (tooltipImage != null)
         {
-            canvas.SetActive(false);
+            if (CharacterManager.IsActiveCharacter(other.gameObject))
+            {
+                icon.ActiveCanvas(false);
+            }
         }
 	}
 }
