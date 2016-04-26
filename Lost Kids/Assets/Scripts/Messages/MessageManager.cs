@@ -4,44 +4,62 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class MessageManager : MonoBehaviour {
-
-    //Array de mensajes del juego
-    private ArrayList messages;
-
     //Fichero que contiene los mensajes
     public TextAsset messageFile;
-
-    //Texto que se muestra en pantalla
-    public Text text;
-
-    //Marco del texto en pantalla
-    public Image frame;
-
-    //Imagen del kodama
-    public Image kodama;
-
-    //Lineas del mensaje
-    private string[] lines;
-
+    // Máximo de líneas por mensaje
+    public int maxLines = 3;
     // Máximo de caracteres por línea
-    public int maxCharacterLine = 100;
-
-    //Indices para recorrer las lineas del mensaje
-    private int startIndex;
-    private int endIndex;
-
+    public int maxCharacterLine = 85;
     //Velocidad de muestra de las letras
     public float normalLetterSpeed;
     public float fastLetterSpeed;
-    private float letterSpeed;
 
-    //Evento delegado para lanzar el evento de bloqueo y desbloqueo del juego mientras se muestran mensajes
+    //Texto que se muestra en pantalla
+    public Text text;
+    //Marco del texto en pantalla
+    public Image frame;
+    // Imagen y etiqueta Kodama
+    [Header("Kodama Settings")]
+    public string kodamaTag = "kodama";
+    public Image kodamaImg;
+    // Imagen y etiqueta Tanuki
+    [Header("Tanuki Settings")]
+    public string tanukiTag = "tanuki";
+    public Image tanukiImg;
+    // Imagen y etiqueta Aoi
+    [Header("Aoi Settings")]
+    public string aoiTag = "aoi";
+    public Image aoiImg;
+    // Imagen y etiqueta Akai
+    [Header("Akai Settings")]
+    public string akaiTag = "akai";
+    public Image akaiImg;
+    // Imagen y etiqueta Ki
+    [Header("Ki Settings")]
+    public string kiTag = "ki";
+    public Image kiImg;
+
+    //Eventos delegados para lanzar el evento de bloqueo y desbloqueo del juego mientras se muestran mensajes
     public delegate void LockUnlockAction();
-    public static event LockUnlockAction LockUnlockEvent;
+    public static event LockUnlockAction LockEvent;
+    public static event LockUnlockAction UnlockEvent;
 
+    //Array de mensajes del juego
+    private ArrayList messages;
+    //Lineas del mensaje
+    private string[] lines;
+    //Indices para recorrer las lineas del mensaje
+    private int startIndex;
+    private int endIndex;
+    //Velocidad de muestra de las letras
+    private float letterSpeed;
+    // Indica que se está mostrando una conversación
+    private bool isConversation;
     private AudioLoader audioLoader;
     //Array con los efectos de sonido
     private ArrayList messagesSfxs;
+    // Imagen que se está mostrando
+    private Image shownImg;
 
     /// <summary>
     /// Maquina de estados para el MessageManager
@@ -49,7 +67,7 @@ public class MessageManager : MonoBehaviour {
     /// EndMessage: Se activa cuando no hay mas mensajes para mostrar
     /// NextMessage: Se activa cuando se han mostrado las 4 lineas en pantalla y quedan más lineas por mostrar
     /// </summary>
-    private enum State { FastMessage, EndMessage, NextMessage };
+    private enum State { FastMessage, EndMessage, NextMessage, NextConversationMessage };
     private State messageState;
 
     // Use this for initialization
@@ -66,12 +84,14 @@ public class MessageManager : MonoBehaviour {
         messagesSfxs.Add(audioLoader.GetSound("Message5"));
 
         //Estado inicial
-        messageState = State.FastMessage;
+        messageState = State.EndMessage;
 
         messages = new ArrayList();
 
         //Se inicializa la velocidad a la velocidad normal
         letterSpeed = normalLetterSpeed;
+        isConversation = false;
+        shownImg = null;
 
         //Se cargan los mensajes desde fichero
         FillMessages();
@@ -101,15 +121,15 @@ public class MessageManager : MonoBehaviour {
     /// <param name="index">Indice del mensaje que se desea mostrar</param>
     /// <returns></returns>
     public void ShowMessage(int index) {
-
+        // Cambia el estado
+        messageState = State.FastMessage;
         //Se activan el marco y el texto
         frame.gameObject.SetActive(true);
         text.gameObject.SetActive(true);
-        kodama.gameObject.SetActive(true);
 
         //Se bloquea el resto del juego
-        if (LockUnlockEvent != null) {
-            LockUnlockEvent();
+        if (LockEvent != null) {
+            LockEvent();
         }
 
         //Se llama a la función para extraer el mensaje
@@ -122,36 +142,59 @@ public class MessageManager : MonoBehaviour {
     /// Extrae el mensaje de la línea pasada por defecto
     /// </summary>
     private void getMessage(int index) {
-
         //Carga el mensaje pasado por indice
         string msg = (string) messages[index];
-
+        // Se muestra la imagen del personaje al que pertenece el mensaje
+        shownImg = CharacterImage(msg);
+        shownImg.gameObject.SetActive(true);
         //Se separa en lineas
         lines = SeparateInLines(msg);
 
         //Se inicializan los índices
         startIndex = 0;
 
-        if (lines.Length <= 4) {
+        if (lines.Length <= maxLines) {
             endIndex = lines.Length;
         } else {
-            endIndex = 4;
+            endIndex = maxLines;
         }
 
         //Se inicia la corrutina para ir mostrando el mensaje letra por letra
         StartCoroutine(TypeText());
     }
 
+    // Recibe un mensaje y devuelve la imagen representativa del interlocutor
+    Image CharacterImage(string message) {
+        // Kodama es el personaje por defecto
+        Image img = kodamaImg;
+        string tag = message.Substring(1, message.IndexOf('>')-1);
+        Debug.Log(tag);
+        if (!tag.Equals(kodamaTag)) {
+            // No se trata del Kodama
+            if (tag.Equals(tanukiTag)) {
+                img = tanukiImg;
+            } else if (tag.Equals(aoiTag)) {
+                img = aoiImg;
+            } else if (tag.Equals(akaiTag)) {
+                img = akaiImg;
+            } else if (tag.Equals(kiTag)) {
+                img = kiImg;
+            }
+        }
+
+        return img;
+    }
+
     // Divide un mensaje en distintas líneas atendiendo al número máximo de caracteres por línea
-    string[] SeparateInLines (string msg) {
+    string[] SeparateInLines(string msg) {
         List<string> lines = new List<string>();
 
         // Divide el mensaje en palabras
         string[] words = msg.Split(' ');
         // Inserta las palabras una a una para formar las distintas líneas
-        lines.Insert(0, words[0]);
+        lines.Insert(0, "");
         for (int i = 1; i < words.Length; ++i) {
-            if (lines[lines.Count-1].Length + words[i].Length >= maxCharacterLine) {
+            if (lines[lines.Count - 1].Length + words[i].Length >= maxCharacterLine) {
                 lines.Insert(lines.Count, words[i]);
             } else {
                 lines[lines.Count - 1] += (" " + words[i]);
@@ -183,15 +226,16 @@ public class MessageManager : MonoBehaviour {
                 text.text += line[j];
                 yield return new WaitForSeconds(letterSpeed);
             }
-
             //Se añade el salto de linea
             text.text += "\n";
-
         }
 
         //Si el indice final es menor que el numero de lineas del mensaje se cambia el estado al siguiente mensaje
         if (endIndex < lines.Length) {
             messageState = State.NextMessage;
+        } else if (isConversation) {// Si es una conversación, viene otro mensaje nuevo
+            messageState = State.NextConversationMessage;
+            Debug.Log("conversacion");
         } else {//Si no, se cambia al estado del mensaje final
             messageState = State.EndMessage;
         }
@@ -200,34 +244,45 @@ public class MessageManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// Función para mostrar en pantalla una conversación
+    /// </summary>
+    /// <param name="conversation">Listado con los índices de los mensajes que conforman la conversación</param>
+    public void ShowConversation(List<int> conversation) {
+        StartCoroutine(ShowConversationRoutine(conversation));
+    }
+
+    /// <summary>
+    /// Corrutina para mostrar una conversación con varios mensajes
+    /// </summary>
+    /// <param name="conversation">Listado con los índices de los mensajes que conforman la conversación</param>
+    /// <returns></returns>
+    IEnumerator ShowConversationRoutine(List<int> conversation) {
+        isConversation = true;
+        for (int mesIndex = 0; mesIndex < conversation.Count; ++mesIndex) {
+            // Espera a que el mensaje anterior termine de mostrarse por pantalla
+            while (!(MessageEnded())) {
+                yield return new WaitForSeconds(0.1f);
+            }
+            // Si se trata del último mensaje de la conversación, desactiva el flag 
+            if (mesIndex == conversation.Count - 1) {
+                isConversation = false;
+            }            
+            // Muestra el mensaje
+            ShowMessage(conversation[mesIndex]);
+        }
+
+        yield return 0;
+    }
+
+    /// <summary>
     /// Funcion para pasar el mensaje en pantalla rápidamente
     /// </summary>
-    /// <returns></returns>
     public void SkipText() {
-
+        Debug.Log("skip");
         switch (messageState) {
             //Si está en el estado por defecto, se cambia la velocidad de letra
             case State.FastMessage:
                 letterSpeed = fastLetterSpeed;
-                break;
-            //Si está en el estado de fin de mensaje
-            case State.EndMessage:
-
-                //Se cambia al estado por defecto
-                messageState = State.FastMessage;
-
-                //Se recupera la velocidad de letra
-                letterSpeed = normalLetterSpeed;
-
-                //Se desbloquea el resto del juego
-                if (LockUnlockEvent != null) {
-                    LockUnlockEvent();
-                }
-
-                //Se oculta la interfaz de mensajes
-                frame.gameObject.SetActive(false);
-                text.gameObject.SetActive(false);
-                kodama.gameObject.SetActive(false);
                 break;
             //Si está en el estado de siguiente mensaje
             case State.NextMessage:
@@ -238,18 +293,41 @@ public class MessageManager : MonoBehaviour {
                 letterSpeed = normalLetterSpeed;
 
                 //Se incrementan los índicas
-                startIndex += 4;
-                endIndex += 4;
+                startIndex += maxLines;
+                endIndex += maxLines;
 
                 if (endIndex > lines.Length) {
                     endIndex = lines.Length;
                 }
-
                 //Se inicia la corrutina para mostrar el mensaje letra por letra
                 StartCoroutine(TypeText());
                 break;
+            // Si está en el estado de siguiente mensaje de conversación
+            case State.NextConversationMessage:
+                //Se cambia al estado final
+                messageState = State.EndMessage;
+                //Se recupera la velocidad de letra
+                letterSpeed = normalLetterSpeed;
+                //Oculta la imagen del mensaje anterior
+                shownImg.gameObject.SetActive(false);
+                break;
+            //Si está en el estado de fin de mensaje
+            case State.EndMessage:
+                //Se cambia al estado por defecto
+                //messageState = State.FastMessage;
+                //Se recupera la velocidad de letra
+                letterSpeed = normalLetterSpeed;
+                //Se desbloquea el resto del juego
+                if (UnlockEvent != null) {
+                    UnlockEvent();
+                }
+                //Se oculta la interfaz de mensajes
+                frame.gameObject.SetActive(false);
+                text.gameObject.SetActive(false);
+                shownImg.gameObject.SetActive(false);
+                shownImg = null;
+                break;
         }
-
     }
 
     /// <summary>
@@ -257,8 +335,6 @@ public class MessageManager : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     public bool MessageEnded() {
-        return messageState.Equals(State.EndMessage);
+        return (messageState.Equals(State.EndMessage));
     }
-
-
 }

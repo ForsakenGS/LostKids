@@ -11,14 +11,14 @@ public class InputManagerLocker : MonoBehaviour, ILockeable {
 
     //Al activarse el script se añade la función Lock
     void OnEnable() {
-        MessageManager.LockUnlockEvent += Lock;
+        MessageManager.LockEvent += Lock;
         CameraManager.LockUnlockEvent += Lock;
     }
 
     //Al desactivarse el script se desuscriben las funciones
     void OnDisable() {
-        MessageManager.LockUnlockEvent -= Unlock;
-        MessageManager.LockUnlockEvent -= Lock;
+        MessageManager.UnlockEvent -= Unlock;
+        MessageManager.LockEvent -= Lock;
         CameraManager.LockUnlockEvent -= Unlock;
         CameraManager.LockUnlockEvent -= Lock;
     }
@@ -29,8 +29,8 @@ public class InputManagerLocker : MonoBehaviour, ILockeable {
     public void Lock() {
         //Es necesario incluir el metodo dentro dentro de Lock, para poder referenciar de manera generica al script
         scInputManager.SetLock(true);
-        MessageManager.LockUnlockEvent -= Lock;
-        MessageManager.LockUnlockEvent += Unlock;
+        MessageManager.LockEvent -= Lock;
+        MessageManager.UnlockEvent += Unlock;
         CameraManager.LockUnlockEvent -= Lock;
         CameraManager.LockUnlockEvent += Unlock;
     }
@@ -41,8 +41,8 @@ public class InputManagerLocker : MonoBehaviour, ILockeable {
     public void Unlock() {
         //Es necesario incluir el metodo dentro dentro de Unlock, para poder referenciar de manera generica al script
         scInputManager.SetLock(false);
-        MessageManager.LockUnlockEvent -= Unlock;
-        MessageManager.LockUnlockEvent += Lock;
+        MessageManager.UnlockEvent -= Unlock;
+        MessageManager.LockEvent += Lock;
         CameraManager.LockUnlockEvent -= Unlock;
         CameraManager.LockUnlockEvent += Lock;
     }
