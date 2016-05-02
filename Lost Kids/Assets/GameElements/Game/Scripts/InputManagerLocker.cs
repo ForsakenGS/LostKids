@@ -3,12 +3,6 @@ using System.Collections;
 
 public class InputManagerLocker : MonoBehaviour, ILockeable {
 
-    private InputManager scInputManager;
-
-    void Awake() {
-        scInputManager = GetComponent<InputManager>();
-    }
-
     //Al activarse el script se añade la función Lock
     void OnEnable() {
         MessageManager.LockEvent += Lock;
@@ -28,7 +22,7 @@ public class InputManagerLocker : MonoBehaviour, ILockeable {
     /// </summary>
     public void Lock() {
         //Es necesario incluir el metodo dentro dentro de Lock, para poder referenciar de manera generica al script
-        scInputManager.SetLock(true);
+        InputManager.SetLock(true);
         MessageManager.LockEvent -= Lock;
         MessageManager.UnlockEvent += Unlock;
         CameraManager.LockUnlockEvent -= Lock;
@@ -40,7 +34,7 @@ public class InputManagerLocker : MonoBehaviour, ILockeable {
     /// </summary>
     public void Unlock() {
         //Es necesario incluir el metodo dentro dentro de Unlock, para poder referenciar de manera generica al script
-        scInputManager.SetLock(false);
+        InputManager.SetLock(false);
         MessageManager.UnlockEvent -= Unlock;
         MessageManager.LockEvent += Lock;
         CameraManager.LockUnlockEvent -= Unlock;
