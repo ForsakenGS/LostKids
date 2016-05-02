@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class InputManager : MonoBehaviour {
-    private bool locked;
+    private static bool locked;
     private CharacterStatus characterStatus;
     private AbilityController abilityControl;
     private MessageManager messageManager;
@@ -56,7 +56,7 @@ public class InputManager : MonoBehaviour {
     /// Función para bloquear/desbloquear el paso de instrucciones al personaje 
     /// </summary>
     /// <param name="lockVar"></param>
-    public void SetLock(bool lockVar) {
+    public static void SetLock(bool lockVar) {
         locked = lockVar;
     }
 
