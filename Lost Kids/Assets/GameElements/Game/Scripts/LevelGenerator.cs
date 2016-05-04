@@ -58,7 +58,7 @@ public class LevelGenerator : MonoBehaviour {
     private int actualRooms;
 
     //Contador de tags que se han incluido hasta el momento
-    private Dictionary<PuzzleTags,int> actualTagsCount;
+    private Dictionary<PuzzleTags2,int> actualTagsCount;
 
     //Contador de aparicion de los personajes requeridos para los puzzles
     private Dictionary<CharacterName, int> actualCharacterTags;
@@ -197,7 +197,7 @@ public class LevelGenerator : MonoBehaviour {
 
             //Añade al total de apariciones las etiquetas de puzzle, agregandolas al diccionario
             //si aparecen por primera vez
-            foreach (PuzzleTags tag in selectedRoom.puzzleTags)
+            foreach (PuzzleTags2 tag in selectedRoom.puzzleTags)
             {
                 if(actualTagsCount.ContainsKey(tag))
                 {

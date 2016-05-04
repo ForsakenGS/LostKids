@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+// Tamaños de habitación
+public enum RoomSizes { Small, Medium, Big };
+// Etiquetas para la habitación
+public enum PuzzleTags {
+    BigJump, Sprint, Push, Break, Telekinesis, Astral, Platforms,
+    Sequence, Levers, Buttons, CanDie, DarkFear, WaterFear, TreeFear, Collectibles, Secret
+};
 /// <summary>
 /// Script para controlar la configuración general de una habitación
 /// </summary>
 public class RoomSettings : MonoBehaviour {
+    [Header("Room Configuration")]
     /// <summary>
     /// Tamaño de la habitación
     /// </summary>
-    public enum RoomSizes { Small, Medium, Big };
     public RoomSizes size;
     /// <summary>
     /// Dificultad estimada de la habitación
@@ -19,31 +25,27 @@ public class RoomSettings : MonoBehaviour {
     /// <summary>
     /// Etiquetas para definir las características de los puzzles que contiene la habitación
     /// </summary>
-    public enum PuzzleTags {
-        BigJump, Sprint, Push, Break, Telekinesis, Astral, Platforms,
-        Sequence, Levers, Buttons, CanDie, DarkFear, WaterFear, TreeFear, Collectibles, Secret
-    };
     public List<PuzzleTags> tags;
+    public List<CharacterName> characters;
+    [Header("References")]
+    public Transform decoration;
+    public Transform exit;
+    public Transform puzzleElements;
+    public Transform walls;
 
-    private GameObject exit;
     private GameObject frontWall;
     private int objectsToPrepare;
     private bool prepared;
 
     // Use this for references & content generation
     void Awake() {
-        // Generación automática de los muros
-
-        // Generación automática de los elementos de decoración
-
+        objectsToPrepare = 0;
         // Referencias a componentes de la habitación
-        exit = transform.FindChild("Exit").gameObject;
-        frontWall = transform.FindChild("Walls").FindChild("FrontWall").gameObject;
+        frontWall = walls.Find("FrontWall").gameObject;
     }
 
     // Use this for initialization
     void Start() {
-        objectsToPrepare = 0;
         prepared = false;
     }
 
@@ -51,6 +53,7 @@ public class RoomSettings : MonoBehaviour {
     IEnumerator FreeFallEffect(Transform trf) {
         // Incrementa el número de elementos en preparación
         objectsToPrepare += 1;
+        //ChangeValue(1);
         // Desactiva física para el objeto
         Rigidbody rb = trf.GetComponent<Rigidbody>();
         if ((rb != null) && (!rb.isKinematic)) {
@@ -75,6 +78,7 @@ public class RoomSettings : MonoBehaviour {
         }
         // Decrementa el número de elementos que quedan por preparar
         objectsToPrepare -= 1;
+        //ChangeValue(-1);
 
         yield return 0;
     }
@@ -92,7 +96,7 @@ public class RoomSettings : MonoBehaviour {
     /// </summary>
     /// <returns><c>Vector3</c> con la posición de salida</returns>
     public Vector3 GetExit() {
-        return exit.transform.position;
+        return exit.position;
     }
 
     /// <summary>
@@ -120,15 +124,18 @@ public class RoomSettings : MonoBehaviour {
             // Bloqueo al jugador
             InputManager.SetLock(true);
             // Bloques de las paredes
-            foreach (Transform wall in transform.FindChild("Walls")) {
+            foreach (Transform wall in walls) {
+                //objectsToPrepare += 1;
                 StartCoroutine("FreeFallEffect", wall);
             }
             // Elementos del puzzle
-            foreach (Transform wall in transform.FindChild("PuzzleElements")) {
+            foreach (Transform wall in puzzleElements) {
+                //objectsToPrepare += 1;
                 StartCoroutine("FreeFallEffect", wall);
             }
             // Elementos decorativos
-            foreach (Transform wall in transform.FindChild("Decoration")) {
+            foreach (Transform wall in decoration) {
+                //objectsToPrepare += 1;
                 StartCoroutine("FreeFallEffect", wall);
             }
             // Espera para que la habitación termine de estar preparada
@@ -148,10 +155,16 @@ public class RoomSettings : MonoBehaviour {
 
     IEnumerator WaitEndOfPreparation() {
         yield return new WaitUntil(() => objectsToPrepare == 0);
-        Debug.Log(objectsToPrepare);
         // Desbloqueo del jugador
         InputManager.SetLock(false);
         // Muestra la habitación
         ShowRoom();
+    }
+
+    private readonly object locker = new object();
+    void ChangeValue(int val) {
+        lock (locker) {
+            objectsToPrepare += val;
+        }
     }
 }

@@ -25,7 +25,11 @@ public class WayDetector : MonoBehaviour {
         } else {
             affectedRoomSettings = way.prevRoom;
         }
-        affectedRoom = affectedRoomSettings.gameObject;
+        if (affectedRoomSettings == null) {
+            Destroy(gameObject);
+        } else {
+            affectedRoom = affectedRoomSettings.gameObject;
+        }
     }
 
     // Use this for initialization
@@ -39,6 +43,7 @@ public class WayDetector : MonoBehaviour {
         if (CharacterManager.GetActiveCharacter().Equals(col.gameObject)) {
             // Comprueba si el efecto es de mostrar u ocultar
             if (toShow) {
+                affectedRoomSettings.enabled = true;
                 if (!affectedRoom.activeInHierarchy) {
                     // La habitación no está habilitada, luego la habilita y muestra
                     affectedRoom.SetActive(true);
