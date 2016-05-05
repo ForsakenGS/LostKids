@@ -10,7 +10,7 @@ public class RoomSettingsEditor : Editor {
     {
         base.OnInspectorGUI();
         PuzzleSettings script = (PuzzleSettings)target;
-        script.tags = (PuzzleTags)EditorGUILayout.EnumMaskField("tags", script.tags);
+        script.tags = (PuzzleTags2)EditorGUILayout.EnumMaskField("tags", script.tags);
     }
     
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 [System.Flags]
-public enum PuzzleTags
+public enum PuzzleTags2
 {
     Platforms = 1 << 0,
     Sequence = 1 << 1,
@@ -25,20 +25,20 @@ public class PuzzleSettings : MonoBehaviour {
     public PuzzleSizes puzzleSize;
 
     [HideInInspector]
-    public PuzzleTags tags;
+    public PuzzleTags2 tags;
 
     [SerializeField]
     public List<CharacterName> requiredCharacters;
 
     [HideInInspector]
-    public List<PuzzleTags> puzzleTags;
+    public List<PuzzleTags2> puzzleTags;
 
     // Use this for initialization
     void Start () {
         string[] stringSeparators = new string[] { ", " };
         foreach (string t in tags.ToString().Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries))
         {
-            puzzleTags.Add((PuzzleTags)Enum.Parse(typeof(PuzzleTags), t));
+            puzzleTags.Add((PuzzleTags2)Enum.Parse(typeof(PuzzleTags2), t));
         }
         
 

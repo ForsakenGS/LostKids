@@ -168,7 +168,6 @@ public class MessageManager : MonoBehaviour {
         // Kodama es el personaje por defecto
         Image img = kodamaImg;
         string tag = message.Substring(1, message.IndexOf('>')-1);
-        Debug.Log(tag);
         if (!tag.Equals(kodamaTag)) {
             // No se trata del Kodama
             if (tag.Equals(tanukiTag)) {
@@ -235,7 +234,6 @@ public class MessageManager : MonoBehaviour {
             messageState = State.NextMessage;
         } else if (isConversation) {// Si es una conversación, viene otro mensaje nuevo
             messageState = State.NextConversationMessage;
-            Debug.Log("conversacion");
         } else {//Si no, se cambia al estado del mensaje final
             messageState = State.EndMessage;
         }
@@ -278,7 +276,6 @@ public class MessageManager : MonoBehaviour {
     /// Funcion para pasar el mensaje en pantalla rápidamente
     /// </summary>
     public void SkipText() {
-        Debug.Log("skip");
         switch (messageState) {
             //Si está en el estado por defecto, se cambia la velocidad de letra
             case State.FastMessage:
