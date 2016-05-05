@@ -40,7 +40,7 @@ public class LevelGenerator : MonoBehaviour {
     public int maxRequiredCharacterDiff=2;
 
     //Diccionario de habitaciones/pasillos baneados, y el tiempo que les queda
-    private Dictionary<PuzzleSettings,int> bannedRooms;
+    private Dictionary<RoomSettings, int> bannedRooms;
 
     //Estructura de las salas y pasillos del nivel
     private List<GameObject> levelStructure;
@@ -58,27 +58,27 @@ public class LevelGenerator : MonoBehaviour {
     private int actualRooms;
 
     //Contador de tags que se han incluido hasta el momento
-    private Dictionary<PuzzleTags,int> actualTagsCount;
+    private Dictionary<RoomSettings.PuzzleTags,int> actualTagsCount;
 
     //Contador de aparicion de los personajes requeridos para los puzzles
     private Dictionary<CharacterName, int> actualCharacterTags;
 
     //Variable donde se almacenaran las diferentes restricciones a la busqueda de una nueva room
-    System.Func<PuzzleSettings, bool> constraints;
+    System.Func<RoomSettings, bool> constraints;
     //Listado donde se almacenan por separado todas las restricciones, para construir la constraint final
-    List<System.Func<PuzzleSettings,bool>> constraintsList;
+    List<System.Func<RoomSettings,bool>> constraintsList;
 
     
     //Listado de referencias a los scripts de las rooms (para obtener su informacion)
-    private List<PuzzleSettings> roomsList;
+    private List<RoomSettings> roomsList;
 
     // Use this for initialization
     void Start () {
 
-        roomsList = new List<PuzzleSettings>();
+        roomsList = new List<RoomSettings>();
         for(int i=0;i<listOfRooms.Length;i++)
         {
-            roomsList.Add(listOfRooms[i].GetComponent<PuzzleSettings>());
+            roomsList.Add(listOfRooms[i].GetComponent<RoomSettings>());
         }
 
         GenerateLevelStructure();
@@ -99,11 +99,30 @@ public class LevelGenerator : MonoBehaviour {
     void InstantiateLevel()
     {
         Vector3 nextRoomPosition = transform.position;
+        GameObject prev = null;
         GameObject room=null;
         for (int i = 0; i < levelStructure.Count; i++)
-        { 
+        {  
             room=Instantiate(levelStructure[i], nextRoomPosition, Quaternion.identity) as GameObject;
+
+            //Se actualiza la referencia a la siguiente habitacion del way con la nueva room
+            if (prev != null && prev.GetComponent<WaySettings>() != null)
+            {
+                prev.GetComponent<WaySettings>().nextRoom = room.GetComponent<RoomSettings>();
+            }
+
+            //Se actualiza la referencia a la anterior habitacion del way con la anterior room
+            if (prev!=null && room.GetComponent<WaySettings>()!=null)
+            {
+                    room.GetComponent<WaySettings>().prevRoom = prev.GetComponent<RoomSettings>();
+            }
+            
+            if(room.GetComponent<RoomSettings>()!= null)
+            {
+                room.gameObject.SetActive(false);
+            }
             nextRoomPosition = room.transform.FindChild("Exit").transform.position;
+            prev = room;
         }
     }
 
@@ -113,8 +132,8 @@ public class LevelGenerator : MonoBehaviour {
     /// </summary>
     void GenerateLevelStructure()
     {
-        List<PuzzleSettings> candidates;
-        PuzzleSettings selected=null;
+        List<RoomSettings> candidates;
+        RoomSettings selected =null;
 
         
         InitializeLevel();
@@ -140,9 +159,9 @@ public class LevelGenerator : MonoBehaviour {
     void InitializeLevel()
     {
         actualRooms = 0;
-        constraintsList = new List<Func<PuzzleSettings, bool>>();
+        constraintsList = new List<Func<RoomSettings, bool>>();
         levelStructure = new List<GameObject>();
-        bannedRooms = new Dictionary<PuzzleSettings, int>();
+        bannedRooms = new Dictionary<RoomSettings, int>();
         
     }
 
@@ -150,10 +169,10 @@ public class LevelGenerator : MonoBehaviour {
     /// Reduce en uno la duracion de las salas baneadas
     /// Si el tiempo de una sala llega a 0, se elimina del diccionario
     /// </summary>
-    void UpdateBans(PuzzleSettings selectedRoom)
+    void UpdateBans(RoomSettings selectedRoom)
     {
         //Se disminuye en uno el contador de bans de las rooms
-        foreach (PuzzleSettings entry in bannedRooms.Keys.ToList())
+        foreach (RoomSettings entry in bannedRooms.Keys.ToList())
         {
             if(bannedRooms[entry]>1)
             {
@@ -185,7 +204,7 @@ public class LevelGenerator : MonoBehaviour {
     /// Actualiza contadores de personajes necesarios y de tags de puzzles aparecidos hasta el momento
     /// </summary>
     /// <param name="selectedRoom">Hacitacion seleccionada cuyos tags se añaden al conjunto</param>
-    void UpdateActualTags(PuzzleSettings selectedRoom)
+    void UpdateActualTags(RoomSettings selectedRoom)
     {
         if(selectedRoom!=null)
         {
@@ -197,7 +216,7 @@ public class LevelGenerator : MonoBehaviour {
 
             //Añade al total de apariciones las etiquetas de puzzle, agregandolas al diccionario
             //si aparecen por primera vez
-            foreach (PuzzleTags tag in selectedRoom.puzzleTags)
+            foreach (RoomSettings.PuzzleTags tag in selectedRoom.tags)
             {
                 if(actualTagsCount.ContainsKey(tag))
                 {
@@ -261,7 +280,7 @@ public class LevelGenerator : MonoBehaviour {
     /// </summary>
     void UpdateDifficultyConstraints()
     {
-        System.Func<PuzzleSettings,bool> difficultyConstraint;
+        System.Func<RoomSettings, bool> difficultyConstraint;
 
         minDifficulty = (int)(actualRooms * minDifficultyIncrease) + initialMinDifficulty;
         maxDifficulty = (int)(actualRooms * maxDifficultyIncrease) + initialMaxDifficulty;
@@ -287,7 +306,7 @@ public class LevelGenerator : MonoBehaviour {
         {
             index = values.IndexOf(minValue);
 
-            Func<PuzzleSettings, bool> characterTagConstraint = r => r.requiredCharacters.Contains(actualCharacterTags.Keys.ElementAt(index));
+            Func<RoomSettings, bool> characterTagConstraint = r => r.requiredCharacters.Contains(actualCharacterTags.Keys.ElementAt(index));
             constraintsList.Add(characterTagConstraint);
             //constraints = PredicateBuilder.And(constraints, characterTagConstraint);
             
@@ -309,10 +328,10 @@ public class LevelGenerator : MonoBehaviour {
             int maxUsedIndex = values.IndexOf(maxValue);
             int minUsedIndex = values.IndexOf(minValue);
 
-            Func<PuzzleSettings, bool> includePuzzleTagConstraint = r => r.puzzleTags.Contains(actualTagsCount.Keys.ElementAt(minUsedIndex));
+            Func<RoomSettings, bool> includePuzzleTagConstraint = r => r.tags.Contains(actualTagsCount.Keys.ElementAt(minUsedIndex));
             constraintsList.Add(includePuzzleTagConstraint);
 
-            Func<PuzzleSettings, bool> excludePuzzleTagConstraint = r => !r.puzzleTags.Contains(actualTagsCount.Keys.ElementAt(maxUsedIndex));
+            Func<RoomSettings, bool> excludePuzzleTagConstraint = r => !r.tags.Contains(actualTagsCount.Keys.ElementAt(maxUsedIndex));
             constraintsList.Add(excludePuzzleTagConstraint);
             //constraints = PredicateBuilder.And(constraints, includePuzzleTagConstraint);
 
@@ -323,9 +342,9 @@ public class LevelGenerator : MonoBehaviour {
     /// Si no se encuentran candidatos, se van eliminando restricciones
     /// </summary>
     /// <returns>Listado de rooms candidatas</returns>
-    private List<PuzzleSettings> GetCandidateList()
+    private List<RoomSettings> GetCandidateList()
     {
-        List<PuzzleSettings> candidates = roomsList.Where(constraints).ToList();
+        List<RoomSettings> candidates = roomsList.Where(constraints).ToList();
         while (candidates.Count<1)
         {
             constraintsList.RemoveAt(constraintsList.Count - 1);
@@ -346,7 +365,7 @@ public class LevelGenerator : MonoBehaviour {
     /// Metodo que construye una sola expresion con todas las restricciones de la lista
     /// </summary>
     /// <returns></returns>
-    private Func<PuzzleSettings,bool> BuildConstraints()
+    private Func<RoomSettings, bool> BuildConstraints()
     {
         constraints = constraintsList[0];
         for(int i=1;i<constraintsList.Count; i++)
@@ -371,7 +390,7 @@ public class LevelGenerator : MonoBehaviour {
     /// </summary>
     /// <param name="candidates">lista de candidatos a elegir</param>
     /// <returns></returns>
-    private PuzzleSettings GetRandomRoom(List<PuzzleSettings> candidates)
+    private RoomSettings GetRandomRoom(List<RoomSettings> candidates)
     {
         int index;
         while (candidates.Count > 1)
