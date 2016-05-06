@@ -11,24 +11,14 @@ using System.Collections.Generic;
 public class FearSource : MonoBehaviour,IActivable {
 
 
-    [System.Flags]
-    public enum Characters { Aoi, Akai, Ki };
-
-    /*
-    [SerializeField]
-    [Flags]
-    public Characters affectedCharacters;
-    */
-    public Characters affectedChar;
+    //Personajes a los que afecta el miedo
+    public List<CharacterName> affectedCharacters;
 
     //Material cuando el miedo esta activo
     public Material activeMaterial;
 
     //Material cuando el miedo esta desactivado
     public Material inactiveMaterial;
-
-    //Lista de nombres a los que afecta el miedo
-    private List<string> affected;
 
     //Referencia a la zona de aviso
     private WarningZone warningZone;
@@ -43,22 +33,12 @@ public class FearSource : MonoBehaviour,IActivable {
     // Use this for initialization
     void Start () {
         scaredCharacters = new HashSet<CharacterStatus>();
-        affected = new List<string>();
-        
-        /*
-        for (int i = 0; i < affectedCharacters.Count; i++)
-        {
-            affected.Add(affectedCharacters.ToString());
-        }
-        */
 
-        affected.Add(affectedChar.ToString());
-        
         warningZone = GetComponentInChildren<WarningZone>();
-        warningZone.SetAffectedCharacters(affected);
+        warningZone.SetAffectedCharacters(affectedCharacters);
 
         fearZone =GetComponentInChildren<FearZone>();
-        fearZone.SetAffectedCharacters(affected);
+        fearZone.SetAffectedCharacters(affectedCharacters);
         
 
 
@@ -129,11 +109,13 @@ public class FearSource : MonoBehaviour,IActivable {
     {
         
         CharacterStatus st = character.GetComponent<CharacterStatus>();
-        if(inZone)
-        if (!scaredCharacters.Contains(st))
+        if (inZone)
         {
-            st.SetScared(true);
-            scaredCharacters.Add(st);
+            if (!scaredCharacters.Contains(st))
+            {
+                st.SetScared(true);
+                scaredCharacters.Add(st);
+            }
         }
         else
         {

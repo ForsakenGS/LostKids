@@ -81,7 +81,7 @@ public class Button : UsableObject {
     {
         if (CharacterManager.IsActiveCharacter(col.gameObject) || col.gameObject.tag.Equals("Pushable"))
         {
-            if(isMoving || type.Equals(Usables.Hold))
+            if(isMoving || type.Equals(UsableTypes.Hold))
             {
                 CancelUse();
             }
