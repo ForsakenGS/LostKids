@@ -19,28 +19,33 @@ public class WayDetector : MonoBehaviour {
     void Awake() {
         // Configuración general del pasillo
         way = transform.parent.parent.GetComponent<WaySettings>();
-        // Habitación a la que afecta
-        if (isNext) {
-            affectedRoomSettings = way.nextRoom;
-        } else {
-            affectedRoomSettings = way.prevRoom;
-        }
-        if (affectedRoomSettings == null) {
-            Destroy(gameObject);
-        } else {
-            affectedRoom = affectedRoomSettings.gameObject;
-        }
+
     }
 
     // Use this for initialization
     void Start() {
+        // Habitación a la que afecta
+        if (isNext)
+        {
+            affectedRoomSettings = way.nextRoom;
+        }
+        else {
+            affectedRoomSettings = way.prevRoom;
+        }
+        if (affectedRoomSettings == null)
+        {
+            Destroy(gameObject);
+        }
+        else {
+            affectedRoom = affectedRoomSettings.gameObject;
+        }
 
     }
 
     // Se ejecuta al entrar en contacto con otro GameObject
     void OnTriggerEnter(Collider col) {
         // Comprueba que sea el jugador activo
-        if (CharacterManager.GetActiveCharacter().Equals(col.gameObject)) {
+        if (CharacterManager.IsActiveCharacter(col.gameObject)) {
             // Comprueba si el efecto es de mostrar u ocultar
             if (toShow) {
                 affectedRoomSettings.enabled = true;

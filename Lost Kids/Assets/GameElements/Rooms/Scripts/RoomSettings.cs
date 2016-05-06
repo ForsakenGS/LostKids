@@ -26,7 +26,7 @@ public class RoomSettings : MonoBehaviour {
     /// Etiquetas para definir las características de los puzzles que contiene la habitación
     /// </summary>
     public List<PuzzleTags> tags;
-    public List<CharacterName> characters;
+    public List<CharacterName> requiredCharacters;
     [Header("References")]
     public Transform decoration;
     public Transform exit;
@@ -41,7 +41,13 @@ public class RoomSettings : MonoBehaviour {
     void Awake() {
         objectsToPrepare = 0;
         // Referencias a componentes de la habitación
+        decoration = transform.Find("Decoration");
+        exit = transform.Find("Exit");
+        puzzleElements = transform.Find("PuzzleElements");
+        walls = transform.Find("Walls");
+
         frontWall = walls.Find("FrontWall").gameObject;
+        
     }
 
     // Use this for initialization
@@ -69,6 +75,7 @@ public class RoomSettings : MonoBehaviour {
         // Caída libre
         do {
             trf.Translate(new Vector3(0, -fallSpeed, 0));
+            Debug.Log("TRANSLATING " + trf.name + " -- " +Vector3.Distance(trf.position, initialPos));
             yield return new WaitForSeconds(0.01f);
         } while (Vector3.Distance(trf.position, initialPos) > 0.2f);
         trf.position = initialPos;

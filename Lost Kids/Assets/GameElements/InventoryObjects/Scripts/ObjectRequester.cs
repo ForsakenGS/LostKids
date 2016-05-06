@@ -13,7 +13,7 @@ public class ObjectRequester : UsableObject {
 	// Use this for initialization
 	void Start () {
         base.Start();
-        type = Usables.Instant;
+        type = UsableTypes.Instant;
         requestedObjectName = requested.GetComponent<InventoryObject>().objectName;
 	}
 

@@ -9,12 +9,20 @@ public class PlayerUse : MonoBehaviour {
     //Distancia de deteccion de objetos usables
     public float useDistance;
 
+    //Tiempo necesario para volver a usar la habilidad
+    public float useCooldown = 1;
+
     //Variable de control del estado
     private bool isUsing;
 
     private UsableObject objectInUse;
 
     private Vector3 rayOffset;
+
+    //Mientras este a true, no permite usar 
+    private bool onCooldown = false;
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -37,23 +45,22 @@ public class PlayerUse : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(usingRay, out hit, useDistance))
         {
-            if (hit.collider.tag.Equals("Usable"))
+            objectInUse = hit.collider.gameObject.GetComponent<UsableObject>();
+            if(objectInUse!=null)
             {
+                onCooldown = true;
+                Invoke("ResetCooldown", useCooldown);
+
                 //Se obtiene la normal del HIT para saber que parte del objeto ha encontrado el usable.
                 //Solo se permite usar los objetos desde la parte de atras ( un angulo de 180 respecto al frente )
                 Vector3 normalLocal= hit.transform.TransformDirection(hit.normal);
                 float angle = Vector3.Angle(hit.normal, hit.transform.forward);
-                /*
-                if (Mathf.Approximately(angle, 180))
-                    
-                {
-                */
-                objectInUse = hit.collider.gameObject.GetComponent<UsableObject>();
+
                 if (objectInUse.canUse)
                 {
                     
                     objectInUse.Use();
-                    if (objectInUse.type.Equals(UsableObject.Usables.Hold))
+                    if (objectInUse.type.Equals(UsableTypes.Hold))
                     {
                         isUsing = true;
                         Vector3 frontPosition = hit.point + GetComponent<CapsuleCollider>().radius * hit.normal;
@@ -92,5 +99,10 @@ public class PlayerUse : MonoBehaviour {
             objectInUse = null;
         }
         
+    }
+
+    void ResetCooldown()
+    {
+        onCooldown = false;
     }
 }

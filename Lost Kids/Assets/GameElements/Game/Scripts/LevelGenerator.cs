@@ -7,9 +7,12 @@ using System.Linq.Expressions;
 using System;
 using UnityEngine.SceneManagement;
 
+
+public enum Worlds { World1, World2, World3 };
+
 public class LevelGenerator : MonoBehaviour {
 
-    public enum Worlds { World1,World2,World3};
+
 
     //Mundo al que corresponde el nivel
     public Worlds world;
@@ -58,11 +61,10 @@ public class LevelGenerator : MonoBehaviour {
     private int actualRooms;
 
     //Contador de tags que se han incluido hasta el momento
-<<<<<<< HEAD
-    private Dictionary<RoomSettings.PuzzleTags,int> actualTagsCount;
-=======
-    private Dictionary<PuzzleTags2,int> actualTagsCount;
->>>>>>> origin/puzzle_room_jc
+
+    private Dictionary<PuzzleTags,int> actualTagsCount;
+
+
 
     //Contador de aparicion de los personajes requeridos para los puzzles
     private Dictionary<CharacterName, int> actualCharacterTags;
@@ -120,11 +122,12 @@ public class LevelGenerator : MonoBehaviour {
             {
                     room.GetComponent<WaySettings>().prevRoom = prev.GetComponent<RoomSettings>();
             }
-            
+            /*
             if(room.GetComponent<RoomSettings>()!= null)
             {
                 room.gameObject.SetActive(false);
             }
+            */
             nextRoomPosition = room.transform.FindChild("Exit").transform.position;
             prev = room;
         }
@@ -166,7 +169,24 @@ public class LevelGenerator : MonoBehaviour {
         constraintsList = new List<Func<RoomSettings, bool>>();
         levelStructure = new List<GameObject>();
         bannedRooms = new Dictionary<RoomSettings, int>();
-        
+
+        actualCharacterTags = new Dictionary<CharacterName, int>();
+
+        //Se inicializa la lista de personajes requeridos
+        foreach(CharacterName name in Enum.GetValues(typeof(CharacterName)))
+        {
+            actualCharacterTags.Add(name, 0);
+        }
+
+        //Se inicializa la lista de tags de puzzles
+        actualTagsCount = new Dictionary<PuzzleTags, int>();
+        foreach (PuzzleTags name in Enum.GetValues(typeof(PuzzleTags)))
+        {
+            actualTagsCount.Add(name, 0);
+        }
+
+
+
     }
 
     /// <summary>
@@ -220,20 +240,10 @@ public class LevelGenerator : MonoBehaviour {
 
             //Añade al total de apariciones las etiquetas de puzzle, agregandolas al diccionario
             //si aparecen por primera vez
-<<<<<<< HEAD
-            foreach (RoomSettings.PuzzleTags tag in selectedRoom.tags)
-=======
-            foreach (PuzzleTags2 tag in selectedRoom.puzzleTags)
->>>>>>> origin/puzzle_room_jc
+
+            foreach (PuzzleTags tag in selectedRoom.tags)
             {
-                if(actualTagsCount.ContainsKey(tag))
-                {
                     actualTagsCount[tag]++;
-                }
-                else
-                {
-                    actualTagsCount.Add(tag, 1);
-                }
             }
         }
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class FearZone : MonoBehaviour {
 
-    private List<string> affected;
+    private List<CharacterName> affected;
 
  
     void Start()
@@ -19,13 +19,12 @@ public class FearZone : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.CompareTag("Player"))
-        {
-            if (affected.Contains(col.gameObject.name))
+        if (col.gameObject.CompareTag("Player")
+            && affected.Contains(col.gameObject.GetComponent<CharacterStatus>().characterName))
             {
                 GetComponentInParent<FearSource>().CharacterOnFearZone(col.gameObject, true);
             }
-        }
+        
     }
 
     void OnTriggerExit(Collider col)
@@ -36,7 +35,7 @@ public class FearZone : MonoBehaviour {
         }
     }
 
-    public void SetAffectedCharacters(List<string> characters)
+    public void SetAffectedCharacters(List<CharacterName> characters)
     {
         affected = characters;
     }
