@@ -144,11 +144,17 @@ public class MessageManager : MonoBehaviour {
     private void getMessage(int index) {
         //Carga el mensaje pasado por indice
         string msg = (string) messages[index];
+
         // Se muestra la imagen del personaje al que pertenece el mensaje
         shownImg = CharacterImage(msg);
         shownImg.gameObject.SetActive(true);
+
+        
+
         //Se separa en lineas
         lines = SeparateInLines(msg);
+
+        
 
         //Se inicializan los índices
         startIndex = 0;
