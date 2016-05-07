@@ -20,7 +20,7 @@ public class CharacterManager : MonoBehaviour {
     public GameObject initialCheckPoint;
 
     //Checkpoint activo
-    private CheckPoint activeCheckPoint;
+    private static CheckPoint activeCheckPoint;
 
     //Personaje activo
     private static GameObject activeCharacter;
@@ -83,7 +83,7 @@ public class CharacterManager : MonoBehaviour {
     /// Actualiza el checkpoint activo ,desactivando el que se encontraba activo hasta el momento
     /// </summary>
     /// <param name="cp"></param>
-    public void SetActiveCheckPoint(CheckPoint cp)
+    public static void SetActiveCheckPoint(CheckPoint cp)
     {
         if (activeCheckPoint != cp)
         {
@@ -96,7 +96,7 @@ public class CharacterManager : MonoBehaviour {
     /// Evento de activacion de un checkpoint
     /// Resucita a los niños que esten muertos en ese momento.
     /// </summary>
-    public void CheckPointActivation()
+    public static void CheckPointActivation()
     {
         for(int i=0;i<characterStatusList.Count;i++)
         {

@@ -1,6 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+/// <summary>
+/// Tipo de objeto:
+/// Instant: Se activa una unica vez y no se vuelve a desactivar
+/// Hold: Se mantiene activo mientras el personaje lo este usando
+/// Una vez activo, se desactiva cuando pase el tiempo introducido
+/// </summary>
+public enum UsableTypes { Instant, Hold, Timed }
+
 /// <summary>
 /// Clase abstracta que representa un objeto usable
 /// Contiene variables y metodos comunes a cualquier objeto activable ( botones, palancas...)
@@ -12,14 +21,8 @@ public abstract class UsableObject : MonoBehaviour {
     //Objeto al que apunta el boton
     public GameObject target;
 
-    /// <summary>
-    /// Tipo de objeto:
-    /// Instant: Se activa una unica vez y no se vuelve a desactivar
-    /// Hold: Se mantiene activo mientras el personaje lo este usando
-    /// Una vez activo, se desactiva cuando pase el tiempo introducido
-    /// </summary>
-    public enum Usables { Instant, Hold, Timed }
-    public Usables type;
+
+    public UsableTypes type;
 
     //Tiempo que se mantiene activo el objeto
     public float activeTime = 0;
@@ -88,7 +91,11 @@ public abstract class UsableObject : MonoBehaviour {
     {
         if (!onUse)
         {
-            onUse = true;
+
+            if (!type.Equals(UsableTypes.Instant))
+            {
+                onUse = true;
+            }
 
             //Si no forma parte de un puzzle, activa su objetivo
             if (!inPuzzle)
@@ -101,10 +108,11 @@ public abstract class UsableObject : MonoBehaviour {
                 puzzleManager.NotifyChange(this, true);
             }
 
-            if (type.Equals(Usables.Timed))
+            if (type.Equals(UsableTypes.Timed))
             {
                 Invoke("CancelUse", activeTime);
             }
+
 
         }
 

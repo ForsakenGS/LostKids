@@ -4,10 +4,6 @@ using System.Collections.Generic;
 
 public class CheckPoint : MonoBehaviour {
 
-    //Referencia al character manager
-    public GameObject characterManagerPrefab;
-    private CharacterManager characterManager;
-
     //Lista de zonas donde aparecen los personajes al resucitar
     public List<GameObject> spawnZones;
 
@@ -28,18 +24,12 @@ public class CheckPoint : MonoBehaviour {
     {
         isActive = false;
         
-        characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         neko = GetComponentInChildren<Neko>();
     }
 
     // Use this for initialization
     void Start()
     {
-        if (characterManagerPrefab == null)
-        {
-            characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
-            characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
-        }
 
         audioLoader = GetComponent<AudioLoader>();
 
@@ -70,7 +60,7 @@ public class CheckPoint : MonoBehaviour {
                     Debug.Log(isActive);
                     Activate();
                 }
-                characterManager.CheckPointActivation();
+                CharacterManager.CheckPointActivation();
             }
 
         }
@@ -90,7 +80,7 @@ public class CheckPoint : MonoBehaviour {
                 AudioManager.Play(checkPointSound,false,1);
             }
 
-            characterManager.SetActiveCheckPoint(this);
+            CharacterManager.SetActiveCheckPoint(this);
             neko.Show();
         }
     }
@@ -100,12 +90,11 @@ public class CheckPoint : MonoBehaviour {
 /// </summary>
 public void ActivateMuted()
 {
-    Debug.Log(isActive);
     if (!isActive)
     {
         isActive = true;
 
-        characterManager.SetActiveCheckPoint(this);
+        CharacterManager.SetActiveCheckPoint(this);
         neko.Show();
     }
 }

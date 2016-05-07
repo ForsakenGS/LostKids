@@ -72,10 +72,14 @@ public class TooltipDetector : MonoBehaviour
 
         if (CharacterManager.IsActiveCharacter(other.gameObject))
         {
-            icon.ActiveCanvas(false);
-            if (usableParent != null)
+            if (icon != null)
             {
-                usableParent.canUse = false;
+                icon.ActiveCanvas(false);
+                if (usableParent != null)
+                {
+                    usableParent.canUse = false;
+                }
+                icon = null;
             }
         }
 

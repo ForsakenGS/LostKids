@@ -2,6 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
+/// <summary>
+/// Tipo de puzzle respectoa su activacion:
+/// Instant: Se activa una vez permanentemente
+/// Hold: Se mantiene activo mientras se cumpla una condicion
+/// Timed: Se mantiene activo durante un tiempo.
+/// </summary>
+public enum puzzleType { Instant, Hold, Timed }
+
 /// <summary>
 /// Script base para la creaccion de puzzles que involucren varios objetos usables
 /// Permite definir la lista de objetos que participan, el objeto que se activa como recompensa, 
@@ -16,13 +25,7 @@ public abstract class PuzzleManagerBase : MonoBehaviour {
     //Objeto que se activa como resultado
     public GameObject result;
 
-    /// <summary>
-    /// Tipo de puzzle respectoa su activacion:
-    /// Instant: Se activa una vez permanentemente
-    /// Hold: Se mantiene activo mientras se cumpla una condicion
-    /// Timed: Se mantiene activo durante un tiempo.
-    /// </summary>
-    public enum puzzleType { Instant, Hold, Timed }
+
     public puzzleType type;
 
     //Tiempo que se mantiene activo

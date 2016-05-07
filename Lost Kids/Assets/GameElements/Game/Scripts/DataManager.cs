@@ -5,7 +5,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 
-public static class DataManager  {
+public static class DataManager
+{
 
     public static List<GameData> savedGames = new List<GameData>();
 
@@ -36,7 +37,7 @@ public static class DataManager  {
             FileStream file = File.Open(Application.persistentDataPath + "/savedGames.tlk", FileMode.Open);
             savedGames = (List<GameData>)bf.Deserialize(file);
             file.Close();
-            loaded= true;
+            loaded = true;
         }
 
         return loaded;

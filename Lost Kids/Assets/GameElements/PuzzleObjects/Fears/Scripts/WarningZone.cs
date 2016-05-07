@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class WarningZone : MonoBehaviour {
 
-    private List<string> affected;
+    private List<CharacterName> affected;
 
     public Sprite tooltipImage;
     private CharacterIcon icon;
@@ -21,15 +21,13 @@ public class WarningZone : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if(col.gameObject.CompareTag("Player"))
+        if(col.gameObject.CompareTag("Player") && affected.Contains(col.gameObject.GetComponent<CharacterStatus>().characterName))
         {
-            if (affected.Contains(col.gameObject.name))
-            {
+
                 icon = col.gameObject.GetComponentInChildren<CharacterIcon>();
                 icon.ActiveCanvas(true);
                 icon.SetImage(tooltipImage);
 
-            }
         }
     }
 
@@ -41,14 +39,15 @@ public class WarningZone : MonoBehaviour {
         }
     }
 
-    public void SetAffectedCharacters(List<string> characters)
+    public void SetAffectedCharacters(List<CharacterName> characters)
     {
         affected = characters;
     }
 
     void OnTriggerStay(Collider col)
     {
-        if (CharacterManager.IsActiveCharacter(col.gameObject) && affected.Contains(col.gameObject.name))
+        if (CharacterManager.IsActiveCharacter(col.gameObject) 
+            && affected.Contains(col.gameObject.GetComponent<CharacterStatus>().characterName))
         {
 
         }

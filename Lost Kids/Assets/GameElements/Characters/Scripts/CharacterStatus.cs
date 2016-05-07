@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+/// <summary>
+/// Clase para definir los diferentes personajes que pueden implementar una máquina de estados
+/// </summary>
+public enum CharacterName { Aoi, Akai, Murasaki };
+
 /// <summary>
 /// Clase con la que que se realiza un control general sobre el comportamiento de cada personaje. Básicamente, implementa una
 /// máquina de estados, las acciones a llevar a cabo durante los estados y las diferentes posibles transferencias.
@@ -18,10 +24,7 @@ public class CharacterStatus : MonoBehaviour {
     /// Clase para definir los diferentes estados en los que se puede encontrar un personaje
     /// </summary>
     public enum State { AstralProjection, Breaking, Crouching, Dead, BigJumping, Jumping, Pushing, Scared, Sprint, Standing, Telekinesis, Using }
-    /// <summary>
-    /// Clase para definir los diferentes personajes que pueden implementar una máquina de estados
-    /// </summary>
-    public enum CharacterName { Aoi, Akai, Murasaki };
+
 
     //Referencia al manager de personajes
     public GameObject characterManagerPrefab;
