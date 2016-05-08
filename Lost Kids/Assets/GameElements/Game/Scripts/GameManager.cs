@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour {
 
     public void PrepareScene(string sc) {
         switch(sc) {
-            case "Level1":
+            case "Tutorial1":
                 AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
                 Destroy(menuMusic);
                 break;

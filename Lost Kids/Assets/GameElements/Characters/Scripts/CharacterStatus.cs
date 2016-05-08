@@ -5,7 +5,7 @@ using System.Collections;
 /// <summary>
 /// Clase para definir los diferentes personajes que pueden implementar una máquina de estados
 /// </summary>
-public enum CharacterName { Aoi, Akai, Murasaki };
+public enum CharacterName { Aoi, Akai, Ki };
 
 /// <summary>
 /// Clase con la que que se realiza un control general sobre el comportamiento de cada personaje. Básicamente, implementa una

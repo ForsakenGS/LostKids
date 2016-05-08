@@ -45,31 +45,33 @@ public class PlayerUse : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(usingRay, out hit, useDistance))
         {
-            objectInUse = hit.collider.gameObject.GetComponent<UsableObject>();
-            if(objectInUse!=null)
-            {
-                onCooldown = true;
-                Invoke("ResetCooldown", useCooldown);
-
-                //Se obtiene la normal del HIT para saber que parte del objeto ha encontrado el usable.
-                //Solo se permite usar los objetos desde la parte de atras ( un angulo de 180 respecto al frente )
-                Vector3 normalLocal= hit.transform.TransformDirection(hit.normal);
-                float angle = Vector3.Angle(hit.normal, hit.transform.forward);
-
-                if (objectInUse.canUse)
+            if(!hit.collider.isTrigger) {
+                objectInUse = hit.collider.gameObject.GetComponent<UsableObject>();
+                if(objectInUse!=null)
                 {
-                    
-                    objectInUse.Use();
-                    if (objectInUse.type.Equals(UsableTypes.Hold))
-                    {
-                        isUsing = true;
-                        Vector3 frontPosition = hit.point + GetComponent<CapsuleCollider>().radius * hit.normal;
-                        Vector3 lookPosition = hit.point;
-                        lookPosition.y = transform.position.y;
-                        frontPosition.y = transform.position.y;
-                        this.transform.position = frontPosition;
+                    onCooldown = true;
+                    Invoke("ResetCooldown", useCooldown);
 
-                        this.transform.LookAt(lookPosition);
+                    //Se obtiene la normal del HIT para saber que parte del objeto ha encontrado el usable.
+                    //Solo se permite usar los objetos desde la parte de atras ( un angulo de 180 respecto al frente )
+                    Vector3 normalLocal= hit.transform.TransformDirection(hit.normal);
+                    float angle = Vector3.Angle(hit.normal, hit.transform.forward);
+
+                    if (objectInUse.canUse)
+                    {
+                    
+                        objectInUse.Use();
+                        if (objectInUse.type.Equals(UsableTypes.Hold))
+                        {
+                            isUsing = true;
+                            Vector3 frontPosition = hit.point + GetComponent<CapsuleCollider>().radius * hit.normal;
+                            Vector3 lookPosition = hit.point;
+                            lookPosition.y = transform.position.y;
+                            frontPosition.y = transform.position.y;
+                            this.transform.position = frontPosition;
+
+                            this.transform.LookAt(lookPosition);
+                        }
                     }
                 }
             }

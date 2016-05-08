@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEditor;
+//using UnityEditor;
 
 public class MaterialModificator : MonoBehaviour {
     /// <summary>
@@ -13,7 +12,7 @@ public class MaterialModificator : MonoBehaviour {
         // Obtiene el mundo al que pertenece el nivel
         string worldName = "world2"; //LevelManager.GetWorldName();
         // Asigna el material correspondiente al mundo
-        Material mat = AssetDatabase.LoadAssetAtPath<Material>("Assets/Materials/pruebas/" + worldName + "_" + objectName + ".mat");
-        GetComponent<Renderer>().material = mat;
+        //Material mat = AssetDatabase.LoadAssetAtPath<Material>("Assets/Materials/pruebas/" + worldName + "_" + objectName + ".mat");
+        //GetComponent<Renderer>().material = mat;
     }
 }

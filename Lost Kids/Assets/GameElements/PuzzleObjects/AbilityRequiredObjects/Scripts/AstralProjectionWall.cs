@@ -11,8 +11,10 @@ public class AstralProjectionWall : MonoBehaviour {
     private Transform astralDestination;
 
     void Awake() {
-        // Actualiza el collider con la distancia de detección
-        gameObject.GetComponent<SphereCollider>().radius = detectionDistance;
+        // Actualiza el collider con la distancia de detecciónç
+        Vector3 size = GetComponent<BoxCollider>().size;
+        Debug.Log(size);
+        gameObject.GetComponent<BoxCollider>().size = new Vector3(size.x,size.y,detectionDistance);
     }
 
     // Use this for initialization
