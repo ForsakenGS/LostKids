@@ -13,7 +13,7 @@ public class CameraManager : MonoBehaviour {
     private int nextRoom;
 
     //Cámara que realizará la transición
-    public GameObject transitionCamera;
+    //public GameObject transitionCamera;
 
     //Script de transición de la cámara
     private TransitionCamera scTransitionCamera;
@@ -32,9 +32,9 @@ public class CameraManager : MonoBehaviour {
 
         isChangingCameras = false;
 
-        if(transitionCamera) {
-            scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
-        }
+        //if(transitionCamera) {
+        //    scTransitionCamera = transitionCamera.GetComponent<TransitionCamera>();
+        //}
 
     }
 
@@ -63,14 +63,14 @@ public class CameraManager : MonoBehaviour {
             LockUnlockEvent();
 
             cameras[currentRoom].SetActive(false);
-            transitionCamera.SetActive(true);
+            //transitionCamera.SetActive(true);
             
             //Si no se están cambiando las cámaras. Se coloca la transicion en la cámara actual
-            if(!isChangingCameras) {
-                transitionCamera.transform.position = cameras[currentRoom].transform.position;
-                transitionCamera.transform.rotation = cameras[currentRoom].transform.rotation;
-                isChangingCameras = true;
-            }
+            //if(!isChangingCameras) {
+            //    transitionCamera.transform.position = cameras[currentRoom].transform.position;
+            //    transitionCamera.transform.rotation = cameras[currentRoom].transform.rotation;
+            //    isChangingCameras = true;
+            //}
 
             //Se guarda el valor de la siguiente habitacion
             this.nextRoom = nextRoom;
@@ -93,9 +93,9 @@ public class CameraManager : MonoBehaviour {
         isChangingCameras = false;
 
         //Se desactiva la camara de transición y se actualiza la posicion de la nueva cámara
-        transitionCamera.SetActive(false);
-        cameras[nextRoom].transform.position = transitionCamera.transform.position;
-        cameras[nextRoom].transform.rotation = transitionCamera.transform.rotation;
+        //transitionCamera.SetActive(false);
+        //cameras[nextRoom].transform.position = transitionCamera.transform.position;
+        //cameras[nextRoom].transform.rotation = transitionCamera.transform.rotation;
 
         //Se activa la nueva camara
         cameras[nextRoom].SetActive(true);
@@ -110,10 +110,10 @@ public class CameraManager : MonoBehaviour {
     /// </summary>
     public GameObject CurrentCamera()
     {
-        if(isChangingCameras)
-        {
-            return transitionCamera;
-        }
+        //if(isChangingCameras)
+        //{
+        //    return transitionCamera;
+        //}
         return cameras[currentRoom];
     }
 

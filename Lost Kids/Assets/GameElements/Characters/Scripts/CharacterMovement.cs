@@ -153,16 +153,16 @@ public class CharacterMovement : MonoBehaviour {
 			if (Mathf.Abs(horizontal) > Mathf.Abs(vertical)) {
 				normal.z = 0;
 				if (normal.x > 0) {
-					normal.x *= -horizontal;
-				} else if(normal.x < 0) {
 					normal.x *= horizontal;
+				} else if(normal.x < 0) {
+					normal.x *= -horizontal;
 				}
 			} else {
 				normal.x = 0;
 				if (normal.z > 0) {
-					normal.z *= -vertical;
-				} else if (normal.z < 0) {
 					normal.z *= vertical;
+				} else if (normal.z < 0) {
+					normal.z *= -vertical;
 				}
 			}
 			forceToApply = normal.normalized;

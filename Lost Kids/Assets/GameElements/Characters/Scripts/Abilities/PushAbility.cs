@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PushAbility : CharacterAbility {
 	public float pushDistance = 2.0f;
-	public float altura = 0.5f;
+	public float height = 0.5f;
 
 	private Transform targetTransform;
     private GameObject targetGameObject;
@@ -14,7 +14,7 @@ public class PushAbility : CharacterAbility {
 
     void Start()
     {
-        altura = GetComponent<Renderer>().bounds.size.y / 2;
+        height = GetComponent<Renderer>().bounds.size.y / 2;
     }
     /// <summary>
     /// Finaliza la ejecución de la habilidad de empujar
@@ -49,7 +49,7 @@ public class PushAbility : CharacterAbility {
             // Consumo de energía inicial
             AddEnergy(-initialConsumption);
             
-            Ray detectRay = new Ray(this.transform.position + Vector3.up*altura, this.transform.forward * pushDistance);
+            Ray detectRay = new Ray(this.transform.position + Vector3.up*height, this.transform.forward * pushDistance);
 			// helper to visualise the ground check ray in the scene view
 			#if UNITY_EDITOR
 			Debug.DrawRay(detectRay.origin, detectRay.direction, Color.green, pushDistance);
