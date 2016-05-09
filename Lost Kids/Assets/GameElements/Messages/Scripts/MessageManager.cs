@@ -76,6 +76,8 @@ public class MessageManager : MonoBehaviour {
         audioLoader = GetComponent<AudioLoader>();
         messagesSfxs = new ArrayList();
 
+
+
         //Rellenamos el array de efectos de sonido
         messagesSfxs.Add(audioLoader.GetSound("Message1"));
         messagesSfxs.Add(audioLoader.GetSound("Message2"));
@@ -95,6 +97,7 @@ public class MessageManager : MonoBehaviour {
 
         //Se cargan los mensajes desde fichero
         FillMessages();
+       
     }
 
     /// <summary>
