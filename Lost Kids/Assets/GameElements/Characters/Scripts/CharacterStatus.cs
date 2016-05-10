@@ -155,32 +155,43 @@ public class CharacterStatus : MonoBehaviour {
     /// Mata al personaje y notifica su nuevo estado al manager, que desactivara su control y lo movera al checkpoint
     /// </summary>
     public void Kill() {
-
+        bool kill = true;
         switch (characterState) {
             case State.AstralProjection:
                 // La habilidad debe terminar su ejecución
                 GetComponent<AbilityController>().UseAbility();
+                // El personaje no debe morir
+                kill = false;
                 break;
-            case State.Dead:
-                break;
-            default:
-                characterState = State.Dead;
-                //Animacion, Efectos, Cambio de imagen.....
-                AudioManager.Play(dieSound, false, 1);
-                //Reinicia el transform en caso de morir estando subido a una plataforma
-                transform.parent = null;
+            case State.Pushing:
                 //Si muere mientras empuja un objeto, lo debe soltar
                 if (GetComponent<PushAbility>() != null) {
                     GetComponent<PushAbility>().ReleaseObject();
                 }
                 GetComponent<Renderer>().enabled = false; //Temporal
                 GetComponent<Rigidbody>().isKinematic = true;
-                if (KillCharacterEvent != null) {
-                    KillCharacterEvent(gameObject);
-                }
-                characterManager.CharacterKilled(this);
                 break;
-
+            case State.BigJumping:
+            case State.Breaking:
+            case State.Telekinesis:
+            case State.Sprint:
+                // La habilidad debe terminar su ejecución
+                GetComponent<AbilityController>().UseAbility();
+                break;
+            case State.Dead:
+                kill = false;
+                break;
+        }
+        if (kill) {
+            characterState = State.Dead;
+            //Animacion, Efectos, Cambio de imagen.....
+            AudioManager.Play(dieSound, false, 1);
+            //Reinicia el transform en caso de morir estando subido a una plataforma
+            transform.parent = null;
+            if (KillCharacterEvent != null) {
+                KillCharacterEvent(gameObject);
+            }
+            characterManager.CharacterKilled(this);
         }
     }
 
@@ -310,14 +321,10 @@ public class CharacterStatus : MonoBehaviour {
     /// Cambia el estado asustado del personaje
     /// </summary>
     /// <param name="scared">true para ponerlo asustado, false para que deje de estarlo</param>
-    public void SetScared(bool scared)
-    {
-        if(scared)
-        {
+    public void SetScared(bool scared) {
+        if (scared) {
             characterState = State.Scared;
-        }
-        else if(characterState.Equals(State.Scared))
-        {
+        } else if (characterState.Equals(State.Scared)) {
             characterState = State.Standing;
         }
     }

@@ -97,8 +97,14 @@ public class HUDManager : MonoBehaviour {
     }
 
     void CharacterResurrected(GameObject character) {
-        CharacterSelection(character, false, transparency);
-        CharacterSelection(character, true, transparency);
+        // Comprueba si el jugador resucitado es el seleccionado por el jugador
+        if (character.Equals(CharacterManager.GetActiveCharacter())) {
+            CharacterSelected(character);
+        } else {
+            // Actualiza el icono del jugador, dejándolo desactivado
+            CharacterSelection(character, false, transparency);
+            CharacterSelection(character, true, transparency);
+        }
     }
 
     void CharacterSelection(GameObject character, bool alive, float alphaSelection) {
