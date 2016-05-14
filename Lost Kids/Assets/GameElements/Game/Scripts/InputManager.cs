@@ -90,8 +90,12 @@ public class InputManager : MonoBehaviour {
             horizontalButton = Input.GetAxis("Horizontal");
             verticalButton = Input.GetAxis("Vertical");
             // Jump button
-            if (Input.GetButtonDown("Jump")) {
+            if (Input.GetButton("Jump")) {
                 jumpButton = true;
+            }
+            // Suicide button
+            if (Input.GetButtonDown("Sacrifice")) {
+                characterStatus.SacrificeButton();
             }
         } else {
             //Pasar mensajes

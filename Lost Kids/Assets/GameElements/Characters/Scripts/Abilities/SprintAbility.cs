@@ -9,11 +9,17 @@ public class SprintAbility : CharacterAbility {
 	/// </summary>
 	public float speedModifier = 2.0f;
 
-	/// <summary>
-	/// Termina la ejecución de la habilidad, reestableciendo la velocidad del personaje
-	/// </summary>
-	/// <returns><c>true</c>, si la ejecución se terminó realmente, <c>false</c> en otro caso.</returns>
-	public override bool EndExecution () {
+    // Use this for initialization
+    void Start() {
+        AbilityInitialization();
+        abilityName = AbilityName.Sprint;
+    }
+
+    /// <summary>
+    /// Termina la ejecución de la habilidad, reestableciendo la velocidad del personaje
+    /// </summary>
+    /// <returns><c>true</c>, si la ejecución se terminó realmente, <c>false</c> en otro caso.</returns>
+    public override bool EndExecution () {
 		bool ended = execution;
 		if (execution) {
 			// Se para la ejecución de la habilidad

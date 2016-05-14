@@ -12,6 +12,12 @@ public class BigJumpAbility : CharacterAbility {
     /// </summary>
     public float jumpImpulseModifier = 2.0f;
 
+    // Use this for initialization
+    void Start() {
+        AbilityInitialization();
+        abilityName = AbilityName.BigJump;
+    }
+
     /// <summary>
     /// Cambia el estado de la habilidad para que no esté en ejecución
     /// </summary>
@@ -33,7 +39,7 @@ public class BigJumpAbility : CharacterAbility {
 			execution = true;
             started = true;
             AddEnergy(-initialConsumption);
-			characterMovement.Jump(jumpImpulseModifier * characterStatus.jumpImpulse);
+			characterMovement.Jump(jumpImpulseModifier * characterStatus.maxJumpImpulse, true);
 		}
 
 		return started;

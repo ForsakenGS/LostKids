@@ -3,35 +3,36 @@ using System.Collections;
 
 /* Class to control the movement of a character getting player's controls from InputManager */
 public class CharacterMovement : MonoBehaviour {
-	// Speed & impulse for each possible state
-	public float extraGravity= 1200f;
-	public float turnSmoothing = 15f;
-	public float groundCheckDistance = 1.45f;
+    // Speed & impulse for each possible state
+    public float extraGravity = 1200f;
+    public float turnSmoothing = 15f;
+    public float groundCheckDistance = 1.45f;
 
     private CameraManager cameraManager;
-	private Rigidbody rigBody;
-	private Collider standingColl;
-	private Collider crouchingColl;
-
+    private Rigidbody rigBody;
+    private Collider standingColl;
+    private Collider crouchingColl;
+    private float lastYCoord;
+    // Audio variables
     private AudioLoader audioLoader;
-
     private AudioSource stepSound;
     private AudioSource jumpSound;
     private AudioSource pushSound;
 
-	// Use this for references
-	void Awake () {
-		cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
+    // Use this for references
+    void Awake() {
+        cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
         rigBody = GetComponent<Rigidbody>();
         Collider[] colliders = GetComponents<Collider>();
         standingColl = colliders[0];
         crouchingColl = colliders[1];
     }
 
-	// Use this for initialization
-	void Start () {
-		standingColl.enabled = true;
-		crouchingColl.enabled = false;
+    // Use this for initialization
+    void Start() {
+        standingColl.enabled = true;
+        crouchingColl.enabled = false;
+        lastYCoord = -10000.0f;
 
         audioLoader = GetComponent<AudioLoader>();
 
@@ -40,18 +41,20 @@ public class CharacterMovement : MonoBehaviour {
         pushSound = audioLoader.GetSound("Push");
     }
 
-    void Update() {
-        if (stepSound.isPlaying) {
-            if (rigBody.velocity.Equals(Vector3.zero)) {
-                stepSound.Stop();
-            }
-        }else if(pushSound) {
-            if(pushSound.isPlaying && rigBody.velocity.Equals(Vector3.zero)) {
-                pushSound.Stop();
-            }
+    /// <summary>
+    /// Comprueba si el personaje está cayendo en el aire
+    /// </summary>
+    /// <returns></returns>
+    public bool CharacterIsFalling() {
+        // Comprueba si el personaje está cayendo mediante la posición en el eje Y
+        bool falling = (lastYCoord > transform.position.y);
+        // Actualiza el valor de la coordenada Y registrada
+        if (falling) {
+            lastYCoord = -10000.0f;
+        } else {
+            lastYCoord = transform.position.y;
         }
-
-        
+        return falling;
     }
 
     /// <summary>
@@ -94,125 +97,148 @@ public class CharacterMovement : MonoBehaviour {
         } while ((!grounded) && (rayCnt < 5));
 
         return grounded;
-	}
+    }
 
-	/// <summary>
-	/// Indica al script que el botón de agachado ha sido pulsado
-	/// </summary>
-	public void Crouch () {
-		// Standing => Crouching
-		standingColl.enabled = false;
-		crouchingColl.enabled = true;
-		transform.Translate(new Vector3(0, -0.5f,0));
-		transform.localScale -= new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
-	}
+    /// <summary>
+    /// Indica al script que el botón de agachado ha sido pulsado
+    /// </summary>
+    public void Crouch() {
+        // Standing => Crouching
+        standingColl.enabled = false;
+        crouchingColl.enabled = true;
+        transform.Translate(new Vector3(0, -0.5f, 0));
+        transform.localScale -= new Vector3(0, 0.5f, 0); // CAMBIAR! No se debe modificar el tamaño del objeto
+    }
 
     /// <summary>
     /// Provoca un efecto de gravedad extra sobre el personaje
     /// </summary>
 	public void ExtraGravity() {
-		// Extra gravity to fall down quickly
-		rigBody.AddForce(new Vector3(0, -1 * extraGravity, 0), ForceMode.Force);
-	}
+        // Extra gravity to fall down quickly
+        rigBody.AddForce(new Vector3(0, -1 * extraGravity, 0), ForceMode.Force);
+    }
 
-	// Return the given vector relative to the given camera 
-	Vector3 GetVectorRelativeToObject(Vector3 inputVector, Transform camera) {
-		Vector3 objectRelativeVector = Vector3.zero;
-		if (inputVector != Vector3.zero) {
-			// Forward vector for camera's field of view
-			Vector3 forward = camera.TransformDirection(Vector3.forward);
-			forward.y = 0f;
-			forward.Normalize();
-			// Calculate new vector
-			Vector3 right = new Vector3(forward.z, 0.0f, -forward.x);
-			Vector3 relativeRight = inputVector.x * right;
-			Vector3 relativeForward = inputVector.z * forward;
-			objectRelativeVector = relativeRight + relativeForward;
-			// Normalizing vector
-			if (objectRelativeVector.magnitude > 1f) {
-				objectRelativeVector.Normalize();	
-			}
-		}
-		// Set original y-coordinate, because height in world is not camera depending
-		objectRelativeVector += new Vector3(0,inputVector.y,0);
+    // Return the given vector relative to the given camera 
+    Vector3 GetVectorRelativeToObject(Vector3 inputVector, Transform camera) {
+        Vector3 objectRelativeVector = Vector3.zero;
+        if (inputVector != Vector3.zero) {
+            // Forward vector for camera's field of view
+            Vector3 forward = camera.TransformDirection(Vector3.forward);
+            forward.y = 0f;
+            forward.Normalize();
+            // Calculate new vector
+            Vector3 right = new Vector3(forward.z, 0.0f, -forward.x);
+            Vector3 relativeRight = inputVector.x * right;
+            Vector3 relativeForward = inputVector.z * forward;
+            objectRelativeVector = relativeRight + relativeForward;
+            // Normalizing vector
+            if (objectRelativeVector.magnitude > 1f) {
+                objectRelativeVector.Normalize();
+            }
+        }
+        // Set original y-coordinate, because height in world is not camera depending
+        objectRelativeVector += new Vector3(0, inputVector.y, 0);
 
-		return objectRelativeVector;	
-	}
+        return objectRelativeVector;
+    }
 
-	/// <summary>
-	/// Indica al script que el botón de salto ha sido pulsado
-	/// </summary>
-	public void Jump (float jumpImpulse) {
-		rigBody.AddForce(new Vector3(0, jumpImpulse, 0), ForceMode.Force);
-        AudioManager.Play(jumpSound, false, 1);
-	}
+    /// <summary>
+    /// Aplica un impulso de salto sobre el jugador y reproduce el sonido si así se indica
+    /// </summary>
+    public void Jump(float jumpImpulse, bool sound) {
+        rigBody.AddForce(new Vector3(0, jumpImpulse, 0), ForceMode.Force);
+        if (sound) {
+            AudioManager.Play(jumpSound, false, 1);
+        }
+    }
 
-	public void MoveCharacterAxes (float horizontal, float vertical, float speed, Vector3 normal) {
-		Vector3 forceToApply = new Vector3();
+    public void MoveCharacterAxes(float horizontal, float vertical, float speed, Vector3 normal) {
+        Vector3 forceToApply = new Vector3();
 
-		if ((horizontal != 0f) || (vertical != 0f)) {
-			if (Mathf.Abs(horizontal) > Mathf.Abs(vertical)) {
-				normal.z = 0;
-				if (normal.x > 0) {
-					normal.x *= horizontal;
-				} else if(normal.x < 0) {
-					normal.x *= -horizontal;
-				}
-			} else {
-				normal.x = 0;
-				if (normal.z > 0) {
-					normal.z *= vertical;
-				} else if (normal.z < 0) {
-					normal.z *= -vertical;
-				}
-			}
-			forceToApply = normal.normalized;
-		}
+        if ((horizontal != 0f) || (vertical != 0f)) {
+            if (Mathf.Abs(horizontal) > Mathf.Abs(vertical)) {
+                normal.z = 0;
+                if (normal.x > 0) {
+                    normal.x *= horizontal;
+                } else if (normal.x < 0) {
+                    normal.x *= -horizontal;
+                }
+            } else {
+                normal.x = 0;
+                if (normal.z > 0) {
+                    normal.z *= vertical;
+                } else if (normal.z < 0) {
+                    normal.z *= -vertical;
+                }
+            }
+            forceToApply = normal.normalized;
+        }
 
         if (!forceToApply.Equals(Vector3.zero)) {
-			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
+            rigBody.AddForce(forceToApply * speed, ForceMode.Force);
 
             if (!pushSound.isPlaying) {
                 AudioManager.Stop(stepSound);
                 AudioManager.Play(pushSound, true, 1);
             }
         }
-	}
+    }
 
-	public void MoveCharacterNormal (float horizontal, float vertical, float speed) {
-		Vector3 forceToApply = new Vector3();
+    public void MoveCharacterNormal(float horizontal, float vertical, float speed) {
+        Vector3 forceToApply = new Vector3();
 
-		if ((horizontal != 0f) || (vertical != 0f)) {
-			forceToApply += new Vector3(horizontal, 0, vertical);
-			forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
-		}
-
+        if ((horizontal != 0f) || (vertical != 0f)) {
+            forceToApply += new Vector3(horizontal, 0, vertical);
+            forceToApply = GetVectorRelativeToObject(forceToApply, cameraManager.CurrentCamera().transform);
+        }
         if (!forceToApply.Equals(Vector3.zero)) {
-			rigBody.AddForce(forceToApply * speed, ForceMode.Force);
-			Rotating(forceToApply.x, forceToApply.z);
+            rigBody.AddForce(forceToApply * speed, ForceMode.Force);
+            Rotating(forceToApply.x, forceToApply.z);
 
-            if(!stepSound.isPlaying) {
+            if (!stepSound.isPlaying) {
                 AudioManager.Play(stepSound, true, 1);
             }
         }
-	}
+    }
 
-	// Change character's rotation to make it look at the direction it is going
-	void Rotating (float horizontal, float vertical) {
-		// Create a rotation based on the horizontal and vertical inputs
-		Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
-		Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
-		// Create a rotation that is an increment closer to the target rotation from the player's rotation.
-		Quaternion newRotation = Quaternion.Lerp(rigBody.rotation, targetRotation, turnSmoothing * Time.deltaTime);
-		// Change the players rotation to this new rotation.
-		rigBody.MoveRotation(newRotation);
-	}
+    /// <summary>
+    /// Función para indicar que el personaje se ha parado
+    /// </summary>
+    public void PlayerHasStopped() {
+        if (stepSound.isPlaying) {
+            // Sonido de andar
+            stepSound.Stop();
+        } else if ((pushSound) && (pushSound.isPlaying)) {
+            // Sonido de empujar
+            pushSound.Stop();
+        }
+    }
 
-	public void Stand() {
-		// Crouching => Standing
-		standingColl.enabled = true;
-		crouchingColl.enabled = false;
-		transform.Translate(new Vector3(0, 0.5f,0));
-		transform.localScale += new Vector3(0,0.5f,0); // CAMBIAR! No se debe modificar el tamaño del objeto
-	}
+    /// <summary>
+    /// Indica si el jugador está en movimiento o no, comprobando si la velocidad a la que se mueve su Rigidbody es inferior al umbral determinado (0.2f)
+    /// </summary>
+    /// <returns><c>true</c> si el jugador está parado, <c>false</c> si está en movimiento</returns>
+    public bool PlayerIsStopped() {
+        //return (rigBody.velocity.Equals(Vector3.zero));
+        return (rigBody.velocity.magnitude < 0.2f);
+    }
+
+    // Change character's rotation to make it look at the direction it is going
+    void Rotating(float horizontal, float vertical) {
+        // Create a rotation based on the horizontal and vertical inputs
+        Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+        // Create a rotation that is an increment closer to the target rotation from the player's rotation.
+        Quaternion newRotation = Quaternion.Lerp(rigBody.rotation, targetRotation, turnSmoothing * Time.deltaTime);
+        // Change the players rotation to this new rotation.
+        rigBody.MoveRotation(newRotation);
+    }
+
+    public void Stand() {
+        // Crouching => Standing
+        standingColl.enabled = true;
+        crouchingColl.enabled = false;
+        transform.Translate(new Vector3(0, 0.5f, 0));
+        transform.localScale += new Vector3(0, 0.5f, 0); // CAMBIAR! No se debe modificar el tamaño del objeto
+    }
 }

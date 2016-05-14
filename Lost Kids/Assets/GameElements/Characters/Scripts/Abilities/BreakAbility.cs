@@ -11,6 +11,12 @@ public class BreakAbility : CharacterAbility {
     /// </summary>
 	public float height = -0.5f;
 
+    // Use this for initialization
+    void Start() {
+        AbilityInitialization();
+        abilityName = AbilityName.Break;
+    }
+
     /// <summary>
     /// Finaliza la ejecución de la habilidad de romper
     /// </summary>

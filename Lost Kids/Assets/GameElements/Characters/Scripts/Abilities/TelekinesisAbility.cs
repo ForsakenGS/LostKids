@@ -14,6 +14,7 @@ public class TelekinesisAbility : CharacterAbility {
     void Start() {
         AbilityInitialization();
         telekinesisSound = audioLoader.GetSound("Telekinesis");
+        abilityName = AbilityName.Telekinesis;
     }
 
     /// <summary>

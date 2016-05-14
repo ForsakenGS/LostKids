@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 
 /// <summary>
+/// Clase para definir las diferentes habilidades de los personajes
+/// </summary>
+public enum AbilityName { AstralProjection, BigJump, Break, Push, Sprint, Telekinesis }
+
+/// <summary>
 /// Clase abstracta para definir el comportamiento general de cualquier habilidad de personaje. Además de los parámetros generales,
 /// declara un par de métodos para activar/desactivar una habilidad, dos métodos abstractos para el comienzo y fin de la habilidad
 /// y toda la funcionalidad necesaria para el control de la energía y el tiempo en el método Update.
@@ -11,6 +16,10 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// </summary>
     public static event AbilityController.AbilityChanged ModifiedAbilityEnergyEvent;
 
+    /// <summary>
+    /// Nombre de la habilidad
+    /// </summary>
+    public AbilityName abilityName;
     /// <summary>
     /// Energía máxima de la habilidad
     /// </summary>
@@ -153,9 +162,11 @@ public abstract class CharacterAbility : MonoBehaviour {
             // Se decrementa el tiempo de ejecución
             if ((executionTime > 0.0f) && (initExecutionTime > 0.0f)) {
                 executionTime -= Time.deltaTime;
-                if ((fixedExecutionTime) && (executionTime <= 0.0f)) {
-                    // La habilidad debe terminar su ejecución
-                    GetComponent<AbilityController>().UseAbility();
+                if (executionTime <= 0.0f) {
+                    // Si la habilidad es de de tiempo fijo, debe terminar su ejecución
+                    if (fixedExecutionTime) {
+                        GetComponent<AbilityController>().UseAbility();
+                    }
                     // Reinicia contador de tiempo
                     executionTime = initExecutionTime;
                 }

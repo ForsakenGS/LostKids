@@ -2,74 +2,75 @@
 using System.Collections;
 
 public class PushAbility : CharacterAbility {
-	public float pushDistance = 2.0f;
-	public float height = 0.5f;
+    public float pushDistance = 2.0f;
+    public float height = 0.5f;
 
-	private Transform targetTransform;
+    private Transform targetTransform;
     private GameObject targetGameObject;
-	private Vector3 pushNormal;
+    private Vector3 pushNormal;
 
     CharacterJoint joint;
 
-
-    void Start()
-    {
+    // Use this for initialization
+    void Start() {
+        AbilityInitialization();
         height = GetComponent<Renderer>().bounds.size.y / 2;
+        abilityName = AbilityName.Push;
     }
+
     /// <summary>
     /// Finaliza la ejecución de la habilidad de empujar
     /// </summary>
     /// <returns><c>true</c>, si se pudo parar la ejecución, <c>false</c> si no fue posible.</returns>
-    public override bool EndExecution () {
-		if (execution) {
-			execution = false;
+    public override bool EndExecution() {
+        if (execution) {
+            execution = false;
             //targetTransform.parent = null; //Vesrion antigua
             ReleaseObject();
-			pushNormal = Vector3.zero;
-		}
+            pushNormal = Vector3.zero;
+        }
 
-		return !execution;
-	}
+        return !execution;
+    }
 
-	/// <summary>
-	/// Devuelve la normal de agarre del objeto
-	/// </summary>
-	/// <returns></returns>
-	public Vector3 GetPushNormal()
-	{
-		return pushNormal;
-	}
+    /// <summary>
+    /// Devuelve la normal de agarre del objeto
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetPushNormal() {
+        return pushNormal;
+    }
 
-	/// <summary>
-	/// Inicia la ejecución de la habilidad de empujar
-	/// </summary>
-	/// <returns><c>true</c>, si se pudo iniciar la ejecución, <c>false</c> si no fue posible.</returns>
-	public override bool StartExecution () {
-		if (!execution) {
+    /// <summary>
+    /// Inicia la ejecución de la habilidad de empujar
+    /// </summary>
+    /// <returns><c>true</c>, si se pudo iniciar la ejecución, <c>false</c> si no fue posible.</returns>
+    public override bool StartExecution() {
+        if (!execution) {
             // Consumo de energía inicial
             AddEnergy(-initialConsumption);
-            
-            Ray detectRay = new Ray(this.transform.position + Vector3.up*height, this.transform.forward * pushDistance);
-			// helper to visualise the ground check ray in the scene view
-			#if UNITY_EDITOR
-			Debug.DrawRay(detectRay.origin, detectRay.direction, Color.green, pushDistance);
-			#endif
-			// Detecta el objeto situado delante del personaje
-			RaycastHit hitInfo;
-			Debug.Log("rayo");
-			if (Physics.Raycast(detectRay, out hitInfo)) {
-				Debug.Log("toca");
-				// Si el objeto se puede romper, le ordena romperse
-				if (hitInfo.collider.tag.Equals("Pushable")) {
-					Debug.Log("Coge");
-					execution = true;
-                    
-					//Se obtiene la normal de la direccion por donde se agarra el objeto
-					pushNormal = hitInfo.normal;
-					targetTransform = hitInfo.collider.transform;
-					//Se coloca el personaje alineado con el objeto y se rota para que mire a el
+
+            Ray detectRay = new Ray(this.transform.position + Vector3.up * height, this.transform.forward * pushDistance);
+            // helper to visualise the ground check ray in the scene view
+#if UNITY_EDITOR
+            Debug.DrawRay(detectRay.origin, detectRay.direction, Color.green, pushDistance);
+#endif
+            // Detecta el objeto situado delante del personaje
+            RaycastHit hitInfo;
+            Debug.Log("rayo");
+            if (Physics.Raycast(detectRay, out hitInfo)) {
+                Debug.Log("toca");
+                // Si el objeto se puede romper, le ordena romperse
+                if (hitInfo.collider.tag.Equals("Pushable")) {
+                    Debug.Log("Coge");
+                    execution = true;
+
+                    //Se obtiene la normal de la direccion por donde se agarra el objeto
+                    pushNormal = hitInfo.normal;
+                    targetTransform = hitInfo.collider.transform;
+                    //Se coloca el personaje alineado con el objeto y se rota para que mire a el
                     //Posicion
-                    Vector3 newPosition= hitInfo.collider.transform.position + (hitInfo.collider.bounds.size.z/2 +GetComponent<CapsuleCollider>().radius) * hitInfo.normal;
+                    Vector3 newPosition = hitInfo.collider.transform.position + (hitInfo.collider.bounds.size.z / 2 + GetComponent<CapsuleCollider>().radius) * hitInfo.normal;
                     newPosition.y = transform.position.y;
                     this.transform.position = newPosition;
                     //Rotacion
@@ -79,20 +80,19 @@ public class PushAbility : CharacterAbility {
 
 
                     //Se crea un joint fisico para enlazar los objetos
-                    GrabObject(hitInfo.collider.gameObject,transform.InverseTransformPoint(detectRay.origin),targetTransform.InverseTransformPoint(hitInfo.point));
+                    GrabObject(hitInfo.collider.gameObject, transform.InverseTransformPoint(detectRay.origin), targetTransform.InverseTransformPoint(hitInfo.point));
 
                 } else {
-					// Desactiva la habilidad en el CharacterStatus
-					characterStatus.EndAbility(this);
-				}
-			}
-		}
+                    // Desactiva la habilidad en el CharacterStatus
+                    characterStatus.EndAbility(this);
+                }
+            }
+        }
 
-		return execution;
-	}
+        return execution;
+    }
 
-    public void GrabObject(GameObject go,Vector3 origin, Vector3 target)
-    {
+    public void GrabObject(GameObject go, Vector3 origin, Vector3 target) {
         targetGameObject = go;
 
         joint = gameObject.AddComponent<CharacterJoint>();
@@ -119,11 +119,9 @@ public class PushAbility : CharacterAbility {
 
     }
 
-    public void ReleaseObject()
-    {
+    public void ReleaseObject() {
         Destroy(joint);
-        if (targetGameObject != null)
-        {
+        if (targetGameObject != null) {
             targetGameObject.GetComponent<PushableObject>().Release();
             EndExecution();
             characterStatus.EndAbility(this);
