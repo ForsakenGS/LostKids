@@ -5,8 +5,7 @@ using System.Collections;
 /// Componente que detecta al jugador en la zona activa de un objeto, permitiendo su uso
 /// y mostrando un tooltip sobre el jugador
 /// </summary>
-public class TooltipDetector : MonoBehaviour
-{
+public class TooltipDetector : MonoBehaviour {
     //Icono asociado al objeto
     public Sprite tooltipImage;
 
@@ -20,15 +19,8 @@ public class TooltipDetector : MonoBehaviour
     private CharacterIcon icon;
 
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
         usableParent = GetComponentInParent<UsableObject>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     /// <summary>
@@ -36,52 +28,49 @@ public class TooltipDetector : MonoBehaviour
     /// muestra el icono correspondiente y permite el uso del objeto
     /// </summary>
     /// <param name="other"></param>
-	void OnTriggerEnter(Collider other)
-    {
-
-        if (CharacterManager.IsActiveCharacter(other.gameObject))
-        {
-            if (requiredAbility == null || other.gameObject.GetComponent(requiredAbility.GetType()) != null)
-            {
+	void OnTriggerEnter(Collider other) {
+        if (CharacterManager.IsActiveCharacter(other.gameObject)) {
+            if (requiredAbility == null || other.gameObject.GetComponent(requiredAbility.GetType()) != null) {
                 //Si el objeto tiene un icono asociado, lo muestra y activa el canvas del jugador
-                if (tooltipImage != null)
-                {
+                if (tooltipImage != null) {
                     icon = other.gameObject.GetComponentInChildren<CharacterIcon>();
                     icon.ActiveCanvas(true);
                     icon.SetImage(tooltipImage);
                 }
-
                 //Activa el uso del objeto
-                if (usableParent != null)
-                {
+                if (usableParent != null) {
                     usableParent.canUse = true;
+                } else if (requiredAbility != null) {
+                    // Intenta preparar la habilidad 'AstralProjection'
+                    AstralProjectionAbility ability = other.gameObject.GetComponent<AstralProjectionAbility>();
+                    if (ability != null) {
+                        ability.SetWall(GetComponentInParent<AstralProjectionWall>());
+                    }
                 }
-
             }
-
         }
     }
-
 
     /// <summary>
     /// Cuando el jugador sale de la zona, desactiva su icono y la posibilidad de usar el objeto
     /// </summary>
     /// <param name="other"></param>
-    void OnTriggerExit(Collider other)
-    {
+    void OnTriggerExit(Collider other) {
 
-        if (CharacterManager.IsActiveCharacter(other.gameObject))
-        {
-            if (icon != null)
-            {
+        if (CharacterManager.IsActiveCharacter(other.gameObject)) {
+            if (icon != null) {
                 icon.ActiveCanvas(false);
-                if (usableParent != null)
-                {
+                if (usableParent != null) {
                     usableParent.canUse = false;
+                } else if (requiredAbility != null) {
+                    // Intenta reiniciar la habilidad 'AstralProjection'
+                    AstralProjectionAbility ability = other.gameObject.GetComponent<AstralProjectionAbility>();
+                    if (ability != null) {
+                        ability.SetWall(null);
+                    }
                 }
                 icon = null;
             }
         }
-
     }
 }

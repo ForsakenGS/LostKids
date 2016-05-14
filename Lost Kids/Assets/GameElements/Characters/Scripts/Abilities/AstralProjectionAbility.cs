@@ -26,7 +26,9 @@ public class AstralProjectionAbility : CharacterAbility {
     void Start() {
         AbilityInitialization();
         astralProjectionSound = audioLoader.GetSound("AstralProjection");
+        abilityName = AbilityName.AstralProjection;
     }
+
     /// <summary>
     /// Termina la ejecución de la habilidad, reestableciendo la velocidad del personaje
     /// </summary>
