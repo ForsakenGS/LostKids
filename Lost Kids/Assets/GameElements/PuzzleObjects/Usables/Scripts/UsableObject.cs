@@ -92,10 +92,13 @@ public abstract class UsableObject : MonoBehaviour {
         if (!onUse)
         {
 
+            /*
             if (!type.Equals(UsableTypes.Instant))
             {
                 onUse = true;
             }
+            */
+            onUse = true;
 
             //Si no forma parte de un puzzle, activa su objetivo
             if (!inPuzzle)

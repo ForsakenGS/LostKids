@@ -12,7 +12,7 @@ public class MenuButton : MonoBehaviour {
 	void Start () {
         audioLoader = GetComponent<AudioLoader>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {

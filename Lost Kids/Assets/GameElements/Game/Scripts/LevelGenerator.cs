@@ -46,7 +46,7 @@ public class LevelGenerator : MonoBehaviour {
     private Dictionary<RoomSettings, int> bannedRooms;
 
     //Estructura de las salas y pasillos del nivel
-    private List<GameObject> levelStructure;
+    private static List<GameObject> levelStructure;
 
     //Rangos de dificultad para la busqueda de rooms candidatas
     private int minDifficulty=1;
@@ -455,6 +455,11 @@ public class LevelGenerator : MonoBehaviour {
         array = temp;
         return array;
 
+    }
+
+    public static List<GameObject> GetCurrentLevelStrcture()
+    {
+        return levelStructure;
     }
 
 

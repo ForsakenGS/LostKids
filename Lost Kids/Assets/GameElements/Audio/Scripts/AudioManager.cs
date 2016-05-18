@@ -1,14 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AudioManager : MonoBehaviour {
 
     public static AudioManager instance = null;
 
+    private HashSet<AudioSource> playingMusics;
+    private HashSet<AudioSource> playingSounds;
+
+
     void Awake() {
 
         if (instance == null) {
-
+            playingMusics = new HashSet<AudioSource>();
+            playingSounds = new HashSet<AudioSource>();
             instance = this;
 
         } else if (instance != this){
@@ -29,8 +35,24 @@ public class AudioManager : MonoBehaviour {
     public static void Play(AudioSource source, bool loop, float volume) {
 
         source.loop = loop;
-        source.volume = volume;
+        source.volume = volume*GameSettings.GetModifiedSoundsVolume();
         source.Play();
+        Instance.playingSounds.Add(source);
+
+    }
+
+    /// <summary>
+    /// Reproduce un clip de musica en loop
+    /// </summary>
+    /// <param name="source">AudioSource que se desea reproducir</param>
+    /// <param name="loop">Indica si se trata de un bucle</param>
+    public static void PlayMusic(AudioSource source, float volume)
+    {
+
+        source.loop = true;
+        source.volume = volume * GameSettings.GetModifiedMusicVolume();
+        source.Play();
+        Instance.playingMusics.Add(source);
 
     }
 
@@ -60,7 +82,8 @@ public class AudioManager : MonoBehaviour {
 
         //Cuando haya pasado el tiempo se reproduce el sonido
         if(currentTime >= endTime) {
-            Play(source, loop, volume);
+            Play(source, loop, volume*GameSettings.GetModifiedSoundsVolume());
+            Instance.playingSounds.Add(source);
         }
 
         yield return 0;
@@ -80,7 +103,8 @@ public class AudioManager : MonoBehaviour {
         float endTime = timeSinceStarted + time;
         float currentTime = timeSinceStarted;
 
-        Play(source, loop, volume);
+        Play(source, loop, volume*GameSettings.GetModifiedSoundsVolume());
+        Instance.playingSounds.Add(source);
 
         while (currentTime < endTime) {
             currentTime += Time.deltaTime;
@@ -106,8 +130,9 @@ public class AudioManager : MonoBehaviour {
         source.volume = 0;
 
         Play(source, loop, 0);
+        Instance.playingSounds.Add(source);
 
-        while ( source.volume < 1) {
+        while ( source.volume < GameSettings.GetModifiedSoundsVolume()) {
             source.volume += deltaVolume * Time.deltaTime;
             yield return null;
         }
@@ -127,8 +152,9 @@ public class AudioManager : MonoBehaviour {
         int randomIndex = Random.Range(0, sources.Count);
 
         AudioSource source = (AudioSource) sources[randomIndex];
-       
+        source.volume = GameSettings.GetModifiedSoundsVolume();
         source.Play();
+        Instance.playingSounds.Add(source);
 
     }
 
@@ -239,7 +265,7 @@ public class AudioManager : MonoBehaviour {
 
         Resume(source);
 
-        while (source.volume < 1) {
+        while (source.volume < GameSettings.GetModifiedSoundsVolume()) {
             source.volume += deltaVolume * Time.deltaTime;
             yield return null;
         }
@@ -256,6 +282,22 @@ public class AudioManager : MonoBehaviour {
 
         if(source.isPlaying) {
             source.Stop();
+            Instance.playingSounds.Remove(source);
+        }
+
+    }
+
+    /// <summary>
+    /// Para un sonido
+    /// </summary>
+    /// <param name="source">AudioSource que se desea parar</param>
+    public static void StopMusic(AudioSource source)
+    {
+
+        if (source.isPlaying)
+        {
+            source.Stop();
+            Instance.playingMusics.Remove(source);
         }
 
     }
@@ -280,6 +322,7 @@ public class AudioManager : MonoBehaviour {
 
             if (currentTime >= endTime) {
                 Stop(source);
+                Instance.playingSounds.Remove(source);
             }
         }
 
@@ -301,10 +344,52 @@ public class AudioManager : MonoBehaviour {
 
         if (source.volume <= 0) {
             Stop(source);
+            Instance.playingSounds.Remove(source);
         }
 
         yield return 0;
 
     }
+
+    public static AudioManager Instance
+    {
+        //Devuelve la instancia actual o crea una nueva si aun no existe
+        get { return instance ?? (instance = new GameObject("AudioManager").AddComponent<AudioManager>()); }
+    }
+
+    public static void UpdateMusicVolume()
+    {
+        foreach(AudioSource music in Instance.playingMusics)
+        {
+            music.volume = GameSettings.GetModifiedMusicVolume();
+        }
+    }
+
+    public static void UpdateSoundsVolume()
+    {
+        foreach (AudioSource sound in Instance.playingSounds)
+        {
+            sound.volume = GameSettings.GetModifiedSoundsVolume();
+        }
+    }
+
+    public static void PauseAllSounds()
+    {
+        foreach (AudioSource sound in Instance.playingSounds)
+        {
+            FadePause(sound, 0.1f);
+        }
+    }
+
+    public static void ResumeAllSounds()
+    {
+        foreach (AudioSource sound in Instance.playingSounds)
+        {
+            FadeResume(sound, 0.1f);
+        }
+    }
+
+
+
 
 }

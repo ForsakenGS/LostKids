@@ -24,7 +24,7 @@ public class TransitionSceneManager : MonoBehaviour {
 
         levelData = GameData.getLevelData(previousScene);
 
-        timeText.text = levelData.finishTime+"";
+        //timeText.text = levelData.finishTime+"";
         totalCollectiblesText.text = levelData.collectibles.Count+"";
 
         int actualCollectibles = 0;

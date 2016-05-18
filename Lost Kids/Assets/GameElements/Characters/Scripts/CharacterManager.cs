@@ -127,9 +127,21 @@ public class CharacterManager : MonoBehaviour {
         if ((IsAvailable(index)) && (!activeCharacter.Equals(characterList[index])))
         {
             activeCharacter.GetComponent<AudioListener>().enabled = false;
+
+            //Si el personaje esta empujando un objeto, lo suelta
+            if (activeCharacter.GetComponent<PushAbility>() != null)
+            {
+                activeCharacter.GetComponent<PushAbility>().ReleaseObject();
+            }
+
             activeCharacter = characterList[index];
             activeCharacter.GetComponent<AudioListener>().enabled = true;
             //activeCharacter.GetComponent<CharacterStatus>().currentRoom = activeCheckPoint.room;
+
+            
+
+            
+            
 
             if (ActiveCharacterChangedEvent != null)
             {

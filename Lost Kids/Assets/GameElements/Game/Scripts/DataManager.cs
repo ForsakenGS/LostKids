@@ -12,16 +12,30 @@ public static class DataManager
 
     public static GameData currentGame;
 
-    public static void Save()
+    public static bool Save()
     {
+        bool saved = false;
+        FileStream file=null;
         if (!savedGames.Contains(currentGame))
         {
             savedGames.Add(currentGame);
         }
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/savedGames.tlk");
-        bf.Serialize(file, savedGames);
-        file.Close();
+        try
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            file = File.Create(Application.persistentDataPath + "/savedGames.tlk");
+            bf.Serialize(file, savedGames);
+            saved = true;
+        }catch(System.Exception e)
+        {
+            Debug.Log("Error guardando fichero: \n" + e);
+        }
+        if (file != null)
+        {
+            file.Close();
+        }
+
+        return saved;
     }
 
     /// <summary>
@@ -33,11 +47,17 @@ public static class DataManager
         bool loaded = false;
         if (File.Exists(Application.persistentDataPath + "/savedGames.tlk"))
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/savedGames.tlk", FileMode.Open);
-            savedGames = (List<GameData>)bf.Deserialize(file);
-            file.Close();
-            loaded = true;
+            try
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Open(Application.persistentDataPath + "/savedGames.tlk", FileMode.Open);
+                savedGames = (List<GameData>)bf.Deserialize(file);
+                file.Close();
+                loaded = true;
+            }catch(System.Exception e)
+            {
+                Debug.Log("Error cargando fichero guardado \n" + e);
+            }
         }
 
         return loaded;

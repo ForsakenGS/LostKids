@@ -9,8 +9,16 @@ public class GameManager : MonoBehaviour {
 
     private GameObject menuMusic;
 
-	// Use this for initialization
-	void Start () {
+    //Variable global para el estado pausado
+    public static bool paused;
+
+    //Delegates para el estado de pausa
+    public delegate void PauseUnPauseEvent();
+    public static event PauseUnPauseEvent PauseEvent;
+    public static event PauseUnPauseEvent UnPauseEvent;
+
+    // Use this for initialization
+    void Start () {
         menuMusic = GameObject.FindGameObjectWithTag("MenuMusic");
 	}
 	
@@ -23,9 +31,9 @@ public class GameManager : MonoBehaviour {
         Application.Quit ();
 	}
 
-	public void GoToScene(string sc) {
-        PrepareScene(sc);
-	}
+	public static void GoToScene(string sc) {
+        SceneManager.LoadScene(sc);
+    }
 
     public void PrepareScene(string sc) {
         switch(sc) {
@@ -77,6 +85,33 @@ public class GameManager : MonoBehaviour {
     public void GoToYokaisDocs(string sc) {
         SceneManager.LoadScene(sc);
     }
+
+    public static void PauseGame()
+    {
+        paused = true;
+        Time.timeScale = 0;
+        if(PauseEvent!=null)
+        {
+            PauseEvent();
+        }
+    }
+
+    public static void ResumeGame()
+    {
+        paused = false;
+        Time.timeScale = 1;
+        if(UnPauseEvent!=null)
+        {
+            UnPauseEvent();
+        }
+    }
+
+    public static void QuitGame()
+    {
+        Application.Quit();
+    }
+
+
 }
 
 

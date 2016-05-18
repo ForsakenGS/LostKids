@@ -12,6 +12,9 @@ public class GameData  {
     List<string> collectibles= new List<string>();
 
     [SerializeField]
+    List<string> solvedRooms = new List<string>();
+
+    [SerializeField]
     List<LevelData> levels = new List<LevelData>();
 
     private static GameData instance;
@@ -57,6 +60,17 @@ public class GameData  {
         }
 
         DataManager.Save();
+    }
+
+    public static void UpdateRooms(string id)
+    {
+        if (!Instance.solvedRooms.Contains(id))
+        {
+            Instance.solvedRooms.Add(id);
+        }
+
+        DataManager.Save();
+        Debug.Log("Room superada " + id);
     }
 
 
