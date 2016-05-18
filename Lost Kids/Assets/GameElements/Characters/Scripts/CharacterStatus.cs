@@ -46,12 +46,12 @@ public class CharacterStatus : MonoBehaviour {
     public float maxJumpImpulse;
     public State initialCharacterState;
     public CharacterName characterName;
-
+    // Audio variables
     private AudioLoader audioLoader;
-
     private AudioSource resurrectSound;
     private AudioSource dieSound;
     private AudioSource sacrificeSound;
+    private AudioSource stepSound;
 
     // Use this for initialization
     void Awake() {
@@ -74,7 +74,8 @@ public class CharacterStatus : MonoBehaviour {
         audioLoader = GetComponent<AudioLoader>();
         resurrectSound = audioLoader.GetSound("Resurrect");
         dieSound = audioLoader.GetSound("Die");
-        sacrificeSound = audioLoader.GetSound("Sacrifice");
+        sacrificeSound = audioLoader.GetSound("Die");
+        stepSound = audioLoader.GetSound("Steps");
     }
 
     /// <summary>
@@ -83,8 +84,12 @@ public class CharacterStatus : MonoBehaviour {
     /// <param name="ability">Habilidad que se desea iniciar a ejecutar</param>
     /// <returns><c>true</c> si es posible iniciar la habilidad, en cuyo caso modifica además el estado del personaje; <c>false</c> en otro caso</returns>
     public bool CanStartAbility(CharacterAbility ability) {
+        // Estados desde los que se puede iniciar cualquier habilidad: Walking, Idle
         bool res = (characterState.Equals(State.Walking) || characterState.Equals(State.Idle));
         if (res) {
+            // Detiene el sonido de andar, que es el único que puede estar reproduciéndose
+            AudioManager.Stop(stepSound);
+            // Actualiza el estado del personaje
             switch (ability.abilityName) {
                 case AbilityName.AstralProjection:
                     characterState = State.AstralProjection;
@@ -112,7 +117,6 @@ public class CharacterStatus : MonoBehaviour {
 
     void FixedUpdate() {
         // Aplica gravedad extra sobre el personaje si está cayendo
-        //if (characterState.Equals(State.BigJumping) || characterState.Equals(State.Jumping)) {
         if (characterState.Equals(State.Falling)) {
             characterMovement.ExtraGravity();
         }
@@ -293,12 +297,6 @@ public class CharacterStatus : MonoBehaviour {
     void Update() {
         // Comprueba si el jugador está apoyado sobre alguna superficie 
         switch (characterState) {
-            case State.Idle:
-                // Si está en el aire, cambia de estado
-                if (!characterMovement.CharacterIsGrounded()) {
-                    characterState = State.Falling;
-                }
-                break;
             case State.Walking:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
@@ -306,6 +304,12 @@ public class CharacterStatus : MonoBehaviour {
                 } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
                     characterMovement.PlayerHasStopped();
                     characterState = State.Idle;
+                }
+                break;
+            case State.Idle:
+                // Si está en el aire, cambia de estado
+                if (!characterMovement.CharacterIsGrounded()) {
+                    characterState = State.Falling;
                 }
                 break;
             case State.Falling:
@@ -335,6 +339,15 @@ public class CharacterStatus : MonoBehaviour {
                 }
                 // Comprueba si el jugador está en movimiento
                 if (characterMovement.PlayerIsStopped()) {
+                    characterMovement.PlayerHasStopped();
+                }
+                break;
+            case State.Sprint:
+                // Si está en el aire, cambia de estado
+                if (!characterMovement.CharacterIsGrounded()) {
+                    GetComponent<AbilityController>().UseAbility();
+                    characterState = State.Falling;
+                } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
                     characterMovement.PlayerHasStopped();
                 }
                 break;
