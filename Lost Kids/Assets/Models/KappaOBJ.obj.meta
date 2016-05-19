@@ -1,17 +1,19 @@
 fileFormatVersion: 2
-guid: 6b55ef70d184d98479b85fbcf1c8ddb8
-timeCreated: 1462924174
+guid: f4b484b73fc269a459732d52ffe759df
+timeCreated: 1463606926
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: modelo
     400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Wall4
+    400002: modelo
+    2300000: modelo
+    3300000: modelo
+    4300000: modelo
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
@@ -51,9 +53,9 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 1
+    normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []

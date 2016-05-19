@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6b55ef70d184d98479b85fbcf1c8ddb8
-timeCreated: 1462924174
+guid: 52becbe9944b16943bfff772c0949845
+timeCreated: 1463608505
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,9 +9,10 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Wall4
+    4300000: DoorTori
+    6400000: //RootNode
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
@@ -36,7 +37,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0

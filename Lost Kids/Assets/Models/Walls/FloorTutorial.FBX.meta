@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6b55ef70d184d98479b85fbcf1c8ddb8
-timeCreated: 1462924174
+guid: 3e6a3837f5947064c96ab44f307892cc
+timeCreated: 1463613651
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,9 +9,9 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Wall4
+    4300000: Floor1
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:

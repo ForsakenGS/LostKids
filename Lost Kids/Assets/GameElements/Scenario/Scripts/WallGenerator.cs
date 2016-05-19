@@ -4,25 +4,48 @@ using System.Collections.Generic;
 
 public class WallGenerator : MonoBehaviour {
 
+    public enum Direction { Horizontal, Vertical }
+    [Header("Wall Settings")]
+    public Direction direction;
 
+    public float wallCount;
+
+    [Header("Walls Collection")]
     public List<GameObject> wallPrefabs;
 
     private float wallSize;
-
-    public float wallCount;
 
     private GameObject lastWall;
 
     private Vector3 newPosition;
 
+    
+
     // Use this for initialization
     void Start () {
+
         wallSize = wallPrefabs[0].GetComponent<Renderer>().bounds.size.x;
-        newPosition = transform.position;
+        Vector3 offset;
+
+        if (direction.Equals(Direction.Horizontal)) {
+            offset = new Vector3(1, 0, 0.5f);
+        } else {
+            offset = new Vector3(0.5f, 0, 1);
+        }
+        
+        newPosition = transform.position + offset;
+
         for(int i=0;i< wallCount; i++)
         {
-            Instantiate(GetNewWall(), newPosition, Quaternion.identity);
-            newPosition.x += wallSize;
+
+            if (direction.Equals(Direction.Horizontal)) {
+                Instantiate(GetNewWall(), newPosition, Quaternion.identity);
+                newPosition.x += wallSize;
+            } else  {
+                Instantiate(GetNewWall(), newPosition, Quaternion.AngleAxis(90,Vector3.up));
+                newPosition.z += wallSize;
+            }
+            
         }
 	
 	}
