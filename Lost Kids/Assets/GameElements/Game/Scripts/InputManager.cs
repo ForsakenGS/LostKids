@@ -63,7 +63,7 @@ public class InputManager : MonoBehaviour {
     // Manage general inputs
     void Update() {
         if (!locked) {
-            if (Input.GetKeyUp(KeyCode.Escape))
+            if (Input.GetButtonDown("Menu"))
             {
                 if (!GameManager.paused)
                 {

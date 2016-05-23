@@ -9,11 +9,17 @@ public class GameSettings :MonoBehaviour {
     public float masterVolume = 1;
     public float musicVolume = 1;
     public float soundsVolume = 1;
-    public static GameSettings instance = null;
 
     public bool fullScreen = true;
 
     public Languages language = Languages.English;
+
+    //Instancia del singleton
+    public static GameSettings instance = null;
+
+    //Delegates para cambios de volumen
+    public delegate void VolumeChangedEvent();
+    public static event VolumeChangedEvent VolumeChanged;
 
     void Awake()
     {
@@ -119,6 +125,10 @@ public class GameSettings :MonoBehaviour {
     {
         Instance.masterVolume = value;
         PlayerPrefs.SetFloat("MasterVolume", value);
+        if(VolumeChanged!=null)
+        {
+            VolumeChanged();
+        }
     }
 
     /// <summary>
@@ -129,6 +139,10 @@ public class GameSettings :MonoBehaviour {
     {
         Instance.musicVolume = value;
         PlayerPrefs.SetFloat("MusicVolume", value);
+        if (VolumeChanged != null)
+        {
+            VolumeChanged();
+        }
     }
 
     /// <summary>
@@ -139,6 +153,10 @@ public class GameSettings :MonoBehaviour {
     {
         Instance.soundsVolume = value;
         PlayerPrefs.SetFloat("SoundsVolume", value);
+        if (VolumeChanged != null)
+        {
+            VolumeChanged();
+        }
     }
 
 

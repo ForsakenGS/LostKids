@@ -49,6 +49,7 @@ public class LevelGoal : MonoBehaviour {
 
         if (charactersOnGoal.Count == characterList.Count)
         {
+            GameManager.CompleteLevel(SceneManager.GetActiveScene().name);
             LevelManager.LevelEnd(nextLevel);
 
         }

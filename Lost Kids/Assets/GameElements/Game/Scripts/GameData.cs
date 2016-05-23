@@ -7,7 +7,10 @@ public class GameData  {
 
     [SerializeField]
     List<string> levelsCompleted= new List<string>();
-    
+
+    [SerializeField]
+    List<string> unlockedLevels = new List<string>();
+
     [SerializeField]
     List<string> collectibles= new List<string>();
 
@@ -34,6 +37,9 @@ public class GameData  {
 
         collectibles = new List<string>();
         levelsCompleted = new List<string>();
+        solvedRooms = new List<string>();
+        unlockedLevels = new List<string>();
+        unlockedLevels.Add(GameLevels.Tutorial1.ToString());
     }
 
     public static void UpdateCollectibles(string id)
@@ -60,6 +66,24 @@ public class GameData  {
         }
 
         DataManager.Save();
+    }
+
+    public static void CompleteLevel(string level)
+    {
+        if (!instance.levelsCompleted.Contains(level))
+        {
+            Instance.levelsCompleted.Add(level);
+
+        }
+    }
+
+    public static void UnlockLevel(string level)
+    {
+        if (!instance.unlockedLevels.Contains(level))
+        {
+            Instance.unlockedLevels.Add(level);
+
+        }
     }
 
     public static void UpdateRooms(string id)
@@ -97,8 +121,15 @@ public class GameData  {
         }
     }
 
+
+
     public static LevelData getLevelData(string level)
     {
         return Instance.levels[Instance.levelsCompleted.IndexOf(level)];
+    }
+
+    public static bool LevelUnlocked(string level)
+    {
+        return Instance.unlockedLevels.Contains(level);
     }
 }

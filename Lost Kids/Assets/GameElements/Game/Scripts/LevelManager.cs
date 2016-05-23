@@ -28,6 +28,7 @@ public class LevelManager : MonoBehaviour {
 
     public static void LevelStart()
     {
+        /*
         levelData = GameData.LevelStart(SceneManager.GetActiveScene().name);
         levelData.name = SceneManager.GetActiveScene().name;
         CollectibleObject[] collectibleObjects = FindObjectsOfType<CollectibleObject>();
@@ -38,12 +39,13 @@ public class LevelManager : MonoBehaviour {
         }
         levelData.setCollectibles(collectibleList);
         levelData.StartTimer();
+        */
     }
 
     public static void LevelEnd(string nextLevel)
     {
-        levelData.EndTimer();
-        GameData.UpdateLevels(levelData.name, levelData);
+        //levelData.EndTimer();
+        //GameData.UpdateLevels(levelData.name, levelData);
         fader.nextScene=nextLevel;
         fader.EndScene();
     }

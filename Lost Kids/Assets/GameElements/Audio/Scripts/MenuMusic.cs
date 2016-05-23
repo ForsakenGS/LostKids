@@ -20,7 +20,7 @@ public class MenuMusic : MonoBehaviour {
             Destroy(gameObject);
 
         }
-
+        AudioManager.PlayMusic(GetComponent<AudioSource>(), 1);
         DontDestroyOnLoad(gameObject);
 
     }

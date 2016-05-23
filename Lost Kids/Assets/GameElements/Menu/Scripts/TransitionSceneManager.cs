@@ -21,12 +21,12 @@ public class TransitionSceneManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         messageManager = MessageManager.GetComponent<MessageManager>();
-
+        /*
         levelData = GameData.getLevelData(previousScene);
 
-        //timeText.text = levelData.finishTime+"";
+        timeText.text = levelData.finishTime+"";
         totalCollectiblesText.text = levelData.collectibles.Count+"";
-
+        
         int actualCollectibles = 0;
         foreach (string collId in levelData.collectibles)
         {
@@ -37,7 +37,7 @@ public class TransitionSceneManager : MonoBehaviour {
         }
 
         actualCollectiblesText.text = actualCollectibles + "";
-
+        */
         fader = GetComponent<SceneFade>();
         fader.nextScene = nextScene;
         fader.StartScene();

@@ -2,6 +2,15 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public enum GameLevels
+{
+    Tutorial1,Tutorial2,Tutorial3,Level1,Boss1,Level2,Boss2
+}
+
 
 public class GameManager : MonoBehaviour {
 
@@ -17,8 +26,12 @@ public class GameManager : MonoBehaviour {
     public static event PauseUnPauseEvent PauseEvent;
     public static event PauseUnPauseEvent UnPauseEvent;
 
+    //Listado de todos los niveles del juego
+    static List<string> levelList;
+
     // Use this for initialization
     void Start () {
+        levelList = Enum.GetNames(typeof(GameLevels)).ToList();
         menuMusic = GameObject.FindGameObjectWithTag("MenuMusic");
 	}
 	
@@ -36,14 +49,19 @@ public class GameManager : MonoBehaviour {
     }
 
     public void PrepareScene(string sc) {
+
         switch(sc) {
             case "Tutorial1":
                 AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
                 Destroy(menuMusic);
                 break;
-            case "Level2":
+            case "Tutorial2":
+                AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
+                Destroy(menuMusic);
                 break;
-            case "Settings":
+            case "Tutorial3":
+                AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
+                Destroy(menuMusic);
                 break;
             case "Credits":
                 break;
@@ -109,6 +127,18 @@ public class GameManager : MonoBehaviour {
     public static void QuitGame()
     {
         Application.Quit();
+    }
+
+    public static void CompleteLevel(string level)
+    {
+        GameData.CompleteLevel(level);
+
+        int pos = levelList.IndexOf(level)+1;
+        if(pos<levelList.Count)
+        {
+            GameData.UnlockLevel(levelList[pos]);
+        }
+        DataManager.Save();
     }
 
 
