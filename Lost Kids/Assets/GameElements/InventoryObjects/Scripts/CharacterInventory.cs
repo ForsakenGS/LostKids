@@ -60,6 +60,6 @@ public class CharacterInventory : MonoBehaviour {
     }
 
     public bool HasObject (string objName) {
-        return objects.Contains(objName);
+        return ((objects != null) && (objects.Contains(objName)));
     }
 }

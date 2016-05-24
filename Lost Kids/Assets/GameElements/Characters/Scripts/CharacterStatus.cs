@@ -29,6 +29,7 @@ public class CharacterStatus : MonoBehaviour {
     private CharacterManager characterManager;
     private CharacterMovement characterMovement;
     private PlayerUse playerUse;
+    private Animator characterAnimator;
 
     public float astralSpeed = 0.0f;
     public float standingSpeed = 8000f;
@@ -36,6 +37,8 @@ public class CharacterStatus : MonoBehaviour {
     public float jumpingSpeed = 5000f;
     public float crouchingSpeed = 4000f;
     public float pushingSpeed = 4000f;
+
+    public bool jumpButtonUp = false;
 
     //Habitacion en la que se encuentra el personaje
     public int currentRoom = 0;
@@ -61,7 +64,7 @@ public class CharacterStatus : MonoBehaviour {
         characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         characterMovement = GetComponent<CharacterMovement>();
         playerUse = GetComponent<PlayerUse>();
-
+        characterAnimator = GetComponent<Animator>();
     }
 
     // Use this for initialization
@@ -95,6 +98,7 @@ public class CharacterStatus : MonoBehaviour {
                     characterState = State.AstralProjection;
                     break;
                 case AbilityName.BigJump:
+                    StartAnimation(characterState, State.BigJumping);
                     characterState = State.BigJumping;
                     break;
                 case AbilityName.Break:
@@ -104,6 +108,7 @@ public class CharacterStatus : MonoBehaviour {
                     characterState = State.Pushing;
                     break;
                 case AbilityName.Sprint:
+                    StartAnimation(characterState, State.Sprint);
                     characterState = State.Sprint;
                     break;
                 case AbilityName.Telekinesis:
@@ -170,7 +175,7 @@ public class CharacterStatus : MonoBehaviour {
         if (kill) {
             characterState = State.Dead;
             //Animacion, Efectos, Cambio de imagen.....
-            GetComponent<Renderer>().enabled = false; //Temporal
+            GetComponentInChildren<Renderer>().enabled = false; //Temporal
             GetComponent<Rigidbody>().isKinematic = true;
             AudioManager.Play(dieSound, false, 1);
             //Reinicia el transform en caso de morir estando subido a una plataforma
@@ -188,17 +193,21 @@ public class CharacterStatus : MonoBehaviour {
 	public void JumpButton() {
         switch (characterState) {
             case State.Jumping:
-                // Comprueba si ha alcanzado el impulso de salto máximo
-                if (totalJumpImpulse < maxJumpImpulse) {
-                    characterMovement.Jump(jumpImpulse, false);
-                    totalJumpImpulse += jumpImpulse;
+                if (!jumpButtonUp) {
+                    // Comprueba si ha alcanzado el impulso de salto máximo
+                    if (totalJumpImpulse < maxJumpImpulse) {
+                        characterMovement.Jump(jumpImpulse, false);
+                        totalJumpImpulse += jumpImpulse;
+                    }
                 }
                 break;
             case State.Walking:
             case State.Idle:
                 // Comienza la acción de saltar
                 characterMovement.Jump(jumpImpulse, true);
+                AudioManager.Stop(stepSound);
                 totalJumpImpulse = jumpImpulse;
+                StartAnimation(characterState, State.Jumping);
                 characterState = State.Jumping;
                 break;
         }
@@ -255,6 +264,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.Idle:
                 characterMovement.MoveCharacterNormal(horizontal, vertical, standingSpeed / 2);
                 characterState = State.Walking;
+                StartAnimationFromIdle(State.Walking);
                 break;
             case State.Walking:
             case State.Sprint:
@@ -288,6 +298,7 @@ public class CharacterStatus : MonoBehaviour {
             case AbilityName.Push:
             case AbilityName.Sprint:
             case AbilityName.Telekinesis:
+                StartAnimation(characterState, State.Idle);
                 characterState = State.Idle;
                 break;
         }
@@ -301,27 +312,33 @@ public class CharacterStatus : MonoBehaviour {
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Falling;
+                    StartAnimationFromWalking(State.Falling);
                 } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
                     characterMovement.PlayerHasStopped();
                     characterState = State.Idle;
+                    StartAnimationFromWalking(State.Idle);
                 }
                 break;
             case State.Idle:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Falling;
+                    StartAnimationFromIdle(State.Falling);
                 }
                 break;
             case State.Falling:
                 // Comprueba si el jugador está apoyado en alguna superficie 
                 if (characterMovement.CharacterIsGrounded()) {
                     characterState = State.Idle;
+                    StartAnimationFromFalling(State.Idle);
                 }
                 break;
             case State.Jumping:
                 // Si empieza a caer, cambia de estado
                 if (characterMovement.CharacterIsFalling()) {
+                    jumpButtonUp = false;
                     characterState = State.Falling;
+                    StartAnimationFromJumping(State.Falling);
                 }
                 break;
             case State.BigJumping:
@@ -329,12 +346,14 @@ public class CharacterStatus : MonoBehaviour {
                 if (characterMovement.CharacterIsFalling()) {
                     GetComponent<AbilityController>().UseAbility();
                     characterState = State.Falling;
+                    StartAnimationFromBigJumping(State.Falling);
                 }
                 break;
             case State.Pushing:
                 //TEMPORAL!! Suelta el objeto si el personaje se cae
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Falling;
+                    StartAnimationFromPushing(State.Falling);
                     GetComponent<PushAbility>().ReleaseObject();
                 }
                 // Comprueba si el jugador está en movimiento
@@ -347,6 +366,7 @@ public class CharacterStatus : MonoBehaviour {
                 if (!characterMovement.CharacterIsGrounded()) {
                     GetComponent<AbilityController>().UseAbility();
                     characterState = State.Falling;
+                    StartAnimationFromSprint(State.Falling);
                 } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
                     characterMovement.PlayerHasStopped();
                 }
@@ -364,6 +384,7 @@ public class CharacterStatus : MonoBehaviour {
             default:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
+                    StartAnimation(characterState, State.Falling);
                     characterState = State.Falling;
                 }
                 break;
@@ -375,7 +396,7 @@ public class CharacterStatus : MonoBehaviour {
     /// </summary>
     public void Ressurect() {
         characterState = State.Idle;
-        GetComponent<Renderer>().enabled = true;
+        GetComponentInChildren<Renderer>().enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
         if (ResurrectCharacterEvent != null) {
             ResurrectCharacterEvent(gameObject);
@@ -400,7 +421,7 @@ public class CharacterStatus : MonoBehaviour {
             d = upDistance * Time.deltaTime;
             yield return null;
         } while (upDistance > 0.2f);
-        GetComponent<Renderer>().enabled = false; //Temporal
+        GetComponentInChildren<Renderer>().enabled = false; //Temporal
         //rig.isKinematic = false;
         // Actualización estado del personaje
         characterState = State.Dead;
@@ -434,6 +455,131 @@ public class CharacterStatus : MonoBehaviour {
             characterState = State.Scared;
         } else if (characterState.Equals(State.Scared)) {
             characterState = State.Idle;
+        }
+    }
+
+    void StartAnimation(State start, State end) {
+        // Comprueba el estado inicial
+        switch (start) {
+            case State.Walking:
+                StartAnimationFromWalking(end);
+                break;
+            case State.Idle:
+                StartAnimationFromIdle(end);
+                break;
+            case State.Pushing:
+                StartAnimationFromPushing(end);
+                break;
+            case State.Sprint:
+                StartAnimationFromSprint(end);
+                break;
+        }
+    }
+
+    void StartAnimationFromBigJumping(State end) {
+        // Abandona el estado de la habilidad BigJumping
+        characterAnimator.SetBool("BigJumpAbility", false);
+        // Salta el estado final deseado
+        switch (end) {
+            case State.Falling:
+                characterAnimator.SetBool("FallingState", true);
+                break;
+        }
+    }
+
+    void StartAnimationFromFalling(State end) {
+        // Abandona el estado Falling
+        characterAnimator.SetBool("FallingState", false);
+        // Salta el estado final deseado
+        switch (end) {
+            case State.Idle:
+                characterAnimator.SetBool("IdleState", true);
+                break;
+        }
+    }
+
+    void StartAnimationFromIdle(State end) {
+        // Abandona el estado Idle
+        characterAnimator.SetBool("IdleState", false);
+        // Salta el estado final deseado
+        switch (end) {
+            case State.Walking:
+                characterAnimator.SetBool("WalkingState", true);
+                break;
+            case State.Jumping:
+                characterAnimator.SetBool("JumpingState", true);
+                break;
+            case State.BigJumping:
+                characterAnimator.SetBool("BigJumpAbility", true);
+                break;
+            case State.Sprint:
+                characterAnimator.SetBool("SprintAbility", true);
+                break;
+            case State.Falling:
+                characterAnimator.SetBool("FallingState", true);
+                break;
+        }
+    }
+
+    void StartAnimationFromJumping(State end) {
+        // Abandona el estado Jumping
+        characterAnimator.SetBool("JumpingState", false);
+        // Salta el estado final deseado
+        switch (end) {
+            case State.Falling:
+                characterAnimator.SetBool("FallingState", true);
+                break;
+        }
+    }
+
+    void StartAnimationFromPushing(State end) {
+        // Abandona el estado de la habilidad Pushing
+        characterAnimator.SetBool("PushAbility", false);
+        // Salta el estado final deseado
+        switch (end) {
+            case State.Idle:
+                characterAnimator.SetBool("IdleState", true);
+                break;
+            case State.Falling:
+                characterAnimator.SetBool("FallingState", true);
+                break;
+        }
+    }
+
+    void StartAnimationFromSprint(State end) {
+        // Abandona el estado de la habilidad Sprint
+        characterAnimator.SetBool("SprintAbility", false);
+        // Salta el estado final deseado
+        switch (end) {
+            case State.Idle:
+                characterAnimator.SetBool("IdleState", true);
+                break;
+            case State.Falling:
+                characterAnimator.SetBool("FallingState", true);
+                break;
+        }
+    }
+
+    void StartAnimationFromWalking(State end) {
+        // Abandona el estado Walking
+        characterAnimator.SetBool("WalkingState", false);
+        // Salta el estado final deseado        
+        switch (end) {
+            case State.Jumping:
+                characterAnimator.SetBool("JumpingState", true);
+                break;
+            case State.Idle:
+                characterAnimator.SetBool("IdleState", true);
+                break;
+            case State.BigJumping:
+                characterAnimator.SetBool("BigJumpAbility", true);
+                break;
+            case State.Sprint:
+                characterAnimator.SetBool("SprintAbility", true);
+                break;
+            case State.Falling:
+                characterAnimator.SetBool("FallingState", true);
+                break;
         }
     }
 }

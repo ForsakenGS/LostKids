@@ -107,6 +107,9 @@ public class InputManager : MonoBehaviour {
             if (Input.GetButton("Jump")) {
                 jumpButton = true;
             }
+            if (Input.GetButtonUp("Jump")) {
+                characterStatus.jumpButtonUp = true;
+            }
             // Suicide button
             if (Input.GetButtonDown("Sacrifice")) {
                 characterStatus.SacrificeButton();
