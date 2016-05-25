@@ -11,7 +11,7 @@ ModelImporter:
     3300000: //RootNode
     4300000: Floor1
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -50,7 +50,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 60
+    normalSmoothAngle: 180
     normalImportMode: 1
     tangentImportMode: 3
   importAnimation: 0

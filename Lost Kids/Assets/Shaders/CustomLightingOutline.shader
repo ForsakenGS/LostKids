@@ -1,12 +1,11 @@
-Shader "Shader Forge/Examples/Custom Lighting" {
-    Properties {
-        _Color ("Color", Color) = (0.6544118,0.8426978,1,1)
-        _Diffuse ("Diffuse", 2D) = "white" {}
+Shader "Custom/CustomLightingOutline" {
+Properties {
+        _Diffuse ("Diffuse", 2D) = "bump" {}
         _Normals ("Normals", 2D) = "bump" {}
-		_Bands("Bands", Float) = 8
-		_Gloss("Gloss", Range(0, 1)) = 0.4511278
-		_OutlineColor("OutlineColor", Color) = (0.222913,0.4780606,0.9779412,1)
-		_OutlineWidth("OutlineWidth", Float) = 0.02
+        _OutlineColor ("OutlineColor", Color) = (0.5,0.5,0.5,1)
+		_OutlineWidth ("OutlineWidth", Range(0,20)) = 1
+        _Glossiness ("Glossiness", Range(0, 11)) = 0
+        _Specularity ("Specularity", Range(0, 4)) = 1
     }
     SubShader {
         Tags {
@@ -37,7 +36,7 @@ Shader "Shader Forge/Examples/Custom Lighting" {
             };
             VertexOutput vert (VertexInput v) {
                 VertexOutput o = (VertexOutput)0;
-                o.pos = mul(UNITY_MATRIX_MVP, float4(v.vertex.xyz + v.normal*_OutlineWidth,1) );
+                o.pos = mul(UNITY_MATRIX_MVP, float4(v.vertex.xyz + v.normal*_OutlineWidth/100,1) );
                 return o;
             }
             float4 frag(VertexOutput i) : COLOR {
@@ -50,7 +49,7 @@ Shader "Shader Forge/Examples/Custom Lighting" {
             Tags {
                 "LightMode"="ForwardBase"
             }
-           
+            
             
             CGPROGRAM
             #pragma vertex vert
@@ -58,14 +57,14 @@ Shader "Shader Forge/Examples/Custom Lighting" {
             #define UNITY_PASS_FORWARDBASE
             #include "UnityCG.cginc"
             #include "AutoLight.cginc"
+            #include "Lighting.cginc"
             #pragma multi_compile_fwdbase_fullshadows
             #pragma exclude_renderers xbox360 ps3 
             #pragma target 3.0
-            uniform float4 _LightColor0;
-            uniform float4 _Color;
             uniform sampler2D _Diffuse; uniform float4 _Diffuse_ST;
             uniform sampler2D _Normals; uniform float4 _Normals_ST;
-            uniform float _Bands;
+            uniform float _Glossiness;
+            uniform float _Specularity;
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
@@ -96,18 +95,19 @@ Shader "Shader Forge/Examples/Custom Lighting" {
             float4 frag(VertexOutput i) : COLOR {
                 i.normalDir = normalize(i.normalDir);
                 float3x3 tangentTransform = float3x3( i.tangentDir, i.bitangentDir, i.normalDir);
+                float3 viewDirection = normalize(_WorldSpaceCameraPos.xyz - i.posWorld.xyz);
                 float3 _Normals_var = UnpackNormal(tex2D(_Normals,TRANSFORM_TEX(i.uv0, _Normals)));
                 float3 normalLocal = _Normals_var.rgb;
                 float3 normalDirection = normalize(mul( normalLocal, tangentTransform )); // Perturbed normals
                 float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
                 float3 lightColor = _LightColor0.rgb;
+                float3 halfDirection = normalize(viewDirection+lightDirection);
 ////// Lighting:
+                float attenuation = LIGHT_ATTENUATION(i);
+////// Emissive:
                 float4 _Diffuse_var = tex2D(_Diffuse,TRANSFORM_TEX(i.uv0, _Diffuse));
-				float fix = dot(lightDirection, normalDirection);
-				/*if (fix < 0.5) {
-					fix = 0.5;
-				}*/
-                float3 finalColor = (_LightColor0.rgb*((_Diffuse_var.rgb*_Color.rgb*floor(max(0,fix) * _Bands) / (_Bands - 1))+UNITY_LIGHTMODEL_AMBIENT.rgb));
+                float3 emissive = (UNITY_LIGHTMODEL_AMBIENT.rgb*_Diffuse_var.rgb);
+                float3 finalColor = emissive + (((_Diffuse_var.rgb*max(0,dot(lightDirection,normalDirection)))+(pow(max(0,dot(normalDirection,halfDirection)),exp(_Glossiness))*_Specularity))*attenuation*_LightColor0.rgb);
                 return fixed4(finalColor,1);
             }
             ENDCG
@@ -117,24 +117,23 @@ Shader "Shader Forge/Examples/Custom Lighting" {
             Tags {
                 "LightMode"="ForwardAdd"
             }
-
-			Blend One One
+            Blend One One
             
             
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-			#define UNITY_PASS_FORWARDADD
+            #define UNITY_PASS_FORWARDADD
             #include "UnityCG.cginc"
             #include "AutoLight.cginc"
+            #include "Lighting.cginc"
             #pragma multi_compile_fwdadd_fullshadows
             #pragma exclude_renderers xbox360 ps3 
             #pragma target 3.0
-			uniform float4 _LightColor0;
-            uniform float4 _Color;
             uniform sampler2D _Diffuse; uniform float4 _Diffuse_ST;
             uniform sampler2D _Normals; uniform float4 _Normals_ST;
-            uniform float _Bands;
+            uniform float _Glossiness;
+            uniform float _Specularity;
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
@@ -165,23 +164,69 @@ Shader "Shader Forge/Examples/Custom Lighting" {
             float4 frag(VertexOutput i) : COLOR {
                 i.normalDir = normalize(i.normalDir);
                 float3x3 tangentTransform = float3x3( i.tangentDir, i.bitangentDir, i.normalDir);
+                float3 viewDirection = normalize(_WorldSpaceCameraPos.xyz - i.posWorld.xyz);
                 float3 _Normals_var = UnpackNormal(tex2D(_Normals,TRANSFORM_TEX(i.uv0, _Normals)));
                 float3 normalLocal = _Normals_var.rgb;
                 float3 normalDirection = normalize(mul( normalLocal, tangentTransform )); // Perturbed normals
                 float3 lightDirection = normalize(lerp(_WorldSpaceLightPos0.xyz, _WorldSpaceLightPos0.xyz - i.posWorld.xyz,_WorldSpaceLightPos0.w));
                 float3 lightColor = _LightColor0.rgb;
+                float3 halfDirection = normalize(viewDirection+lightDirection);
 ////// Lighting:
+                float attenuation = LIGHT_ATTENUATION(i);
                 float4 _Diffuse_var = tex2D(_Diffuse,TRANSFORM_TEX(i.uv0, _Diffuse));
-				float fix = dot(lightDirection, normalDirection);
-				/*if (fix < 10) {
-					fix = 1;
-				}*/
-				float3 finalColor = (_LightColor0.rgb*((_Diffuse_var.rgb*_Color.rgb*floor(max(0,fix) * _Bands) / (_Bands - 1))+UNITY_LIGHTMODEL_AMBIENT.rgb));
-                return fixed4(finalColor,1);
+                float3 finalColor = (((_Diffuse_var.rgb*max(0,dot(lightDirection,normalDirection)))+(pow(max(0,dot(normalDirection,halfDirection)),exp(_Glossiness))*_Specularity))*attenuation*_LightColor0.rgb);
+                return fixed4(finalColor * 1,0);
+            }
+            ENDCG
+        }
+        Pass {
+            Name "Meta"
+            Tags {
+                "LightMode"="Meta"
+            }
+            Cull Off
+            
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #define UNITY_PASS_META 1
+            #include "UnityCG.cginc"
+            #include "UnityMetaPass.cginc"
+            #pragma fragmentoption ARB_precision_hint_fastest
+            #pragma multi_compile_shadowcaster
+            #pragma exclude_renderers xbox360 ps3 
+            #pragma target 3.0
+            uniform sampler2D _Diffuse; uniform float4 _Diffuse_ST;
+            struct VertexInput {
+                float4 vertex : POSITION;
+                float2 texcoord0 : TEXCOORD0;
+                float2 texcoord1 : TEXCOORD1;
+                float2 texcoord2 : TEXCOORD2;
+            };
+            struct VertexOutput {
+                float4 pos : SV_POSITION;
+                float2 uv0 : TEXCOORD0;
+            };
+            VertexOutput vert (VertexInput v) {
+                VertexOutput o = (VertexOutput)0;
+                o.uv0 = v.texcoord0;
+                o.pos = UnityMetaVertexPosition(v.vertex, v.texcoord1.xy, v.texcoord2.xy, unity_LightmapST, unity_DynamicLightmapST );
+                return o;
+            }
+            float4 frag(VertexOutput i) : SV_Target {
+                UnityMetaInput o;
+                UNITY_INITIALIZE_OUTPUT( UnityMetaInput, o );
+                
+                float4 _Diffuse_var = tex2D(_Diffuse,TRANSFORM_TEX(i.uv0, _Diffuse));
+                o.Emission = (UNITY_LIGHTMODEL_AMBIENT.rgb*_Diffuse_var.rgb);
+                
+                float3 diffColor = float3(0,0,0);
+                o.Albedo = diffColor;
+                
+                return UnityMetaFragment( o );
             }
             ENDCG
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
 }
