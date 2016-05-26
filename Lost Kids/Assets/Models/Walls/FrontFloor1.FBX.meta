@@ -1,20 +1,40 @@
 fileFormatVersion: 2
-guid: 26e5a36377510dd4a88477793b4c7a5d
-timeCreated: 1463607879
+guid: 9201fc2f66c342047a2a065291f61232
+timeCreated: 1464221207
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: ColumnNoLine
+    100002: Floor002
+    100004: Floor1
+    100006: Wall1
+    100008: FrontFloorPlane1
+    100010: FrontFloorNoLine1
     400000: //RootNode
-    400002: ColumnNoLine
+    400002: Floor002
+    400004: Floor1
+    400006: Wall1
+    400008: FrontFloorPlane1
+    400010: FrontFloorNoLine1
     2300000: //RootNode
-    2300002: ColumnNoLine
+    2300002: Floor002
+    2300004: Floor1
+    2300006: Wall1
+    2300008: FrontFloorPlane1
+    2300010: FrontFloorNoLine1
     3300000: //RootNode
-    3300002: ColumnNoLine
-    4300000: Column
-    4300002: ColumnNoLine
+    3300002: Floor002
+    3300004: Floor1
+    3300006: Wall1
+    3300008: FrontFloorPlane1
+    3300010: FrontFloorNoLine1
+    4300000: Floor002
+    4300002: Floor1
+    4300004: Wall1
+    4300006: FrontFloor1
+    4300008: FrontFloorPlane1
+    4300010: FrontFloorNoLine1
   materials:
     importMaterials: 0
     materialName: 0
@@ -58,7 +78,7 @@ ModelImporter:
     normalSmoothAngle: 180
     normalImportMode: 1
     tangentImportMode: 3
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
