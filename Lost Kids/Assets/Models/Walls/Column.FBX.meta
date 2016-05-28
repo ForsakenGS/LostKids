@@ -1,15 +1,20 @@
 fileFormatVersion: 2
-guid: 26e5a36377510dd4a88477793b4c7a5d
-timeCreated: 1463607879
+guid: ac25ba2d288606646b9f3be4395765f1
+timeCreated: 1464356025
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: ColumnNoLine
     400000: //RootNode
+    400002: ColumnNoLine
     2300000: //RootNode
+    2300002: ColumnNoLine
     3300000: //RootNode
+    3300002: ColumnNoLine
     4300000: Column
+    4300002: ColumnNoLine
   materials:
     importMaterials: 1
     materialName: 0
@@ -50,10 +55,10 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 60
+    normalSmoothAngle: 180
     normalImportMode: 1
     tangentImportMode: 3
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []

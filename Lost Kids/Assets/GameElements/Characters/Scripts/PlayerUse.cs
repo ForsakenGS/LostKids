@@ -26,7 +26,7 @@ public class PlayerUse : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        rayOffset = new Vector3(0, GetComponent<Renderer>().bounds.size.y / 2, 0);
+        rayOffset = new Vector3(0, GetComponentInChildren<Renderer>().bounds.size.y / 2, 0);
 	}
 	
 	// Update is called once per frame

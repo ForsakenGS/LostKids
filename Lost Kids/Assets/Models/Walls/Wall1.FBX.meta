@@ -6,10 +6,15 @@ ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Wall1NoLine
     400000: //RootNode
+    400002: Wall1NoLine
     2300000: //RootNode
+    2300002: Wall1NoLine
     3300000: //RootNode
+    3300002: Wall1NoLine
     4300000: Wall1
+    4300002: Wall1NoLine
   materials:
     importMaterials: 0
     materialName: 0
@@ -50,7 +55,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 60
+    normalSmoothAngle: 180
     normalImportMode: 1
     tangentImportMode: 3
   importAnimation: 0
