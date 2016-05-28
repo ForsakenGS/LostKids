@@ -1,20 +1,26 @@
 fileFormatVersion: 2
-guid: a92da3e03569b89419bdf50577556c27
-timeCreated: 1462924174
+guid: 26e5a36377510dd4a88477793b4c7a5d
+timeCreated: 1463607879
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Wall2NoLine
+    100002: ColumnNoLine
+    100004: ColumnSpikesNoLine
     400000: //RootNode
-    400002: Wall2NoLine
+    400002: ColumnNoLine
+    400004: ColumnSpikesNoLine
     2300000: //RootNode
-    2300002: Wall2NoLine
+    2300002: ColumnNoLine
+    2300004: ColumnSpikesNoLine
     3300000: //RootNode
-    3300002: Wall2NoLine
-    4300000: Wall2
-    4300002: Wall2NoLine
+    3300002: ColumnNoLine
+    3300004: ColumnSpikesNoLine
+    4300000: Column
+    4300002: ColumnNoLine
+    4300004: ColumnSpikes
+    4300006: ColumnSpikesNoLine
   materials:
     importMaterials: 0
     materialName: 0

@@ -11,30 +11,84 @@ ModelImporter:
     100006: Wall1
     100008: FrontFloorPlane1
     100010: FrontFloorNoLine1
+    100012: Column
+    100014: ColumnNoLine
+    100016: FrontFloor1
+    100018: FrontFloor1NoLine
+    100020: FrontFloor2
+    100022: FrontFloor2NoLine
+    100024: FrontFloor3
+    100026: FrontFloor3NoLine
+    100028: Old
+    100030: Wall2
+    100032: Wall4
     400000: //RootNode
     400002: Floor002
     400004: Floor1
     400006: Wall1
     400008: FrontFloorPlane1
     400010: FrontFloorNoLine1
+    400012: Column
+    400014: ColumnNoLine
+    400016: FrontFloor1
+    400018: FrontFloor1NoLine
+    400020: FrontFloor2
+    400022: FrontFloor2NoLine
+    400024: FrontFloor3
+    400026: FrontFloor3NoLine
+    400028: Old
+    400030: Wall2
+    400032: Wall4
     2300000: //RootNode
     2300002: Floor002
     2300004: Floor1
     2300006: Wall1
     2300008: FrontFloorPlane1
     2300010: FrontFloorNoLine1
+    2300012: Column
+    2300014: ColumnNoLine
+    2300016: FrontFloor1
+    2300018: FrontFloor1NoLine
+    2300020: FrontFloor2
+    2300022: FrontFloor2NoLine
+    2300024: FrontFloor3
+    2300026: FrontFloor3NoLine
+    2300028: Old
+    2300030: Wall2
+    2300032: Wall4
     3300000: //RootNode
     3300002: Floor002
     3300004: Floor1
     3300006: Wall1
     3300008: FrontFloorPlane1
     3300010: FrontFloorNoLine1
+    3300012: Column
+    3300014: ColumnNoLine
+    3300016: FrontFloor1
+    3300018: FrontFloor1NoLine
+    3300020: FrontFloor2
+    3300022: FrontFloor2NoLine
+    3300024: FrontFloor3
+    3300026: FrontFloor3NoLine
+    3300028: Old
+    3300030: Wall2
+    3300032: Wall4
     4300000: Floor002
     4300002: Floor1
     4300004: Wall1
     4300006: FrontFloor1
     4300008: FrontFloorPlane1
     4300010: FrontFloorNoLine1
+    4300012: FrontFloor1NoLine
+    4300014: Old
+    4300016: Column
+    4300018: ColumnNoLine
+    4300020: Wall2
+    4300022: FrontFloor2
+    4300024: FrontFloor2NoLine
+    4300026: Wall4
+    4300028: FrontFloor3
+    4300030: FrontFloor3NoLine
   materials:
     importMaterials: 0
     materialName: 0

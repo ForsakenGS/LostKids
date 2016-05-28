@@ -1,22 +1,22 @@
 fileFormatVersion: 2
-guid: a92da3e03569b89419bdf50577556c27
-timeCreated: 1462924174
+guid: 5bc1e27c03083b84e9b1d8abd58ff87f
+timeCreated: 1464349473
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Wall2NoLine
+    100002: NormalFloorNoLine
     400000: //RootNode
-    400002: Wall2NoLine
+    400002: NormalFloorNoLine
     2300000: //RootNode
-    2300002: Wall2NoLine
+    2300002: NormalFloorNoLine
     3300000: //RootNode
-    3300002: Wall2NoLine
-    4300000: Wall2
-    4300002: Wall2NoLine
+    3300002: NormalFloorNoLine
+    4300000: NormalFloor
+    4300002: NormalFloorNoLine
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
@@ -55,10 +55,10 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 180
-    normalImportMode: 1
+    normalSmoothAngle: 60
+    normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []

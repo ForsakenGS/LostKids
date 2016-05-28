@@ -6,10 +6,15 @@ ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Wall5NoLine
     400000: //RootNode
+    400002: Wall5NoLine
     2300000: //RootNode
+    2300002: Wall5NoLine
     3300000: //RootNode
+    3300002: Wall5NoLine
     4300000: Wall5
+    4300002: Wall5NoLine
   materials:
     importMaterials: 0
     materialName: 0

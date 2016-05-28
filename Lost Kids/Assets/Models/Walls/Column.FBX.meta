@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 26e5a36377510dd4a88477793b4c7a5d
-timeCreated: 1463607879
+guid: ac25ba2d288606646b9f3be4395765f1
+timeCreated: 1464356025
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -16,7 +16,7 @@ ModelImporter:
     4300000: Column
     4300002: ColumnNoLine
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
@@ -58,7 +58,7 @@ ModelImporter:
     normalSmoothAngle: 180
     normalImportMode: 1
     tangentImportMode: 3
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
