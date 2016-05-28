@@ -45,6 +45,8 @@ public class CollectionManager : MonoBehaviour {
 
         LoadText(collection);
 
+        Resources.UnloadUnusedAssets();
+
     }
 
     void LoadImage(string collectionName)
