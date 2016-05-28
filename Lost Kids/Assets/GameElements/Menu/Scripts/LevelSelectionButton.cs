@@ -9,20 +9,14 @@ public class LevelSelectionButton : MonoBehaviour {
     public Sprite unlockedImage;
     public UnityEngine.UI.Button levelButton;  
     public bool unlocked=false;
-    public Image selector;
 
-    private Color selectorColor;
 	// Use this for initialization
 	void Start () {
         if(levelButton==null)
         {
             levelButton = GetComponentInChildren<UnityEngine.UI.Button>();
         }
-        if(selector==null)
-        {
-            selector = GetComponentInChildren<Image>();
-        }
-        selectorColor = selector.color;
+       
 
         if (GameData.LevelUnlocked(level.ToString()))
         {
@@ -50,15 +44,4 @@ public class LevelSelectionButton : MonoBehaviour {
         }
     }
 
-    public void Selected()
-    {
-        selectorColor.a = 1;
-        selector.color = selectorColor;
-    }
-
-    public void DeSelected()
-    {
-        selectorColor.a = 0;
-        selector.color = selectorColor;
-    }
 }

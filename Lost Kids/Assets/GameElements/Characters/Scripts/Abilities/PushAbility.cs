@@ -108,7 +108,7 @@ public class PushAbility : CharacterAbility {
         //origin.y = +0.3f;
         //target.y=0.35f;
         //joint.anchor = origin; //Probablemente no sea necesario cuando se improten bien los modelos
-
+        joint.breakForce = float.MaxValue;
         joint.connectedBody = targetRigidBody;
 
         //joint.connectedAnchor = target;

@@ -25,6 +25,7 @@ public class SettingsManager : MonoBehaviour {
     void OnEnable()
     {
         UpdateSettings();
+        masterSlider.Select();
     }
 
 
