@@ -111,6 +111,7 @@ public class LevelGenerator : MonoBehaviour {
         {  
             room=Instantiate(levelStructure[i], nextRoomPosition, Quaternion.identity) as GameObject;
 
+            
             //Se actualiza la referencia a la siguiente habitacion del way con la nueva room
             if (prev != null && prev.GetComponent<WaySettings>() != null)
             {
@@ -122,12 +123,12 @@ public class LevelGenerator : MonoBehaviour {
             {
                     room.GetComponent<WaySettings>().prevRoom = prev.GetComponent<RoomSettings>();
             }
-            /*
+            
             if(room.GetComponent<RoomSettings>()!= null)
             {
-                room.gameObject.SetActive(false);
+                TranslateRoom(room);
             }
-            */
+            
             nextRoomPosition = room.transform.FindChild("Exit").transform.position;
             prev = room;
         }
@@ -185,8 +186,17 @@ public class LevelGenerator : MonoBehaviour {
             actualTagsCount.Add(name, 0);
         }
 
+    }
 
-
+    /// <summary>
+    /// Desplaza la room para encajar la entrada
+    /// </summary>
+    /// <param name="room"></param>
+    void TranslateRoom(GameObject room)
+    {
+        Vector3 entry = room.transform.Find("Entry").transform.position;
+        Vector3 offset = entry - room.transform.position;
+        room.transform.position -= offset;
     }
 
     /// <summary>
