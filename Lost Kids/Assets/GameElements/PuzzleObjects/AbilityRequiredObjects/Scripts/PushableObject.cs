@@ -33,6 +33,7 @@ public class PushableObject : MonoBehaviour {
     public void Release()
     {
         Debug.Log("Sueltame!");
+        gameObject.layer = LayerMask.NameToLayer("Default");
         if (IsGrounded())
         {
             rigidBody.isKinematic = true;
@@ -43,6 +44,7 @@ public class PushableObject : MonoBehaviour {
     public void Grab(PushAbility pa)
     {
         rigidBody.isKinematic = false;
+        gameObject.layer = LayerMask.NameToLayer("PushableObjects");
         pushAbility = pa;
     }
 
@@ -83,15 +85,15 @@ public class PushableObject : MonoBehaviour {
 
         return grounded;
     }
-
+    
     void OnCollisionExit(Collision col)
     {
-        if(pushAbility!=null && col.transform.position.y<transform.position.y)
+        if(pushAbility!=null && !IsGrounded())
         {
             pushAbility.ReleaseObject();
         }
     }
-
+    
     void OnCollisionEnter(Collision col)
     {
         if(pushAbility == null && IsGrounded())

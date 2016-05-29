@@ -75,7 +75,6 @@ public class RoomSettings : MonoBehaviour {
         // Caída libre
         do {
             trf.Translate(new Vector3(0, -fallSpeed, 0));
-            //Debug.Log("TRANSLATING " + trf.name + " -- " +Vector3.Distance(trf.position, initialPos));
             yield return new WaitForSeconds(0.01f);
         } while (Vector3.Distance(trf.position, initialPos) > 0.2f);
         trf.position = initialPos;
@@ -137,17 +136,17 @@ public class RoomSettings : MonoBehaviour {
             // Bloques de las paredes
             foreach (Transform wall in walls) {
                 //objectsToPrepare += 1;
-               // StartCoroutine("FreeFallEffect", wall);
+                StartCoroutine("FreeFallEffect", wall);
             }
             // Elementos del puzzle
             foreach (Transform wall in puzzleElements) {
                 //objectsToPrepare += 1;
-               // StartCoroutine("FreeFallEffect", wall);
+                StartCoroutine("FreeFallEffect", wall);
             }
             // Elementos decorativos
             foreach (Transform wall in decoration) {
                 //objectsToPrepare += 1;
-               // StartCoroutine("FreeFallEffect", wall);
+                StartCoroutine("FreeFallEffect", wall);
             }
             // Espera para que la habitación termine de estar preparada
             StartCoroutine("WaitEndOfPreparation");
