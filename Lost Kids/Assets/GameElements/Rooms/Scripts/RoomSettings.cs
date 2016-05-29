@@ -75,7 +75,6 @@ public class RoomSettings : MonoBehaviour {
         // Caída libre
         do {
             trf.Translate(new Vector3(0, -fallSpeed, 0));
-            Debug.Log("TRANSLATING " + trf.name + " -- " +Vector3.Distance(trf.position, initialPos));
             yield return new WaitForSeconds(0.01f);
         } while (Vector3.Distance(trf.position, initialPos) > 0.2f);
         trf.position = initialPos;

@@ -94,7 +94,7 @@ public class PushAbility : CharacterAbility {
 
     public void GrabObject(GameObject go, Vector3 origin, Vector3 target) {
         targetGameObject = go;
-
+        targetGameObject.transform.position += Vector3.up * 0.001f;
         joint = gameObject.AddComponent<CharacterJoint>();
 
         Rigidbody targetRigidBody = targetGameObject.GetComponent<Rigidbody>();
@@ -115,8 +115,6 @@ public class PushAbility : CharacterAbility {
 
         targetGameObject.GetComponent<PushableObject>().Grab(this);
 
-        Debug.Log("Punto origen: " + origin + " Punto objetivo: " + target);
-
     }
 
     public void ReleaseObject() {
@@ -126,8 +124,11 @@ public class PushAbility : CharacterAbility {
             if (targetGameObject != null)
             {
                 targetGameObject.GetComponent<PushableObject>().Release();
-                EndExecution();
                 characterStatus.EndAbility(this);
+                if(execution)
+                {
+                    EndExecution();
+                }
             }
         }
         targetGameObject = null;
