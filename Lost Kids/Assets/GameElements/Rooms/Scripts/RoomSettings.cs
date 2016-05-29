@@ -134,20 +134,20 @@ public class RoomSettings : MonoBehaviour {
             // Bloqueo al jugador
             InputManager.SetLock(true);
             // Bloques de las paredes
-            foreach (Transform wall in walls) {
+            /*foreach (Transform wall in walls) {
                 //objectsToPrepare += 1;
-                StartCoroutine("FreeFallEffect", wall);
+                //StartCoroutine("FreeFallEffect", wall);
             }
             // Elementos del puzzle
             foreach (Transform wall in puzzleElements) {
                 //objectsToPrepare += 1;
-                StartCoroutine("FreeFallEffect", wall);
+                //StartCoroutine("FreeFallEffect", wall);
             }
             // Elementos decorativos
             foreach (Transform wall in decoration) {
                 //objectsToPrepare += 1;
-                StartCoroutine("FreeFallEffect", wall);
-            }
+                //StartCoroutine("FreeFallEffect", wall);
+            }*/
             // Espera para que la habitación termine de estar preparada
             StartCoroutine("WaitEndOfPreparation");
         }
