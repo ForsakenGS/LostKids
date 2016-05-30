@@ -65,6 +65,8 @@ public abstract class UsableObject : MonoBehaviour {
     /// </summary>
     public void Start () {
 
+        activables = new List<IActivable>();
+
         //Se guarda la referencia al script Activable
         foreach(GameObject target in targets)
         {
@@ -135,7 +137,7 @@ public abstract class UsableObject : MonoBehaviour {
             if (!inPuzzle)
             {
                 foreach(IActivable activable in activables) {
-                    activable.Activate();
+                    activable.CancelActivation();
                 }
             }
             //Si forma parte de un puzzle, notifica su desactivacion al manager
