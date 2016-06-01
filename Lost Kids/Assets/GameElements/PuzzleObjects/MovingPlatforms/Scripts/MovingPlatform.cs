@@ -64,7 +64,7 @@ public class MovingPlatform : MonoBehaviour,IActivable {
     private bool resetting;
 
     // Use this for initialization
-    void Start()
+    void OnEnable()
     {
 
         //Se genera el camino de puntos
@@ -194,7 +194,7 @@ public class MovingPlatform : MonoBehaviour,IActivable {
     /// Detecta al jugador y lo coloca como hijo de la plataforma para que siga su movimiento
     /// </summary>
     /// <param name="col"></param>
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.tag=="Player")
         {
@@ -205,7 +205,7 @@ public class MovingPlatform : MonoBehaviour,IActivable {
         }
     }
 
-    void OnTriggerExit(Collider col)
+    void OnCollisionExit(Collision col)
     {
         if (col.gameObject.tag == "Player")
         {

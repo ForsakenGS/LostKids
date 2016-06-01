@@ -30,10 +30,13 @@ public class KappaProjectile : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if(col.gameObject.CompareTag("Player"))
+        if (!col.isTrigger)
         {
-            col.gameObject.GetComponent<CharacterStatus>().Kill();
+            if (col.gameObject.CompareTag("Player"))
+            {
+                col.gameObject.GetComponent<CharacterStatus>().Kill();
+            }
+            Invoke("Destroy", 0);
         }
-        Invoke("Destroy", 0);
     }
 }

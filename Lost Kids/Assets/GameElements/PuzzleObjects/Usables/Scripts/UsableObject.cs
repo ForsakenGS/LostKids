@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 
 /// <summary>
 /// Tipo de objeto:
@@ -19,7 +19,7 @@ public enum UsableTypes { Instant, Hold, Timed }
 public abstract class UsableObject : MonoBehaviour {
 
     //Objeto al que apunta el boton
-    public GameObject target;
+    public List<GameObject> targets;
 
 
     public UsableTypes type;
@@ -37,7 +37,7 @@ public abstract class UsableObject : MonoBehaviour {
 
     //Referencia al objeto que activa
     [HideInInspector]
-    public IActivable activable;
+    public List<IActivable> activables;
 
     //Indicador de si forma o no parte de un puzzle
     //Cuando el objeto forma parte de un puzzle, ignora su activable, 
@@ -65,10 +65,12 @@ public abstract class UsableObject : MonoBehaviour {
     /// </summary>
     public void Start () {
 
+        activables = new List<IActivable>();
+
         //Se guarda la referencia al script Activable
-        if (target != null)
+        foreach(GameObject target in targets)
         {
-            activable = target.GetComponent<IActivable>();
+            activables.Add(target.GetComponent<IActivable>());
         }
 
         //Si no tiene detector de uso, se asume que se puede usar desde cualquier posicion
@@ -101,9 +103,10 @@ public abstract class UsableObject : MonoBehaviour {
             onUse = true;
 
             //Si no forma parte de un puzzle, activa su objetivo
-            if (!inPuzzle)
-            {
-                activable.Activate();
+            if (!inPuzzle) {
+                foreach(IActivable activable in activables) {
+                    activable.Activate();
+                }
             }
             //Si forma parte de un puzzle, notifica su activacion al manager
             else
@@ -133,7 +136,9 @@ public abstract class UsableObject : MonoBehaviour {
             //Si no forma parte de un puzzle, desactiva su objetivo
             if (!inPuzzle)
             {
-                activable.CancelActivation();
+                foreach(IActivable activable in activables) {
+                    activable.CancelActivation();
+                }
             }
             //Si forma parte de un puzzle, notifica su desactivacion al manager
             else

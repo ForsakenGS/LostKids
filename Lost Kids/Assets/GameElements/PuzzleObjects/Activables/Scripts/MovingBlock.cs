@@ -16,6 +16,8 @@ public class MovingBlock : MonoBehaviour, IActivable {
     //Velocidad de apertura
     public float moveSpeed;
 
+    public float moveDistance;
+
     //Variable que almacena el estado del bloque
     private bool onPosition = false;
 
@@ -35,24 +37,25 @@ public class MovingBlock : MonoBehaviour, IActivable {
     // Use this for initialization
     void Start()
     {
+
         //Se guarda la posicion inicial del bloque
         startPosition = this.transform.position;
         //Se calcula un offset ( distancia a la que se movera) en funcion al tamaño y direccion de apertura
-        Vector3 size=GetComponent<Renderer>().bounds.size;
+        
         Vector3 offset = new Vector3(0, 0, 0);
         switch (openDirection)
         {
             case Direction.Down:
-                offset = new Vector3(0, -size.y, 0);
+                offset = new Vector3(0, -moveDistance, 0);
                 break;
             case Direction.Up:
-                offset = new Vector3(0, size.y, 0);
+                offset = new Vector3(0, moveDistance, 0);
                 break;
             case Direction.Left:
-                offset = new Vector3(-size.z, 0, 0);
+                offset = new Vector3(-moveDistance, 0, 0);
                 break;
             case Direction.Right:
-                offset = new Vector3(size.z, 0, 0);
+                offset = new Vector3(moveDistance, 0, 0);
                 break;
 
         }
@@ -142,7 +145,7 @@ public class MovingBlock : MonoBehaviour, IActivable {
     /// Cuando detecta al jugador, lo añade como hijo para que siga su movimiento
     /// </summary>
     /// <param name="col"></param>
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.tag == "Player")
         {
@@ -154,7 +157,7 @@ public class MovingBlock : MonoBehaviour, IActivable {
     /// Cuando el jugadr abandona el bloque, deja de ser hijo del bloque
     /// </summary>
     /// <param name="col"></param>
-    void OnTriggerExit(Collider col)
+    void OnCollisionExit(Collision col)
     {
         if (col.gameObject.tag == "Player")
         {

@@ -135,7 +135,7 @@ public class CameraManager : MonoBehaviour {
     }
 
     public void RestoreCamera(GameObject cam) {
-
+        Debug.Log("Hola");
         cam.SetActive(false);
         cameras[currentRoom].SetActive(true);
         LockUnlockEvent();

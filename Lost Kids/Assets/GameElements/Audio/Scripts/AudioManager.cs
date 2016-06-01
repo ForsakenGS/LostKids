@@ -6,10 +6,30 @@ public class AudioManager : MonoBehaviour {
 
     public static AudioManager instance = null;
 
+    private float musicVolume;
+    private float soundsVolume;
     private HashSet<AudioSource> playingMusics;
     private HashSet<AudioSource> playingSounds;
 
+    //Al activarse el script se añade la función Lock
+    void OnEnable()
+    {
+        UpdateMusicVolume();
+        UpdateSoundsVolume();
+        GameSettings.VolumeChanged += UpdateSoundsVolume;
+        GameSettings.VolumeChanged += UpdateMusicVolume;
+        GameManager.PauseEvent += PauseAllSounds;
+        GameManager.UnPauseEvent +=ResumeAllSounds;
+    }
 
+    //Al desactivarse el script se desuscriben las funciones
+    void OnDisable()
+    {
+        GameSettings.VolumeChanged -= UpdateSoundsVolume;
+        GameSettings.VolumeChanged -= UpdateMusicVolume;
+        GameManager.PauseEvent -= PauseAllSounds;
+        GameManager.UnPauseEvent -= ResumeAllSounds;
+    }
     void Awake() {
 
         if (instance == null) {
@@ -25,6 +45,12 @@ public class AudioManager : MonoBehaviour {
             
         DontDestroyOnLoad (gameObject);
 
+    }
+
+    void Restart()
+    {
+        playingMusics = new HashSet<AudioSource>();
+        playingSounds = new HashSet<AudioSource>();
     }
 
     /// <summary>
@@ -351,25 +377,37 @@ public class AudioManager : MonoBehaviour {
 
     }
 
-    public static AudioManager Instance
+    public void UpdateMusicVolume()
     {
-        //Devuelve la instancia actual o crea una nueva si aun no existe
-        get { return instance ?? (instance = new GameObject("AudioManager").AddComponent<AudioManager>()); }
+        musicVolume = GameSettings.GetModifiedMusicVolume();
+        UpdateMusicClipsVolume();
     }
 
-    public static void UpdateMusicVolume()
+    public void UpdateSoundsVolume()
     {
-        foreach(AudioSource music in Instance.playingMusics)
+        soundsVolume = GameSettings.GetModifiedSoundsVolume();
+        UpdateSoundClipsVolume();
+    }
+
+    public void UpdateMusicClipsVolume()
+    {
+        foreach(AudioSource music in playingMusics)
         {
-            music.volume = GameSettings.GetModifiedMusicVolume();
+            if (music != null)
+            {
+                music.volume = musicVolume;
+            }
         }
     }
 
-    public static void UpdateSoundsVolume()
+    public void UpdateSoundClipsVolume()
     {
-        foreach (AudioSource sound in Instance.playingSounds)
+        foreach (AudioSource sound in playingSounds)
         {
-            sound.volume = GameSettings.GetModifiedSoundsVolume();
+            if (sound != null)
+            {
+                sound.volume = soundsVolume;
+            }
         }
     }
 
@@ -377,7 +415,7 @@ public class AudioManager : MonoBehaviour {
     {
         foreach (AudioSource sound in Instance.playingSounds)
         {
-            FadePause(sound, 0.1f);
+            Pause(sound);
         }
     }
 
@@ -385,8 +423,14 @@ public class AudioManager : MonoBehaviour {
     {
         foreach (AudioSource sound in Instance.playingSounds)
         {
-            FadeResume(sound, 0.1f);
+            Resume(sound);
         }
+    }
+
+    public static AudioManager Instance
+    {
+        //Devuelve la instancia actual o crea una nueva si aun no existe
+        get { return instance ?? (instance = new GameObject("AudioManager").AddComponent<AudioManager>()); }
     }
 
 

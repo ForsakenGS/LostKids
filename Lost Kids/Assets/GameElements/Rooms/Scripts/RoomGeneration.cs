@@ -25,7 +25,7 @@ public class RoomGeneration : MonoBehaviour {
         // Generación automática de los elementos de decoración
         DecoGeneration();
         // Ordenación jerarquía de la escena
-        HierarchySorting();
+        //HierarchySorting();
     }
 
     // Use this for initialization

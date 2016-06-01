@@ -14,8 +14,6 @@ public class PersistenceTest : MonoBehaviour {
             DataManager.SetCurrentGame(0);
         }
 
-
-	
 	}
 	
 	// Update is called once per frame

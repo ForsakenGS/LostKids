@@ -7,9 +7,12 @@ public class GameData  {
 
     [SerializeField]
     List<string> levelsCompleted= new List<string>();
-    
+
     [SerializeField]
-    List<string> collectibles= new List<string>();
+    List<string> unlockedLevels = new List<string>();
+
+    [SerializeField]
+    List<Collection> collections= new List<Collection>();
 
     [SerializeField]
     List<string> solvedRooms = new List<string>();
@@ -32,20 +35,14 @@ public class GameData  {
     protected GameData()
     { 
 
-        collectibles = new List<string>();
+        collections = new List<Collection>();
         levelsCompleted = new List<string>();
+        solvedRooms = new List<string>();
+        unlockedLevels = new List<string>();
+        unlockedLevels.Add(GameLevels.Tutorial1.ToString());
     }
 
-    public static void UpdateCollectibles(string id)
-    {
-        if (!Instance.collectibles.Contains(id))
-        {
-            Instance.collectibles.Add(id);
-        }
-
-        DataManager.Save();
-        Debug.Log("Conseguido colectionable " + id);
-    }
+  
 
     public static void UpdateLevels(string level, LevelData data)
     {
@@ -62,6 +59,24 @@ public class GameData  {
         DataManager.Save();
     }
 
+    public static void CompleteLevel(string level)
+    {
+        if (!instance.levelsCompleted.Contains(level))
+        {
+            Instance.levelsCompleted.Add(level);
+
+        }
+    }
+
+    public static void UnlockLevel(string level)
+    {
+        if (!instance.unlockedLevels.Contains(level))
+        {
+            Instance.unlockedLevels.Add(level);
+
+        }
+    }
+
     public static void UpdateRooms(string id)
     {
         if (!Instance.solvedRooms.Contains(id))
@@ -73,16 +88,57 @@ public class GameData  {
         Debug.Log("Room superada " + id);
     }
 
+    public static void AddCollectible(Collections name, CollectionPieces piece)
+    {
+
+        //Se busca si ya existe esa coleccion en la partida
+        Collection col = GetCollection(name);
+        if (col != null)
+        {
+            col.AddPiece(piece);
+        }
+        //Si no existe, se crea
+        else
+        {
+            Collection coll = new Collection(name);
+            //Se añade la nueva pieza de la coleccion
+            coll.AddPiece(piece);
+            Instance.collections.Add(coll);
+        }
+
+        DataManager.Save();
+    }
 
     /// <summary>
-    /// Devuelve si el collectible con el id introducido ya ha sido adquirido
+    /// Devuelve si la pieza de la coleccion ya se ha recogido
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static bool AlreadyCollected(string id)
+    public static bool AlreadyCollected(Collections name, CollectionPieces piece)
     {
+        bool collected = false;
+        //Se busca si ya existe esa coleccion en la partida
+        Collection col = GetCollection(name);
+        if (col != null)
+        {
+            collected = col.CollectedPiece(piece);
+        }
+        return collected;
+    }
 
-        return Instance.collectibles.Contains(id);
+    public static Collection GetCollection(Collections name)
+    {
+        Collection col = null;
+
+        foreach (Collection c in Instance.collections)
+        {
+            if (c.collection.Equals(name))
+            {
+                col = c;
+                break;
+            }
+        }
+        return col;
     }
 
     public static LevelData LevelStart(string level)
@@ -97,8 +153,15 @@ public class GameData  {
         }
     }
 
+
+
     public static LevelData getLevelData(string level)
     {
         return Instance.levels[Instance.levelsCompleted.IndexOf(level)];
+    }
+
+    public static bool LevelUnlocked(string level)
+    {
+        return Instance.unlockedLevels.Contains(level);
     }
 }

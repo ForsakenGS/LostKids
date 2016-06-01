@@ -62,20 +62,22 @@ public class InputManager : MonoBehaviour {
 
     // Manage general inputs
     void Update() {
-        if (!locked) {
-            if (Input.GetKeyUp(KeyCode.Escape))
+        if (Input.GetButtonDown("Menu"))
+        {
+            if (!GameManager.paused)
             {
-                if (!GameManager.paused)
-                {
-                    PausePanel.ShowPanel();
-                    GameManager.PauseGame();
-                }
-                else
-                {
-                    PausePanel.HidePanel();
-                    GameManager.ResumeGame();
-                }
+                PausePanel.ShowPanel();
+                GameManager.PauseGame();
             }
+            else
+            {
+                PausePanel.HidePanel();
+                GameManager.ResumeGame();
+            }
+        }
+
+        if (!locked) {
+            
 
             // Switch Players Buttons
             if ((Input.GetAxis("Player1_Axis") > 0) || (Input.GetButtonDown("Player1"))) {

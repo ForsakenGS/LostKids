@@ -69,8 +69,10 @@ public class Door : MonoBehaviour, IActivable {
         }
 
         audioLoader = GetComponent<AudioLoader>();
-        openSound = audioLoader.GetSound("Open");
-        closeSound = audioLoader.GetSound("Close");
+        if(audioLoader) {
+            openSound = audioLoader.GetSound("Open");
+            closeSound = audioLoader.GetSound("Close");
+        }
 
         //Se guarda la posicion inicial de la puerta
         startPosition = this.transform.position;

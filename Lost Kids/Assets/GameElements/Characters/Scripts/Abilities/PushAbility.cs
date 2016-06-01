@@ -57,10 +57,14 @@ public class PushAbility : CharacterAbility {
 #endif
             // Detecta el objeto situado delante del personaje
             RaycastHit hitInfo;
+            Debug.Log("rayo");
             if (Physics.Raycast(detectRay, out hitInfo)) {
+                Debug.Log("toca");
                 // Si el objeto se puede romper, le ordena romperse
                 if (hitInfo.collider.tag.Equals("Pushable")) {
+                    Debug.Log("Coge");
                     execution = true;
+
                     //Se obtiene la normal de la direccion por donde se agarra el objeto
                     pushNormal = hitInfo.normal;
                     targetTransform = hitInfo.collider.transform;
@@ -90,7 +94,7 @@ public class PushAbility : CharacterAbility {
 
     public void GrabObject(GameObject go, Vector3 origin, Vector3 target) {
         targetGameObject = go;
-
+        targetGameObject.transform.position += Vector3.up * 0.001f;
         joint = gameObject.AddComponent<CharacterJoint>();
 
         Rigidbody targetRigidBody = targetGameObject.GetComponent<Rigidbody>();
@@ -104,21 +108,27 @@ public class PushAbility : CharacterAbility {
         //origin.y = +0.3f;
         //target.y=0.35f;
         //joint.anchor = origin; //Probablemente no sea necesario cuando se improten bien los modelos
-
+        joint.breakForce = float.MaxValue;
         joint.connectedBody = targetRigidBody;
 
         //joint.connectedAnchor = target;
 
         targetGameObject.GetComponent<PushableObject>().Grab(this);
+
     }
 
     public void ReleaseObject() {
-        if (joint != null) {
+        if (joint != null)
+        {
             Destroy(joint);
-            if (targetGameObject != null) {
+            if (targetGameObject != null)
+            {
                 targetGameObject.GetComponent<PushableObject>().Release();
-                EndExecution();
                 characterStatus.EndAbility(this);
+                if(execution)
+                {
+                    EndExecution();
+                }
             }
         }
         targetGameObject = null;

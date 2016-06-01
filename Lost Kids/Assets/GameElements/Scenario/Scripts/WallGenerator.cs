@@ -23,7 +23,7 @@ public class WallGenerator : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
+        GameObject newWall;
         wallSize = wallPrefabs[0].GetComponent<Renderer>().bounds.size.x;
         Vector3 offset;
 
@@ -39,12 +39,13 @@ public class WallGenerator : MonoBehaviour {
         {
 
             if (direction.Equals(Direction.Horizontal)) {
-                Instantiate(GetNewWall(), newPosition, Quaternion.identity);
+                newWall= Instantiate(GetNewWall(), newPosition, Quaternion.identity) as GameObject;
                 newPosition.x += wallSize;
             } else  {
-                Instantiate(GetNewWall(), newPosition, Quaternion.AngleAxis(90,Vector3.up));
+                newWall = Instantiate(GetNewWall(), newPosition, Quaternion.AngleAxis(90,Vector3.up)) as GameObject;
                 newPosition.z += wallSize;
             }
+            newWall.transform.parent = transform;
             
         }
 	
