@@ -57,14 +57,10 @@ public class PushAbility : CharacterAbility {
 #endif
             // Detecta el objeto situado delante del personaje
             RaycastHit hitInfo;
-            Debug.Log("rayo");
             if (Physics.Raycast(detectRay, out hitInfo)) {
-                Debug.Log("toca");
                 // Si el objeto se puede romper, le ordena romperse
                 if (hitInfo.collider.tag.Equals("Pushable")) {
-                    Debug.Log("Coge");
                     execution = true;
-
                     //Se obtiene la normal de la direccion por donde se agarra el objeto
                     pushNormal = hitInfo.normal;
                     targetTransform = hitInfo.collider.transform;
@@ -114,17 +110,12 @@ public class PushAbility : CharacterAbility {
         //joint.connectedAnchor = target;
 
         targetGameObject.GetComponent<PushableObject>().Grab(this);
-
-        Debug.Log("Punto origen: " + origin + " Punto objetivo: " + target);
-
     }
 
     public void ReleaseObject() {
-        if (joint != null)
-        {
+        if (joint != null) {
             Destroy(joint);
-            if (targetGameObject != null)
-            {
+            if (targetGameObject != null) {
                 targetGameObject.GetComponent<PushableObject>().Release();
                 EndExecution();
                 characterStatus.EndAbility(this);

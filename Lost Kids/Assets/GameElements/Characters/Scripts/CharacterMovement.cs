@@ -3,16 +3,23 @@ using System.Collections;
 
 /* Class to control the movement of a character getting player's controls from InputManager */
 public class CharacterMovement : MonoBehaviour {
+    public float umbral = 0.02f;
+
     // Speed & impulse for each possible state
     public float extraGravity = 1200f;
     public float turnSmoothing = 15f;
     public float groundCheckDistance = 1.45f;
 
+    // Referencias a managers
     private CameraManager cameraManager;
+    // Componentes del personaje
     private Rigidbody rigBody;
     private Collider standingColl;
     private Collider crouchingColl;
+    // Último valores del jugador registrados
     private float lastYCoord;
+    private Vector3 lastPosition;
+    private float playerSpeed;
     // Audio variables
     private AudioLoader audioLoader;
     private AudioSource stepSound;
@@ -33,9 +40,9 @@ public class CharacterMovement : MonoBehaviour {
         standingColl.enabled = true;
         crouchingColl.enabled = false;
         lastYCoord = -10000.0f;
+        lastPosition = transform.position;
 
         audioLoader = GetComponent<AudioLoader>();
-
         stepSound = audioLoader.GetSound("Steps");
         jumpSound = audioLoader.GetSound("Jump");
         pushSound = audioLoader.GetSound("Push");
@@ -116,6 +123,22 @@ public class CharacterMovement : MonoBehaviour {
 	public void ExtraGravity() {
         // Extra gravity to fall down quickly
         rigBody.AddForce(new Vector3(0, -1 * extraGravity, 0), ForceMode.Force);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="normalized"></param>
+    /// <returns></returns>
+    public float GetPlayerSpeed(bool normalized) {
+        float res = playerSpeed;
+        if (normalized) {
+            if (rigBody.velocity.magnitude > umbral) {
+                res += 1;
+            }
+        }
+
+        return res;
     }
 
     // Return the given vector relative to the given camera 
@@ -219,8 +242,7 @@ public class CharacterMovement : MonoBehaviour {
     /// </summary>
     /// <returns><c>true</c> si el jugador está parado, <c>false</c> si está en movimiento</returns>
     public bool PlayerIsStopped() {
-        //return (rigBody.velocity.Equals(Vector3.zero));
-        return (rigBody.velocity.magnitude < 0.2f);
+        return (GetPlayerSpeed(true) < 1);
     }
 
     // Change character's rotation to make it look at the direction it is going
@@ -240,5 +262,12 @@ public class CharacterMovement : MonoBehaviour {
         crouchingColl.enabled = false;
         transform.Translate(new Vector3(0, 0.5f, 0));
         transform.localScale += new Vector3(0, 0.5f, 0); // CAMBIAR! No se debe modificar el tamaño del objeto
+    }
+
+    // Update is called once per frame
+    void Update() {
+        Vector3 deltaPosition = transform.position - lastPosition;
+        playerSpeed = deltaPosition.magnitude;
+        lastPosition = transform.position;
     }
 }
