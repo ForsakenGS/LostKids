@@ -5,12 +5,12 @@ using System.Collections;
 public class HUDManager : MonoBehaviour {
     public GameObject aoi;
     public GameObject akai;
-    public GameObject murasaki;
+    public GameObject ki;
     public float transparency = 0.25f;
 
     private Transform aoiUI;
     private Transform akaiUI;
-    private Transform murasakiUI;
+    private Transform kiUI;
     private Transform bigJumpAbilityUI;
     private Transform sprintAbilityUI;
     private Transform breakAbilityUI;
@@ -32,10 +32,10 @@ public class HUDManager : MonoBehaviour {
         akaiUI = trfPH.Find("2AkaiUI");
         breakAbilityUI = akaiUI.Find("BreakAbility");
         pushAbilityUI = akaiUI.Find("PushAbility");
-        // Interfaz personaje Murasaki
-        murasakiUI = trfPH.Find("3MurasakiUI");
-        telekinesisAbilityUI = murasakiUI.Find("TelekinesisAbility");
-        teletransportAbilityUI = murasakiUI.Find("AstralProjectionAbility");
+        // Interfaz personaje Ki
+        kiUI = trfPH.Find("3KiUI");
+        telekinesisAbilityUI = kiUI.Find("TelekinesisAbility");
+        teletransportAbilityUI = kiUI.Find("AstralProjectionAbility");
         // Interfaz del inventario
         Transform trfI = transform.Find("HUDCanvas").Find("InventoryUI");
         sakeUI = trfI.Find("SakeBottle");
@@ -46,8 +46,8 @@ public class HUDManager : MonoBehaviour {
         if (akai == null) {
             DestroyImmediate(akaiUI.gameObject);
         }
-        if (murasaki == null) {
-            DestroyImmediate(murasakiUI.gameObject);
+        if (ki == null) {
+            DestroyImmediate(kiUI.gameObject);
         }
     }
 
@@ -63,12 +63,26 @@ public class HUDManager : MonoBehaviour {
         CharacterManager.ActiveCharacterChangedEvent += CharacterChanged;
         AbilityController.SelectedAbilityEvent += AbilitySelected;
         CharacterAbility.ModifiedAbilityEnergyEvent += EnergyModified;
+        CharacterAbility.StartExecutionAbilityEvent += AbilityExecutionStart;
+        CharacterAbility.EndExecutionAbilityEvent += AbilityExecutionEnd;
         CharacterInventory.ObjectAddedEvent += ObjectAdded;
         CharacterInventory.ObjectRemovedEvent += ObjectRemoved;
         CharacterInventory.ObjectRequestedEvent += ObjectRequested;
         CharacterStatus.KillCharacterEvent += CharacterKilled;
         CharacterStatus.ResurrectCharacterEvent += CharacterResurrected;
     }
+
+    void AbilityExecutionEnd(CharacterAbility ability) {
+        //Debug.Log("end");
+        Transform abilityUI = GetAbilityUITransform(selectedAbility.GetType());
+        abilityUI.localScale.Scale(new Vector3(0.5f, 0.5f, 0.5f));
+    }
+
+    void AbilityExecutionStart(CharacterAbility ability) {
+        //Debug.Log("start");
+        Transform abilityUI = GetAbilityUITransform(selectedAbility.GetType());
+        abilityUI.localScale.Scale(new Vector3(2,2,2));
+    }    
 
     void AbilitySelected(CharacterAbility ability) {
         AbilitySelection(selectedAbility.GetType(), transparency);
@@ -164,8 +178,8 @@ public class HUDManager : MonoBehaviour {
             characterUI = aoiUI;
         } else if (character.Equals(akai)) {
             characterUI = akaiUI;
-        } else if (character.Equals(murasaki)) {
-            characterUI = murasakiUI;
+        } else if (character.Equals(ki)) {
+            characterUI = kiUI;
         }
 
         return characterUI.Find("Character");
@@ -271,9 +285,9 @@ public class HUDManager : MonoBehaviour {
             AbilitySelection(typeof(PushAbility), transparency);
         }
         // MurasakiUI
-        if (murasaki != null) {
-            CharacterSelection(murasaki, true, transparency);
-            CharacterSelection(murasaki, false, transparency);
+        if (ki != null) {
+            CharacterSelection(ki, true, transparency);
+            CharacterSelection(ki, false, transparency);
             AbilitySelection(typeof(TelekinesisAbility), transparency);
             AbilitySelection(typeof(AstralProjectionAbility), transparency);
         }

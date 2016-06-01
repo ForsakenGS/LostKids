@@ -15,6 +15,14 @@ public abstract class CharacterAbility : MonoBehaviour {
 	/// Evento para informar que la energía de la habilidad se ha visto modificada
     /// </summary>
     public static event AbilityController.AbilityChanged ModifiedAbilityEnergyEvent;
+    /// <summary>
+	/// Evento para informar que la habilidad ha sido ejecutada
+    /// </summary>
+    public static event AbilityController.AbilityChanged StartExecutionAbilityEvent;
+    /// <summary>
+	/// Evento para informar que la habilidad ha sido parada
+    /// </summary>
+    public static event AbilityController.AbilityChanged EndExecutionAbilityEvent;
 
     /// <summary>
     /// Nombre de la habilidad
@@ -177,6 +185,16 @@ public abstract class CharacterAbility : MonoBehaviour {
                 AddEnergy(maxEnergy);
             } else {
                 AddEnergy((Time.deltaTime / timeToRestoreEnergy) * maxEnergy);
+            }
+        }
+        // Lanzamiento eventos HUD --- HAY QUE CAMBIAR!!!
+        if (execution) {
+            if (StartExecutionAbilityEvent != null) {
+                StartExecutionAbilityEvent(this);
+            }
+        } else {
+            if (EndExecutionAbilityEvent != null) {
+                EndExecutionAbilityEvent(this);
             }
         }
     }

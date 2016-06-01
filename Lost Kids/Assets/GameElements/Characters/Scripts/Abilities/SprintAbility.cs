@@ -42,7 +42,7 @@ public class SprintAbility : CharacterAbility {
             started = true;
             AddEnergy(-initialConsumption);
 			characterStatus.standingSpeed *= speedModifier;
-		}
+        }
 
 		return started;
 	}
