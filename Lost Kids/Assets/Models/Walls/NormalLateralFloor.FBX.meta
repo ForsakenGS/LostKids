@@ -1,36 +1,20 @@
 fileFormatVersion: 2
-guid: f56b276c5413ba14ab580d8539f646a1
-timeCreated: 1459728071
+guid: 11fb45c883cdd244084dbc22fbdf522a
+timeCreated: 1464960409
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Body
-    100004: Mango
-    100006: Handle
+    100002: NormalLateralFloorNoLine
     400000: //RootNode
-    400002: Body
-    400004: Mango
-    400006: Handle
+    400002: NormalLateralFloorNoLine
     2300000: //RootNode
-    2300002: Body
-    2300004: Mango
-    2300006: Handle
+    2300002: NormalLateralFloorNoLine
     3300000: //RootNode
-    3300002: Body
-    3300004: Mango
-    3300006: Handle
-    4300000: Lever
-    4300002: Base
-    4300004: Body
-    4300006: Mango
-    4300008: Handle
-    6400000: //RootNode
-    6400002: Body
-    6400004: Mango
-    6400006: Handle
-    9500000: //RootNode
+    3300002: NormalLateralFloorNoLine
+    4300000: NormalLateralFloor
+    4300002: NormalLateralFloorNoLine
   materials:
     importMaterials: 1
     materialName: 0
@@ -57,7 +41,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -71,10 +55,10 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 180
-    normalImportMode: 1
+    normalSmoothAngle: 60
+    normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
@@ -89,7 +73,7 @@ ModelImporter:
     rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
