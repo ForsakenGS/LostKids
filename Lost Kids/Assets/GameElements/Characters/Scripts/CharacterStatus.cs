@@ -21,11 +21,12 @@ public class CharacterStatus : MonoBehaviour {
     /// <summary>
     /// Clase para definir los diferentes estados en los que se puede encontrar un personaje
     /// </summary>
-    public enum State { AstralProjection, Breaking, BigJumping, Crouching, Dead, Falling, Idle, Jumping, Pushing, Scared, Sprint, Walking, Telekinesis, Using }
+    public enum State { AstralProjection, Breaking, BigJumping, Crouching, Dead, Falling, Idle, Jumping, Pushing, Sacrifice, Scared, Sprint, Walking, Telekinesis, Using }
 
 
     //Referencia al manager de personajes
     public GameObject characterManagerPrefab;
+    private InputManager inputManager;
     private CharacterManager characterManager;
     private CharacterMovement characterMovement;
     private PlayerUse playerUse;
@@ -40,9 +41,7 @@ public class CharacterStatus : MonoBehaviour {
     public float crouchingSpeed = 4000f;
     public float pushingSpeed = 4000f;
 
-    public bool jumpButtonUp = false;
-
-    //Habitacion en la que se encuentra el personaje
+   //Habitacion en la que se encuentra el personaje
     public int currentRoom = 0;
 
     // Personaje
@@ -51,6 +50,7 @@ public class CharacterStatus : MonoBehaviour {
     public float maxJumpImpulse;
     public State initialCharacterState;
     public CharacterName characterName;
+    private bool jumpButtonUp = false;
     // Audio variables
     private AudioLoader audioLoader;
     private AudioSource resurrectSound;
@@ -64,6 +64,7 @@ public class CharacterStatus : MonoBehaviour {
         if (characterManagerPrefab == null) {
             characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
         }
+        inputManager = GameObject.Find("InputManager").GetComponent<InputManager>();
         characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         characterMovement = GetComponent<CharacterMovement>();
         playerUse = GetComponent<PlayerUse>();
@@ -101,27 +102,27 @@ public class CharacterStatus : MonoBehaviour {
             switch (ability.abilityName) {
                 case AbilityName.AstralProjection:
                     characterState = State.AstralProjection;
-                    characterAnimator.SetTrigger("AstralProjection");
+                    SetAnimatorTrigger("AstralProjection");
                     break;
                 case AbilityName.BigJump:
                     characterState = State.BigJumping;
-                    characterAnimator.SetTrigger("BigJump");
+                    SetAnimatorTrigger("BigJump");
                     break;
                 case AbilityName.Break:
                     characterState = State.Breaking;
-                    characterAnimator.SetTrigger("Break");
+                    SetAnimatorTrigger("Break");
                     break;
                 case AbilityName.Push:
                     characterState = State.Pushing;
-                    characterAnimator.SetTrigger("Push");
+                    SetAnimatorTrigger("Push");
                     break;
                 case AbilityName.Sprint:
                     characterState = State.Sprint;
-                    characterAnimator.SetTrigger("Sprint");
+                    SetAnimatorTrigger("Sprint");
                     break;
                 case AbilityName.Telekinesis:
                     characterState = State.Telekinesis;
-                    characterAnimator.SetTrigger("Telekinesis");
+                    SetAnimatorTrigger("Telekinesis");
                     break;
             }
         }
@@ -186,14 +187,18 @@ public class CharacterStatus : MonoBehaviour {
             case State.Walking:
             case State.Idle:
                 // Comienza la acción de saltar
-                characterMovement.Jump(jumpImpulse, true);
                 AudioManager.Stop(stepSound);
-                totalJumpImpulse = firstJumpImpulse;
                 characterState = State.Jumping;
-                characterAnimator.ResetTrigger("Idle");
-                characterAnimator.ResetTrigger("Walk");
-                characterAnimator.SetTrigger("Jump");
+                characterMovement.Jump(firstJumpImpulse, true);                
+                totalJumpImpulse = firstJumpImpulse;
+                SetAnimatorTrigger("Jump");
                 break;
+        }
+    }
+
+    public void JumpButtonUp() {
+        if (characterState.Equals(State.Jumping)) {
+            jumpButtonUp = true;
         }
     }
 
@@ -223,13 +228,15 @@ public class CharacterStatus : MonoBehaviour {
                 GetComponent<AbilityController>().UseAbility();
                 break;
             case State.Dead:
+            case State.Sacrifice:
                 kill = false;
                 break;
         }
         if (kill) {
             characterState = State.Dead;
-            characterAnimator.SetTrigger("Dead");
+            SetAnimatorTrigger("Dead");
             //Animacion, Efectos, Cambio de imagen.....
+            GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
             GetComponentInChildren<Renderer>().enabled = false; //Temporal
             GetComponent<Rigidbody>().isKinematic = true;
             AudioManager.Stop(stepSound);
@@ -255,7 +262,7 @@ public class CharacterStatus : MonoBehaviour {
                 characterMovement.MoveCharacterNormal(horizontal, vertical, standingSpeed / 2);
                 characterState = State.Walking;
                 characterAnimator.ResetTrigger("Idle");
-                characterAnimator.SetTrigger("Walk");
+                SetAnimatorTrigger("Walk");
                 break;
             case State.Walking:
             case State.Sprint:
@@ -298,7 +305,7 @@ public class CharacterStatus : MonoBehaviour {
         // Cambia de estado salvo que se trate de la habilidad "BigJump"
         if (!ability.abilityName.Equals(AbilityName.BigJump)) {
             characterState = State.Idle;
-            characterAnimator.SetTrigger("Idle");
+            SetAnimatorTrigger("Idle");
         }
     }
 
@@ -311,34 +318,41 @@ public class CharacterStatus : MonoBehaviour {
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Falling;
-                    characterAnimator.SetTrigger("Fall");
+                    SetAnimatorTrigger("Fall");
                 } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
                     characterMovement.PlayerHasStopped();
                     characterState = State.Idle;
                     characterAnimator.ResetTrigger("Walk");
-                    characterAnimator.SetTrigger("Idle");
+                    SetAnimatorTrigger("Idle");
                 }
                 break;
             case State.Idle:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
-                    characterState = State.Falling;
-                    characterAnimator.SetTrigger("Fall");
+                    characterState = State.Jumping;
+                    //SetAnimatorTrigger("Fall");
                 }
                 break;
             case State.Falling:
                 // Comprueba si el jugador está apoyado en alguna superficie 
                 if (characterMovement.CharacterIsGrounded()) {
                     characterState = State.Idle;
-                    characterAnimator.SetTrigger("Land");
+                    SetAnimatorTrigger("Land");
+                    inputManager.LockTime(0.3f);
                 }
                 break;
             case State.Jumping:
                 // Si empieza a caer, cambia de estado
                 if (characterMovement.CharacterIsFalling()) {
                     jumpButtonUp = false;
+                    totalJumpImpulse = 0.0f;
                     characterState = State.Falling;
-                    characterAnimator.SetTrigger("Fall");
+                    SetAnimatorTrigger("Fall");
+                } else if (characterMovement.CharacterIsGrounded()) {  // Comprueba si el jugador está apoyado en alguna superficie 
+                    jumpButtonUp = false;
+                    totalJumpImpulse = 0.0f;
+                    characterState = State.Idle;
+                    SetAnimatorTrigger("Land");
                 }
                 break;
             case State.BigJumping:
@@ -346,7 +360,7 @@ public class CharacterStatus : MonoBehaviour {
                 if (characterMovement.CharacterIsFalling()) {
                     GetComponent<AbilityController>().UseAbility();
                     characterState = State.Falling;
-                    characterAnimator.SetTrigger("Fall");
+                    SetAnimatorTrigger("Fall");
                 }
                 break;
             case State.Pushing:
@@ -354,7 +368,7 @@ public class CharacterStatus : MonoBehaviour {
                 if (!characterMovement.CharacterIsGrounded()) {
                     GetComponent<PushAbility>().ReleaseObject();
                     characterState = State.Falling;
-                    characterAnimator.SetTrigger("Fall");
+                    SetAnimatorTrigger("Fall");
                 }
                 // Comprueba si el jugador está en movimiento
                 if (characterMovement.PlayerIsStopped()) {
@@ -366,7 +380,7 @@ public class CharacterStatus : MonoBehaviour {
                 if (!characterMovement.CharacterIsGrounded()) {
                     GetComponent<AbilityController>().UseAbility();
                     characterState = State.Falling;
-                    characterAnimator.SetTrigger("Fall");
+                    SetAnimatorTrigger("Fall");
                 } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
                     characterMovement.PlayerHasStopped();
                 }
@@ -376,17 +390,18 @@ public class CharacterStatus : MonoBehaviour {
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterMovement.Stand();
                     characterState = State.Falling;
-                    characterAnimator.SetTrigger("Fall");
+                    SetAnimatorTrigger("Fall");
                 }
                 break;
             case State.Dead:
             case State.AstralProjection:
+            case State.Sacrifice:
                 break;
             default:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Falling;
-                    characterAnimator.SetTrigger("Fall");
+                    SetAnimatorTrigger("Fall");
                 }
                 break;
         }
@@ -419,8 +434,9 @@ public class CharacterStatus : MonoBehaviour {
     /// Resucita al personaje
     /// </summary>
     public void Ressurect() {
+        // Reinicia las máquinas de estado
+        characterAnimator.Rebind();
         characterState = State.Idle;
-        characterAnimator.SetTrigger("Idle");
         GetComponentInChildren<Renderer>().enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
         if (ResurrectCharacterEvent != null) {
@@ -434,9 +450,11 @@ public class CharacterStatus : MonoBehaviour {
         // Bloquea al jugador
         InputManager.SetLock(true);
         // Efecto y sonido del "sacrificio"
-        characterAnimator.SetTrigger("Sacrifice");
+        characterState = State.Sacrifice;
+        SetAnimatorTrigger("Sacrifice");
         AudioManager.Stop(stepSound);
         AudioManager.Play(sacrificeSound, false, 1);
+        GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
         Rigidbody rig = GetComponent<Rigidbody>();
         rig.isKinematic = true;
         float upDistance = 3.0f;
@@ -473,6 +491,32 @@ public class CharacterStatus : MonoBehaviour {
         }
     }
 
+    void SetAnimatorTrigger(string trigger) {
+        // Desactiva cualquier otro posible trigger
+        characterAnimator.ResetTrigger("Idle");
+        characterAnimator.ResetTrigger("Walk");
+        characterAnimator.ResetTrigger("Jump");
+        characterAnimator.ResetTrigger("Fall");
+        characterAnimator.ResetTrigger("Land");
+        characterAnimator.ResetTrigger("Dead");
+        characterAnimator.ResetTrigger("Scared");
+        characterAnimator.ResetTrigger("Sacrifice");
+        characterAnimator.ResetTrigger("Use");
+        // Desactiva triggers de las habilidades
+        if (characterName.Equals(CharacterName.Aoi)) {
+            characterAnimator.ResetTrigger("BigJump");
+            characterAnimator.ResetTrigger("Sprint");
+        } else if (characterName.Equals(CharacterName.Akai)) {
+            characterAnimator.ResetTrigger("Break");
+            characterAnimator.ResetTrigger("Push");
+        } else {
+            characterAnimator.ResetTrigger("Telekinesis");
+            characterAnimator.ResetTrigger("AstralProjection");
+        }
+        // Activa el trigger correspondiente
+        characterAnimator.SetTrigger(trigger);
+    }
+
     /// <summary>
     /// Cambia el estado asustado del personaje
     /// </summary>
@@ -480,10 +524,10 @@ public class CharacterStatus : MonoBehaviour {
     public void SetScared(bool scared) {
         if (scared) {
             characterState = State.Scared;
-            characterAnimator.SetTrigger("Scared");
+            SetAnimatorTrigger("Scared");
         } else if (characterState.Equals(State.Scared)) {
             characterState = State.Idle;
-            characterAnimator.SetTrigger("Idle");
+            SetAnimatorTrigger("Idle");
         }
     }
 }

@@ -28,7 +28,9 @@ public class BreakAbility : CharacterAbility {
     public override bool EndExecution() {
         bool res = (execution && (executionTime <= 0));
         if (res) {
+            // Termina ejecución y bloque brevemente al jugador
             execution = false;
+            inputManager.LockTime(0.5f);
         }
 
         return res;
@@ -54,7 +56,7 @@ public class BreakAbility : CharacterAbility {
             if (Physics.Raycast(detectRay, out hitInfo)) {
                 // Si el objeto se puede romper, le da un golpe
                 if (hitInfo.collider.tag.Equals("Breakable")) {
-                    hitInfo.collider.GetComponent<BreakableObject>().TakeHit();
+                    hitInfo.collider.GetComponent<BreakableObject>().TakeHit(delay);
                 }
             }
         }
