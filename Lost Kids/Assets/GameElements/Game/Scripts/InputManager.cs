@@ -52,12 +52,31 @@ public class InputManager : MonoBehaviour {
             }
         }
     }
+
+    void Lock() {
+        locked = true;
+    }
+
+    public void LockTime (float time) {
+        locked = true;
+        Invoke("Unlock",time);
+    }
+
     /// <summary>
     /// Función para bloquear/desbloquear el paso de instrucciones al personaje 
     /// </summary>
     /// <param name="lockVar"></param>
     public static void SetLock(bool lockVar) {
         locked = lockVar;
+    }
+
+    void Unlock() {
+        locked = false;
+    }
+
+    public void UnlockTime(float time) {
+        locked = false;
+        Invoke("Lock", time);
     }
 
     // Manage general inputs
@@ -77,8 +96,6 @@ public class InputManager : MonoBehaviour {
         }
 
         if (!locked) {
-            
-
             // Switch Players Buttons
             if ((Input.GetAxis("Player1_Axis") > 0) || (Input.GetButtonDown("Player1"))) {
                 characterManager.ActivateCharacter(0);
@@ -106,11 +123,10 @@ public class InputManager : MonoBehaviour {
             horizontalButton = Input.GetAxis("Horizontal");
             verticalButton = Input.GetAxis("Vertical");
             // Jump button
-            if (Input.GetButton("Jump")) {
-                jumpButton = true;
-            }
             if (Input.GetButtonUp("Jump")) {
-                characterStatus.jumpButtonUp = true;
+                characterStatus.JumpButtonUp();
+            } else if (Input.GetButton("Jump")) {
+                jumpButton = true;
             }
             // Suicide button
             if (Input.GetButtonDown("Sacrifice")) {
@@ -118,7 +134,7 @@ public class InputManager : MonoBehaviour {
             }
         } else {
             //Pasar mensajes
-            if (Input.GetButtonDown("Jump")) {
+            if ((!messageManager.MessageEnded()) && (Input.GetButtonDown("Jump"))) {
                 messageManager.SkipText();
             }
         }

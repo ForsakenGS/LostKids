@@ -169,7 +169,13 @@ public class CharacterMovement : MonoBehaviour {
     /// Aplica un impulso de salto sobre el jugador y reproduce el sonido si así se indica
     /// </summary>
     public void Jump(float jumpImpulse, bool sound) {
-        rigBody.AddForce(new Vector3(0, jumpImpulse, 0), ForceMode.Force);
+        // Impulso del salto hacia arriba
+        Vector3 impulse = new Vector3(0, jumpImpulse, 0);
+        // Impulso hacia delante
+        impulse += transform.forward * (GetPlayerSpeed(true) * jumpImpulse / 3);
+        // Ejecución del salto
+        rigBody.AddForce(impulse, ForceMode.Force);
+        // Sonido del salto
         if (sound) {
             AudioManager.Play(jumpSound, false, 1);
         }
