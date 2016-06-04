@@ -15,68 +15,59 @@ public abstract class BreakableObject : MonoBehaviour, IBreakable {
 
     private AudioLoader audioLoader;
 
-    public void Break()
-    {
-        if (audioLoader != null && audioLoader.GetSound("Break") != null)
-        {
+    public void Break() {
+        if (audioLoader != null && audioLoader.GetSound("Break") != null) {
             AudioManager.Play(audioLoader.GetSound("Break"), false, 1);
         }
         StartCoroutine(gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
     }
 
-    public virtual void TakeHit()
-    {
-        if(audioLoader!=null && audioLoader.GetSound("Hit")!= null)
-        {
+    public virtual void TakeHit() {
+        if (audioLoader != null && audioLoader.GetSound("Hit") != null) {
             AudioManager.Play(audioLoader.GetSound("Hit"), false, 1);
         }
         currentHitPoints--;
-        if(currentHitPoints <= 0)
-        {
+        if (currentHitPoints <= 0) {
             Break();
-        }
-        else if(textures[currentHitPoints]!=null)
-        {
-            GetComponent<Renderer>().material.mainTexture=textures[currentHitPoints];
+        } else if (textures[currentHitPoints] != null) {
+            GetComponent<Renderer>().material.mainTexture = textures[currentHitPoints];
         }
     }
 
+    public virtual void TakeHit(float delay) {
+        Invoke("TakeHit", delay);
+    }
+
     // Use this for initialization
-    public void Start () {
+    public void Start() {
         currentHitPoints = maxHitPoints;
-        if (currentHitPoints > 0)
-        {
-            if (textures[currentHitPoints] != null)
-            {
+        if (currentHitPoints > 0) {
+            if (textures[currentHitPoints] != null) {
                 GetComponent<Renderer>().material.mainTexture = textures[currentHitPoints];
             }
         }
         audioLoader = GetComponent<AudioLoader>();
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    // Update is called once per frame
+    void Update() {
+
+    }
 
     /// <summary>
     /// Metodo que se llama desde el inspector cuando se modifica algun valor
     /// Se utiliza para mantener el mismo tamaño entre los puntos, sus velocidades, y sus delays
     /// </summary>
-    void OnValidate()
-    {
-        if (maxHitPoints > 0)
-        {
-            if (textures.Length != maxHitPoints+1)
-            {
-                textures = copyAndResize(textures, maxHitPoints+1);
+    void OnValidate() {
+        if (maxHitPoints > 0) {
+            if (textures.Length != maxHitPoints + 1) {
+                textures = copyAndResize(textures, maxHitPoints + 1);
             }
         }
-        
+
     }
 
-    private Texture[] copyAndResize(Texture[] array, int size)
-    {
+    private Texture[] copyAndResize(Texture[] array, int size) {
         Texture[] temp = new Texture[size];
         Array.Copy(array, temp, Math.Min(array.Length, size));
         array = temp;
@@ -84,8 +75,7 @@ public abstract class BreakableObject : MonoBehaviour, IBreakable {
 
     }
 
-    public int GetCurrentHitPoints()
-    {
+    public int GetCurrentHitPoints() {
         return currentHitPoints;
     }
 }
