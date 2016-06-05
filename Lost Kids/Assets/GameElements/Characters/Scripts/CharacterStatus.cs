@@ -26,7 +26,7 @@ public class CharacterStatus : MonoBehaviour {
 
     //Referencia al manager de personajes
     public GameObject characterManagerPrefab;
-    private InputManager inputManager;
+    private InputManagerTLK inputManager;
     private CharacterManager characterManager;
     private CharacterMovement characterMovement;
     private PlayerUse playerUse;
@@ -64,7 +64,7 @@ public class CharacterStatus : MonoBehaviour {
         if (characterManagerPrefab == null) {
             characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
         }
-        inputManager = GameObject.Find("InputManager").GetComponent<InputManager>();
+        inputManager = GameObject.Find("InputManagerTLK").GetComponent<InputManagerTLK>();
         characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         characterMovement = GetComponent<CharacterMovement>();
         playerUse = GetComponent<PlayerUse>();
@@ -448,7 +448,7 @@ public class CharacterStatus : MonoBehaviour {
 
     IEnumerator Sacrifice() {
         // Bloquea al jugador
-        InputManager.SetLock(true);
+        InputManagerTLK.SetLock(true);
         // Efecto y sonido del "sacrificio"
         characterState = State.Sacrifice;
         SetAnimatorTrigger("Sacrifice");
@@ -475,7 +475,7 @@ public class CharacterStatus : MonoBehaviour {
         }
         characterManager.CharacterKilled(this);
         // Desbloquea al jugador
-        InputManager.SetLock(false);
+        InputManagerTLK.SetLock(false);
     }
 
     /// <summary>
