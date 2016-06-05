@@ -132,7 +132,7 @@ public class RoomSettings : MonoBehaviour {
         if (!prepared) {
             prepared = true;
             // Bloqueo al jugador
-            InputManager.SetLock(true);
+            InputManagerTLK.SetLock(true);
             // Bloques de las paredes
             /*foreach (Transform wall in walls) {
                 //objectsToPrepare += 1;
@@ -170,7 +170,7 @@ public class RoomSettings : MonoBehaviour {
     IEnumerator WaitEndOfPreparation() {
         yield return new WaitUntil(() => objectsToPrepare == 0);
         // Desbloqueo del jugador
-        InputManager.SetLock(false);
+        InputManagerTLK.SetLock(false);
         // Muestra la habitación
         ShowRoom();
     }
