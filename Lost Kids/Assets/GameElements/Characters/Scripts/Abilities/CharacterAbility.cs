@@ -60,14 +60,16 @@ public abstract class CharacterAbility : MonoBehaviour {
     protected float energy;
     protected CharacterStatus characterStatus;
     protected CharacterMovement characterMovement;
-
     private float initExecutionTime;
+    // Referencias a managers
+    protected InputManagerTLK inputManager;
 
     // Use this for references
     void Awake() {
         characterStatus = GetComponent<CharacterStatus>();
         characterMovement = GetComponent<CharacterMovement>();
         audioLoader = GetComponent<AudioLoader>();
+        inputManager = GameObject.Find("InputManagerTLK").GetComponent<InputManagerTLK>();
     }
 
     // Use this for initialization
