@@ -6,6 +6,7 @@ public class RockController : MonoBehaviour {
     public GameObject wall;
     private KillerSphere rock;
     public bool isEnabled = true;
+
     [HideInInspector]
     public bool active = false;
 	// Use this for initialization
@@ -23,8 +24,8 @@ public class RockController : MonoBehaviour {
     {
         active = true;
         rock.Launch();
-        wall.GetComponent<MeshRenderer>().enabled = false;
-        wall.GetComponent<BoxCollider>().isTrigger = true;
+        //wall.GetComponent<MeshRenderer>().enabled = false;
+        //wall.GetComponent<BoxCollider>().isTrigger = true;
     }
 
     public void Reset()
@@ -32,8 +33,8 @@ public class RockController : MonoBehaviour {
         CancelInvoke();
         active = false;
         rock.Reset();
-        wall.GetComponent<MeshRenderer>().enabled = true;
-        wall.GetComponent<BoxCollider>().isTrigger = false;
+        //wall.GetComponent<MeshRenderer>().enabled = true;
+        //wall.GetComponent<BoxCollider>().isTrigger = false;
     }
 
     void Deactivate()

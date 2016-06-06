@@ -68,7 +68,8 @@ public abstract class UsableObject : MonoBehaviour {
         activables = new List<IActivable>();
 
         //Se guarda la referencia al script Activable
-        foreach(GameObject target in targets)
+
+        foreach (GameObject target in targets)
         {
             activables.Add(target.GetComponent<IActivable>());
         }
@@ -131,7 +132,7 @@ public abstract class UsableObject : MonoBehaviour {
     {
         if (onUse)
         {
-            Debug.Log("Boton Desactivado");
+
             onUse = false;
             //Si no forma parte de un puzzle, desactiva su objetivo
             if (!inPuzzle)

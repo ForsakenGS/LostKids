@@ -3,10 +3,13 @@ using System.Collections;
 
 public class MouseDestroyer : MonoBehaviour {
 
+ 
+
     public bool disableOnStart = true;
 	// Use this for initialization
 	void Start () {
-        if(disableOnStart)
+        
+        if (disableOnStart)
         {
             DisableMouse();
         }
@@ -15,8 +18,9 @@ public class MouseDestroyer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+
+
+    }
 
 
     void DisableMouse()
