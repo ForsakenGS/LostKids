@@ -72,10 +72,10 @@ public class AudioManager : MonoBehaviour {
     /// </summary>
     /// <param name="source">AudioSource que se desea reproducir</param>
     /// <param name="loop">Indica si se trata de un bucle</param>
-    public static void PlayMusic(AudioSource source, float volume)
+    public static void PlayMusic(AudioSource source,bool loop, float volume)
     {
 
-        source.loop = true;
+        source.loop = loop;
         source.volume = volume * GameSettings.GetModifiedMusicVolume();
         source.Play();
         Instance.playingMusics.Add(source);
