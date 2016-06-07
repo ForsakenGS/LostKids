@@ -6,11 +6,23 @@ ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: WallToriRight
+    100004: WallToriRightNoLine
     400000: //RootNode
+    400002: WallToriRight
+    400004: WallToriRightNoLine
     2300000: //RootNode
+    2300002: WallToriRight
+    2300004: WallToriRightNoLine
     3300000: //RootNode
+    3300002: WallToriRight
+    3300004: WallToriRightNoLine
     4300000: DoorTori
+    4300002: WallToriRight
+    4300004: WallToriRightNoLine
     6400000: //RootNode
+    6400002: WallToriRight
+    6400004: WallToriRightNoLine
   materials:
     importMaterials: 1
     materialName: 0

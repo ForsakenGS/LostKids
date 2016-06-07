@@ -77,7 +77,7 @@ public class Door : MonoBehaviour, IActivable {
         //Se guarda la posicion inicial de la puerta
         startPosition = this.transform.position;
         //Se calcula un offset ( distancia a la que se movera) en funcion al tamaño y direccion de apertura
-        Vector3 size = transform.localScale;//GetComponent<Renderer>().bounds.size;
+        Vector3 size = transform.localScale*2;//REVISAR!!!!!!!!!!!!!!!!!!!//GetComponent<Renderer>().bounds.size;
         Vector3 offset = new Vector3(0, 0, 0);
         switch (openDirection)
         {
