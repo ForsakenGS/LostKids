@@ -200,9 +200,6 @@ public class InputManagerTLK : MonoBehaviour {
             if (!GameManager.paused) {
                 PausePanel.ShowPanel();
                 GameManager.PauseGame();
-            } else {
-                PausePanel.HidePanel();
-                GameManager.ResumeGame();
             }
         }
 
