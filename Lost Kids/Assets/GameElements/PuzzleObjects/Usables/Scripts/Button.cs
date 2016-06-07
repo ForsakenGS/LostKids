@@ -42,8 +42,8 @@ public class Button : UsableObject {
         base.Start();
 
         //Almacena posiciones iniciales y finales ( activado y desactivado )
-        startPosition = this.transform.position;
-        endPosition = this.transform.position - new Vector3(0, pushDeph, 0);
+        startPosition = transform.position;
+        endPosition = transform.position - new Vector3(0, pushDeph, 0);
 
         audioLoader = GetComponent<AudioLoader>();
 
@@ -89,6 +89,39 @@ public class Button : UsableObject {
     }
 
     /// <summary>
+    /// Detecta al jugador cuando se situa encima del boton para comenzar a moverlo y llegar a su activacion
+    /// </summary>
+    /// <param name="col"></param>
+    void OnCollisionEnter(Collision col)
+    {
+        
+        if (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable"))
+        {
+            col.transform.parent = transform;
+            StopAllCoroutines();
+
+            StartCoroutine(Move(endPosition));
+
+        }
+    }
+
+    /// <summary>
+    /// Detecta al jugador al dejar la parte superior del objeto, y devuelve este a su posicion inicial
+    /// </summary>
+    /// <param name="col"></param>
+    void OnCollisionExit(Collision col)
+    {
+        if (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable"))
+        {
+            col.transform.parent = null;
+            if (isMoving || type.Equals(UsableTypes.Hold))
+            {
+                CancelUse();
+            }
+        }
+    }
+
+    /// <summary>
     /// Metodo que se activa al usar el objeto. Incluye un comportamiento base generico
     /// y comportamiendo especifico para el objeto
     /// </summary>
@@ -112,7 +145,7 @@ public class Button : UsableObject {
     /// </summary>
     override public void CancelUse()
     {
-        if(onUse) {
+        
             AudioManager.Play(buttonUpSound, false, 1);
 
             //Comportamiento base generico para todos los objetos usables
@@ -121,7 +154,7 @@ public class Button : UsableObject {
             //Comportamiento especifico para cada objeto. Incluir ademas animaciones, sonidos...
             StopAllCoroutines();
             StartCoroutine(Move(startPosition));
-        }
+        
     }
 
     /// <summary>
@@ -137,8 +170,9 @@ public class Button : UsableObject {
 
         while (t < 1f) // Hasta que no acabe el frame no permite otro movimiento
         {
-            t += Time.deltaTime * pushSpeed; 
+            t += Time.deltaTime * pushSpeed;
             transform.position = Vector3.Lerp(beginPosition, pos, t); // interpola el movimiento entre dos puntos
+
             yield return null;
         }
         isMoving = false;

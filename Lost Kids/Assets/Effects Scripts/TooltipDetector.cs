@@ -23,6 +23,16 @@ public class TooltipDetector : MonoBehaviour {
         usableParent = GetComponentInParent<UsableObject>();
     }
 
+
+    void OnDestroy()
+    {
+        if(icon!=null)
+        {
+            icon.ActiveCanvas(false);
+        }
+    }
+
+
     /// <summary>
     /// Cuando el jugador entra en el detector, si dispone de las habilidades necesarias
     /// muestra el icono correspondiente y permite el uso del objeto

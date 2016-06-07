@@ -94,7 +94,7 @@ public class PushAbility : CharacterAbility {
 
     public void GrabObject(GameObject go, Vector3 origin, Vector3 target) {
         targetGameObject = go;
-        targetGameObject.transform.position += Vector3.up * 0.001f;
+        targetGameObject.transform.position += Vector3.up * 0.05f;
         joint = gameObject.AddComponent<CharacterJoint>();
 
         Rigidbody targetRigidBody = targetGameObject.GetComponent<Rigidbody>();

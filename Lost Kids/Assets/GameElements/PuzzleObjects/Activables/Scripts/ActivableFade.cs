@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ActivableFade : MonoBehaviour {
 
-    public Image fadeImage;
+    private Image fadeImage;
 
     public float fadeSpeed;
 
@@ -19,6 +19,7 @@ public class ActivableFade : MonoBehaviour {
 
     public void Start() {
         cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<CameraManager>();
+        fadeImage = GameObject.FindGameObjectWithTag("FadeImage").GetComponent<Image>();
     }
 
     public void OnEnable() {

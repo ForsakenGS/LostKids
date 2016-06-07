@@ -60,22 +60,23 @@ public class PushableObject : MonoBehaviour {
             switch (rayCnt)
             {
                 case 0:
-                    ray = transform.position + (Vector3.down * size.y/2);
+
+                    ray = transform.position;
                     break;
                 case 1:
-                    ray = transform.position + (Vector3.down * size.y / 2) + (Vector3.forward * size.z/2);
+                    ray = transform.position + (Vector3.forward * size.z/2);
                     break;
                 case 2:
-                    ray = transform.position + (Vector3.down * size.y / 2) + (Vector3.back * size.z / 2);
+                    ray = transform.position + (Vector3.back * size.z / 2);
                     break;
                 case 3:
-                    ray = transform.position + (Vector3.down * size.y / 2) + (Vector3.left * size.x / 2);
+                    ray = transform.position + (Vector3.left * size.x / 2);
                     break;
                 case 4:
-                    ray = transform.position + (Vector3.down * size.y / 2) + (Vector3.right * size.x / 2);
+                    ray = transform.position + (Vector3.right * size.x / 2);
                     break;
             }
-            ray.y += 0.05f;
+            //ray.y += 0.05f;
             Debug.DrawLine(ray, ray + (Vector3.down ), Color.blue, 10000);
             // Lanza el rayo y comprueba si colisiona con otro objeto
             grounded = (Physics.Raycast(ray, Vector3.down, 0.1f));
@@ -88,7 +89,7 @@ public class PushableObject : MonoBehaviour {
     
     void OnCollisionExit(Collision col)
     {
-        if(pushAbility!=null && !IsGrounded())
+        if(!CharacterManager.IsActiveCharacter(col.gameObject) && pushAbility!=null && !IsGrounded())
         {
             pushAbility.ReleaseObject();
         }
