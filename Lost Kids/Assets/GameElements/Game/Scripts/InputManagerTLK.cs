@@ -243,6 +243,7 @@ public class InputManagerTLK : MonoBehaviour {
         } else {
             //Pasar mensajes
             if (ButtonDown("Jump")) {
+                if(messageManager.ShowingMessage())
                 messageManager.SkipText();
             }
         }

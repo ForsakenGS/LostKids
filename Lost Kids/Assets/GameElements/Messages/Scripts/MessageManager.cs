@@ -67,7 +67,7 @@ public class MessageManager : MonoBehaviour {
     /// EndMessage: Se activa cuando no hay mas mensajes para mostrar
     /// NextMessage: Se activa cuando se han mostrado las 4 lineas en pantalla y quedan más lineas por mostrar
     /// </summary>
-    private enum State { FastMessage, EndMessage, NextMessage, NextConversationMessage };
+    private enum State { NoMessage, FastMessage, EndMessage, NextMessage, NextConversationMessage };
     private State messageState;
 
     // Use this for initialization
@@ -86,7 +86,7 @@ public class MessageManager : MonoBehaviour {
         messagesSfxs.Add(audioLoader.GetSound("Message5"));
 
         //Estado inicial
-        messageState = State.EndMessage;
+        messageState = State.NoMessage;
 
         messages = new ArrayList();
 
@@ -267,8 +267,12 @@ public class MessageManager : MonoBehaviour {
         isConversation = true;
         for (int mesIndex = 0; mesIndex < conversation.Count; ++mesIndex) {
             // Espera a que el mensaje anterior termine de mostrarse por pantalla
-            while (!(MessageEnded())) {
-                yield return new WaitForSeconds(0.1f);
+            if (ShowingMessage())
+            {
+                while (!(MessageEnded()))
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
             }
             // Si se trata del último mensaje de la conversación, desactiva el flag 
             if (mesIndex == conversation.Count - 1) {
@@ -332,6 +336,7 @@ public class MessageManager : MonoBehaviour {
                 text.gameObject.SetActive(false);
                 shownImg.gameObject.SetActive(false);
                 shownImg = null;
+                messageState = State.NoMessage;
                 break;
         }
     }
@@ -342,5 +347,14 @@ public class MessageManager : MonoBehaviour {
     /// <returns></returns>
     public bool MessageEnded() {
         return (messageState.Equals(State.EndMessage));
+    }
+
+    /// <summary>
+    /// Funcion que devuelve si se esta mostrando un mensaje
+    /// </summary>
+    /// <returns></returns>
+    public bool ShowingMessage()
+    {
+        return (!messageState.Equals(State.NoMessage));
     }
 }
