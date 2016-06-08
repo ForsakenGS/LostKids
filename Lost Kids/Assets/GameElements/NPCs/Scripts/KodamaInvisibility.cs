@@ -29,10 +29,9 @@ public class KodamaInvisibility : MonoBehaviour {
             if(distance<=minDistance)
             {
 
-                if (distance > 0)
+                if (distance > 1.8)
                 {
-                    newAlpha = Mathf.InverseLerp(minDistance, 0.0f,
-        distance);
+                    newAlpha = Mathf.InverseLerp(minDistance, 0.0f, distance-1.8f);
                     
 
                 }
@@ -46,6 +45,18 @@ public class KodamaInvisibility : MonoBehaviour {
                 faceColor.a = newAlpha;
                 face.GetComponent<Renderer>().material.color = faceColor;
             }
+        }
+    }
+
+    void OnTriggerExit(Collider col) {
+        if(CharacterManager.IsActiveCharacter(col.gameObject))
+        {
+            newAlpha = 0;
+            bodyColor.a = newAlpha;
+            body.GetComponent<Renderer>().material.color = bodyColor;
+
+            faceColor.a = newAlpha;
+            face.GetComponent<Renderer>().material.color = faceColor;
         }
     }
 }

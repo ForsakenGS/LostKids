@@ -213,9 +213,9 @@ public class InputManagerTLK : MonoBehaviour {
                 characterManager.ActivateCharacter(2);
             }
             // Crouch Button
-            if (ButtonDown("Crouch")) {
-                characterStatus.CrouchButton();
-            }
+            //if (ButtonDown("Crouch")) {
+            //    characterStatus.CrouchButton();
+            //}
             // Abilities Buttons
             if (ButtonDown("ChangeAbility")) {
                 abilityControl.ChangeAbility();
