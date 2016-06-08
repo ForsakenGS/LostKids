@@ -57,14 +57,10 @@ public class PushAbility : CharacterAbility {
 #endif
             // Detecta el objeto situado delante del personaje
             RaycastHit hitInfo;
-            Debug.Log("rayo");
             if (Physics.Raycast(detectRay, out hitInfo)) {
-                Debug.Log("toca");
                 // Si el objeto se puede romper, le ordena romperse
                 if (hitInfo.collider.tag.Equals("Pushable")) {
-                    Debug.Log("Coge");
                     execution = true;
-
                     //Se obtiene la normal de la direccion por donde se agarra el objeto
                     pushNormal = hitInfo.normal;
                     targetTransform = hitInfo.collider.transform;
@@ -72,16 +68,14 @@ public class PushAbility : CharacterAbility {
                     //Posicion
                     Vector3 newPosition = hitInfo.collider.transform.position + (hitInfo.collider.bounds.size.z / 2 + GetComponent<CapsuleCollider>().radius) * hitInfo.normal;
                     newPosition.y = transform.position.y;
+                    newPosition -= 0.2f * transform.forward;
                     this.transform.position = newPosition;
                     //Rotacion
                     Vector3 lookPosition = hitInfo.collider.transform.position;
                     lookPosition.y = transform.position.y;
                     this.transform.LookAt(lookPosition);
-
-
                     //Se crea un joint fisico para enlazar los objetos
                     GrabObject(hitInfo.collider.gameObject, transform.InverseTransformPoint(detectRay.origin), targetTransform.InverseTransformPoint(hitInfo.point));
-
                 } else {
                     // Desactiva la habilidad en el CharacterStatus
                     characterStatus.EndAbility(this);
@@ -118,15 +112,12 @@ public class PushAbility : CharacterAbility {
     }
 
     public void ReleaseObject() {
-        if (joint != null)
-        {
+        if (joint != null) {
             Destroy(joint);
-            if (targetGameObject != null)
-            {
+            if (targetGameObject != null) {
                 targetGameObject.GetComponent<PushableObject>().Release();
                 characterStatus.EndAbility(this);
-                if(execution)
-                {
+                if (execution) {
                     EndExecution();
                 }
             }

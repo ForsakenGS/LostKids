@@ -32,7 +32,6 @@ public class PushableObject : MonoBehaviour {
 
     public void Release()
     {
-        Debug.Log("Sueltame!");
         gameObject.layer = LayerMask.NameToLayer("Default");
         if (IsGrounded())
         {
