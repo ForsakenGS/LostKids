@@ -259,25 +259,25 @@ public class CharacterStatus : MonoBehaviour {
     public void MovementButtons(float horizontal, float vertical) {
         switch (characterState) {
             case State.Idle:
-                characterMovement.MoveCharacterNormal(horizontal, vertical, standingSpeed / 2);
+                characterMovement.MoveCharacterNormal(horizontal, vertical, standingSpeed / 2, true);
                 characterState = State.Walking;
                 characterAnimator.ResetTrigger("Idle");
                 SetAnimatorTrigger("Walk");
                 break;
             case State.Walking:
             case State.Sprint:
-                characterMovement.MoveCharacterNormal(horizontal, vertical, standingSpeed);
+                characterMovement.MoveCharacterNormal(horizontal, vertical, standingSpeed, true);
                 break;
             case State.Falling:
             case State.Jumping:
             case State.BigJumping:
-                characterMovement.MoveCharacterNormal(horizontal, vertical, jumpingSpeed);
+                characterMovement.MoveCharacterNormal(horizontal, vertical, jumpingSpeed, false);
                 break;
             case State.AstralProjection:
-                characterMovement.MoveCharacterNormal(horizontal, vertical, astralSpeed);
+                characterMovement.MoveCharacterNormal(horizontal, vertical, astralSpeed, false);
                 break;
             case State.Crouching:
-                characterMovement.MoveCharacterNormal(horizontal, vertical, crouchingSpeed);
+                characterMovement.MoveCharacterNormal(horizontal, vertical, crouchingSpeed, false);
                 break;
             case State.Pushing:
                 // Calcula si el personaje empuja o arrastra hacia él la caja y selecciona animación
@@ -414,18 +414,39 @@ public class CharacterStatus : MonoBehaviour {
         switch (characterState) {
             case State.Idle:
             case State.Walking:
-                if (playerUse.Use()) {
-                    characterState = State.Using;
-                } else {
-                    characterState = State.Idle;
+                // Comprueba si puede usar el objeto
+                if (playerUse.CanUse()) {
+                    // Animación de uso
+                    characterAnimator.SetTrigger("Use");
+                    inputManager.LockTime(1.1f);
+                    if (playerUse.Use()) {
+                        // El jugador queda usando el objeto
+                        characterState = State.Using;
+                        characterAnimator.SetBool("using", true);
+                    } else {
+                        // El jugador deja de usar el objeto
+                        characterState = State.Idle;
+                        characterAnimator.SetTrigger("Idle");
+                        inputManager.LockTime(0.2f);
+                    }
                 }
                 break;
             case State.AstralProjection:
-                playerUse.Use();
+                // Comprueba si puede usar el objeto
+                if (playerUse.CanUse()) {
+                    // Animación de uso
+                    characterAnimator.SetTrigger("Use");
+                    inputManager.LockTime(1.1f);
+                    // Jugador usa el objeto
+                    playerUse.Use();
+                }
                 break;
             case State.Using:
                 playerUse.StopUsing();
                 characterState = State.Idle;
+                characterAnimator.SetBool("using", false);
+                characterAnimator.SetTrigger("Idle");
+                inputManager.LockTime(0.2f);
                 break;
         }
     }
