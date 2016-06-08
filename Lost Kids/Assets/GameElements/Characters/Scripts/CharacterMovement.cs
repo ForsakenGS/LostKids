@@ -171,12 +171,15 @@ public class CharacterMovement : MonoBehaviour {
     public void Jump(float jumpImpulse, bool sound) {
         // Impulso del salto hacia arriba
         Vector3 impulse = new Vector3(0, jumpImpulse, 0);
-        // Impulso hacia delante
-        impulse += transform.forward * (GetPlayerSpeed(true) * jumpImpulse / 3);
+        // Impulso hacia delante (si no hay obstáculo delante)
+        if (!Physics.Raycast(new Vector3(transform.position.x, 1.25f, transform.position.z), transform.forward)) {
+            impulse += transform.forward * (GetPlayerSpeed(true) * jumpImpulse / 3);
+        }
         // Ejecución del salto
         rigBody.AddForce(impulse, ForceMode.Force);
         // Sonido del salto
         if (sound) {
+            AudioManager.Stop(stepSound);
             AudioManager.Play(jumpSound, false, 1);
         }
     }
@@ -213,7 +216,7 @@ public class CharacterMovement : MonoBehaviour {
         }
     }
 
-    public void MoveCharacterNormal(float horizontal, float vertical, float speed) {
+    public void MoveCharacterNormal(float horizontal, float vertical, float speed, bool sound) {
         Vector3 forceToApply = new Vector3();
 
         if ((horizontal != 0f) || (vertical != 0f)) {
@@ -224,7 +227,7 @@ public class CharacterMovement : MonoBehaviour {
             rigBody.AddForce(forceToApply * speed, ForceMode.Force);
             Rotating(forceToApply.x, forceToApply.z);
 
-            if (!stepSound.isPlaying) {
+            if ((sound) && (!stepSound.isPlaying)) {
                 AudioManager.Play(stepSound, true, 1);
             }
         }

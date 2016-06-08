@@ -34,6 +34,27 @@ public class PlayerUse : MonoBehaviour {
 	
 	}
 
+    public bool CanUse() {
+        bool res = false;
+        //Se lanza un rayo hacia delante, sumando cierta altura para no lanzarlo desde el suelo
+        Ray usingRay = new Ray(this.transform.position + rayOffset, this.transform.forward);
+
+        //Debug para poder visualizar el rayo en el inspector
+        Debug.DrawLine(this.transform.position + rayOffset, this.transform.position + rayOffset + this.transform.forward * useDistance, Color.red);
+
+        RaycastHit hit;
+        if (Physics.Raycast(usingRay, out hit, useDistance)) {
+            if (!hit.collider.isTrigger) {
+                objectInUse = hit.collider.gameObject.GetComponent<UsableObject>();
+                if (objectInUse != null) {
+                    res = objectInUse.canUse;
+                }
+            }
+        }
+
+        return res;
+    }
+
     public bool Use()
     {
 		//Se lanza un rayo hacia delante, sumando cierta altura para no lanzarlo desde el suelo
