@@ -431,7 +431,7 @@ public class CharacterStatus : MonoBehaviour {
                             // El jugador deja de usar el objeto
                             characterState = State.Idle;
                             characterAnimator.SetTrigger("Idle");
-                            inputManager.LockTime(0.2f);
+                            //inputManager.LockTime(0.2f);
                         }
                     }
                 }
