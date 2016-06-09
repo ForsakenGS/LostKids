@@ -50,7 +50,7 @@ public abstract class UsableObject : MonoBehaviour {
 
     //Indica cuando el jugador puede usar el objeto. Se debe poner a true
     //Cuando el jugador se encuentra dentro de la zona de activacion ( tooltipdetector)
-    //[HideInInspector]
+    [HideInInspector]
     public bool canUse=false;
 
     //Referencia al manager del puzzle

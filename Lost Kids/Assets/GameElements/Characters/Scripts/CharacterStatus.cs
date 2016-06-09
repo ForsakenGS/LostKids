@@ -414,20 +414,25 @@ public class CharacterStatus : MonoBehaviour {
         switch (characterState) {
             case State.Idle:
             case State.Walking:
-                // Comprueba si puede usar el objeto
-                if (playerUse.CanUse()) {
-                    // Animación de uso
-                    characterAnimator.SetTrigger("Use");
-                    inputManager.LockTime(1.1f);
-                    if (playerUse.Use()) {
-                        // El jugador queda usando el objeto
-                        characterState = State.Using;
-                        characterAnimator.SetBool("using", true);
-                    } else {
-                        // El jugador deja de usar el objeto
-                        characterState = State.Idle;
-                        characterAnimator.SetTrigger("Idle");
-                        inputManager.LockTime(0.2f);
+                // Comprueba si se trata del Kodama
+                if (playerUse.IsKodama()) {
+                    playerUse.Use();
+                } else {
+                    // Comprueba si puede usar el objeto
+                    if (playerUse.CanUse()) {
+                        // Animación de uso
+                        characterAnimator.SetTrigger("Use");
+                        inputManager.LockTime(1.1f);
+                        if (playerUse.Use()) {
+                            // El jugador queda usando el objeto
+                            characterState = State.Using;
+                            characterAnimator.SetBool("using", true);
+                        } else {
+                            // El jugador deja de usar el objeto
+                            characterState = State.Idle;
+                            characterAnimator.SetTrigger("Idle");
+                            inputManager.LockTime(0.2f);
+                        }
                     }
                 }
                 break;
