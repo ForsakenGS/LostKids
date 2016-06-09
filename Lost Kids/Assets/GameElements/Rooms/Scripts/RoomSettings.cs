@@ -33,7 +33,7 @@ public class RoomSettings : MonoBehaviour {
     public Transform puzzleElements;
     public Transform walls;
 
-    private GameObject frontWall;
+    //private GameObject frontWall;
     private int objectsToPrepare;
     private bool prepared;
 
@@ -46,7 +46,7 @@ public class RoomSettings : MonoBehaviour {
         puzzleElements = transform.Find("PuzzleElements");
         walls = transform.Find("Walls");
 
-        frontWall = walls.Find("FrontWall").gameObject;
+        //frontWall = walls.Find("FrontWall").gameObject;
         
     }
 
@@ -111,10 +111,10 @@ public class RoomSettings : MonoBehaviour {
     public void HideRoom() {
         // Modifica la transparencia de la pared horizontal frontal
         //frontWall.GetComponent<Renderer>().enabled = true;
-        foreach(Renderer r in frontWall.GetComponentsInChildren<Renderer>())
+        /*foreach(Renderer r in frontWall.GetComponentsInChildren<Renderer>())
         {
             r.enabled = true;
-        }
+        }*/
     }
 
     // Se ejecuta al habilitar el script
@@ -161,10 +161,10 @@ public class RoomSettings : MonoBehaviour {
     public void ShowRoom() {
         // Modifica la transparencia de la pared horizontal frontal
         //frontWall.GetComponent<Renderer>().enabled = false;
-        foreach (Renderer r in frontWall.GetComponentsInChildren<Renderer>())
+        /*foreach (Renderer r in frontWall.GetComponentsInChildren<Renderer>())
         {
             r.enabled = false;
-        }
+        }*/
     }
 
     IEnumerator WaitEndOfPreparation() {
