@@ -14,7 +14,7 @@ public class Button : UsableObject {
     
 
     //Profundidad a la quese hunde el boton
-    public float pushDeph;
+    public float pushDeph = 0.5f;
     
     //Velocidad a la que se pulsa el boton
     public float pushSpeed;

@@ -100,6 +100,27 @@ public class PlayerUse : MonoBehaviour {
 		return isUsing;
     }
 
+    public bool IsKodama() {
+        bool res = false;
+        //Se lanza un rayo hacia delante, sumando cierta altura para no lanzarlo desde el suelo
+        Ray usingRay = new Ray(this.transform.position + rayOffset, this.transform.forward);
+
+        //Debug para poder visualizar el rayo en el inspector
+        Debug.DrawLine(this.transform.position + rayOffset, this.transform.position + rayOffset + this.transform.forward * useDistance, Color.red);
+        // Comprueba si se trata del Kodama
+        RaycastHit hit;
+        if (Physics.Raycast(usingRay, out hit, useDistance)) {
+            if (!hit.collider.isTrigger) {
+                objectInUse = hit.collider.gameObject.GetComponent<Kodama>();
+                if (objectInUse != null) {
+                    res = objectInUse.canUse;
+                }
+            }
+        }
+
+        return res;
+    }
+
     /// <summary>
     /// Devuelve true si el jugador esta usando algun objeto
     /// </summary>

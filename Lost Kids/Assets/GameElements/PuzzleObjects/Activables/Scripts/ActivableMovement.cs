@@ -26,6 +26,8 @@ public class ActivableMovement : MonoBehaviour, IActivable {
     private Vector3 startPosition;
     private Vector3 endPosition;
 
+    public float movement;
+
     //Variable de control sobre el movimiento de la puerta
     private bool isMoving
     {
@@ -77,21 +79,21 @@ public class ActivableMovement : MonoBehaviour, IActivable {
         //Se guarda la posicion inicial de la puerta
         startPosition = this.transform.position;
         //Se calcula un offset ( distancia a la que se movera) en funcion al tamaño y direccion de apertura
-        Vector3 size = transform.localScale;//GetComponent<Renderer>().bounds.size;
+        //Vector3 size = transform.localScale;//GetComponent<Renderer>().bounds.size;
         Vector3 offset = new Vector3(0, 0, 0);
         switch (openDirection)
         {
             case Direction.Down:
-                offset = new Vector3(0, -size.y, 0);
+                offset = new Vector3(0, -movement, 0);
                 break;
             case Direction.Up:
-                offset = new Vector3(0, size.y, 0);
+                offset = new Vector3(0, movement, 0);
                 break;
             case Direction.Left:
-                offset = new Vector3(-size.z, 0, 0);
+                offset = new Vector3(-movement, 0, 0);
                 break;
             case Direction.Right:
-                offset = new Vector3(size.z, 0, 0);
+                offset = new Vector3(movement, 0, 0);
                 break;
 
         }
