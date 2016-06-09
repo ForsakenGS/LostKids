@@ -75,13 +75,13 @@ public class HUDManager : MonoBehaviour {
     void AbilityExecutionEnd(CharacterAbility ability) {
         //Debug.Log("end");
         Transform abilityUI = GetAbilityUITransform(selectedAbility.GetType());
-        abilityUI.localScale.Scale(new Vector3(0.5f, 0.5f, 0.5f));
+        //abilityUI.localScale.Scale(new Vector3(0.5f, 0.5f, 0.5f));
     }
 
     void AbilityExecutionStart(CharacterAbility ability) {
         //Debug.Log("start");
         Transform abilityUI = GetAbilityUITransform(selectedAbility.GetType());
-        abilityUI.localScale.Scale(new Vector3(2,2,2));
+        //abilityUI.localScale.Scale(new Vector3(2,2,2));
     }    
 
     void AbilitySelected(CharacterAbility ability) {

@@ -61,7 +61,7 @@ public class GameData  {
 
     public static void CompleteLevel(string level)
     {
-        if (!instance.levelsCompleted.Contains(level))
+        if (!Instance.levelsCompleted.Contains(level))
         {
             Instance.levelsCompleted.Add(level);
 
@@ -70,7 +70,7 @@ public class GameData  {
 
     public static void UnlockLevel(string level)
     {
-        if (!instance.unlockedLevels.Contains(level))
+        if (!Instance.unlockedLevels.Contains(level))
         {
             Instance.unlockedLevels.Add(level);
 
