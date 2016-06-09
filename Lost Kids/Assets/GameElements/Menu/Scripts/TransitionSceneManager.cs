@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class TransitionSceneManager : MonoBehaviour {
 
@@ -8,6 +9,7 @@ public class TransitionSceneManager : MonoBehaviour {
     private MessageManager messageManager;
     private SceneFade fader;
 
+    public int messagesCount;
     public string previousScene;
     public string nextScene;
 
@@ -16,6 +18,7 @@ public class TransitionSceneManager : MonoBehaviour {
     public Text totalCollectiblesText;
     public Text actualCollectiblesText;
     private LevelData levelData;
+
 
     private bool inputAvailable = false;
 	// Use this for initialization
@@ -67,7 +70,12 @@ public class TransitionSceneManager : MonoBehaviour {
 
     void StartMessages()
     {
-        messageManager.ShowMessage(0);
+        List<int> indexList = new List<int>(messagesCount);
+        for(int i=0;i<messagesCount;i++)
+        {
+            indexList.Add(i);
+        }
+        messageManager.ShowConversation(indexList);
         inputAvailable = true;
     }
 

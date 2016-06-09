@@ -52,17 +52,43 @@ public class GameManager : MonoBehaviour {
 
         switch(sc) {
             case "Tutorial1":
-                AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
-                Destroy(menuMusic);
+                /*
+                if (menuMusic != null)
+                {
+                    AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
+                    Destroy(menuMusic);
+                }
+                */
                 break;
+
             case "Tutorial2":
-                AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
-                Destroy(menuMusic);
+                /*
+                if (menuMusic != null)
+                {
+                    AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
+                    Destroy(menuMusic);
+                }
+                */
                 break;
             case "Tutorial3":
-                AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
-                Destroy(menuMusic);
+                /*
+                if (menuMusic != null)
+                {
+                    AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
+                    Destroy(menuMusic);
+                }
                 break;
+                */
+            case "Level1":
+                /*
+                if (menuMusic != null)
+                {
+                    AudioManager.Stop(menuMusic.GetComponent<AudioLoader>().GetSound("MenuMusic"));
+                    Destroy(menuMusic);
+                }
+                break;
+                */
+
             case "Credits":
                 break;
             case "LoadScene":

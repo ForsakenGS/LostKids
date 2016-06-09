@@ -18,26 +18,29 @@ public class MessageManager : MonoBehaviour {
     public Text text;
     //Marco del texto en pantalla
     public Image frame;
+    // Imagen que se está mostrando
+    public Image shownImg;
+
     // Imagen y etiqueta Kodama
     [Header("Kodama Settings")]
     public string kodamaTag = "kodama";
-    public Image kodamaImg;
+    public Sprite kodamaImg;
     // Imagen y etiqueta Tanuki
     [Header("Tanuki Settings")]
     public string tanukiTag = "tanuki";
-    public Image tanukiImg;
+    public Sprite tanukiImg;
     // Imagen y etiqueta Aoi
     [Header("Aoi Settings")]
     public string aoiTag = "aoi";
-    public Image aoiImg;
+    public Sprite aoiImg;
     // Imagen y etiqueta Akai
     [Header("Akai Settings")]
     public string akaiTag = "akai";
-    public Image akaiImg;
+    public Sprite akaiImg;
     // Imagen y etiqueta Ki
     [Header("Ki Settings")]
     public string kiTag = "ki";
-    public Image kiImg;
+    public Sprite kiImg;
 
     //Eventos delegados para lanzar el evento de bloqueo y desbloqueo del juego mientras se muestran mensajes
     public delegate void LockUnlockAction();
@@ -58,8 +61,7 @@ public class MessageManager : MonoBehaviour {
     private AudioLoader audioLoader;
     //Array con los efectos de sonido
     private ArrayList messagesSfxs;
-    // Imagen que se está mostrando
-    private Image shownImg;
+
 
     /// <summary>
     /// Maquina de estados para el MessageManager
@@ -93,7 +95,7 @@ public class MessageManager : MonoBehaviour {
         //Se inicializa la velocidad a la velocidad normal
         letterSpeed = normalLetterSpeed;
         isConversation = false;
-        shownImg = null;
+        //shownImg = null;
 
         //Se cargan los mensajes desde fichero
         FillMessages();
@@ -149,7 +151,7 @@ public class MessageManager : MonoBehaviour {
         string msg = (string) messages[index];
 
         // Se muestra la imagen del personaje al que pertenece el mensaje
-        shownImg = CharacterImage(msg);
+        shownImg.sprite = CharacterImage(msg);
         shownImg.gameObject.SetActive(true);
 
         
@@ -173,13 +175,13 @@ public class MessageManager : MonoBehaviour {
     }
 
     // Recibe un mensaje y devuelve la imagen representativa del interlocutor
-    Image CharacterImage(string message) {
+    Sprite CharacterImage(string message) {
         // Kodama es el personaje por defecto
-        Image img = kodamaImg;
+        Sprite img = shownImg.sprite;
         string tag = message.Substring(1, message.IndexOf('>')-1);
-        if (!tag.Equals(kodamaTag)) {
-            // No se trata del Kodama
-            if (tag.Equals(tanukiTag)) {
+        if (tag.Equals(kodamaTag)) {
+            img = kodamaImg;
+        }else if (tag.Equals(tanukiTag)) {
                 img = tanukiImg;
             } else if (tag.Equals(aoiTag)) {
                 img = aoiImg;
@@ -188,7 +190,8 @@ public class MessageManager : MonoBehaviour {
             } else if (tag.Equals(kiTag)) {
                 img = kiImg;
             }
-        }
+        
+
 
         return img;
     }
@@ -335,7 +338,7 @@ public class MessageManager : MonoBehaviour {
                 frame.gameObject.SetActive(false);
                 text.gameObject.SetActive(false);
                 shownImg.gameObject.SetActive(false);
-                shownImg = null;
+                //shownImg = null;
                 messageState = State.NoMessage;
                 break;
         }
