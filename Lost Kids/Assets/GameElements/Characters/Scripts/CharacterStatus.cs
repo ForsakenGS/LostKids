@@ -37,6 +37,7 @@ public class CharacterStatus : MonoBehaviour {
     public float standingSpeed = 8000f;
     public float jumpImpulse = 200000f;
     public float firstJumpImpulse = 10000f;
+    public float astralJumpImpulse = 2000f;
     public float jumpingSpeed = 5000f;
     public float crouchingSpeed = 4000f;
     public float pushingSpeed = 4000f;
@@ -193,6 +194,15 @@ public class CharacterStatus : MonoBehaviour {
                 totalJumpImpulse = firstJumpImpulse;
                 SetAnimatorTrigger("Jump");
                 break;
+            case State.AstralProjection:
+                if (!jumpButtonUp) {
+                    // Comprueba si ha alcanzado el impulso de salto inicial
+                    if (totalJumpImpulse < firstJumpImpulse) {
+                        characterMovement.Jump(astralJumpImpulse, false);
+                        totalJumpImpulse += astralJumpImpulse;
+                    }
+                }
+                break;
         }
     }
 
@@ -317,6 +327,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.Walking:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
+                    AudioManager.Stop(stepSound);
                     characterState = State.Falling;
                     SetAnimatorTrigger("Fall");
                 } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
@@ -394,9 +405,15 @@ public class CharacterStatus : MonoBehaviour {
                 }
                 break;
             case State.Dead:
-            case State.AstralProjection:
             case State.Sacrifice:
                 break;
+            case State.AstralProjection:
+                // Comprueba si el jugador está apoyado en alguna superficie 
+                if (characterMovement.CharacterIsGrounded()) {  
+                    jumpButtonUp = false;
+                    totalJumpImpulse = 0.0f;
+                }
+                break;            
             default:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
