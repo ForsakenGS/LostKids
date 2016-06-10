@@ -13,8 +13,9 @@ public class MouseDestroyer : MonoBehaviour {
         {
             DisableMouse();
         }
-	    
-	}
+        Time.timeScale = 1;
+        GameManager.paused = false;
+    }
 	
 	// Update is called once per frame
 	void Update () {
