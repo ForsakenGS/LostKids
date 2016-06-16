@@ -1,23 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour {
 
     public static AudioManager instance = null;
 
-    private float musicVolume;
-    private float soundsVolume;
+    public AudioMixer audioMixer;
     private HashSet<AudioSource> playingMusics;
     private HashSet<AudioSource> playingSounds;
 
     //Al activarse el script se añade la función Lock
     void OnEnable()
     {
-        UpdateMusicVolume();
-        UpdateSoundsVolume();
-        GameSettings.VolumeChanged += UpdateSoundsVolume;
-        GameSettings.VolumeChanged += UpdateMusicVolume;
+
         GameManager.PauseEvent += PauseAllSounds;
         GameManager.UnPauseEvent +=ResumeAllSounds;
     }
@@ -25,8 +22,7 @@ public class AudioManager : MonoBehaviour {
     //Al desactivarse el script se desuscriben las funciones
     void OnDisable()
     {
-        GameSettings.VolumeChanged -= UpdateSoundsVolume;
-        GameSettings.VolumeChanged -= UpdateMusicVolume;
+
         GameManager.PauseEvent -= PauseAllSounds;
         GameManager.UnPauseEvent -= ResumeAllSounds;
     }
@@ -61,7 +57,22 @@ public class AudioManager : MonoBehaviour {
     public static void Play(AudioSource source, bool loop, float volume) {
 
         source.loop = loop;
-        source.volume = volume*GameSettings.GetModifiedSoundsVolume();
+        source.volume = volume;
+        source.Play();
+        Instance.playingSounds.Add(source);
+
+    }
+
+    /// <summary>
+    /// Reproduce un audio simple o en bucle
+    /// </summary>
+    /// <param name="source">AudioSource que se desea reproducir</param>
+    /// <param name="loop">Indica si se trata de un bucle</param>
+    public static void Play(AudioSource source, bool loop, float volume,float minPitch,float maxPitch)
+    {
+        source.pitch = Random.Range(minPitch, maxPitch);
+        source.loop = loop;
+        source.volume = volume;
         source.Play();
         Instance.playingSounds.Add(source);
 
@@ -76,7 +87,7 @@ public class AudioManager : MonoBehaviour {
     {
 
         source.loop = loop;
-        source.volume = volume * GameSettings.GetModifiedMusicVolume();
+        source.volume = volume;
         source.Play();
         Instance.playingMusics.Add(source);
 
@@ -108,7 +119,7 @@ public class AudioManager : MonoBehaviour {
 
         //Cuando haya pasado el tiempo se reproduce el sonido
         if(currentTime >= endTime) {
-            Play(source, loop, volume*GameSettings.GetModifiedSoundsVolume());
+            Play(source, loop, volume);
             Instance.playingSounds.Add(source);
         }
 
@@ -129,7 +140,7 @@ public class AudioManager : MonoBehaviour {
         float endTime = timeSinceStarted + time;
         float currentTime = timeSinceStarted;
 
-        Play(source, loop, volume*GameSettings.GetModifiedSoundsVolume());
+        Play(source, loop, volume);
         Instance.playingSounds.Add(source);
 
         while (currentTime < endTime) {
@@ -158,7 +169,7 @@ public class AudioManager : MonoBehaviour {
         Play(source, loop, 0);
         Instance.playingSounds.Add(source);
 
-        while ( source.volume < GameSettings.GetModifiedSoundsVolume()) {
+        while ( source.volume < 1) {
             source.volume += deltaVolume * Time.deltaTime;
             yield return null;
         }
@@ -178,7 +189,6 @@ public class AudioManager : MonoBehaviour {
         int randomIndex = Random.Range(0, sources.Count);
 
         AudioSource source = (AudioSource) sources[randomIndex];
-        source.volume = GameSettings.GetModifiedSoundsVolume();
         source.Play();
         Instance.playingSounds.Add(source);
 
@@ -291,7 +301,7 @@ public class AudioManager : MonoBehaviour {
 
         Resume(source);
 
-        while (source.volume < GameSettings.GetModifiedSoundsVolume()) {
+        while (source.volume < 1) {
             source.volume += deltaVolume * Time.deltaTime;
             yield return null;
         }
@@ -376,41 +386,7 @@ public class AudioManager : MonoBehaviour {
         yield return 0;
 
     }
-
-    public void UpdateMusicVolume()
-    {
-        musicVolume = GameSettings.GetModifiedMusicVolume();
-        UpdateMusicClipsVolume();
-    }
-
-    public void UpdateSoundsVolume()
-    {
-        soundsVolume = GameSettings.GetModifiedSoundsVolume();
-        UpdateSoundClipsVolume();
-    }
-
-    public void UpdateMusicClipsVolume()
-    {
-        foreach(AudioSource music in playingMusics)
-        {
-            if (music != null)
-            {
-                music.volume = musicVolume;
-            }
-        }
-    }
-
-    public void UpdateSoundClipsVolume()
-    {
-        foreach (AudioSource sound in playingSounds)
-        {
-            if (sound != null)
-            {
-                sound.volume = soundsVolume;
-            }
-        }
-    }
-
+    
     public static void PauseAllSounds()
     {
         foreach (AudioSource sound in Instance.playingSounds)
@@ -431,6 +407,11 @@ public class AudioManager : MonoBehaviour {
     {
         //Devuelve la instancia actual o crea una nueva si aun no existe
         get { return instance ?? (instance = new GameObject("AudioManager").AddComponent<AudioManager>()); }
+    }
+
+    public static AudioMixer GetAudioMixer()
+    {
+        return Instance.audioMixer;
     }
 
 

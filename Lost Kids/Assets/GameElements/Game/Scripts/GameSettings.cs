@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Audio;
 
 public enum Languages {English,Spanish};
 
@@ -17,6 +18,8 @@ public class GameSettings :MonoBehaviour {
     //Instancia del singleton
     public static GameSettings instance = null;
 
+    private AudioMixer audioMixer;
+
     //Delegates para cambios de volumen
     public delegate void VolumeChangedEvent();
     public static event VolumeChangedEvent VolumeChanged;
@@ -30,8 +33,10 @@ public class GameSettings :MonoBehaviour {
             instance = this;
 
             masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
+            
             musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
             soundsVolume = PlayerPrefs.GetFloat("SoundsVolume", 1f);
+            UpdateAudioMixer();
             fullScreen = PlayerPrefs.GetInt("FullScreen", 1) == 1;
             string lang = PlayerPrefs.GetString("Language", "English");
             if (lang.Equals("Spanish"))
@@ -64,6 +69,17 @@ public class GameSettings :MonoBehaviour {
 	
 	}
 
+    public void UpdateAudioMixer()
+    {
+        if(audioMixer==null)
+        {
+
+            audioMixer = AudioManager.GetAudioMixer();
+        }
+        audioMixer.SetFloat("masterVolume", masterVolume);
+        audioMixer.SetFloat("musicVolume", musicVolume);
+        audioMixer.SetFloat("soundsVolume", soundsVolume);
+    }
 
     public static float GetMusicVolume()
     {
@@ -78,24 +94,6 @@ public class GameSettings :MonoBehaviour {
     public static float GetSoundsVolume()
     {
         return Instance.soundsVolume;
-    }
-
-    /// <summary>
-    /// Devuelve el volumen de la musica teniendo en cuenta el volumen global
-    /// </summary>
-    /// <returns></returns>
-    public static float GetModifiedMusicVolume()
-    {
-        return Instance.masterVolume * Instance.musicVolume;
-    }
-
-    /// <summary>
-    /// Devuelve el volumen de los sonidos teniendo en cuenta el volumen global
-    /// </summary>
-    /// <returns></returns>
-    public static float GetModifiedSoundsVolume()
-    {
-        return Instance.masterVolume * Instance.soundsVolume;
     }
 
     /// <summary>
@@ -125,10 +123,8 @@ public class GameSettings :MonoBehaviour {
     {
         Instance.masterVolume = value;
         PlayerPrefs.SetFloat("MasterVolume", value);
-        if(VolumeChanged!=null)
-        {
-            VolumeChanged();
-        }
+        Instance.audioMixer.SetFloat("masterVolume", Instance.masterVolume);
+
     }
 
     /// <summary>
@@ -139,10 +135,8 @@ public class GameSettings :MonoBehaviour {
     {
         Instance.musicVolume = value;
         PlayerPrefs.SetFloat("MusicVolume", value);
-        if (VolumeChanged != null)
-        {
-            VolumeChanged();
-        }
+        Instance.audioMixer.SetFloat("musicVolume", Instance.musicVolume);
+
     }
 
     /// <summary>
@@ -153,10 +147,7 @@ public class GameSettings :MonoBehaviour {
     {
         Instance.soundsVolume = value;
         PlayerPrefs.SetFloat("SoundsVolume", value);
-        if (VolumeChanged != null)
-        {
-            VolumeChanged();
-        }
+        Instance.audioMixer.SetFloat("soundsVolume", Instance.soundsVolume);
     }
 
 

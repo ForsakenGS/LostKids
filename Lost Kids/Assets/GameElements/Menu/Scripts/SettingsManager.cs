@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SettingsManager : MonoBehaviour {
-
-
 
     public Slider masterSlider;
     public Slider soundsSlider;
@@ -25,7 +24,7 @@ public class SettingsManager : MonoBehaviour {
     void OnEnable()
     {
         UpdateSettings();
-        masterSlider.Select();
+        EventSystem.current.SetSelectedGameObject(masterSlider.gameObject);
     }
 
 
@@ -127,7 +126,7 @@ public class SettingsManager : MonoBehaviour {
 
         GameSettings.SetMasterVolume(value);
 
-        if (value > 0 && masterToggle.isOn)
+        if (value > -80 && masterToggle.isOn)
         {
             masterToggle.isOn = false;
         }
@@ -136,7 +135,7 @@ public class SettingsManager : MonoBehaviour {
     public void ChangeMusicVolume(float value)
     {
         GameSettings.SetMusicVolume(value);
-        if (value > 0 && musicToggle.isOn)
+        if (value > -80 && musicToggle.isOn)
         {
             musicToggle.isOn = false;
         }
@@ -145,7 +144,7 @@ public class SettingsManager : MonoBehaviour {
     public void ChangeSoundsVolume(float value)
     {
         GameSettings.SetSoundsVolume(value);
-        if (value > 0 && soundsToggle.isOn)
+        if (value > -80 && soundsToggle.isOn)
         {
             soundsToggle.isOn = false;
         }
@@ -157,7 +156,7 @@ public class SettingsManager : MonoBehaviour {
     {
         if (mute)
         {
-            musicSlider.value = 0;
+            musicSlider.value = -80;
         }
     }
 
@@ -165,7 +164,7 @@ public class SettingsManager : MonoBehaviour {
     {
         if (mute)
         {
-            masterSlider.value = 0;
+            masterSlider.value = -80;
         }
     }
 
@@ -173,7 +172,7 @@ public class SettingsManager : MonoBehaviour {
     {
         if (mute)
         {
-            soundsSlider.value = 0;
+            soundsSlider.value = -80;
         }
     }
 

@@ -228,7 +228,7 @@ public class CharacterMovement : MonoBehaviour {
             Rotating(forceToApply.x, forceToApply.z);
 
             if ((sound) && (!stepSound.isPlaying)) {
-                AudioManager.Play(stepSound, true, 1);
+                AudioManager.Play(stepSound, true, 1, 0.9f, 1.1f);
             }
         }
     }
