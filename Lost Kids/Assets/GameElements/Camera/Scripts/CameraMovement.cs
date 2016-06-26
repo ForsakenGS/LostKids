@@ -18,7 +18,11 @@ public class CameraMovement : MonoBehaviour {
     //"Radio" del jugador
     public float playerRadius = 0.5f;
 
+    private CameraScroller cameraScroller;
+
     void Start() {
+
+        cameraScroller = GameObject.FindGameObjectWithTag("CameraParallax").GetComponent<CameraScroller>();
 
         RefreshPlayer();
         UpdateParams();
@@ -45,6 +49,8 @@ public class CameraMovement : MonoBehaviour {
         Vector3 standardPos = player.position + relCameraPos;
 
         transform.position = Vector3.Slerp(transform.position, standardPos, smooth * Time.deltaTime);
+
+        cameraScroller.UpdateScrollSpeed(transform.position, standardPos);
 
     }
 
