@@ -23,13 +23,23 @@ public class CameraManager : MonoBehaviour {
 
     //Evento delegado para lanzar el evento de bloqueo y desbloqueo del juego mientras se cambian las cámaras
     public delegate void LockUnlockAction();
-    public static event LockUnlockAction LockUnlockEvent;
+    public static event LockUnlockAction LockEvent;
+    public static event LockUnlockAction UnlockEvent;
 
     public delegate void CutSceneAction();
     public static event CutSceneAction CutSceneEvent;
 
+    //Variables estaticas para manejar el zoom en conversaciones
+    public float zoomOutFoV=60;
+    public float zoomInFoV = 25;
+    public float zoomSpeed = 1;
+    private bool zoomed = false;
+    public static CameraManager instance = null;
+
+
     void Awake() {
 
+        instance = this;
         isChangingCameras = false;
 
         //if(transitionCamera) {
@@ -42,12 +52,21 @@ public class CameraManager : MonoBehaviour {
     void OnEnable()
     {
         CharacterManager.ActiveCharacterChangedEvent += CameraToActivePlayer;
+        /*
+        MessageManager.ConversationStartEvent += BeginSmoothZoomIn;
+        MessageManager.ConversationEndEvent += BeginSmoothZoomOut;
+        */
     }
 
     //Al desactivarse el script se desuscriben las funciones
     void OnDisable()
     {
         CharacterManager.ActiveCharacterChangedEvent -= CameraToActivePlayer;
+        /*
+        MessageManager.ConversationStartEvent -= BeginSmoothZoomIn;
+        MessageManager.ConversationEndEvent -= BeginSmoothZoomOut;
+        */
+
     }
 
     /// <summary>
@@ -60,7 +79,7 @@ public class CameraManager : MonoBehaviour {
         if(currentRoom != nextRoom) {
 
             Debug.Log("Bloqueo");
-            LockUnlockEvent();
+            LockEvent();
 
             cameras[currentRoom].SetActive(false);
             //transitionCamera.SetActive(true);
@@ -101,7 +120,7 @@ public class CameraManager : MonoBehaviour {
         cameras[nextRoom].SetActive(true);
 
         Debug.Log("Desbloqueo");
-        LockUnlockEvent();
+        UnlockEvent();
         
     }
 
@@ -124,10 +143,23 @@ public class CameraManager : MonoBehaviour {
 
 
     public void ChangeCameraFade(GameObject cam, float timeCutScene) {
-        LockUnlockEvent();
+        if (LockEvent != null)
+        {
+            LockEvent();
+        }
         cameras[currentRoom].SetActive(false);
         cam.SetActive(true);
         Invoke("FinishCutScene", timeCutScene);
+    }
+
+    public void ChangeCameraFade(GameObject cam)
+    {
+        if (LockEvent != null)
+        {
+            LockEvent();
+        }
+        cameras[currentRoom].SetActive(false);
+        cam.SetActive(true);
     }
 
     private void FinishCutScene() {
@@ -138,8 +170,70 @@ public class CameraManager : MonoBehaviour {
         Debug.Log("Hola");
         cam.SetActive(false);
         cameras[currentRoom].SetActive(true);
-        LockUnlockEvent();
+        if (UnlockEvent != null)
+        {
+            UnlockEvent();
+        }
     }
+
+    public void BeginSmoothZoomIn()
+    {
+        if (!zoomed)
+        {
+            zoomed = true;
+            instance.StartCoroutine(instance.ZoomIn(zoomInFoV, zoomSpeed));
+        }
+
+    }
+
+    public void BeginSmoothZoomOut()
+    {
+        if(zoomed)
+        {
+            zoomed = false;
+            instance.StartCoroutine(instance.ZoomOut(zoomOutFoV, zoomSpeed));
+        }
+        
+
+    }
+
+    public IEnumerator ZoomIn(float endZoom,float speed)
+    {
+        float t = 0;
+        while (t < 1f) 
+        {
+            t += Time.deltaTime * speed;
+            Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endZoom, t);
+
+            yield return null;
+        }
+        if (Camera.main.fieldOfView < endZoom)
+        {
+            Camera.main.fieldOfView = endZoom;
+        }
+        yield return 0;
+        
+    }
+
+    public IEnumerator ZoomOut(float endZoom, float speed)
+    {
+        float t = 0;
+        while (t < 1f)
+        {
+            t += Time.deltaTime * speed;
+            Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endZoom, t);
+
+            yield return null;
+        }
+        if (Camera.main.fieldOfView > endZoom)
+        {
+            Camera.main.fieldOfView = endZoom;
+        }
+        yield return 0;
+        zoomed = false;
+        yield return 0;
+    }
+
 
 
 }

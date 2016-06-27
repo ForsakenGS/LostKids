@@ -8,9 +8,11 @@ public class Kodama : UsableObject {
     // Referencia a MessageManager
     private MessageManager messageManager;
 
+    private CutScene cutScene;
     // Use this for references
     void Awake() {
         messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
+        cutScene = GetComponent<CutScene>();
     }
 
     /// <summary>
@@ -18,6 +20,18 @@ public class Kodama : UsableObject {
     /// </summary>
     override public void Use() {
         // Muestra la conversación
+        if (cutScene == null)
+        {
+            messageManager.ShowConversation(indexList);
+        }
+        else
+        {
+            cutScene.BeginCutScene(BeginConversation);
+        }
+    }
+
+    private void BeginConversation()
+    {
         messageManager.ShowConversation(indexList);
     }
 }
