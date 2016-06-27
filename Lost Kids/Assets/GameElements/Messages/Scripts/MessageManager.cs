@@ -46,6 +46,9 @@ public class MessageManager : MonoBehaviour {
     public delegate void LockUnlockAction();
     public static event LockUnlockAction LockEvent;
     public static event LockUnlockAction UnlockEvent;
+    public static event LockUnlockAction ConversationStartEvent;
+    public static event LockUnlockAction ConversationEndEvent;
+
 
     //Array de mensajes del juego
     private ArrayList messages;
@@ -132,6 +135,7 @@ public class MessageManager : MonoBehaviour {
         frame.gameObject.SetActive(true);
         text.gameObject.SetActive(true);
 
+        
         //Se bloquea el resto del juego
         if (LockEvent != null) {
             LockEvent();
@@ -154,12 +158,8 @@ public class MessageManager : MonoBehaviour {
         shownImg.sprite = CharacterImage(msg);
         shownImg.gameObject.SetActive(true);
 
-        
-
         //Se separa en lineas
         lines = SeparateInLines(msg);
-
-        
 
         //Se inicializan los índices
         startIndex = 0;
@@ -235,7 +235,26 @@ public class MessageManager : MonoBehaviour {
             //Se recorre la linea y se va añadiendo letra a letra con un retraso de la velocidad de letra
             for (int j = 0; j < line.Length; j++) {
                 text.text += line[j];
-                yield return new WaitForSeconds(letterSpeed);
+                //Se reconocen algunos caracteres especiales (. , ) que modifiquen la velocidad del texto
+                switch(line[j])
+                {
+                    case '.':
+                        yield return new WaitForSeconds(4*letterSpeed);
+                        break;
+                    case '!':
+                        yield return new WaitForSeconds(4 * letterSpeed);
+                        break;
+                    case '?':
+                        yield return new WaitForSeconds(4 * letterSpeed);
+                        break;
+                    case ',':
+                        yield return new WaitForSeconds(2*letterSpeed);
+                        break;
+                    default:
+                        yield return new WaitForSeconds(letterSpeed);
+                        break;
+                }
+                
             }
             //Se añade el salto de linea
             text.text += "\n";
@@ -258,6 +277,10 @@ public class MessageManager : MonoBehaviour {
     /// </summary>
     /// <param name="conversation">Listado con los índices de los mensajes que conforman la conversación</param>
     public void ShowConversation(List<int> conversation) {
+        if (ConversationStartEvent != null)
+        {
+            ConversationStartEvent();
+        }
         StartCoroutine(ShowConversationRoutine(conversation));
     }
 
@@ -284,7 +307,6 @@ public class MessageManager : MonoBehaviour {
             // Muestra el mensaje
             ShowMessage(conversation[mesIndex]);
         }
-
         yield return 0;
     }
 
@@ -333,6 +355,11 @@ public class MessageManager : MonoBehaviour {
                 //Se desbloquea el resto del juego
                 if (UnlockEvent != null) {
                     UnlockEvent();
+                }
+
+                if (ConversationEndEvent != null)
+                {
+                    ConversationEndEvent();
                 }
                 //Se oculta la interfaz de mensajes
                 frame.gameObject.SetActive(false);

@@ -6,15 +6,16 @@ public class InputManagerTLKLocker : MonoBehaviour, ILockeable {
     //Al activarse el script se añade la función Lock
     void OnEnable() {
         MessageManager.LockEvent += Lock;
-        CameraManager.LockUnlockEvent += Lock;
+        CameraManager.LockEvent += Lock;
+        CameraManager.UnlockEvent += Unlock;
     }
 
     //Al desactivarse el script se desuscriben las funciones
     void OnDisable() {
         MessageManager.UnlockEvent -= Unlock;
         MessageManager.LockEvent -= Lock;
-        CameraManager.LockUnlockEvent -= Unlock;
-        CameraManager.LockUnlockEvent -= Lock;
+        CameraManager.LockEvent -= Unlock;
+        CameraManager.UnlockEvent -= Unlock;
     }
 
     /// <summary>
@@ -25,8 +26,8 @@ public class InputManagerTLKLocker : MonoBehaviour, ILockeable {
         InputManagerTLK.SetLock(true);
         MessageManager.LockEvent -= Lock;
         MessageManager.UnlockEvent += Unlock;
-        CameraManager.LockUnlockEvent -= Lock;
-        CameraManager.LockUnlockEvent += Unlock;
+        CameraManager.LockEvent -= Lock;
+        CameraManager.UnlockEvent += Unlock;
     }
 
     /// <summary>
@@ -37,7 +38,7 @@ public class InputManagerTLKLocker : MonoBehaviour, ILockeable {
         InputManagerTLK.SetLock(false);
         MessageManager.UnlockEvent -= Unlock;
         MessageManager.LockEvent += Lock;
-        CameraManager.LockUnlockEvent -= Unlock;
-        CameraManager.LockUnlockEvent += Lock;
+        CameraManager.UnlockEvent -= Unlock;
+        CameraManager.LockEvent += Lock;
     }
 }
