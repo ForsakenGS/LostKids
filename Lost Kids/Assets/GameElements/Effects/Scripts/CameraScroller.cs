@@ -37,7 +37,7 @@ public class CameraScroller : MonoBehaviour {
     public void UpdateScrollSpeed(Vector3 initPos, Vector3 finishPos) {
 
         float aux = Mathf.Abs(finishPos.x - initPos.x);
-        Debug.Log(aux);
+
         if(aux > 0.05f) {
 
             if(initPos.x < finishPos.x) {
@@ -51,7 +51,6 @@ public class CameraScroller : MonoBehaviour {
             Vector2 offset = new Vector2(displacement, savedOffset.y);
             renderer.material.SetTextureOffset("_MainTex", offset);
 
-            Debug.Log("HOLA!");
 
             scrollSpeed = 0;
         }
