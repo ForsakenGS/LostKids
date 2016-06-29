@@ -19,6 +19,9 @@ public class CharacterManager : MonoBehaviour {
     //Checkpoint inicial
     public GameObject initialCheckPoint;
 
+    //Velocidad de movimiento hacia el checkpoint
+    public float resurrectionSpeed = 15f;
+
     //Checkpoint activo
     private static CheckPoint activeCheckPoint;
 
@@ -32,8 +35,11 @@ public class CharacterManager : MonoBehaviour {
 
     private AudioSource changeCharacterSound;
 
+    public static CharacterManager instance = null;
+
     void Awake()
     {
+        instance = this;
         characterStatusList = new List<CharacterStatus>();
         characters = new List<GameObject>();
         activeCheckPoint = initialCheckPoint.GetComponent<CheckPoint>();
@@ -108,6 +114,27 @@ public class CharacterManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// Metodo que se lanza cuando se llega a un nuevo checkpoint por primera vez
+    /// </summary>
+    /// <param name="check"></param>
+    public static void CheckPointReached(CheckPoint check)
+    {
+        activeCheckPoint = check;
+        for (int i = 0; i < characterStatusList.Count; i++)
+        {
+            if (characterStatusList[i].gameObject != activeCharacter)
+            {
+                instance.characterList[i].transform.position = activeCheckPoint.GetSpawnZone(i);
+                characterStatusList[i].currentRoom = activeCheckPoint.room;
+                if (!characterStatusList[i].IsAlive())
+                {
+                    characterStatusList[i].Ressurect();
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Comprueba si el niño correspondiente al indice esta disponible para seleciconarlo
     /// </summary>
     /// <param name="index">Indice del personaje a comprobar</param>
@@ -162,13 +189,25 @@ public class CharacterManager : MonoBehaviour {
     /// <param name="character">script del personaje muerto</param>
     public void CharacterKilled(CharacterStatus character)
     {
-        int index = characterStatusList.IndexOf(character);
         
-        characterList[index].transform.position = activeCheckPoint.GetSpawnZone(index);
-        characterStatusList[index].currentRoom = activeCheckPoint.room;
+        int index = characterStatusList.IndexOf(character);
+        float distanceToCheckPoint = Vector3.Distance(character.transform.position, activeCheckPoint.GetSpawnZone(index));
 
+        iTween.MoveTo(character.gameObject, activeCheckPoint.GetSpawnZone(index), distanceToCheckPoint/resurrectionSpeed);
+        //characterList[index].transform.position = activeCheckPoint.GetSpawnZone(index);
+        characterStatusList[index].currentRoom = activeCheckPoint.room;
+        Invoke("ActivateNextAvailableCharacter", distanceToCheckPoint / resurrectionSpeed);
+
+    }
+
+    /// <summary>
+    /// Activa el siguiente personaje disponible tras la muerte.
+    /// Si no hay ninguno, resucita a los 3 en el ultimo checkpoint
+    /// </summary>
+    public void ActivateNextAvailableCharacter()
+    {
         int nextIndex = NextAvailableCharacter();
-        if(nextIndex!=-1)
+        if (nextIndex != -1)
         {
             ActivateCharacter(nextIndex);
         }
@@ -177,6 +216,7 @@ public class CharacterManager : MonoBehaviour {
             ResetCheckPoint();
         }
     }
+
 
     /// <summary>
     /// Devuelve el indice del proximo personaje disponible

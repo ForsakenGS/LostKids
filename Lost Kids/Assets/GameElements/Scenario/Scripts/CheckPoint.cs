@@ -13,6 +13,7 @@ public class CheckPoint : MonoBehaviour {
     //Habitacion en la que se encuentra
     public int room;
 
+    public bool reached = false;
     //Flag de Checkpoint activo
     bool isActive;
 
@@ -55,12 +56,20 @@ public class CheckPoint : MonoBehaviour {
         {
             if (col.gameObject.GetComponent<CharacterStatus>().IsAvailable())
             {
+
                 if (!isActive)
                 {
-                    Debug.Log(isActive);
                     Activate();
                 }
-                CharacterManager.CheckPointActivation();
+                if (reached)
+                {
+                    CharacterManager.CheckPointActivation();
+                }
+                else
+                {
+                    reached = true;
+                    CharacterManager.CheckPointReached(this);
+                }
             }
 
         }

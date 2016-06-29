@@ -152,6 +152,10 @@ public class CameraManager : MonoBehaviour {
         Invoke("FinishCutScene", timeCutScene);
     }
 
+    /// <summary>
+    /// Activa una camara secundaria desactivando la principal
+    /// </summary>
+    /// <param name="cam"></param>
     public void ChangeCameraFade(GameObject cam)
     {
         if (LockEvent != null)
@@ -162,12 +166,18 @@ public class CameraManager : MonoBehaviour {
         cam.SetActive(true);
     }
 
+    /// <summary>
+    /// Llava al evento de finalizacion de cutscene
+    /// </summary>
     private void FinishCutScene() {
         CutSceneEvent();
     }
 
+    /// <summary>
+    /// Reactiva la camara principal y desactiva la secundaria
+    /// </summary>
+    /// <param name="cam"></param>
     public void RestoreCamera(GameObject cam) {
-        Debug.Log("Hola");
         cam.SetActive(false);
         cameras[currentRoom].SetActive(true);
         if (UnlockEvent != null)
@@ -175,6 +185,7 @@ public class CameraManager : MonoBehaviour {
             UnlockEvent();
         }
     }
+
 
     public void BeginSmoothZoomIn()
     {
