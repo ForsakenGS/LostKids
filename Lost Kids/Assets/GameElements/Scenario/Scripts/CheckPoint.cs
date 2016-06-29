@@ -10,6 +10,8 @@ public class CheckPoint : MonoBehaviour {
     //Referencia al gato sobre el checkpoint
     private Neko neko;
 
+    private VortexActivator vortex;
+
     //Habitacion en la que se encuentra
     public int room;
 
@@ -25,6 +27,7 @@ public class CheckPoint : MonoBehaviour {
         isActive = false;
         
         neko = GetComponentInChildren<Neko>();
+        vortex = GetComponentInChildren<VortexActivator>();
     }
 
     // Use this for initialization
@@ -57,7 +60,6 @@ public class CheckPoint : MonoBehaviour {
             {
                 if (!isActive)
                 {
-                    Debug.Log(isActive);
                     Activate();
                 }
                 CharacterManager.CheckPointActivation();
@@ -72,7 +74,6 @@ public class CheckPoint : MonoBehaviour {
     /// </summary>
     public void Activate()
     {
-        Debug.Log(isActive);
         if (!isActive) {
             isActive = true;
 
@@ -82,6 +83,7 @@ public class CheckPoint : MonoBehaviour {
 
             CharacterManager.SetActiveCheckPoint(this);
             neko.Show();
+            vortex.Show();
         }
     }
 
@@ -96,6 +98,7 @@ public void ActivateMuted()
 
         CharacterManager.SetActiveCheckPoint(this);
         neko.Show();
+        vortex.Show();
     }
 }
 
@@ -106,6 +109,7 @@ public void ActivateMuted()
     {
         isActive = false;
         neko.Hide();
+        vortex.Hide();
     }
 
     /// <summary>
