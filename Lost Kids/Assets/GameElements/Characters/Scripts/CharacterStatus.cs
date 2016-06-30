@@ -246,6 +246,7 @@ public class CharacterStatus : MonoBehaviour {
             characterState = State.Dead;
             SetAnimatorTrigger("Dead");
             //Animacion, Efectos, Cambio de imagen.....
+            GetComponentInChildren<ParticlesActivator>().Show();
             GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
             GetComponentInChildren<Renderer>().enabled = false; //Temporal
             GetComponent<Rigidbody>().isKinematic = true;

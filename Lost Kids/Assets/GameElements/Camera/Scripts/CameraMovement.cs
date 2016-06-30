@@ -22,7 +22,7 @@ public class CameraMovement : MonoBehaviour {
 
     void Start() {
 
-        //cameraScroller = GameObject.FindGameObjectWithTag("CameraParallax").GetComponent<CameraScroller>();
+        cameraScroller = GameObject.FindGameObjectWithTag("CameraParallax").GetComponent<CameraScroller>();
 
         RefreshPlayer();
         UpdateParams();
@@ -50,7 +50,7 @@ public class CameraMovement : MonoBehaviour {
 
         transform.position = Vector3.Slerp(transform.position, standardPos, smooth * Time.deltaTime);
 
-       // cameraScroller.UpdateScrollSpeed(transform.position, standardPos);
+        cameraScroller.UpdateScrollSpeed(transform.position, standardPos);
 
     }
 

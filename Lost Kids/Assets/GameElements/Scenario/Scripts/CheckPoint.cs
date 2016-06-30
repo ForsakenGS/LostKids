@@ -10,7 +10,7 @@ public class CheckPoint : MonoBehaviour {
     //Referencia al gato sobre el checkpoint
     private Neko neko;
 
-    private VortexActivator vortex;
+    private ParticlesActivator vortex;
 
     //Habitacion en la que se encuentra
     public int room;
@@ -28,7 +28,7 @@ public class CheckPoint : MonoBehaviour {
         isActive = false;
         
         neko = GetComponentInChildren<Neko>();
-        vortex = GetComponentInChildren<VortexActivator>();
+        vortex = GetComponentInChildren<ParticlesActivator>();
     }
 
     // Use this for initialization
