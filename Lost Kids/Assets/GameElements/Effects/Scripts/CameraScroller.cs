@@ -41,10 +41,10 @@ public class CameraScroller : MonoBehaviour {
         if(aux > 0.05f) {
 
             if(initPos.x < finishPos.x) {
-                scrollSpeed = -aux * 0.05f;
+                scrollSpeed = aux * 0.05f;
             }
             else if(initPos.x > finishPos.x){
-                scrollSpeed = aux * 0.05f;
+                scrollSpeed = -aux * 0.05f;
             }
 
             displacement += Time.deltaTime * scrollSpeed;
