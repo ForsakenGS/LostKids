@@ -36,7 +36,7 @@ public class FadingFloor : MonoBehaviour {
 
     void OnCollisionEnter(Collision col)
     {
-        if(CharacterManager.IsActiveCharacter(col.gameObject))
+        if (col.gameObject.CompareTag("Player"))
         {
             if(!visible)
             {
@@ -48,7 +48,7 @@ public class FadingFloor : MonoBehaviour {
 
     void OnCollisionExit(Collision col)
     {
-        if (CharacterManager.IsActiveCharacter(col.gameObject))
+        if (col.gameObject.CompareTag("Player"))
         {
             charactersInside.Remove(col.gameObject);
             if(charactersInside.Count<=0)
