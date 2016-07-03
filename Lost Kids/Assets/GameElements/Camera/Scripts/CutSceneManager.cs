@@ -169,7 +169,7 @@ public class CutSceneManager : MonoBehaviour {
         iTween.MoveTo(blackBarBot.gameObject, botBarStartPos, time);
     }
 
-    private static void FadeIn()
+    public static void FadeIn()
     {
 
         fadeImage.enabled = true;
@@ -177,12 +177,12 @@ public class CutSceneManager : MonoBehaviour {
         fadeImage.CrossFadeAlpha(1, fadeTime, false);
     }
 
-    private static void FadeOut()
+    public static void FadeOut()
     {
 
         fadeImage.canvasRenderer.SetAlpha(1);
         fadeImage.CrossFadeAlpha(0, fadeTime, false);
-        fadeImage.enabled = false;
+        //fadeImage.enabled = false;
 
     }
 }

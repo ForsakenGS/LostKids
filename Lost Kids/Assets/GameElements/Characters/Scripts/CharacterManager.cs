@@ -165,11 +165,6 @@ public class CharacterManager : MonoBehaviour {
             activeCharacter.GetComponent<AudioListener>().enabled = true;
             //activeCharacter.GetComponent<CharacterStatus>().currentRoom = activeCheckPoint.room;
 
-            
-
-            
-            
-
             if (ActiveCharacterChangedEvent != null)
             {
 
@@ -178,8 +173,7 @@ public class CharacterManager : MonoBehaviour {
                 AudioManager.Play(changeCharacterSound, false, 1);
 
             }
-
-
+            
         }
     }
 
@@ -193,7 +187,12 @@ public class CharacterManager : MonoBehaviour {
         int index = characterStatusList.IndexOf(character);
         float distanceToCheckPoint = Vector3.Distance(character.transform.position, activeCheckPoint.GetSpawnZone(index));
 
-        iTween.MoveTo(character.gameObject, activeCheckPoint.GetSpawnZone(index), distanceToCheckPoint/resurrectionSpeed);
+
+        iTween.MoveTo(character.gameObject, activeCheckPoint.GetSpawnZone(index), distanceToCheckPoint / resurrectionSpeed);
+        if(NextAvailableCharacter()==-1)
+        {
+            CutSceneManager.FadeIn();
+        }
         //characterList[index].transform.position = activeCheckPoint.GetSpawnZone(index);
         characterStatusList[index].currentRoom = activeCheckPoint.room;
         Invoke("ActivateNextAvailableCharacter", distanceToCheckPoint / resurrectionSpeed);
@@ -243,11 +242,24 @@ public class CharacterManager : MonoBehaviour {
     /// </summary>
     public void ResetCheckPoint()
     {
-        for(int i=0; i<characterList.Count;i++)
+        Invoke("RessurectAll", 0.5f);
+
+    }
+
+    /// <summary>
+    /// Resucita todos los personajes y activa el primero
+    /// </summary>
+    public void RessurectAll()
+    {
+        CutSceneManager.FadeOut();
+        //Se resucita al primer personaje por separado para que no se active el checkpoint
+        for (int i = 1; i < characterList.Count; i++)
         {
-            characterStatusList[i].Ressurect();
-            
+            characterStatusList[i].Invoke("Ressurect",i);
+
         }
+        //Se resucita al primer personaje por separado para que no se active el checkpoint
+        characterStatusList[0].Ressurect();
         ActivateCharacter(0);
     }
 

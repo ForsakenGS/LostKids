@@ -248,4 +248,8 @@ public class InputManagerTLK : MonoBehaviour {
             }
         }
     }
+    public void OnApplicationQuit()
+    {
+        XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 0, 0);
+    }
 }
