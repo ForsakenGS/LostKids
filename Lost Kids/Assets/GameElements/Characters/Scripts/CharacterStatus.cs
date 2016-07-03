@@ -260,13 +260,27 @@ public class CharacterStatus : MonoBehaviour {
             GetComponent<Rigidbody>().isKinematic = true;
             AudioManager.Stop(stepSound);
             AudioManager.Play(dieSound, false, 1);
-            //Reinicia el transform en caso de morir estando subido a una plataforma
+                       //Reinicia el transform en caso de morir estando subido a una plataforma
             transform.parent = null;
-            if (KillCharacterEvent != null) {
-                KillCharacterEvent(gameObject);
-            }
-            characterManager.CharacterKilled(this);
+
+            iTween.ShakePosition(Camera.main.gameObject, new Vector3(1, 1, 0), 0.5f);
+
+            XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 1, 1);
+            //InputManager.ActiveDevice.Vibrate(100f);
+
+            Invoke("DeathNotification", 0.5f);
+
         }
+    }
+
+    public void DeathNotification()
+    {
+        XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 0, 0);
+        if (KillCharacterEvent != null)
+        {
+            KillCharacterEvent(gameObject);
+        }
+        characterManager.CharacterKilled(this);
     }
 
     /// <summary>
