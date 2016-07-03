@@ -60,6 +60,9 @@ public class CharacterStatus : MonoBehaviour {
     private AudioSource stepSound;
     private AudioSource pushSound;
 
+    private ParticlesActivator deadParticles;
+    private ParticlesActivator resurrectionParticles;
+
     // Use this for initialization
     void Awake() {
         if (characterManagerPrefab == null) {
@@ -71,6 +74,10 @@ public class CharacterStatus : MonoBehaviour {
         playerUse = GetComponent<PlayerUse>();
         characterAnimator = GetComponent<Animator>();
         rigBody = GetComponent<Rigidbody>();
+
+        deadParticles = transform.Find("DeadParticles").gameObject.GetComponent<ParticlesActivator>();
+        resurrectionParticles = transform.Find("ResurrectionParticles").gameObject.GetComponent<ParticlesActivator>();
+
     }
 
     // Use this for initialization
@@ -246,7 +253,8 @@ public class CharacterStatus : MonoBehaviour {
             characterState = State.Dead;
             SetAnimatorTrigger("Dead");
             //Animacion, Efectos, Cambio de imagen.....
-            GetComponentInChildren<ParticlesActivator>().Show();
+            //GetComponentInChildren<ParticlesActivator>().Show();
+            deadParticles.Show();
             GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
             GetComponentInChildren<Renderer>().enabled = false; //Temporal
             GetComponent<Rigidbody>().isKinematic = true;
@@ -481,13 +489,18 @@ public class CharacterStatus : MonoBehaviour {
         // Reinicia las máquinas de estado
         characterAnimator.Rebind();
         characterState = State.Idle;
+        resurrectionParticles.Show();
+        Invoke("EnablePlayer", 0.8f);
+        //Animacion, Efectos, Cambio de imagen.....
+        AudioManager.Play(resurrectSound, false, 1);
+    }
+
+    public void EnablePlayer() {
         GetComponentInChildren<Renderer>().enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
         if (ResurrectCharacterEvent != null) {
             ResurrectCharacterEvent(gameObject);
         }
-        //Animacion, Efectos, Cambio de imagen.....
-        AudioManager.Play(resurrectSound, false, 1);
     }
 
     IEnumerator Sacrifice() {

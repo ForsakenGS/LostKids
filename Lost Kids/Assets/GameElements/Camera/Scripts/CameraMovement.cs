@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CameraMovement : MonoBehaviour {
 
@@ -18,11 +19,17 @@ public class CameraMovement : MonoBehaviour {
     //"Radio" del jugador
     public float playerRadius = 0.5f;
 
-    private CameraScroller cameraScroller;
+    private GameObject[] parallaxScrollers;
+    private List<CameraScroller> cameraScrollers;
 
     void Start() {
 
-        cameraScroller = GameObject.FindGameObjectWithTag("CameraParallax").GetComponent<CameraScroller>();
+        parallaxScrollers = GameObject.FindGameObjectsWithTag("CameraParallax");
+        cameraScrollers = new List<CameraScroller>();
+
+        foreach(GameObject g in parallaxScrollers) {
+            cameraScrollers.Add(g.GetComponent<CameraScroller>());
+        }
 
         RefreshPlayer();
         UpdateParams();
@@ -50,7 +57,9 @@ public class CameraMovement : MonoBehaviour {
 
         transform.position = Vector3.Slerp(transform.position, standardPos, smooth * Time.deltaTime);
 
-        cameraScroller.UpdateScrollSpeed(transform.position, standardPos);
+        for(int i = 0; i < cameraScrollers.Count; i++) {
+            cameraScrollers[i].UpdateScrollSpeed(transform.position, standardPos);
+        }
 
     }
 

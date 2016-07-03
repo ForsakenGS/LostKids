@@ -5,6 +5,8 @@ public class CameraScroller : MonoBehaviour {
 
     private GameObject camera;
 
+    public float speed = 0.05f;
+
     [HideInInspector]
     public float scrollSpeed = 0;
 
@@ -13,6 +15,9 @@ public class CameraScroller : MonoBehaviour {
     private Renderer renderer;
 
     private float displacement = 0;
+
+    public enum Directions {Positive,Negative}
+    public Directions direction;
 
 	// Use this for initialization
 	void Start () {
@@ -41,14 +46,25 @@ public class CameraScroller : MonoBehaviour {
         if(aux > 0.05f) {
 
             if(initPos.x < finishPos.x) {
-                scrollSpeed = aux * 0.05f;
+                scrollSpeed = aux * speed;
             }
             else if(initPos.x > finishPos.x){
-                scrollSpeed = -aux * 0.05f;
+                scrollSpeed = -aux * speed;
             }
 
             displacement += Time.deltaTime * scrollSpeed;
-            Vector2 offset = new Vector2(displacement, savedOffset.y);
+            Vector2 offset = Vector3.zero;
+
+            switch (direction) {
+                case Directions.Positive:
+                    offset = new Vector2(displacement, savedOffset.y);
+                    break;
+                case Directions.Negative:
+                    offset = new Vector2(-displacement, savedOffset.y);
+                    break;
+            }
+            
+            
             renderer.material.SetTextureOffset("_MainTex", offset);
 
 
