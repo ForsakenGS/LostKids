@@ -49,7 +49,7 @@ public class KodamaHead : MonoBehaviour {
     void RotateLeft()
     {
         wasLeft = true;
-        iTween.RotateTo(gameObject, leftRotation, rotationTime);
+        iTween.RotateTo(gameObject,iTween.Hash("rotation", leftRotation,"time", rotationTime,"easetype",iTween.EaseType.easeInOutSine));
         if(Random.value<shakeChance)
         {
             Invoke("Shake", rotationTime);
@@ -63,7 +63,7 @@ public class KodamaHead : MonoBehaviour {
     void RotateRight()
     {
         wasLeft = false;
-        iTween.RotateTo(gameObject, rightRotation, rotationTime);
+        iTween.RotateTo(gameObject, iTween.Hash("rotation", rightRotation, "time", rotationTime, "easetype", iTween.EaseType.easeInOutSine));
         if (Random.value < shakeChance)
         {
             Invoke("Shake", rotationTime);
@@ -89,7 +89,7 @@ public class KodamaHead : MonoBehaviour {
 
     void Shake()
     {
-        iTween.ShakeRotation(gameObject, shakeRotation, shakeTime);
+        iTween.ShakeRotation(gameObject,shakeRotation, shakeTime);
         Invoke("RestoreRotation", shakeTime + NextInterval());
     }
 

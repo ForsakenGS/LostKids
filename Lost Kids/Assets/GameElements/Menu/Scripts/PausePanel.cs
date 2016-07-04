@@ -7,13 +7,21 @@ public class PausePanel : MonoBehaviour {
 
     GameObject mainPanel;
     GameObject settingsPanel;
+    GameObject controlsPanel;
     GameObject menuConfirmPanel;
     GameObject desktopConfirmPanel;
 
     UnityEngine.UI.Button resumeButton;
     UnityEngine.UI.Button settingsButton;
+    UnityEngine.UI.Button controlsButton;
     UnityEngine.UI.Button menuButton;
     UnityEngine.UI.Button quitButton;
+
+    UnityEngine.UI.Button settingsBackButton;
+    UnityEngine.UI.Button controlsKeyboardButton;
+    UnityEngine.UI.Button controlsPadButton;
+
+    
 
 
 
@@ -34,13 +42,19 @@ public class PausePanel : MonoBehaviour {
             instance = this;
             mainPanel = transform.Find("MainPanel").gameObject;
             settingsPanel = transform.Find("Settings").gameObject;
+            controlsPanel = transform.Find("ControlsPanel").gameObject;
             menuConfirmPanel = transform.Find("MenuConfirm").gameObject;
             desktopConfirmPanel = transform.Find("DesktopConfirm").gameObject;
 
             resumeButton = transform.Find("MainPanel/ResumeButton").GetComponent<UnityEngine.UI.Button>();
             settingsButton=transform.Find("MainPanel/SettingsButton").GetComponent<UnityEngine.UI.Button>();
-            menuButton=transform.Find("MainPanel/MenuButton").GetComponent<UnityEngine.UI.Button>();
+            controlsButton = transform.Find("MainPanel/ControlsButton").GetComponent<UnityEngine.UI.Button>();
+            menuButton =transform.Find("MainPanel/MenuButton").GetComponent<UnityEngine.UI.Button>();
             quitButton=transform.Find("MainPanel/QuitButton").GetComponent<UnityEngine.UI.Button>();
+
+            settingsBackButton= transform.Find("Settings/BackButton").GetComponent<UnityEngine.UI.Button>();
+            controlsKeyboardButton = transform.Find("ControlsPanel/KeyboardButton").GetComponent<UnityEngine.UI.Button>();
+            controlsPadButton = transform.Find("ControlsPanel/PadButton").GetComponent<UnityEngine.UI.Button>();
 
 
         }
@@ -100,6 +114,7 @@ public class PausePanel : MonoBehaviour {
     {
         mainPanel.SetActive(false);
         settingsPanel.SetActive(true);
+        settingsBackButton.Select();
     }
     
 
@@ -108,6 +123,30 @@ public class PausePanel : MonoBehaviour {
         settingsPanel.SetActive(false);
         Show();
         settingsButton.Select();
+    }
+
+    public void ShowControlsPanel()
+    {
+        mainPanel.SetActive(false);
+        controlsPanel.SetActive(true);
+
+        if(Input.GetJoystickNames().Length>0 && !Input.GetJoystickNames()[0].Equals(""))
+        {
+            controlsPadButton.Select();
+            controlsPadButton.onClick.Invoke();
+        }
+        else
+        {
+            controlsKeyboardButton.Select();
+            controlsKeyboardButton.onClick.Invoke();
+        }
+    }
+
+    public void HideControlsPanel()
+    {
+        controlsPanel.SetActive(false);
+        Show();
+        controlsButton.Select();
     }
 
     public void ChangeScene(string sc)
