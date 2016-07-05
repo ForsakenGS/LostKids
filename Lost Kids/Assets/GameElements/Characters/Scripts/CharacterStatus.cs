@@ -41,8 +41,9 @@ public class CharacterStatus : MonoBehaviour {
     public float jumpingSpeed = 5000f;
     public float crouchingSpeed = 4000f;
     public float pushingSpeed = 4000f;
+    public float maxSacrificeHeight;
 
-   //Habitacion en la que se encuentra el personaje
+    //Habitacion en la que se encuentra el personaje
     public int currentRoom = 0;
 
     // Personaje
@@ -52,6 +53,7 @@ public class CharacterStatus : MonoBehaviour {
     public State initialCharacterState;
     public CharacterName characterName;
     private bool jumpButtonUp = false;
+    private float sacrificeHeight;
     // Audio variables
     private AudioLoader audioLoader;
     private AudioSource resurrectSound;
@@ -77,6 +79,7 @@ public class CharacterStatus : MonoBehaviour {
     void Start() {
         // Inicialización
         characterState = initialCharacterState;
+        sacrificeHeight = 0.0f;
         //Se saca el objeto del padre para poder añadirlo como hijo a nuevos elementos
         transform.parent = null;
         // Obtención sonidos
@@ -190,7 +193,7 @@ public class CharacterStatus : MonoBehaviour {
                 // Comienza la acción de saltar
                 AudioManager.Stop(stepSound);
                 characterState = State.Jumping;
-                characterMovement.Jump(firstJumpImpulse, true);                
+                characterMovement.Jump(firstJumpImpulse, true);
                 totalJumpImpulse = firstJumpImpulse;
                 SetAnimatorTrigger("Jump");
                 break;
@@ -248,7 +251,7 @@ public class CharacterStatus : MonoBehaviour {
             //Animacion, Efectos, Cambio de imagen.....
             GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
             GetComponentInChildren<Renderer>().enabled = false; //Temporal
-            GetComponent<Rigidbody>().isKinematic = true;
+            rigBody.isKinematic = true;
             AudioManager.Stop(stepSound);
             AudioManager.Play(dieSound, false, 1);
             //Reinicia el transform en caso de morir estando subido a una plataforma
@@ -308,8 +311,8 @@ public class CharacterStatus : MonoBehaviour {
             //case AbilityName.Break:
             case AbilityName.Push:
                 AudioManager.Stop(pushSound);
-            //case AbilityName.Sprint:
-            //case AbilityName.Telekinesis:
+                //case AbilityName.Sprint:
+                //case AbilityName.Telekinesis:
                 break;
         }
         // Cambia de estado salvo que se trate de la habilidad "BigJump"
@@ -409,11 +412,11 @@ public class CharacterStatus : MonoBehaviour {
                 break;
             case State.AstralProjection:
                 // Comprueba si el jugador está apoyado en alguna superficie 
-                if (characterMovement.CharacterIsGrounded()) {  
+                if (characterMovement.CharacterIsGrounded()) {
                     jumpButtonUp = false;
                     totalJumpImpulse = 0.0f;
                 }
-                break;            
+                break;
             default:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
@@ -481,34 +484,17 @@ public class CharacterStatus : MonoBehaviour {
         characterAnimator.Rebind();
         characterState = State.Idle;
         GetComponentInChildren<Renderer>().enabled = true;
-        GetComponent<Rigidbody>().isKinematic = false;
+        rigBody.isKinematic = false;
         if (ResurrectCharacterEvent != null) {
             ResurrectCharacterEvent(gameObject);
         }
         //Animacion, Efectos, Cambio de imagen.....
         AudioManager.Play(resurrectSound, false, 1);
     }
-
-    IEnumerator Sacrifice() {
-        // Bloquea al jugador
-        InputManagerTLK.SetLock(true);
-        // Efecto y sonido del "sacrificio"
-        characterState = State.Sacrifice;
-        SetAnimatorTrigger("Sacrifice");
-        AudioManager.Stop(stepSound);
-        AudioManager.Play(sacrificeSound, false, 1);
-        GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
-        Rigidbody rig = GetComponent<Rigidbody>();
-        rig.isKinematic = true;
-        float upDistance = 3.0f;
-        float d = upDistance * Time.deltaTime;
-        do {
-            // Eleva levemente al personaje
-            transform.Translate(new Vector3(0, d, 0));
-            upDistance -= d;
-            d = upDistance * Time.deltaTime;
-            yield return null;
-        } while (upDistance > 0.2f);
+    
+    // Se ejecuta cuando se termina el proceso de sacrificio del personaje
+    void SacrificeEnd() {
+        AudioManager.Stop(sacrificeSound);
         GetComponentInChildren<Renderer>().enabled = false; //Temporal
         //rig.isKinematic = false;
         // Actualización estado del personaje
@@ -517,19 +503,56 @@ public class CharacterStatus : MonoBehaviour {
             KillCharacterEvent(gameObject);
         }
         characterManager.CharacterKilled(this);
-        // Desbloquea al jugador
-        InputManagerTLK.SetLock(false);
+    }
+
+    // Se ejecuta cuando comienza el proceso de sacrificio del personaje
+    void SacrificeStart() {
+        // Efecto y sonido del "sacrificio"
+        characterState = State.Sacrifice;
+        SetAnimatorTrigger("Sacrifice");
+        AudioManager.Stop(stepSound);
+        AudioManager.Play(sacrificeSound, false, 1);
+        GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
+        rigBody.isKinematic = true;
     }
 
     /// <summary>
-    /// Función para indicar que el botón de sacrificio ha sido pulsado, sacificando al personaje sólo en caso de encontrarse en los estados adecuados
+    /// Función para indicar que el botón de sacrificio ha sido pulsado, sacrificando al personaje sólo en caso de encontrarse en los estados adecuados
     /// </summary>
     public void SacrificeButton() {
         // Comprueba el estado del jugador
         switch (characterState) {
+            case State.Sacrifice:
+                if (sacrificeHeight < maxSacrificeHeight) {
+                    // El personaje sigue ascendiendo
+                    float d = 3.0f * Time.deltaTime;
+                    transform.Translate(new Vector3(0, d, 0));
+                    sacrificeHeight += d;
+                } else {
+                    // El personaje se sacrifica
+                    sacrificeHeight = 0.0f;
+                    SacrificeEnd();
+                }
+                break;
             case State.Idle:
             case State.Walking:
-                StartCoroutine(Sacrifice());
+                SacrificeStart();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Función para indicar que el botón de sacrificio se ha dejado de pulsar, anulando el sacrificio del personaje si aún no se ha llevado a cabo
+    /// </summary>
+    public void SacrificeButtonUp() {
+        // Comprueba el estado del jugador
+        switch (characterState) {
+            case State.Sacrifice:
+                characterState = State.Falling;
+                AudioManager.Stop(sacrificeSound);
+                SetAnimatorTrigger("Fall");
+                sacrificeHeight = 0.0f;
+                rigBody.isKinematic = false;
                 break;
         }
     }
