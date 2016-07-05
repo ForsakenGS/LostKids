@@ -129,7 +129,7 @@ public class CutSceneManager : MonoBehaviour {
 
     private void DeactivateCutScene()
     {
-        MessageManager.ConversationEndEvent -= DeactivateCutScene;
+        MessageManager.ConversationEndEvent -= EndCutScene;
         CameraManager.CutSceneEvent -= EndCutScene;
         HideBars(fadeTime);
         cameraManager.RestoreCamera(cutSceneCamera);
