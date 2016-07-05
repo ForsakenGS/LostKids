@@ -23,17 +23,15 @@ public class CheckPoint : MonoBehaviour {
 
     private AudioSource checkPointSound;
 
-    void Awake()
-    {
+    void Awake() {
         isActive = false;
-        
+
         neko = GetComponentInChildren<Neko>();
         vortex = GetComponentInChildren<ParticlesActivator>();
     }
 
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
 
         audioLoader = GetComponent<AudioLoader>();
 
@@ -42,53 +40,40 @@ public class CheckPoint : MonoBehaviour {
 
     }
 
-    // Update is called once per frame
-    void Update () {
-	
-	}
-
     /// <summary>
     /// Detecta al jugador para activar el checkpoint, notificando al manager y resucitando a los niños correspondientes
     /// </summary>
     /// <param name="col"></param>
-    void OnTriggerEnter(Collider col)
-    {
+    void OnTriggerEnter(Collider col) {
         //col.gameObject.CompareTag("Player")
-        
-        if (CharacterManager.IsActiveCharacter(col.gameObject))
-        {
-            if (col.gameObject.GetComponent<CharacterStatus>().IsAvailable())
-            {
 
-                if (!isActive)
-                {
+        if (CharacterManager.IsActiveCharacter(col.gameObject)) {
+            if (col.gameObject.GetComponent<CharacterStatus>().IsAvailable()) {
+
+                if (!isActive) {
                     Activate();
                 }
-                if (reached)
-                {
+                if (reached) {
                     CharacterManager.CheckPointActivation();
-                }
-                else
-                {
+                } else {
                     reached = true;
                     CharacterManager.CheckPointReached(this);
                 }
             }
 
         }
-        
+
     }
 
     /// <summary>
     /// Activa el checkpoint y notifica el cambio al manager
     /// </summary>
-    public void Activate()
-    {
+    public void Activate() {
         if (!isActive) {
             isActive = true;
 
-            if(checkPointSound) {
-                AudioManager.Play(checkPointSound,false,1);
+            if (checkPointSound) {
+                AudioManager.Play(checkPointSound, false, 1);
             }
 
             CharacterManager.SetActiveCheckPoint(this);
@@ -97,26 +82,23 @@ public class CheckPoint : MonoBehaviour {
         }
     }
 
-/// <summary>
-/// Activa el checkpoint sin que suene y notifica el cambio al manager
-/// </summary>
-public void ActivateMuted()
-{
-    if (!isActive)
-    {
-        isActive = true;
+    /// <summary>
+    /// Activa el checkpoint sin que suene y notifica el cambio al manager
+    /// </summary>
+    public void ActivateMuted() {
+        if (!isActive) {
+            isActive = true;
 
-        CharacterManager.SetActiveCheckPoint(this);
-        neko.Show();
-        vortex.Show();
+            CharacterManager.SetActiveCheckPoint(this);
+            neko.Show();
+            vortex.Show();
+        }
     }
-}
 
     /// <summary>
     /// Desactiva el checkpoint y oculta al gato
     /// </summary>
-    public void Deactivate()
-    {
+    public void Deactivate() {
         isActive = false;
         neko.Hide();
         vortex.Hide();
@@ -128,8 +110,7 @@ public void ActivateMuted()
     /// </summary>
     /// <param name="index">index del spawner dentro del checkpoint</param>
     /// <returns>posicion del spawner</returns>
-    public Vector3 GetSpawnZone(int index)
-    {
+    public Vector3 GetSpawnZone(int index) {
         return spawnZones[index].transform.position;
     }
 

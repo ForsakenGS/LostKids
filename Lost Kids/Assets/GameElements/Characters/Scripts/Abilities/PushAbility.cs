@@ -58,8 +58,8 @@ public class PushAbility : CharacterAbility {
             // Detecta el objeto situado delante del personaje
             RaycastHit hitInfo;
             if (Physics.Raycast(detectRay, out hitInfo)) {
-                // Si el objeto se puede romper, le ordena romperse
                 if (hitInfo.collider.tag.Equals("Pushable")) {
+                    // El objeto se puede empujar
                     active = true;
                     CallEventActivateAbility();
                     //Se obtiene la normal de la direccion por donde se agarra el objeto
@@ -77,10 +77,11 @@ public class PushAbility : CharacterAbility {
                     this.transform.LookAt(lookPosition);
                     //Se crea un joint fisico para enlazar los objetos
                     GrabObject(hitInfo.collider.gameObject, transform.InverseTransformPoint(detectRay.origin), targetTransform.InverseTransformPoint(hitInfo.point));
-                } else {
-                    // Desactiva la habilidad en el CharacterStatus
-                    characterStatus.EndAbility(this);
                 }
+            }
+            if (!active) {
+                // Desactiva la habilidad en el CharacterStatus
+                characterStatus.EndAbility(this);
             }
         }
 

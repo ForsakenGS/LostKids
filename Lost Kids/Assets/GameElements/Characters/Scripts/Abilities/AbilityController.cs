@@ -31,10 +31,6 @@ public class AbilityController : MonoBehaviour {
     void Start() {
         // Inicialización
         activeAbility = null;
-        // Lanza el evento de habilidad seleccionada
-        //if (SelectedAbilityEvent != null) {
-        //SelectedAbilityEvent(ability1);
-        //}
     }
 
     bool ActivateAbility(CharacterAbility ability) {
@@ -78,13 +74,14 @@ public class AbilityController : MonoBehaviour {
         } else if (activeAbility.Equals(ability2)) {
             // Se desactiva la habilidad 2
             DeactivateAbility(ability2);
-        } else {
-            // Se desactiva la habilidad 1, que está activa
-            if (DeactivateAbility(ability1)) {
-                // Se activa la habilidad 2 porque se ha podido desactivar la habilidad 1
-                ActivateAbility(ability2);
-            }
         }
+        //else {
+        //    // Se desactiva la habilidad 1, que está activa
+        //    if (DeactivateAbility(ability1)) {
+        //        // Se activa la habilidad 2 porque se ha podido desactivar la habilidad 1
+        //        ActivateAbility(ability2);
+        //    }
+        //}
     }
 
     bool DeactivateAbility(CharacterAbility ability) {
@@ -101,44 +98,6 @@ public class AbilityController : MonoBehaviour {
         return DeactivateAbility(activeAbility);
     }
 
-    ///// <summary>
-    ///// Usa o deja de usar la habilidad del personaje indicada
-    ///// </summary>
-    //void UseAbility(CharacterAbility ability) {
-
-    //    if (!activeAbility.IsExecuting()) {
-    //        // Empieza a usar si es posible
-    //        if ((activeAbility.CanBeStarted()) && (characterStatus.CanStartAbility(activeAbility))) {
-    //            activeAbility.StartExecution();
-    //        }
-    //    } else {
-    //        // Deja de usar
-    //        if (activeAbility.EndExecution()) {
-    //            characterStatus.EndAbility(activeAbility);
-    //        }
-    //    }
-    //}
-
-    ///// <summary>
-    ///// Cambia la habilidad del personaje que está seleccionada
-    ///// </summary>
-    //public void ChangeAbility() {
-    //    // Intenta desactivar la habilidad actual
-    //    if (activeAbility.DeactivateAbility()) {
-    //        // Elige la habilidad a activar y procede con su activación
-    //        if (activeAbility.Equals(ability1)) {
-    //            activeAbility = ability2;
-    //        } else {
-    //            activeAbility = ability1;
-    //        }
-    //        activeAbility.ActivateAbility();
-    //        // Lanza el evento de habilidad seleccionada
-    //        if (SelectedAbilityEvent != null) {
-    //            SelectedAbilityEvent(activeAbility);
-    //        }
-    //    }
-    //}
-
     /// <summary>
     /// Permite conocer la habilidad activa del personaje
     /// </summary>
@@ -146,11 +105,4 @@ public class AbilityController : MonoBehaviour {
     public CharacterAbility GetActiveAbility() {
         return activeAbility;
     }
-
-    ///// <summary>
-    ///// Usa o deja de usar la habilidad del personaje que está seleccionada
-    ///// </summary>
-    //public void UseAbility() {
-
-    //}
 }

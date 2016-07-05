@@ -37,22 +37,20 @@ public class CharacterManager : MonoBehaviour {
 
     public static CharacterManager instance = null;
 
-    void Awake()
-    {
+    void Awake() {
         instance = this;
         characterStatusList = new List<CharacterStatus>();
         characters = new List<GameObject>();
         activeCheckPoint = initialCheckPoint.GetComponent<CheckPoint>();
-        for (int i = 0; i < characterList.Count; i++)
-        {
+        for (int i = 0; i < characterList.Count; i++) {
             characterStatusList.Add(characterList[i].GetComponent<CharacterStatus>());
             characters.Add(characterList[i]);
         }
         activeCharacter = characterList[0];
     }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
 
         audioLoader = GetComponent<AudioLoader>();
 
@@ -67,20 +65,19 @@ public class CharacterManager : MonoBehaviour {
 
         }
 
-        
+
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    // Update is called once per frame
+    void Update() {
+
+    }
 
     /// <summary>
     /// Añade un nuevo personaje a la lista para su posterior control
     /// </summary>
     /// <param name="character"></param>
-    public void addCharacter(GameObject character)
-    {
+    public void addCharacter(GameObject character) {
         characterList.Add(character);
         characterStatusList.Add(character.GetComponent<CharacterStatus>());
     }
@@ -89,10 +86,8 @@ public class CharacterManager : MonoBehaviour {
     /// Actualiza el checkpoint activo ,desactivando el que se encontraba activo hasta el momento
     /// </summary>
     /// <param name="cp"></param>
-    public static void SetActiveCheckPoint(CheckPoint cp)
-    {
-        if (activeCheckPoint != cp)
-        {
+    public static void SetActiveCheckPoint(CheckPoint cp) {
+        if (activeCheckPoint != cp) {
             activeCheckPoint.Deactivate();
             activeCheckPoint = cp;
         }
@@ -102,12 +97,9 @@ public class CharacterManager : MonoBehaviour {
     /// Evento de activacion de un checkpoint
     /// Resucita a los niños que esten muertos en ese momento.
     /// </summary>
-    public static void CheckPointActivation()
-    {
-        for(int i=0;i<characterStatusList.Count;i++)
-        {
-            if(!characterStatusList[i].IsAlive())
-            {
+    public static void CheckPointActivation() {
+        for (int i = 0; i < characterStatusList.Count; i++) {
+            if (!characterStatusList[i].IsAlive()) {
                 characterStatusList[i].Ressurect();
             }
         }
@@ -117,18 +109,16 @@ public class CharacterManager : MonoBehaviour {
     /// Metodo que se lanza cuando se llega a un nuevo checkpoint por primera vez
     /// </summary>
     /// <param name="check"></param>
-    public static void CheckPointReached(CheckPoint check)
-    {
+    public static void CheckPointReached(CheckPoint check) {
         activeCheckPoint = check;
-        for (int i = 0; i < characterStatusList.Count; i++)
-        {
-            if (characterStatusList[i].gameObject != activeCharacter)
-            {
+        for (int i = 0; i < characterStatusList.Count; i++) {
+            if (characterStatusList[i].gameObject != activeCharacter) {
                 instance.characterList[i].transform.position = activeCheckPoint.GetSpawnZone(i);
                 characterStatusList[i].currentRoom = activeCheckPoint.room;
-                if (!characterStatusList[i].IsAlive())
-                {
+                if (!characterStatusList[i].IsAlive()) {
                     characterStatusList[i].Ressurect();
+                } else {
+                    characterStatusList[i].ResetCharacter();
                 }
             }
         }
@@ -139,8 +129,7 @@ public class CharacterManager : MonoBehaviour {
     /// </summary>
     /// <param name="index">Indice del personaje a comprobar</param>
     /// <returns>true si el personaje esta disponible</returns>
-    public bool IsAvailable(int index)
-    {
+    public bool IsAvailable(int index) {
         return ((index < characterStatusList.Count) && (characterStatusList[index].IsAvailable()));
     }
 
@@ -149,15 +138,12 @@ public class CharacterManager : MonoBehaviour {
     /// Cambia la camara activa por la correspondiente a la posicion del jugador
     /// </summary>
     /// <param name="index">indice del personaje a activar</param>
-    public void ActivateCharacter(int index)
-    {
-        if ((IsAvailable(index)) && (!activeCharacter.Equals(characterList[index])))
-        {
+    public void ActivateCharacter(int index) {
+        if ((IsAvailable(index)) && (!activeCharacter.Equals(characterList[index]))) {
             activeCharacter.GetComponent<AudioListener>().enabled = false;
 
             //Si el personaje esta empujando un objeto, lo suelta
-            if (activeCharacter.GetComponent<PushAbility>() != null)
-            {
+            if (activeCharacter.GetComponent<PushAbility>() != null) {
                 activeCharacter.GetComponent<PushAbility>().ReleaseObject();
             }
 
@@ -165,15 +151,14 @@ public class CharacterManager : MonoBehaviour {
             activeCharacter.GetComponent<AudioListener>().enabled = true;
             //activeCharacter.GetComponent<CharacterStatus>().currentRoom = activeCheckPoint.room;
 
-            if (ActiveCharacterChangedEvent != null)
-            {
+            if (ActiveCharacterChangedEvent != null) {
 
                 ActiveCharacterChangedEvent();
 
                 AudioManager.Play(changeCharacterSound, false, 1);
 
             }
-            
+
         }
     }
 
@@ -181,16 +166,14 @@ public class CharacterManager : MonoBehaviour {
     /// Notifica la muerte de uno de los personajes
     /// </summary>
     /// <param name="character">script del personaje muerto</param>
-    public void CharacterKilled(CharacterStatus character)
-    {
-        
+    public void CharacterKilled(CharacterStatus character) {
+
         int index = characterStatusList.IndexOf(character);
         float distanceToCheckPoint = Vector3.Distance(character.transform.position, activeCheckPoint.GetSpawnZone(index));
 
 
         iTween.MoveTo(character.gameObject, activeCheckPoint.GetSpawnZone(index), distanceToCheckPoint / resurrectionSpeed);
-        if(NextAvailableCharacter()==-1)
-        {
+        if (NextAvailableCharacter() == -1) {
             CutSceneManager.FadeIn();
         }
         //characterList[index].transform.position = activeCheckPoint.GetSpawnZone(index);
@@ -203,15 +186,11 @@ public class CharacterManager : MonoBehaviour {
     /// Activa el siguiente personaje disponible tras la muerte.
     /// Si no hay ninguno, resucita a los 3 en el ultimo checkpoint
     /// </summary>
-    public void ActivateNextAvailableCharacter()
-    {
+    public void ActivateNextAvailableCharacter() {
         int nextIndex = NextAvailableCharacter();
-        if (nextIndex != -1)
-        {
+        if (nextIndex != -1) {
             ActivateCharacter(nextIndex);
-        }
-        else
-        {
+        } else {
             ResetCheckPoint();
         }
     }
@@ -222,14 +201,11 @@ public class CharacterManager : MonoBehaviour {
     /// Si no hay ninguno disponible, devuelve -1
     /// </summary>
     /// <returns>indice del proximo personaje disponible. -1 si no hay ninguno</returns>
-    public int NextAvailableCharacter()
-    {
+    public int NextAvailableCharacter() {
         int newIndex = -1;
 
-        for(int i=0;i<characterStatusList.Count;i++)
-        {
-            if(characterStatusList[i].IsAvailable())
-            {
+        for (int i = 0; i < characterStatusList.Count; i++) {
+            if (characterStatusList[i].IsAvailable()) {
                 newIndex = i;
             }
         }
@@ -240,8 +216,7 @@ public class CharacterManager : MonoBehaviour {
     /// <summary>
     /// Resetea los personajes en el checkpoint , resucitandolos y activando por defecto el primer personaje
     /// </summary>
-    public void ResetCheckPoint()
-    {
+    public void ResetCheckPoint() {
         Invoke("RessurectAll", 0.5f);
 
     }
@@ -249,13 +224,11 @@ public class CharacterManager : MonoBehaviour {
     /// <summary>
     /// Resucita todos los personajes y activa el primero
     /// </summary>
-    public void RessurectAll()
-    {
+    public void RessurectAll() {
         CutSceneManager.FadeOut();
         //Se resucita al primer personaje por separado para que no se active el checkpoint
-        for (int i = 1; i < characterList.Count; i++)
-        {
-            characterStatusList[i].Invoke("Ressurect",i);
+        for (int i = 1; i < characterList.Count; i++) {
+            characterStatusList[i].Invoke("Ressurect", i);
 
         }
         //Se resucita al primer personaje por separado para que no se active el checkpoint
@@ -267,8 +240,7 @@ public class CharacterManager : MonoBehaviour {
     /// Devuelve el gameobject correspondiente al personaje activo
     /// </summary>
     /// <returns>gameobject correspondiente al personaje activo</returns>
-    public static GameObject GetActiveCharacter()
-    {
+    public static GameObject GetActiveCharacter() {
         return activeCharacter;
     }
 
@@ -277,13 +249,11 @@ public class CharacterManager : MonoBehaviour {
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public static bool IsActiveCharacter(GameObject obj)
-    {
+    public static bool IsActiveCharacter(GameObject obj) {
         return obj.Equals(activeCharacter);
     }
 
-    public static List<GameObject> GetCharacterList()
-    {
+    public static List<GameObject> GetCharacterList() {
         return characters;
     }
 

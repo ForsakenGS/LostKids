@@ -3,16 +3,18 @@ using InControl;
 
 public class InputManagerTLK : MonoBehaviour {
     // Controles del juego
-    InputControlType player1Control = InputControlType.DPadUp;
-    InputControlType player2Control = InputControlType.DPadRight;
-    InputControlType player3Control = InputControlType.DPadDown;
+    InputControlType character1Control = InputControlType.DPadLeft;
+    InputControlType character2Control = InputControlType.DPadUp;
+    InputControlType character3Control = InputControlType.DPadRight;
+    InputControlType nextCharacterControl = InputControlType.LeftTrigger;
+    InputControlType prevCharacterControl = InputControlType.RightTrigger;
     InputControlType jumpControl = InputControlType.Action1;
-    InputControlType Ability2Control = InputControlType.Action2;
+    InputControlType Ability2Control = InputControlType.RightBumper;
     InputControlType useControl = InputControlType.Action3;
-    InputControlType Ability1Control = InputControlType.Action4;
+    InputControlType Ability1Control = InputControlType.LeftBumper;
     InputControlType menuControl = InputControlType.Command;
-    InputControlType sacrificeControl = InputControlType.LeftBumper;
-    InputControlType crouchControl = InputControlType.RightBumper;
+    InputControlType sacrificeControl = InputControlType.Action4;
+    InputControlType crouchControl = InputControlType.Action2;
 
     private static bool locked;
     private CharacterStatus characterStatus;
@@ -123,14 +125,14 @@ public class InputManagerTLK : MonoBehaviour {
             case "Use":
                 res = useControl;
                 break;
-            case "Player1":
-                res = player1Control;
+            case "Character1":
+                res = character1Control;
                 break;
-            case "Player2":
-                res = player2Control;
+            case "Character2":
+                res = character2Control;
                 break;
-            case "Player3":
-                res = player3Control;
+            case "Character3":
+                res = character3Control;
                 break;
             case "Ability2":
                 res = Ability2Control;
@@ -158,13 +160,13 @@ public class InputManagerTLK : MonoBehaviour {
 
     bool GetControlDown(InputControlType controlType) {
         InputControl control = InputManager.ActiveDevice.GetControl(controlType);
-        //return (!control.WasPressed && control.IsPressed);
+
         return control.WasPressed;
     }
 
     bool GetControlUp(InputControlType controlType) {
         InputControl control = InputManager.ActiveDevice.GetControl(controlType);
-        //return (control.WasPressed && !control.IsPressed);
+
         return control.WasReleased;
     }
 
@@ -204,11 +206,11 @@ public class InputManagerTLK : MonoBehaviour {
         }
         if (!locked) {
             // Switch Players Buttons
-            if (ButtonDown("Player1")) {
+            if (ButtonDown("Character1")) {
                 characterManager.ActivateCharacter(0);
-            } else if (ButtonDown("Player2")) {
+            } else if (ButtonDown("Character2")) {
                 characterManager.ActivateCharacter(1);
-            } else if (ButtonDown("Player3")) {
+            } else if (ButtonDown("Character3")) {
                 characterManager.ActivateCharacter(2);
             }
             // Abilities Buttons

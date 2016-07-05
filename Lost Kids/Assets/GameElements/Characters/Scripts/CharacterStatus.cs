@@ -76,10 +76,8 @@ public class CharacterStatus : MonoBehaviour {
         playerUse = GetComponent<PlayerUse>();
         characterAnimator = GetComponent<Animator>();
         rigBody = GetComponent<Rigidbody>();
-
         deadParticles = transform.Find("DeadParticles").gameObject.GetComponent<ParticlesActivator>();
         resurrectionParticles = transform.Find("ResurrectionParticles").gameObject.GetComponent<ParticlesActivator>();
-
     }
 
     // Use this for initialization
@@ -155,6 +153,14 @@ public class CharacterStatus : MonoBehaviour {
                 characterMovement.Crouch();
                 characterState = State.Crouching;
                 break;
+        }
+    }
+
+    public void EnablePlayer() {
+        GetComponentInChildren<Renderer>().enabled = true;
+        rigBody.isKinematic = false;
+        if (ResurrectCharacterEvent != null) {
+            ResurrectCharacterEvent(gameObject);
         }
     }
 
@@ -263,7 +269,7 @@ public class CharacterStatus : MonoBehaviour {
             rigBody.isKinematic = true;
             AudioManager.Stop(stepSound);
             AudioManager.Play(dieSound, false, 1);
-                       //Reinicia el transform en caso de morir estando subido a una plataforma
+            //Reinicia el transform en caso de morir estando subido a una plataforma
             transform.parent = null;
 
             iTween.ShakePosition(Camera.main.gameObject, new Vector3(1, 1, 0), 0.5f);
@@ -276,11 +282,9 @@ public class CharacterStatus : MonoBehaviour {
         }
     }
 
-    public void DeathNotification()
-    {
+    public void DeathNotification() {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 0, 0);
-        if (KillCharacterEvent != null)
-        {
+        if (KillCharacterEvent != null) {
             KillCharacterEvent(gameObject);
         }
         characterManager.CharacterKilled(this);
@@ -500,26 +504,26 @@ public class CharacterStatus : MonoBehaviour {
     }
 
     /// <summary>
+    /// Restaura los valores del personaje a la configuración inicial
+    /// </summary>
+    public void ResetCharacter() {
+        characterState = initialCharacterState;
+        characterAnimator.Rebind();
+        totalJumpImpulse = 0.0f;
+    }
+
+    /// <summary>
     /// Resucita al personaje
     /// </summary>
     public void Ressurect() {
         // Reinicia las máquinas de estado
-        characterAnimator.Rebind();
-        characterState = State.Idle;
+        ResetCharacter();
         resurrectionParticles.Show();
         Invoke("EnablePlayer", 0.8f);
         //Animacion, Efectos, Cambio de imagen.....
         AudioManager.Play(resurrectSound, false, 1);
     }
 
-    public void EnablePlayer() {
-        GetComponentInChildren<Renderer>().enabled = true;
-        rigBody.isKinematic = false;
-        if (ResurrectCharacterEvent != null) {
-            ResurrectCharacterEvent(gameObject);
-        }
-    }
-    
     // Se ejecuta cuando se termina el proceso de sacrificio del personaje
     void SacrificeEnd() {
         AudioManager.Stop(sacrificeSound);
