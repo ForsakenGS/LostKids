@@ -230,7 +230,7 @@ public class CharacterStatus : MonoBehaviour {
         switch (characterState) {
             case State.AstralProjection:
                 // La habilidad debe terminar su ejecución
-                GetComponent<AbilityController>().UseAbility();
+                GetComponent<AbilityController>().DeactivateActiveAbility();
                 // El personaje no debe morir
                 kill = false;
                 break;
@@ -245,7 +245,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.Telekinesis:
             case State.Sprint:
                 // La habilidad debe terminar su ejecución
-                GetComponent<AbilityController>().UseAbility();
+                GetComponent<AbilityController>().DeactivateActiveAbility();
                 break;
             case State.Dead:
             case State.Sacrifice:
@@ -395,7 +395,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.BigJumping:
                 // Si empieza a caer, cambia de estado
                 if (characterMovement.CharacterIsFalling()) {
-                    GetComponent<AbilityController>().UseAbility();
+                    GetComponent<AbilityController>().DeactivateActiveAbility();
                     characterState = State.Falling;
                     SetAnimatorTrigger("Fall");
                 }
@@ -415,7 +415,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.Sprint:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
-                    GetComponent<AbilityController>().UseAbility();
+                    GetComponent<AbilityController>().DeactivateActiveAbility();
                     characterState = State.Falling;
                     SetAnimatorTrigger("Fall");
                 } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento

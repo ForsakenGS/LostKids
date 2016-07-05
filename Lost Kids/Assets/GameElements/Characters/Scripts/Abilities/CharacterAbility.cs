@@ -166,7 +166,7 @@ public abstract class CharacterAbility : MonoBehaviour {
                 AddEnergy(-(Time.deltaTime * normalConsumption));
                 if (energy <= 0.0) {
                     // La habilidad debe terminar su ejecución
-                    GetComponent<AbilityController>().UseAbility();
+                    GetComponent<AbilityController>().DeactivateActiveAbility();
                 }
             }
             // Se decrementa el tiempo de ejecución
@@ -175,7 +175,7 @@ public abstract class CharacterAbility : MonoBehaviour {
                 if (executionTime <= 0.0f) {
                     // Si la habilidad es de de tiempo fijo, debe terminar su ejecución
                     if (fixedExecutionTime) {
-                        GetComponent<AbilityController>().UseAbility();
+                        GetComponent<AbilityController>().DeactivateActiveAbility();
                     }
                     // Reinicia contador de tiempo
                     executionTime = initExecutionTime;

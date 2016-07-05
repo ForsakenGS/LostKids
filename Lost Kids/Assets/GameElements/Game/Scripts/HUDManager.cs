@@ -5,7 +5,7 @@ using System.Collections;
 public class HUDManager : MonoBehaviour {
     // Tamaño del HUD del personaje activo
     public float modificationSelectedCharacter;
-    public float modificationUsedAbility;
+    public float modificationActiveAbility;
     // Transparencia del HUD
     public float transparency = 0.25f;
     // Referencias a los personajes
@@ -62,11 +62,11 @@ public class HUDManager : MonoBehaviour {
             }
         }
         CharacterSelection(activeCharacter, true, 1);
-        selectedAbility = activeCharacter.GetComponent<AbilityController>().GetActiveAbility();
-        AbilitySelection(selectedAbility.GetType(), 1);
+        //selectedAbility = activeCharacter.GetComponent<AbilityController>().GetActiveAbility();
+        //AbilitySelection(selectedAbility.GetType(), 1);
         // Suscripciones a eventos
         CharacterManager.ActiveCharacterChangedEvent += CharacterChanged;
-        AbilityController.SelectedAbilityEvent += AbilitySelected;
+        //AbilityController.SelectedAbilityEvent += AbilitySelected;
         CharacterAbility.ModifiedAbilityEnergyEvent += EnergyModified;
         CharacterAbility.StartExecutionAbilityEvent += AbilityExecutionStart;
         CharacterAbility.EndExecutionAbilityEvent += AbilityExecutionEnd;
@@ -80,17 +80,21 @@ public class HUDManager : MonoBehaviour {
     // Se ejecuta cuando se termina la ejecución de una habilidad
     void AbilityExecutionEnd(CharacterAbility ability) {
         // Habilidad afectada
-        RectTransform abilityUI = GetAbilityUIRectTransform(selectedAbility.GetType());
+        RectTransform abilityUI = GetAbilityUIRectTransform(ability.GetType());
         // Reduce tamaño del icono
-        abilityUI.sizeDelta /= (1 + modificationUsedAbility);
+        foreach (RectTransform trf in abilityUI) {
+            trf.sizeDelta /= (1 + modificationActiveAbility);
+        }
     }
 
     // Se ejecuta cuando comienza la ejecución de una habilidad
     void AbilityExecutionStart(CharacterAbility ability) {
         // Habilidad afectada
-        RectTransform abilityUI = GetAbilityUIRectTransform(selectedAbility.GetType());
+        RectTransform abilityUI = GetAbilityUIRectTransform(ability.GetType());
         // Aumenta tamaño del icono
-        abilityUI.sizeDelta *= (1 + modificationUsedAbility);
+        foreach (RectTransform trf in abilityUI) {
+            trf.sizeDelta *= (1 + modificationActiveAbility);
+        }
     }
 
     // Se ejecuta cuando se selecciona una habilidad
@@ -139,7 +143,7 @@ public class HUDManager : MonoBehaviour {
 
     // Modifica la transparencia del personaje determinado
     void CharacterSelection(GameObject character, bool alive, float alphaSelection) {
-        // Selecciona la interfaz relativa a la habilidad y modifica su apariencia
+        // Selecciona la interfaz relativa al personaje y modifica su apariencia
         Transform characterUI = GetCharacterUIRectTransform(character);
         if (alive) {
             characterUI.Find("Full").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
