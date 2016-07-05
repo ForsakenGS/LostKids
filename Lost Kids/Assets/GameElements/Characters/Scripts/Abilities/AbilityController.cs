@@ -40,7 +40,7 @@ public class AbilityController : MonoBehaviour {
     bool ActivateAbility(CharacterAbility ability) {
         bool res = (ability.CanBeStarted()) && (characterStatus.CanStartAbility(ability));
         if (res) {
-            res = ability.StartExecution();
+            res = ability.ActivateAbility();
             if (res) {
                 activeAbility = ability;
             }
@@ -88,7 +88,7 @@ public class AbilityController : MonoBehaviour {
     }
 
     bool DeactivateAbility(CharacterAbility ability) {
-        bool res = activeAbility.EndExecution();
+        bool res = activeAbility.DeactivateAbility();
         if (res) {
             characterStatus.EndAbility(activeAbility);
             activeAbility = null;

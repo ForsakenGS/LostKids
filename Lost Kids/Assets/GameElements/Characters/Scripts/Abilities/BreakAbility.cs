@@ -25,12 +25,13 @@ public class BreakAbility : CharacterAbility {
     /// Finaliza la ejecución de la habilidad de romper
     /// </summary>
     /// <returns><c>true</c> si se pudo parar la ejecución, <c>false</c> si no fue posible.</returns>
-    public override bool EndExecution() {
-        bool res = (execution && (executionTime <= 0));
+    public override bool DeactivateAbility() {
+        bool res = (active && (executionTime <= 0));
         if (res) {
             // Termina ejecución y bloque brevemente al jugador
-            execution = false;
+            active = false;
             inputManager.LockTime(0.5f);
+            CallEventDeactivateAbility();
         }
 
         return res;
@@ -40,12 +41,13 @@ public class BreakAbility : CharacterAbility {
     /// Inicia la ejecución de la habilidad de romper
     /// </summary>
     /// <returns><c>true</c>, si se pudo iniciar la ejecución, <c>false</c> si no fue posible.</returns>
-    public override bool StartExecution() {
-        bool started = !execution;
-        if (!execution){
+    public override bool ActivateAbility() {
+        bool started = !active;
+        if (!active){
             // Consumo de energía inicial
             AddEnergy(-initialConsumption);
-            execution = true;
+            active = true;
+            CallEventActivateAbility();
             Ray detectRay = new Ray(this.transform.position + Vector3.up * height, this.transform.forward * breakDistance);
             // helper to visualise the ground check ray in the scene view
             #if UNITY_EDITOR

@@ -68,8 +68,8 @@ public class HUDManager : MonoBehaviour {
         CharacterManager.ActiveCharacterChangedEvent += CharacterChanged;
         //AbilityController.SelectedAbilityEvent += AbilitySelected;
         CharacterAbility.ModifiedAbilityEnergyEvent += EnergyModified;
-        CharacterAbility.StartExecutionAbilityEvent += AbilityExecutionStart;
-        CharacterAbility.EndExecutionAbilityEvent += AbilityExecutionEnd;
+        CharacterAbility.ActivateAbilityEvent += AbilityExecutionStart;
+        CharacterAbility.DeactivateAbilityEvent += AbilityExecutionEnd;
         CharacterInventory.ObjectAddedEvent += ObjectAdded;
         CharacterInventory.ObjectRemovedEvent += ObjectRemoved;
         CharacterInventory.ObjectRequestedEvent += ObjectRequested;
@@ -114,12 +114,20 @@ public class HUDManager : MonoBehaviour {
         abilityUI.Find("Empty").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
     }
 
+    // Modifica la transparencia de la habilidad determinada
+    void AbilitySelection(string abilityType, float alphaSelection) {
+        // Selecciona la interfaz relativa a la habilidad y modifica su apariencia
+        RectTransform abilityUI = GetAbilityUIRectTransform(abilityType);
+        abilityUI.Find("Full").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
+        abilityUI.Find("Empty").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
+    }
+
     // Se ejecuta cuando se produce un cambio de personaje
     void CharacterChanged() {
         // Modifica la interfaz del personaje seleccionado
         GameObject newActiveCharacter = CharacterManager.GetActiveCharacter();
         CharacterSelected(newActiveCharacter);
-        AbilitySelected(newActiveCharacter.GetComponent<AbilityController>().GetActiveAbility());
+        //AbilitySelected(newActiveCharacter.GetComponent<AbilityController>().GetActiveAbility());
         UpdateInventory();
     }
 
@@ -149,6 +157,21 @@ public class HUDManager : MonoBehaviour {
             characterUI.Find("Full").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
         } else {
             characterUI.Find("Empty").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
+        }
+        // Selecciona la interfaz relativa a las habilidades del personaje y modifica su apariencia
+        switch (character.GetComponent<CharacterStatus>().characterName) {
+            case (CharacterName.Aoi):
+                AbilitySelection("BigJumpAbility", alphaSelection);
+                AbilitySelection("SprintAbility", alphaSelection);
+                break;
+            case (CharacterName.Akai):
+                AbilitySelection("BreakAbility", alphaSelection);
+                AbilitySelection("PushAbility", alphaSelection);
+                break;
+            case (CharacterName.Ki):
+                AbilitySelection("TelekinesisAbility", alphaSelection);
+                AbilitySelection("AstralProjectionAbility", alphaSelection);
+                break;
         }
     }
 
@@ -187,6 +210,33 @@ public class HUDManager : MonoBehaviour {
         Transform abilityUI = GetAbilityUIRectTransform(ability.GetType());
         float amount = ability.GetAvailableEnergy() / ability.GetMaxEnergy();
         abilityUI.Find("Full").GetComponent<Image>().fillAmount = amount;
+    }
+
+    // Devuelve el componente RectTransform de la habilidad indicada
+    RectTransform GetAbilityUIRectTransform(string abilityType) {
+        RectTransform abilityUI = null;
+        switch (abilityType) {
+            case "BigJumpAbility":
+                abilityUI = bigJumpAbilityUI;
+                break;
+            case "SprintAbility":
+                abilityUI = sprintAbilityUI;
+                break;
+            case "BreakAbility":
+                abilityUI = breakAbilityUI;
+                break;
+            case "PushAbility":
+                abilityUI = pushAbilityUI;
+                break;
+            case "TelekinesisAbility":
+                abilityUI = telekinesisAbilityUI;
+                break;
+            case "AstralProjectionAbility":
+                abilityUI = astralProjectionAbilityUI;
+                break;
+        }
+
+        return abilityUI;
     }
 
     // Devuelve el componente RectTransform de la habilidad indicada
