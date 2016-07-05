@@ -18,42 +18,17 @@ public class TelekinesisAbility : CharacterAbility {
     }
 
     /// <summary>
-    /// Cambia el estado de la habilidad para que no esté en ejecución
-    /// </summary>
-    /// <returns><c>true</c> si se modificó el estado de la habilidad, o <c>false</c> si la habilidad ya no estaba en ejecución</returns>
-    public override bool EndExecution() {
-        bool changed = execution;
-        if (execution) {
-            if ((fixedExecutionTime) && (executionTime <= 0)) {
-                // Tiempo de ejecución fijado y terminado
-                execution = false;
-                fixedExecutionTime = false;
-            } else if (!fixedExecutionTime) {
-                // No tiene tiempo de ejecución fijado
-                execution = false;
-                // Deja de usar el objeto, si procede
-                if (usableObj != null) {
-                    usableObj.CancelUse();
-                }
-            }
-            // Desactiva sonido
-            AudioManager.Stop(telekinesisSound);
-        }
-
-        return changed;
-    }
-
-    /// <summary>
     /// Ejecuta la habilidad, dando por hecho que existe suficiente energía para ello
     /// </summary>
     /// <returns><c>true</c> si se ejecutó la habilidad, o <c>false</c> si no se ha podido ejecutar</returns>
-    public override bool StartExecution() {
+    public override bool ActivateAbility() {
         bool started = false;
-        if (!execution) {
+        if (!active) {
             // Comienza la ejecución de la habilidad
-            execution = true;
+            active = true;
             started = true;
             AudioManager.Play(telekinesisSound, true, 1);
+            CallEventActivateAbility();
             // Comprueba si hay un objeto que se pueda ejecutar
             if (usableObj != null) {
                 usableObj.Use();
@@ -70,6 +45,33 @@ public class TelekinesisAbility : CharacterAbility {
         AddEnergy(-initialConsumption);
 
         return started;
+    }
+
+    /// <summary>
+    /// Cambia el estado de la habilidad para que no esté en ejecución
+    /// </summary>
+    /// <returns><c>true</c> si se modificó el estado de la habilidad, o <c>false</c> si la habilidad ya no estaba en ejecución</returns>
+    public override bool DeactivateAbility() {
+        bool changed = active;
+        if (active) {
+            if ((fixedExecutionTime) && (executionTime <= 0)) {
+                // Tiempo de ejecución fijado y terminado
+                active = false;
+                fixedExecutionTime = false;
+            } else if (!fixedExecutionTime) {
+                // No tiene tiempo de ejecución fijado
+                active = false;
+                // Deja de usar el objeto, si procede
+                if (usableObj != null) {
+                    usableObj.CancelUse();
+                }
+            }
+            // Desactiva sonido
+            AudioManager.Stop(telekinesisSound);
+            CallEventDeactivateAbility();
+        }
+
+        return changed;
     }
 
     /// <summary>

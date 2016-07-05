@@ -22,15 +22,15 @@ public class PushAbility : CharacterAbility {
     /// Finaliza la ejecución de la habilidad de empujar
     /// </summary>
     /// <returns><c>true</c>, si se pudo parar la ejecución, <c>false</c> si no fue posible.</returns>
-    public override bool EndExecution() {
-        if (execution) {
-            execution = false;
-            //targetTransform.parent = null; //Vesrion antigua
+    public override bool DeactivateAbility() {
+        if (active) {
+            active = false;
             ReleaseObject();
             pushNormal = Vector3.zero;
+            CallEventDeactivateAbility();
         }
 
-        return !execution;
+        return !active;
     }
 
     /// <summary>
@@ -45,8 +45,8 @@ public class PushAbility : CharacterAbility {
     /// Inicia la ejecución de la habilidad de empujar
     /// </summary>
     /// <returns><c>true</c>, si se pudo iniciar la ejecución, <c>false</c> si no fue posible.</returns>
-    public override bool StartExecution() {
-        if (!execution) {
+    public override bool ActivateAbility() {
+        if (!active) {
             // Consumo de energía inicial
             AddEnergy(-initialConsumption);
 
@@ -60,7 +60,8 @@ public class PushAbility : CharacterAbility {
             if (Physics.Raycast(detectRay, out hitInfo)) {
                 // Si el objeto se puede romper, le ordena romperse
                 if (hitInfo.collider.tag.Equals("Pushable")) {
-                    execution = true;
+                    active = true;
+                    CallEventActivateAbility();
                     //Se obtiene la normal de la direccion por donde se agarra el objeto
                     pushNormal = hitInfo.normal;
                     targetTransform = hitInfo.collider.transform;
@@ -83,7 +84,7 @@ public class PushAbility : CharacterAbility {
             }
         }
 
-        return execution;
+        return active;
     }
 
     public void GrabObject(GameObject go, Vector3 origin, Vector3 target) {
@@ -117,8 +118,8 @@ public class PushAbility : CharacterAbility {
             if (targetGameObject != null) {
                 targetGameObject.GetComponent<PushableObject>().Release();
                 characterStatus.EndAbility(this);
-                if (execution) {
-                    EndExecution();
+                if (active) {
+                    DeactivateAbility();
                 }
             }
         }

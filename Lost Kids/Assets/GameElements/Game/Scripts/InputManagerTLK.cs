@@ -202,7 +202,6 @@ public class InputManagerTLK : MonoBehaviour {
                 GameManager.PauseGame();
             }
         }
-
         if (!locked) {
             // Switch Players Buttons
             if (ButtonDown("Player1")) {
@@ -212,16 +211,12 @@ public class InputManagerTLK : MonoBehaviour {
             } else if (ButtonDown("Player3")) {
                 characterManager.ActivateCharacter(2);
             }
-            // Crouch Button
-            //if (ButtonDown("Crouch")) {
-            //    characterStatus.CrouchButton();
-            //}
             // Abilities Buttons
             if (ButtonDown("Ability1")) {
-                abilityControl.ChangeAbility();
+                abilityControl.ActivateAbility1();
             }
             if (ButtonDown("Ability2")) {
-                abilityControl.UseAbility();
+                abilityControl.ActivateAbility2();
             }
             // Use Button
             if (ButtonDown("Use")) {
@@ -245,13 +240,13 @@ public class InputManagerTLK : MonoBehaviour {
         } else {
             //Pasar mensajes
             if (ButtonDown("Jump")) {
-                if(messageManager.ShowingMessage())
-                messageManager.SkipText();
+                if (messageManager.ShowingMessage())
+                    messageManager.SkipText();
             }
         }
     }
-    public void OnApplicationQuit()
-    {
+
+    public void OnApplicationQuit() {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 0, 0);
     }
 }

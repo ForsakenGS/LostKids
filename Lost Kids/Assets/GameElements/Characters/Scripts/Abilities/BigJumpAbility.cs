@@ -22,26 +22,28 @@ public class BigJumpAbility : CharacterAbility {
     /// Cambia el estado de la habilidad para que no esté en ejecución
     /// </summary>
     /// <returns><c>true</c> si se modificó el estado de la habilidad, o <c>false</c> si la habilidad ya no estaba en ejecución</returns>
-    public override bool EndExecution () {
-        bool changed = execution;
-        execution = false;
+    public override bool DeactivateAbility() {
+        bool changed = active;
+        active = false;
+        CallEventDeactivateAbility();
 
-		return changed;
-	}
+        return changed;
+    }
 
     /// <summary>
     /// Ejecuta el salto si no está en ejecución, dando por hecho que existe suficiente energía para ello
     /// </summary>
     /// <returns><c>true</c> si se ejecutó el salto, o <c>false</c> si la habilidad ya estaba en ejecución</returns>
-    public override bool StartExecution () {
-		bool started = false;
-		if (!execution) {
-			execution = true;
+    public override bool ActivateAbility() {
+        bool started = !active;
+        if (!active) {
+            active = true;
             started = true;
+            CallEventActivateAbility();
             AddEnergy(-initialConsumption);
-			characterMovement.Jump(jumpImpulseModifier * characterStatus.maxJumpImpulse, true);
-		}
+            characterMovement.Jump(jumpImpulseModifier * characterStatus.maxJumpImpulse, true);
+        }
 
-		return started;
-	}
+        return started;
+    }
 }

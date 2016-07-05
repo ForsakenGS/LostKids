@@ -6,10 +6,10 @@
 /// modifica la velocidad del personaje según speedModifier y decrementa la energía de la habilidad.
 /// </summary>
 public class AstralProjectionAbility : CharacterAbility {
-	/// <summary>
-	/// Modificador de velocidad sobre la establecida por defecto
-	/// </summary>
-	public float speedModifier = 0.8f;
+    /// <summary>
+    /// Modificador de velocidad sobre la establecida por defecto
+    /// </summary>
+    public float speedModifier = 0.8f;
     /// <summary>
     /// Modelo que ocupará el lugar del personaje durante la ejecución de la habilidad
     /// </summary>
@@ -33,12 +33,13 @@ public class AstralProjectionAbility : CharacterAbility {
     /// Termina la ejecución de la habilidad, reestableciendo la velocidad del personaje
     /// </summary>
     /// <returns><c>true</c>, si la ejecución se terminó realmente, <c>false</c> en otro caso.</returns>
-    public override bool EndExecution () {
-		bool ended = execution;
-		if (execution) {
-			// Se para la ejecución de la habilidad
-			execution = false;
+    public override bool DeactivateAbility() {
+        bool ended = active;
+        if (active) {
+            // Se para la ejecución de la habilidad
+            active = false;
             AudioManager.Stop(astralProjectionSound);
+            CallEventDeactivateAbility();
             // Comprueba si la proyección astral se llevó a cabo
             if (staticCharacter != null) {
                 // El personaje vuelve a la posición original con los parámetros originales y se elimina la copia
@@ -49,10 +50,10 @@ public class AstralProjectionAbility : CharacterAbility {
             } else {
                 fixedExecutionTime = false;
             }
-		}
+        }
 
-		return ended;
-	}
+        return ended;
+    }
 
     /// <summary>
     /// Asigna el objeto de tipo 'AstralProjectionWall' sobre el que se ejecuta la habilidad en ese momento
@@ -66,17 +67,17 @@ public class AstralProjectionAbility : CharacterAbility {
     /// Comienza la ejecución de la habilidad, duplicando al personaje al otro lado de la pared
     /// </summary>
     /// <returns><c>true</c>, si la habilidad se inició con éxito, <c>false</c> si no fue posible.</returns>
-    public override bool StartExecution () {
-        bool started = false;
-        if (!execution) {
+    public override bool ActivateAbility() {
+        bool started = !active;
+        if (!active) {
             // Comienza la ejecución de la habilidad
-            execution = true;
-            started = true;
+            active = true;
             AudioManager.Play(astralProjectionSound, true, 1);
+            CallEventActivateAbility();
             // Comprueba si hay una pared sobre la que se pueda ejecutar
             if (wall != null) {
                 // Crea un doble del personaje y la proyección astral
-                staticCharacter = (GameObject) Instantiate(characterDuringProjection,transform.position,transform.rotation);
+                staticCharacter = (GameObject) Instantiate(characterDuringProjection, transform.position, transform.rotation);
                 transform.position = wall.GetAstralProjectionPosition();
                 // Modifica los parámetros de la proyección astral
                 characterStatus.astralSpeed = speedModifier * characterStatus.standingSpeed;
@@ -89,5 +90,5 @@ public class AstralProjectionAbility : CharacterAbility {
         AddEnergy(-initialConsumption);
 
         return started;
-	}
+    }
 }

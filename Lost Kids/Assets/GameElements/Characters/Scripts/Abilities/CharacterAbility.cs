@@ -7,8 +7,8 @@ public enum AbilityName { AstralProjection, BigJump, Break, Push, Sprint, Teleki
 
 /// <summary>
 /// Clase abstracta para definir el comportamiento general de cualquier habilidad de personaje. Además de los parámetros generales,
-/// declara un par de métodos para activar/desactivar una habilidad, dos métodos abstractos para el comienzo y fin de la habilidad
-/// y toda la funcionalidad necesaria para el control de la energía y el tiempo en el método Update.
+/// declara un par de métodos abstractos para activar/desactivar una habilidad y toda la funcionalidad necesaria para el control 
+/// de la energía y el tiempo en el método Update.
 /// </summary>
 public abstract class CharacterAbility : MonoBehaviour {
     /// <summary>
@@ -16,13 +16,13 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// </summary>
     public static event AbilityController.AbilityChanged ModifiedAbilityEnergyEvent;
     /// <summary>
-	/// Evento para informar que la habilidad ha sido ejecutada
+	/// Evento para informar que la habilidad ha sido activada
     /// </summary>
-    public static event AbilityController.AbilityChanged StartExecutionAbilityEvent;
+    public static event AbilityController.AbilityChanged ActivateAbilityEvent;
     /// <summary>
-	/// Evento para informar que la habilidad ha sido parada
+	/// Evento para informar que la habilidad ha sido desactivada
     /// </summary>
-    public static event AbilityController.AbilityChanged EndExecutionAbilityEvent;
+    public static event AbilityController.AbilityChanged DeactivateAbilityEvent;
 
     /// <summary>
     /// Nombre de la habilidad
@@ -49,14 +49,14 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// </summary>
     public float executionTime = 1;
     /// <summary>
-    /// Determina si la ejecución de la habilidad es bloqueante; es decir, no permite el cambio a otra habilidad.
+    /// Determina si la habilidad posee un tiempo de ejecución fijo y no permite el cambio a otra habilidad.
     /// </summary>
     public bool fixedExecutionTime = false;
 
     // Parámetros básicos de la habilidad
     protected bool active;
     protected AudioLoader audioLoader;
-    protected bool execution;
+    //protected bool execution;
     protected float energy;
     protected CharacterStatus characterStatus;
     protected CharacterMovement characterMovement;
@@ -72,21 +72,26 @@ public abstract class CharacterAbility : MonoBehaviour {
         inputManager = GameObject.Find("InputManagerTLK").GetComponent<InputManagerTLK>();
     }
 
-    // Use this for initialization
-    void Start() {
-        AbilityInitialization();
-    }
-
+    /// <summary>
+    /// Método para la inicialización de los parámetros de la habilidad
+    /// </summary>
     protected void AbilityInitialization() {
+        active = false;
         energy = 0.0f;
         initExecutionTime = executionTime;
     }
 
+    /// <summary>
+    /// Método para añadir energía al total de la habilidad
+    /// </summary>
+    /// <param name="energyModif">Cantidad de energía a incrementar</param>
     protected void AddEnergy(float energyModif) {
+        // Incrementa la energía, sin sobrepasar el límite máximo
         energy += energyModif;
         if (energy > maxEnergy) {
             energy = maxEnergy;
         }
+        // Lanza el evento para informar que la energía de la habilidad ha sido modificada
         if (ModifiedAbilityEnergyEvent != null) {
             ModifiedAbilityEnergyEvent(this);
         }
@@ -95,8 +100,24 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// <summary>
     /// Activa la habilidad
     /// </summary>
-    public void ActivateAbility() {
-        active = true;
+    public abstract bool ActivateAbility();
+
+    /// <summary>
+    /// Método para llamar al evento ActivateAbility
+    /// </summary>
+    public void CallEventActivateAbility() {
+        if (ActivateAbilityEvent != null) {
+            ActivateAbilityEvent(this);
+        }
+    }
+
+    /// <summary>
+    /// Método para llamar al evento DeactivateAbility
+    /// </summary>
+    public void CallEventDeactivateAbility() {
+        if (DeactivateAbilityEvent != null) {
+            DeactivateAbilityEvent(this);
+        }
     }
 
     /// <summary>
@@ -107,33 +128,41 @@ public abstract class CharacterAbility : MonoBehaviour {
         return (energy >= initialConsumption);
     }
 
+    //    {
+    //    bool res = active;
+    //    if (execution) {
+    //        if (!fixedExecutionTime) {
+    //            characterStatus.EndAbility(this);
+    //            res = EndExecution();
+    //        } else {
+    //            res = false;
+    //        }
+    //    }
+    //    if (res) {
+    //        active = false;
+    //    }
+
+    //    return res;
+    //}
+
     /// <summary>
-    /// Desactiva la habilidad si es posible, terminando su ejecución en caso de ser necesario
+    /// Desactiva la ejecución de la habilidad si es posible
     /// </summary>
 	/// <returns><c>true</c> si se ha podido desactivar, <c>false</c> si no ha sido posible</returns>
-    public bool DeactivateAbility() {
-        bool res = active;
-        if (execution) {
-            if (!fixedExecutionTime) {
-                characterStatus.EndAbility(this);
-                res = EndExecution();
-            } else {
-                res = false;
-            }
-        }
-        if (res) {
-            active = false;
-        }
+    public abstract bool DeactivateAbility();
 
-        return res;
-    }
-
-    public abstract bool EndExecution();
-
+    /// <summary>
+    /// Devuelve la cantidad de energía disponible de la habilidad
+    /// </summary>
+    /// <returns></returns>
     public float GetAvailableEnergy() {
         return energy;
     }
 
+    /// <summary>
+    /// Devuelve el máximo de energía que puede contener una habilidad
+    /// </summary>
+    /// <returns></returns>
     public float GetMaxEnergy() {
         return maxEnergy;
     }
@@ -146,27 +175,17 @@ public abstract class CharacterAbility : MonoBehaviour {
         return active;
     }
 
-    /// <summary>
-    /// Permite conocer si la habilidad está en ejecución o no
-    /// </summary>
-    /// <returns><c>true</c> si la habilidad está en ejecución, <c>false</c> si no lo está</returns>
-    public bool IsExecuting() {
-        return execution;
-    }
-
-    public abstract bool StartExecution();
-
     // Update is called once per frame
     void Update() {
-        // Control del tiempo de habilidad
-        if (execution) {
+        // Control de la energía de habilidad
+        if (active) {
             // Consumo durante ejecución
             if (normalConsumption > 0.0f) {
                 // Se decrementa la energía
                 AddEnergy(-(Time.deltaTime * normalConsumption));
                 if (energy <= 0.0) {
                     // La habilidad debe terminar su ejecución
-                    GetComponent<AbilityController>().UseAbility();
+                    GetComponent<AbilityController>().DeactivateActiveAbility();
                 }
             }
             // Se decrementa el tiempo de ejecución
@@ -175,7 +194,7 @@ public abstract class CharacterAbility : MonoBehaviour {
                 if (executionTime <= 0.0f) {
                     // Si la habilidad es de de tiempo fijo, debe terminar su ejecución
                     if (fixedExecutionTime) {
-                        GetComponent<AbilityController>().UseAbility();
+                        GetComponent<AbilityController>().DeactivateActiveAbility();
                     }
                     // Reinicia contador de tiempo
                     executionTime = initExecutionTime;
@@ -187,16 +206,6 @@ public abstract class CharacterAbility : MonoBehaviour {
                 AddEnergy(maxEnergy);
             } else {
                 AddEnergy((Time.deltaTime / timeToRestoreEnergy) * maxEnergy);
-            }
-        }
-        // Lanzamiento eventos HUD --- HAY QUE CAMBIAR!!!
-        if (execution) {
-            if (StartExecutionAbilityEvent != null) {
-                StartExecutionAbilityEvent(this);
-            }
-        } else {
-            if (EndExecutionAbilityEvent != null) {
-                EndExecutionAbilityEvent(this);
             }
         }
     }
