@@ -7,9 +7,9 @@ public class InputManagerTLK : MonoBehaviour {
     InputControlType player2Control = InputControlType.DPadRight;
     InputControlType player3Control = InputControlType.DPadDown;
     InputControlType jumpControl = InputControlType.Action1;
-    InputControlType useAbilityControl = InputControlType.Action2;
+    InputControlType Ability2Control = InputControlType.Action2;
     InputControlType useControl = InputControlType.Action3;
-    InputControlType changeAbilityControl = InputControlType.Action4;
+    InputControlType Ability1Control = InputControlType.Action4;
     InputControlType menuControl = InputControlType.Command;
     InputControlType sacrificeControl = InputControlType.LeftBumper;
     InputControlType crouchControl = InputControlType.RightBumper;
@@ -132,11 +132,11 @@ public class InputManagerTLK : MonoBehaviour {
             case "Player3":
                 res = player3Control;
                 break;
-            case "UseAbility":
-                res = useAbilityControl;
+            case "Ability2":
+                res = Ability2Control;
                 break;
-            case "ChangeAbility":
-                res = changeAbilityControl;
+            case "Ability1":
+                res = Ability1Control;
                 break;
             case "Crouch":
                 res = crouchControl;
@@ -217,10 +217,10 @@ public class InputManagerTLK : MonoBehaviour {
             //    characterStatus.CrouchButton();
             //}
             // Abilities Buttons
-            if (ButtonDown("ChangeAbility")) {
+            if (ButtonDown("Ability1")) {
                 abilityControl.ChangeAbility();
             }
-            if (ButtonDown("UseAbility")) {
+            if (ButtonDown("Ability2")) {
                 abilityControl.UseAbility();
             }
             // Use Button
@@ -237,8 +237,10 @@ public class InputManagerTLK : MonoBehaviour {
                 jumpButton = true;
             }
             // Suicide button
-            if (ButtonDown("Sacrifice")) {
+            if (Button("Sacrifice")) {
                 characterStatus.SacrificeButton();
+            } else if (ButtonUp("Sacrifice")) {
+                characterStatus.SacrificeButtonUp();
             }
         } else {
             //Pasar mensajes

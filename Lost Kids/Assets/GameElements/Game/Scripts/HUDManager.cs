@@ -3,51 +3,45 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class HUDManager : MonoBehaviour {
+    // Tamaño del HUD del personaje activo
+    public float modificationSelectedCharacter;
+    public float modificationUsedAbility;
+    // Transparencia del HUD
+    public float transparency = 0.25f;
+    // Referencias a los personajes
+    [Header("Characters")]
     public GameObject aoi;
     public GameObject akai;
     public GameObject ki;
-    public float transparency = 0.25f;
+    // Referencias a los elementos del HUD
+    [Header("HUD Elements")]
+    public RectTransform selectedCharacter;
+    public RectTransform unselectedCharacters;
+    public RectTransform aoiCharacterUI;
+    public RectTransform bigJumpAbilityUI;
+    public RectTransform sprintAbilityUI;
+    public RectTransform akaiCharacterUI;
+    public RectTransform breakAbilityUI;
+    public RectTransform pushAbilityUI;
+    public RectTransform kiCharacterUI;
+    public RectTransform telekinesisAbilityUI;
+    public RectTransform astralProjectionAbilityUI;
+    public RectTransform sakeUI;
 
-    private Transform aoiUI;
-    private Transform akaiUI;
-    private Transform kiUI;
-    private Transform bigJumpAbilityUI;
-    private Transform sprintAbilityUI;
-    private Transform breakAbilityUI;
-    private Transform pushAbilityUI;
-    private Transform telekinesisAbilityUI;
-    private Transform teletransportAbilityUI;
-    private Transform sakeUI;
     private CharacterAbility selectedAbility;
-    private GameObject selectedCharacter;
+    private GameObject activeCharacter;
 
     //Use this for references
     void Awake() {
-        Transform trfPH = transform.Find("HUDCanvas").Find("PlayerAbilitiesUI");
-        // Interfaz personaje Aoi
-        aoiUI = trfPH.Find("1AoiUI");
-        bigJumpAbilityUI = aoiUI.Find("BigJumpAbility");
-        sprintAbilityUI = aoiUI.Find("SprintAbility");
-        // Interfaz personaje Akai
-        akaiUI = trfPH.Find("2AkaiUI");
-        breakAbilityUI = akaiUI.Find("BreakAbility");
-        pushAbilityUI = akaiUI.Find("PushAbility");
-        // Interfaz personaje Ki
-        kiUI = trfPH.Find("3KiUI");
-        telekinesisAbilityUI = kiUI.Find("TelekinesisAbility");
-        teletransportAbilityUI = kiUI.Find("AstralProjectionAbility");
-        // Interfaz del inventario
-        Transform trfI = transform.Find("HUDCanvas").Find("InventoryUI");
-        sakeUI = trfI.Find("SakeBottle");
         // Oculta la interfaz relativa a los jugadores deshabilitados
         if (aoi == null) {
-            DestroyImmediate(aoiUI.gameObject);
+            Destroy(aoiCharacterUI.parent.gameObject);
         }
         if (akai == null) {
-            DestroyImmediate(akaiUI.gameObject);
+            Destroy(akaiCharacterUI.parent.gameObject);
         }
         if (ki == null) {
-            DestroyImmediate(kiUI.gameObject);
+            Destroy(kiCharacterUI.parent.gameObject);
         }
     }
 
@@ -55,9 +49,20 @@ public class HUDManager : MonoBehaviour {
     void Start() {
         // Inicialización UI
         TransparencyInitialization();
-        selectedCharacter = CharacterManager.GetActiveCharacter();
-        CharacterSelection(selectedCharacter, true, 1);
-        selectedAbility = selectedCharacter.GetComponent<AbilityController>().GetActiveAbility();
+        // Interfaz del jugador seleccionado
+        activeCharacter = CharacterManager.GetActiveCharacter();
+        RectTransform trf = GetCharacterUIRectTransform(activeCharacter);
+        trf.parent.SetParent(selectedCharacter);
+        RectTransform parentRectTrf = trf.parent.GetComponent<RectTransform>();
+        parentRectTrf.anchoredPosition = new Vector2(0, 0);
+        parentRectTrf.sizeDelta = new Vector2(315, 210);
+        foreach (RectTransform t1 in trf.parent) {
+            foreach (RectTransform t2 in t1) {
+                t2.sizeDelta *= (1 + modificationSelectedCharacter);
+            }
+        }
+        CharacterSelection(activeCharacter, true, 1);
+        selectedAbility = activeCharacter.GetComponent<AbilityController>().GetActiveAbility();
         AbilitySelection(selectedAbility.GetType(), 1);
         // Suscripciones a eventos
         CharacterManager.ActiveCharacterChangedEvent += CharacterChanged;
@@ -72,31 +77,40 @@ public class HUDManager : MonoBehaviour {
         CharacterStatus.ResurrectCharacterEvent += CharacterResurrected;
     }
 
+    // Se ejecuta cuando se termina la ejecución de una habilidad
     void AbilityExecutionEnd(CharacterAbility ability) {
-        //Debug.Log("end");
-        Transform abilityUI = GetAbilityUITransform(selectedAbility.GetType());
-        //abilityUI.localScale.Scale(new Vector3(0.5f, 0.5f, 0.5f));
+        // Habilidad afectada
+        RectTransform abilityUI = GetAbilityUIRectTransform(selectedAbility.GetType());
+        // Reduce tamaño del icono
+        abilityUI.sizeDelta /= (1 + modificationUsedAbility);
     }
 
+    // Se ejecuta cuando comienza la ejecución de una habilidad
     void AbilityExecutionStart(CharacterAbility ability) {
-        //Debug.Log("start");
-        Transform abilityUI = GetAbilityUITransform(selectedAbility.GetType());
-        //abilityUI.localScale.Scale(new Vector3(2,2,2));
-    }    
+        // Habilidad afectada
+        RectTransform abilityUI = GetAbilityUIRectTransform(selectedAbility.GetType());
+        // Aumenta tamaño del icono
+        abilityUI.sizeDelta *= (1 + modificationUsedAbility);
+    }
 
+    // Se ejecuta cuando se selecciona una habilidad
     void AbilitySelected(CharacterAbility ability) {
+        // Deselección de habilidad anterior
         AbilitySelection(selectedAbility.GetType(), transparency);
+        // Selección de nueva habilidad
         selectedAbility = ability;
         AbilitySelection(selectedAbility.GetType(), 1);
     }
 
+    // Modifica la transparencia de la habilidad determinada
     void AbilitySelection(System.Type abilityType, float alphaSelection) {
         // Selecciona la interfaz relativa a la habilidad y modifica su apariencia
-        Transform abilityUI = GetAbilityUITransform(abilityType);
+        RectTransform abilityUI = GetAbilityUIRectTransform(abilityType);
         abilityUI.Find("Full").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
         abilityUI.Find("Empty").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
     }
 
+    // Se ejecuta cuando se produce un cambio de personaje
     void CharacterChanged() {
         // Modifica la interfaz del personaje seleccionado
         GameObject newActiveCharacter = CharacterManager.GetActiveCharacter();
@@ -105,11 +119,13 @@ public class HUDManager : MonoBehaviour {
         UpdateInventory();
     }
 
+    // Se ejecuta cuando se produce la muerte de un personaje
     void CharacterKilled(GameObject character) {
         CharacterSelection(character, true, 0);
-        CharacterSelection(character, false, 2*transparency);
+        CharacterSelection(character, false, 2 * transparency);
     }
 
+    // Se ejecuta cuando un personaje resucita
     void CharacterResurrected(GameObject character) {
         // Comprueba si el jugador resucitado es el seleccionado por el jugador
         if (character.Equals(CharacterManager.GetActiveCharacter())) {
@@ -121,33 +137,57 @@ public class HUDManager : MonoBehaviour {
         }
     }
 
+    // Modifica la transparencia del personaje determinado
     void CharacterSelection(GameObject character, bool alive, float alphaSelection) {
         // Selecciona la interfaz relativa a la habilidad y modifica su apariencia
-        Transform characterUI = GetCharacterUITransform(character);
+        Transform characterUI = GetCharacterUIRectTransform(character);
         if (alive) {
-            characterUI.Find("Alive").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
+            characterUI.Find("Full").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
         } else {
-            characterUI.Find("Dead").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
+            characterUI.Find("Empty").GetComponent<CanvasRenderer>().SetAlpha(alphaSelection);
         }
     }
 
+    // Se ejecuta cuando se produce un cambio de personaje
     void CharacterSelected(GameObject character) {
-        if (selectedCharacter.GetComponent<CharacterStatus>().IsAlive()) {
-            CharacterSelection(selectedCharacter, true, transparency);
+        // Se muestra el icono correspondiente a la vida o no del personaje
+        if (activeCharacter.GetComponent<CharacterStatus>().IsAlive()) {
+            CharacterSelection(activeCharacter, true, transparency);
         }
-        selectedCharacter = character;
-        CharacterSelection(selectedCharacter, true, 1);
+        // Se modifica la interfaz del antiguo personaje seleccionado
+        RectTransform trf = GetCharacterUIRectTransform(activeCharacter);
+        foreach (RectTransform t1 in trf.parent) {
+            foreach (RectTransform t2 in t1) {
+                t2.sizeDelta /= (1 + modificationSelectedCharacter);
+            }
+        }
+        trf.parent.GetComponent<RectTransform>().sizeDelta /= (1 + modificationSelectedCharacter);
+        trf.parent.SetParent(unselectedCharacters);
+        // Se modifica la interfaz del personaje actualmente seleccionado
+        activeCharacter = character;
+        trf = GetCharacterUIRectTransform(activeCharacter);
+        trf.parent.SetParent(selectedCharacter);
+        trf.parent.GetComponent<RectTransform>().sizeDelta *= (1 + modificationSelectedCharacter);
+        foreach (RectTransform t1 in trf.parent) {
+            foreach (RectTransform t2 in t1) {
+                t2.sizeDelta *= (1 + modificationSelectedCharacter);
+            }
+        }
+        trf.parent.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+        CharacterSelection(activeCharacter, true, 1);
     }
 
+    // Se ejecuta cuando se produce un cambio en la cantidad de energía de la habilidad determinada
     void EnergyModified(CharacterAbility ability) {
         // Selecciona la interfaz relativa a la habilidad y modifica el relleno de la imagen
-        Transform abilityUI = GetAbilityUITransform(ability.GetType());
+        Transform abilityUI = GetAbilityUIRectTransform(ability.GetType());
         float amount = ability.GetAvailableEnergy() / ability.GetMaxEnergy();
         abilityUI.Find("Full").GetComponent<Image>().fillAmount = amount;
     }
 
-    Transform GetAbilityUITransform(System.Type abilityType) {
-        Transform abilityUI = null;
+    // Devuelve el componente RectTransform de la habilidad indicada
+    RectTransform GetAbilityUIRectTransform(System.Type abilityType) {
+        RectTransform abilityUI = null;
         switch (abilityType.ToString()) {
             case "BigJumpAbility":
                 abilityUI = bigJumpAbilityUI;
@@ -165,28 +205,30 @@ public class HUDManager : MonoBehaviour {
                 abilityUI = telekinesisAbilityUI;
                 break;
             case "AstralProjectionAbility":
-                abilityUI = teletransportAbilityUI;
+                abilityUI = astralProjectionAbilityUI;
                 break;
         }
 
         return abilityUI;
     }
 
-    Transform GetCharacterUITransform(GameObject character) {
-        Transform characterUI = null;
+    // Devuelve el componente RectTransform del personaje indicado
+    RectTransform GetCharacterUIRectTransform(GameObject character) {
+        RectTransform characterUI = null;
         if (character.Equals(aoi)) {
-            characterUI = aoiUI;
+            characterUI = aoiCharacterUI;
         } else if (character.Equals(akai)) {
-            characterUI = akaiUI;
+            characterUI = akaiCharacterUI;
         } else if (character.Equals(ki)) {
-            characterUI = kiUI;
+            characterUI = kiCharacterUI;
         }
 
-        return characterUI.Find("Character");
+        return characterUI;
     }
 
-    Transform GetInventoryObjectUITransform(string obj) {
-        Transform res = null;
+    // Devuelve el componente RectTransform del objeto indicado
+    RectTransform GetInventoryObjectUITransform(string obj) {
+        RectTransform res = null;
         switch (obj) {
             case "SakeBottle":
                 res = sakeUI;
@@ -196,6 +238,7 @@ public class HUDManager : MonoBehaviour {
         return res;
     }
 
+    // Se ejecuta cuando se añade un objeto al inventario 
     void ObjectAdded(string obj) {
         switch (obj) {
             case "SakeBottle":
@@ -204,6 +247,7 @@ public class HUDManager : MonoBehaviour {
         }
     }
 
+    // Se ejecuta cuando se usa un objeto del inventario
     void ObjectRemoved(string obj) {
         switch (obj) {
             case "SakeBottle":
@@ -212,6 +256,7 @@ public class HUDManager : MonoBehaviour {
         }
     }
 
+    // Se ejecuta cuando se le solicita al personaje un objeto de su inventario
     void ObjectRequested(string obj) {
         switch (obj) {
             case "SakeBottle":
@@ -240,7 +285,7 @@ public class HUDManager : MonoBehaviour {
 
     void OnEnable() {
         // Comprueba si las variables están inicializadas para poder suscribirse a los eventos
-        if ((selectedCharacter != null) && (selectedAbility != null)) {
+        if ((activeCharacter != null) && (selectedAbility != null)) {
             // Suscripciones a eventos
             CharacterManager.ActiveCharacterChangedEvent += CharacterChanged;
             AbilityController.SelectedAbilityEvent += AbilitySelected;
@@ -269,6 +314,7 @@ public class HUDManager : MonoBehaviour {
         GetInventoryObjectUITransform(obj).Find("Full").GetComponent<CanvasRenderer>().SetAlpha(alphaObj);
     }
 
+    // Inicialización de la transparencia de los distintos elementos del HUD
     void TransparencyInitialization() {
         // AoiUI
         if (aoi != null) {
@@ -296,9 +342,10 @@ public class HUDManager : MonoBehaviour {
         ShowEmptyInventoryObject(false, "SakeBottle");
     }
 
+    // Actualiza el inventario del jugador seleccionado
     void UpdateInventory() {
         ShowEmptyInventoryObject(false, "SakeBottle");
-        if (selectedCharacter.GetComponent<CharacterInventory>().HasObject("SakeBottle")) {
+        if (activeCharacter.GetComponent<CharacterInventory>().HasObject("SakeBottle")) {
             ShowInventoryObject(true, "SakeBottle");
         } else {
             ShowInventoryObject(false, "SakeBottle");
