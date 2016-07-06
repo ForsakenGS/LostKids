@@ -76,7 +76,7 @@ public class PushableObject : MonoBehaviour {
                     break;
             }
             //ray.y += 0.05f;
-            Debug.DrawLine(ray, ray + (Vector3.down ), Color.blue, 10000);
+            //Debug.DrawLine(ray, ray + (Vector3.down ), Color.blue, 10000);
             // Lanza el rayo y comprueba si colisiona con otro objeto
             grounded = (Physics.Raycast(ray, Vector3.down, 0.1f));
             rayCnt += 1;

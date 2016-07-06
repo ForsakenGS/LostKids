@@ -95,7 +95,7 @@ public class Button : UsableObject {
     void OnCollisionEnter(Collision col)
     {
         
-        if ( (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable") ) && col.gameObject.transform.position.y > transform.position.y+0.3f)
+        if (!onUse && (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable") ) && col.gameObject.transform.position.y > transform.position.y+0.3f)
         {
             col.transform.parent = transform;
             StopAllCoroutines();

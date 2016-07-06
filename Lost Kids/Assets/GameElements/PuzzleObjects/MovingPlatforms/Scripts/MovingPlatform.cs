@@ -198,7 +198,7 @@ public class MovingPlatform : MonoBehaviour,IActivable {
     {
         if (col.gameObject.tag=="Player")
         {
-            if (col.transform.parent == null)
+            if (col.transform.parent == null || col.transform.parent.GetComponent<MovingPlatform>()!=null)
             {
                 col.transform.parent = this.transform;
             }
