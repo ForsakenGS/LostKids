@@ -188,7 +188,7 @@ public class CharacterStatus : MonoBehaviour {
     }
 
     /// <summary>
-    /// Función para indicar que el botón de salto ha sido pulsado, cambiando el estado del personaje a 'Jumping' en caso de ser necesario.
+    /// Función para indicar que el botón de salto está siendo pulsado, añadiendo impulso al salto en caso de ser necesario.
     /// </summary>
 	public void JumpButton() {
         switch (characterState) {
@@ -200,15 +200,6 @@ public class CharacterStatus : MonoBehaviour {
                         totalJumpImpulse += jumpImpulse;
                     }
                 }
-                break;
-            case State.Walking:
-            case State.Idle:
-                // Comienza la acción de saltar
-                AudioManager.Stop(stepSound);
-                characterState = State.Jumping;
-                characterMovement.Jump(firstJumpImpulse, true);
-                totalJumpImpulse = firstJumpImpulse;
-                SetAnimatorTrigger("Jump");
                 break;
             case State.AstralProjection:
                 if (!jumpButtonUp) {
@@ -222,6 +213,31 @@ public class CharacterStatus : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Función para indicar que el botón de salto ha sido pulsado, cambiando el estado del personaje a 'Jumping' en caso de ser necesario.
+    /// </summary>
+	public void JumpButtonDown() {
+        switch (characterState) {
+            case State.Walking:
+            case State.Idle:
+                // Comienza la acción de saltar
+                AudioManager.Stop(stepSound);
+                characterState = State.Jumping;
+                characterMovement.Jump(firstJumpImpulse, true);
+                totalJumpImpulse = firstJumpImpulse;
+                SetAnimatorTrigger("Jump");
+                break;
+            case State.AstralProjection:
+                // Impulso inicial de la proyección astral al levitar
+                characterMovement.Jump(3*astralJumpImpulse, false);
+                totalJumpImpulse += 3*astralJumpImpulse;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Función para indicar que el botón de salto se ha dejado de pulsar
+    /// </summary>
     public void JumpButtonUp() {
         if (characterState.Equals(State.Jumping)) {
             jumpButtonUp = true;

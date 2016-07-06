@@ -55,13 +55,14 @@ public class AbilityController : MonoBehaviour {
         } else if (activeAbility.Equals(ability1)) {
             // Se desactiva la habilidad 1
             DeactivateAbility(ability1);
-        } else {
-            // Se desactiva la habilidad 2, que está activa
-            if (DeactivateAbility(ability2)) {
-                // Se activa la habilidad 1 porque se ha podido desactivar la habilidad 2
-                ActivateAbility(ability1);
-            }
         }
+        //else {
+        //    // Se desactiva la habilidad 2, que está activa
+        //    if (DeactivateAbility(ability2)) {
+        //        // Se activa la habilidad 1 porque se ha podido desactivar la habilidad 2
+        //        ActivateAbility(ability1);
+        //    }
+        //}
     }
 
     /// <summary>

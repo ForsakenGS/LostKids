@@ -2,37 +2,24 @@
 using System.Collections;
 
 public class KodamaCall : MonoBehaviour {
-
-
     public float callInterval = 3000f;
 
-    public  AudioSource callSound;
+    private AudioSource callSound;
 
-    void OnEnable()
-    {
+    void OnEnable() {
         Invoke("MakeCall", callInterval);
     }
 
-    void OnDisable()
-    {
+    void OnDisable() {
         CancelInvoke("MakeCall");
     }
 
-    void Awake()
-    {
+    // Use this for references
+    void Awake() {
+        callSound = GetComponent<AudioSource>();
     }
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
-    void MakeCall()
-    {
+    void MakeCall() {
         callSound.Play();
         Invoke("MakeCall", callInterval + Random.Range(-callInterval / 10f, callInterval / 10f));
     }

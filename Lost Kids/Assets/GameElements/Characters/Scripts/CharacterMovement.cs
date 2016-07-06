@@ -98,7 +98,7 @@ public class CharacterMovement : MonoBehaviour {
 #endif
             // Lanza el rayo y comprueba si colisiona con otro objeto
             RaycastHit hit;
-            grounded = (Physics.Raycast(ray, Vector3.down, out hit, groundCheckDistance)) && !hit.collider.isTrigger;
+            grounded = (Physics.Raycast(ray, Vector3.down, out hit, groundCheckDistance)) && (!hit.collider.isTrigger) && (!hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")));
             rayCnt += 1;
 
         } while ((!grounded) && (rayCnt < 5));

@@ -216,8 +216,7 @@ public class InputManagerTLK : MonoBehaviour {
             // Abilities Buttons
             if (ButtonDown("Ability1")) {
                 abilityControl.ActivateAbility1();
-            }
-            if (ButtonDown("Ability2")) {
+            } else if (ButtonDown("Ability2")) {
                 abilityControl.ActivateAbility2();
             }
             // Use Button
@@ -228,7 +227,9 @@ public class InputManagerTLK : MonoBehaviour {
             horizontalButton = ButtonValue("Horizontal");
             verticalButton = ButtonValue("Vertical");
             // Jump button
-            if (ButtonUp("Jump")) {
+            if (ButtonDown("Jump")) {
+                characterStatus.JumpButtonDown();
+            } else if (ButtonUp("Jump")) {
                 characterStatus.JumpButtonUp();
             } else if (Button("Jump")) {
                 jumpButton = true;
