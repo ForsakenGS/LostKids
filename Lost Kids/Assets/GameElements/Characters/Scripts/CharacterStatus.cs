@@ -405,12 +405,13 @@ public class CharacterStatus : MonoBehaviour {
                     totalJumpImpulse = 0.0f;
                     characterState = State.Falling;
                     SetAnimatorTrigger("Fall");
-                } else if (characterMovement.CharacterIsGrounded()) {  // Comprueba si el jugador está apoyado en alguna superficie 
-                    jumpButtonUp = false;
-                    totalJumpImpulse = 0.0f;
-                    characterState = State.Idle;
-                    SetAnimatorTrigger("Land");
-                }
+                } 
+                //else if (characterMovement.CharacterIsGrounded()) {  // Comprueba si el jugador está apoyado en alguna superficie 
+                //    jumpButtonUp = false;
+                //    totalJumpImpulse = 0.0f;
+                //    characterState = State.Idle;
+                //    SetAnimatorTrigger("Land");
+                //}
                 break;
             case State.BigJumping:
                 // Si empieza a caer, cambia de estado

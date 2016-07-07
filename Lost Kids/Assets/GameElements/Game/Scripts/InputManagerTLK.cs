@@ -23,7 +23,7 @@ public class InputManagerTLK : MonoBehaviour {
     private CharacterManager characterManager;
     private float horizontalButton;
     private float verticalButton;
-    private bool jumpButton;
+    private int jumpButton;
 
     // Use this for references
     void Awake() {
@@ -37,7 +37,7 @@ public class InputManagerTLK : MonoBehaviour {
         locked = false;
         horizontalButton = 0.0f;
         verticalButton = 0.0f;
-        jumpButton = false;
+        jumpButton = 0;
         CharacterComponentsUpdate();
         // Suscripciones a eventos
         CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
@@ -108,9 +108,12 @@ public class InputManagerTLK : MonoBehaviour {
                 verticalButton = 0.0f;
             }
             // Jump button
-            if (jumpButton) {
+            if (jumpButton == 1) {
                 characterStatus.JumpButton();
-                jumpButton = false;
+                jumpButton = 0;
+            } else if (jumpButton == 2) {
+                characterStatus.JumpButtonDown();
+                jumpButton = 0;
             }
         }
     }
@@ -228,11 +231,13 @@ public class InputManagerTLK : MonoBehaviour {
             verticalButton = ButtonValue("Vertical");
             // Jump button
             if (ButtonDown("Jump")) {
-                characterStatus.JumpButtonDown();
+                jumpButton = 2;
             } else if (ButtonUp("Jump")) {
                 characterStatus.JumpButtonUp();
             } else if (Button("Jump")) {
-                jumpButton = true;
+                if (jumpButton != 2) {
+                    jumpButton = 1;
+                }
             }
             // Suicide button
             if (Button("Sacrifice")) {
