@@ -328,8 +328,10 @@ public class HUDManager : MonoBehaviour {
     void OnDisable() {
         // Elimina suscripciones a eventos
         CharacterManager.ActiveCharacterChangedEvent -= CharacterChanged;
-        AbilityController.SelectedAbilityEvent -= AbilitySelected;
+        //AbilityController.SelectedAbilityEvent -= AbilitySelected;
         CharacterAbility.ModifiedAbilityEnergyEvent -= EnergyModified;
+        CharacterAbility.ActivateAbilityEvent -= AbilityExecutionStart;
+        CharacterAbility.DeactivateAbilityEvent -= AbilityExecutionEnd;
         CharacterInventory.ObjectAddedEvent -= ObjectAdded;
         CharacterInventory.ObjectRemovedEvent -= ObjectRemoved;
         CharacterInventory.ObjectRequestedEvent -= ObjectRequested;
@@ -342,8 +344,10 @@ public class HUDManager : MonoBehaviour {
         if ((activeCharacter != null) && (selectedAbility != null)) {
             // Suscripciones a eventos
             CharacterManager.ActiveCharacterChangedEvent += CharacterChanged;
-            AbilityController.SelectedAbilityEvent += AbilitySelected;
+            //AbilityController.SelectedAbilityEvent += AbilitySelected;
             CharacterAbility.ModifiedAbilityEnergyEvent += EnergyModified;
+            CharacterAbility.ActivateAbilityEvent += AbilityExecutionStart;
+            CharacterAbility.DeactivateAbilityEvent += AbilityExecutionEnd;
             CharacterInventory.ObjectAddedEvent += ObjectAdded;
             CharacterInventory.ObjectRemovedEvent += ObjectRemoved;
             CharacterInventory.ObjectRequestedEvent += ObjectRequested;
