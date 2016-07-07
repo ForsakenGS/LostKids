@@ -17,6 +17,7 @@ public class InputManagerTLK : MonoBehaviour {
     InputControlType crouchControl = InputControlType.Action2;
 
     private static bool locked;
+    private static bool hardLocked = false;
     private CharacterStatus characterStatus;
     private AbilityController abilityControl;
     private MessageManager messageManager;
@@ -29,6 +30,8 @@ public class InputManagerTLK : MonoBehaviour {
     void Awake() {
         characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
         messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
+	locked=false;
+	hardLocked=false;
     }
 
     // Use this for initialization
@@ -187,11 +190,15 @@ public class InputManagerTLK : MonoBehaviour {
     /// </summary>
     /// <param name="lockVar"></param>
     public static void SetLock(bool lockVar) {
+        hardLocked = lockVar;
         locked = lockVar;
     }
 
     void Unlock() {
-        locked = false;
+        if (!hardLocked)
+        {
+            locked = false;
+        }
     }
 
     public void UnlockTime(float time) {
