@@ -42,11 +42,13 @@ public class ActivableMovement : MonoBehaviour, IActivable {
 
     private AudioSource activationSound;
     private AudioSource deActivationSound;
-
+    /*
     public bool hasFadeCutScene;
     private ActivableFade activableFade;
     public GameObject cutSceneCamera;
-
+    */
+    private CutScene cutScene;
+    /*
     public void OnEnable() {
         if(hasFadeCutScene) {
             ActivableFade.FadeInOutEvent += OpenDoorCutScene;
@@ -60,15 +62,17 @@ public class ActivableMovement : MonoBehaviour, IActivable {
         }
         
     }
-
+    */
     // Use this for initialization
     void Start()
     {
         //Si se va a mostrar un cutscene
-        if(hasFadeCutScene) {
+        cutScene = GetComponent<CutScene>();
+        /*
+        if (hasFadeCutScene) {
             activableFade = GetComponent<ActivableFade>();
         }
-
+        */
         audioLoader = GetComponent<AudioLoader>();
         if(audioLoader) {
             activationSound = audioLoader.GetSound("Activation");
@@ -178,10 +182,15 @@ public class ActivableMovement : MonoBehaviour, IActivable {
     /// </summary>
     public void Activate()
     {
+        if(cutScene!=null)
+        {
+
+            cutScene.BeginCutScene(MoveObject);
+        /*
         if(hasFadeCutScene) {
 
             activableFade.StartCutScene(cutSceneCamera);
-
+         */
         }else {
             //Es necesario incluir el metodo dentro dentro de activate, para poder referenciar de manera generica al script
             MoveObject();
