@@ -159,6 +159,11 @@ public class CharacterManager : MonoBehaviour {
 
             }
 
+            if(activeCheckPoint.HasCharacterInside(activeCharacter))
+            {
+                CheckPointActivation();
+            }
+
         }
     }
 
@@ -173,12 +178,12 @@ public class CharacterManager : MonoBehaviour {
 
 
         iTween.MoveTo(character.gameObject, activeCheckPoint.GetSpawnZone(index), distanceToCheckPoint / resurrectionSpeed);
-        if (NextAvailableCharacter() == -1) {
+        if (GetAvailableCharacter() == -1) {
             CutSceneManager.FadeIn();
         }
         //characterList[index].transform.position = activeCheckPoint.GetSpawnZone(index);
         characterStatusList[index].currentRoom = activeCheckPoint.room;
-        Invoke("ActivateNextAvailableCharacter", distanceToCheckPoint / resurrectionSpeed);
+        Invoke("ActivateAvailableCharacter", distanceToCheckPoint / resurrectionSpeed);
 
     }
 
@@ -186,8 +191,8 @@ public class CharacterManager : MonoBehaviour {
     /// Activa el siguiente personaje disponible tras la muerte.
     /// Si no hay ninguno, resucita a los 3 en el ultimo checkpoint
     /// </summary>
-    public void ActivateNextAvailableCharacter() {
-        int nextIndex = NextAvailableCharacter();
+    public void ActivateAvailableCharacter() {
+        int nextIndex = GetAvailableCharacter();
         if (nextIndex != -1) {
             ActivateCharacter(nextIndex);
         } else {
@@ -201,7 +206,7 @@ public class CharacterManager : MonoBehaviour {
     /// Si no hay ninguno disponible, devuelve -1
     /// </summary>
     /// <returns>indice del proximo personaje disponible. -1 si no hay ninguno</returns>
-    public int NextAvailableCharacter() {
+    public int GetAvailableCharacter() {
         int newIndex = -1;
 
         for (int i = 0; i < characterStatusList.Count; i++) {
@@ -211,6 +216,62 @@ public class CharacterManager : MonoBehaviour {
         }
 
         return newIndex;
+    }
+
+    /// <summary>
+    /// Activa el siguiente personaje siempre que se encuentre alguno disponible
+    /// </summary>
+    public  void ActivateNextCharacter()
+    {
+        if (characterList.Count == 1)
+        {
+            return;
+        }
+        int actualIndex = characterList.IndexOf(activeCharacter);
+        int nextIndex = actualIndex+1;
+        
+        bool found = false;
+        while(nextIndex!=actualIndex && !found)
+        {
+            if(nextIndex>=characterList.Count)
+            {
+                nextIndex = 0;
+            }
+            if(nextIndex!=actualIndex && characterStatusList[nextIndex].IsAvailable())
+            {
+                ActivateCharacter(nextIndex);
+                found = true;
+            }
+            nextIndex++;
+        }
+    }
+
+    /// <summary>
+    /// Activa el anterior personaje siempre que se encuentre alguno disponible
+    /// </summary>
+    public void ActivatePreviousCharacter()
+    {
+        if(characterList.Count==1)
+        {
+            return;
+        }
+        int actualIndex = characterList.IndexOf(activeCharacter);
+        int nextIndex = actualIndex - 1;
+
+        bool found = false;
+        while (nextIndex != actualIndex && !found)
+        {
+            if (nextIndex < 0)
+            {
+                nextIndex = characterList.Count-1;
+            }
+            if (characterStatusList[nextIndex].IsAvailable())
+            {
+                ActivateCharacter(nextIndex);
+                found = true;
+            }
+            nextIndex++;
+        }
     }
 
     /// <summary>
@@ -242,6 +303,11 @@ public class CharacterManager : MonoBehaviour {
     /// <returns>gameobject correspondiente al personaje activo</returns>
     public static GameObject GetActiveCharacter() {
         return activeCharacter;
+    }
+
+    public static CheckPoint GetActiveCheckPoint()
+    {
+        return activeCheckPoint;
     }
 
     /// <summary>
