@@ -9,7 +9,7 @@ public class BreakAbility : CharacterAbility {
     /// <summary>
     /// Altura sobre la posición del personaje desde la que se lanza el rayo
     /// </summary>
-	public float height = -0.5f;
+	public float height = 1f;
     /// <summary>
     /// Retraso para ejecutar el daño
     /// </summary>
