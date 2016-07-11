@@ -51,6 +51,7 @@ public class Dart : MonoBehaviour {
             }
             else
             {
+                AudioManager.Play(hitSound, false, 1, 0.8f, 1.2f);
                 hitSound.Play();
                 hitParticles.Play();
                 disabled = true;

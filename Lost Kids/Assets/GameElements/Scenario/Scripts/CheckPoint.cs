@@ -23,9 +23,17 @@ public class CheckPoint : MonoBehaviour {
 
     private AudioSource checkPointSound;
 
+    private HashSet<GameObject> charactersInside;
+
+
+    void OnDisable()
+    {
+        CharacterStatus.KillCharacterEvent -= CharacterDied;
+    }
+
     void Awake() {
         isActive = false;
-
+        charactersInside = new HashSet<GameObject>();
         neko = GetComponentInChildren<Neko>();
         vortex = GetComponentInChildren<ParticlesActivator>();
     }
@@ -45,24 +53,65 @@ public class CheckPoint : MonoBehaviour {
     /// </summary>
     /// <param name="col"></param>
     void OnTriggerEnter(Collider col) {
-        //col.gameObject.CompareTag("Player")
 
-        if (CharacterManager.IsActiveCharacter(col.gameObject)) {
+
+        if (col.gameObject.CompareTag("Player")) {
             if (col.gameObject.GetComponent<CharacterStatus>().IsAvailable()) {
-
-                if (!isActive) {
-                    Activate();
+                //Se guarda el personaje en la lista de niños en el checkpoint y se subscribe al evento por si muere sin salir del trigger
+                charactersInside.Add(col.gameObject);
+                if(charactersInside.Count==1)
+                {
+                    CharacterStatus.KillCharacterEvent += CharacterDied;
                 }
-                if (reached) {
+
+                if (reached && CharacterManager.GetActiveCheckPoint() == this) {
                     CharacterManager.CheckPointActivation();
                 } else {
                     reached = true;
+                    Activate();
                     CharacterManager.CheckPointReached(this);
                 }
             }
 
         }
 
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            //Si ya no quedan niños dentro del trigger, se elimina la subscripcion al evento
+            charactersInside.Remove(col.gameObject);
+            if(charactersInside.Count==0)
+            {
+                CharacterStatus.KillCharacterEvent -= CharacterDied;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Notificacion de que el alma del niño ha llegado al checkpoint
+    /// Si  hay algun niño en vivo en el checkpoint, resucita al nuevo
+    /// </summary>
+    /// <param name="character"></param>
+    void SoulReached(GameObject character)
+    {
+        if(charactersInside.Count>0)
+        {
+            character.GetComponent<CharacterStatus>().Ressurect();
+            charactersInside.Add(character);
+        }
+    }
+
+    void CharacterDied(GameObject character)
+    {
+        charactersInside.Remove(character);
+    }
+
+    public bool HasCharacterInside(GameObject character)
+    {
+        return charactersInside.Contains(character);
     }
 
     /// <summary>

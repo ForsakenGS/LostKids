@@ -83,8 +83,6 @@ public class DartLauncherTrap : AbstractTrap {
 
     }
 
-
-
     public void Shoot()
     {
         if (isEnabled)
@@ -97,7 +95,7 @@ public class DartLauncherTrap : AbstractTrap {
                 dart.transform.position = this.transform.position + transform.forward * shooterOffset;
                 dart.transform.rotation = this.transform.rotation;
                 dart.GetComponent<Rigidbody>().velocity = transform.forward * dartSpeed;
-                shootSound.Play();
+                AudioManager.Play(shootSound, false, 1, 0.8f, 1.2f);
                 shootParticles.Play();
             }
             Invoke("Shoot", shootCooldown);
