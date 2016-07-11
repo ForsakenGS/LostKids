@@ -6,8 +6,8 @@ public class InputManagerTLK : MonoBehaviour {
     InputControlType character1Control = InputControlType.DPadLeft;
     InputControlType character2Control = InputControlType.DPadUp;
     InputControlType character3Control = InputControlType.DPadRight;
-    InputControlType nextCharacterControl = InputControlType.LeftTrigger;
-    InputControlType prevCharacterControl = InputControlType.RightTrigger;
+    InputControlType nextCharacterControl = InputControlType.RightTrigger;
+    InputControlType prevCharacterControl = InputControlType.LeftTrigger;
     InputControlType jumpControl = InputControlType.Action1;
     InputControlType Ability2Control = InputControlType.RightBumper;
     InputControlType useControl = InputControlType.Action3;
@@ -16,8 +16,7 @@ public class InputManagerTLK : MonoBehaviour {
     InputControlType sacrificeControl = InputControlType.Action4;
     InputControlType crouchControl = InputControlType.Action2;
 
-    private static bool locked;
-    private static bool hardLocked = false;
+    private static int locked;
     private CharacterStatus characterStatus;
     private AbilityController abilityControl;
     private MessageManager messageManager;
@@ -30,14 +29,12 @@ public class InputManagerTLK : MonoBehaviour {
     void Awake() {
         characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
         messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
-
     }
 
     // Use this for initialization
     void Start() {
         // Inicialización variables
-        locked = false;
-        hardLocked = false;
+        locked = 0;
         horizontalButton = 0.0f;
         verticalButton = 0.0f;
         jumpButton = 0;
@@ -103,7 +100,7 @@ public class InputManagerTLK : MonoBehaviour {
 
     // Manage inputs that produce physics
     void FixedUpdate() {
-        if (!locked) {
+        if (locked == 0) {
             // Character movement
             if ((horizontalButton != 0) || (verticalButton != 0f)) {
                 characterStatus.MovementButtons(horizontalButton, verticalButton);
@@ -139,6 +136,12 @@ public class InputManagerTLK : MonoBehaviour {
                 break;
             case "Character3":
                 res = character3Control;
+                break;
+            case "NextCharacter":
+                res = nextCharacterControl;
+                break;
+            case "PrevCharacter":
+                res = prevCharacterControl;
                 break;
             case "Ability2":
                 res = Ability2Control;
@@ -176,13 +179,23 @@ public class InputManagerTLK : MonoBehaviour {
         return control.WasReleased;
     }
 
-    void Lock() {
-        locked = true;
+    static void Lock() {
+        locked += 1;
     }
 
-    public void LockTime(float time) {
-        locked = true;
-        Invoke("Unlock", time);
+    //public void LockTime(float time) {
+    //    Lock();
+    //    Invoke("Unlock", time);
+    //}
+
+    void OnDisable() {
+        // Suscripciones a eventos
+        CharacterManager.ActiveCharacterChangedEvent -= CharacterComponentsUpdate;
+    }
+
+    void OnEnable() {
+        // Suscripciones a eventos
+        CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
     }
 
     /// <summary>
@@ -190,21 +203,25 @@ public class InputManagerTLK : MonoBehaviour {
     /// </summary>
     /// <param name="lockVar"></param>
     public static void SetLock(bool lockVar) {
-        hardLocked = lockVar;
-        locked = lockVar;
-    }
-
-    void Unlock() {
-        if (!hardLocked)
-        {
-            locked = false;
+        if (lockVar) {
+            Lock();
+        } else {
+            Unlock();
         }
     }
 
-    public void UnlockTime(float time) {
-        locked = false;
-        Invoke("Lock", time);
+    static void Unlock() {
+        //if (!hardLocked) {
+        if (locked > 0) {
+            locked -= 1;
+        }
+        //}
     }
+
+    //public void UnlockTime(float time) {
+    //    Unlock();
+    //    Invoke("Lock", time);
+    //}
 
     // Manage general inputs
     void Update() {
@@ -213,8 +230,7 @@ public class InputManagerTLK : MonoBehaviour {
                 PausePanel.ShowPanel();
                 GameManager.PauseGame();
             }
-        }
-        if (!locked) {
+        } else if (locked == 0) {
             // Switch Players Buttons
             if (ButtonDown("Character1")) {
                 characterManager.ActivateCharacter(0);
@@ -222,6 +238,10 @@ public class InputManagerTLK : MonoBehaviour {
                 characterManager.ActivateCharacter(1);
             } else if (ButtonDown("Character3")) {
                 characterManager.ActivateCharacter(2);
+            } else if (ButtonDown("NextCharacter")) {
+                characterManager.ActivateNextCharacter();
+            } else if (ButtonDown("PrevCharacter")) {
+                characterManager.ActivatePreviousCharacter();
             }
             // Abilities Buttons
             if (ButtonDown("Ability1")) {
@@ -255,10 +275,17 @@ public class InputManagerTLK : MonoBehaviour {
         } else {
             //Pasar mensajes
             if (ButtonDown("Jump")) {
-                if (messageManager.ShowingMessage())
+                if (messageManager.ShowingMessage()) {
                     messageManager.SkipText();
+                }
             }
         }
+        //if (hardLocked) {
+        //    Debug.Log("hard");
+        //}
+        //if (locked) {
+        //    Debug.Log("looo");
+        //}
     }
 
     public void OnApplicationQuit() {

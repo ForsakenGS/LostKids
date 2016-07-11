@@ -26,11 +26,10 @@ public class BreakAbility : CharacterAbility {
     /// </summary>
     /// <returns><c>true</c> si se pudo parar la ejecución, <c>false</c> si no fue posible.</returns>
     public override bool DeactivateAbility() {
-        bool res = (active && (executionTime <= 0));
+        bool res = active;
         if (res) {
-            // Termina ejecución y bloque brevemente al jugador
+            // Termina ejecución y bloquea al jugador para evitar que se mueva durante la animación
             active = false;
-            inputManager.LockTime(0.5f);
             CallEventDeactivateAbility();
         }
 
