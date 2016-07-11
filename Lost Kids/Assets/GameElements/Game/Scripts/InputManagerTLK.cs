@@ -30,14 +30,14 @@ public class InputManagerTLK : MonoBehaviour {
     void Awake() {
         characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
         messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
-	locked=false;
-	hardLocked=false;
+
     }
 
     // Use this for initialization
     void Start() {
         // Inicialización variables
         locked = false;
+        hardLocked = false;
         horizontalButton = 0.0f;
         verticalButton = 0.0f;
         jumpButton = 0;

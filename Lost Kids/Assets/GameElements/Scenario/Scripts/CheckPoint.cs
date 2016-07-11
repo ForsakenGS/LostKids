@@ -36,6 +36,7 @@ public class CheckPoint : MonoBehaviour {
         charactersInside = new HashSet<GameObject>();
         neko = GetComponentInChildren<Neko>();
         vortex = GetComponentInChildren<ParticlesActivator>();
+
     }
 
     // Use this for initialization
@@ -44,7 +45,10 @@ public class CheckPoint : MonoBehaviour {
         audioLoader = GetComponent<AudioLoader>();
 
         checkPointSound = audioLoader.GetSound("CheckPoint");
-
+        if (!isActive)
+        {
+            vortex.Hide();
+        }
 
     }
 
@@ -64,8 +68,11 @@ public class CheckPoint : MonoBehaviour {
                     CharacterStatus.KillCharacterEvent += CharacterDied;
                 }
 
-                if (reached && CharacterManager.GetActiveCheckPoint() == this) {
-                    CharacterManager.CheckPointActivation();
+                if (reached) {
+                    if (CharacterManager.GetActiveCheckPoint() == this)
+                    {
+                        CharacterManager.CheckPointActivation();
+                    }
                 } else {
                     reached = true;
                     Activate();
@@ -125,7 +132,7 @@ public class CheckPoint : MonoBehaviour {
                 AudioManager.Play(checkPointSound, false, 1);
             }
 
-            CharacterManager.SetActiveCheckPoint(this);
+            //CharacterManager.SetActiveCheckPoint(this);
             neko.Show();
             vortex.Show();
         }
@@ -137,7 +144,7 @@ public class CheckPoint : MonoBehaviour {
     public void ActivateMuted() {
         if (!isActive) {
             isActive = true;
-
+            reached = true;
             CharacterManager.SetActiveCheckPoint(this);
             neko.Show();
             vortex.Show();

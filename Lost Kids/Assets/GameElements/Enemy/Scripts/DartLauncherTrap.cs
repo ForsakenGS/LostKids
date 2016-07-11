@@ -33,11 +33,12 @@ public class DartLauncherTrap : AbstractTrap {
     }
     // Use this for initialization
     void Start () {
-
+        /*
         if(enabled && fireOnEnable)
         {
             Shoot();
         }
+        */
 	
 	}
 	
@@ -45,6 +46,19 @@ public class DartLauncherTrap : AbstractTrap {
 	void Update () {
 	
 	}
+
+    void OnEnable()
+    {
+        if(isEnabled && gameObject.activeInHierarchy)
+        {
+            FireTrap();
+        }
+    }
+
+    void OnDisable()
+    {
+        CancelInvoke();
+    }
 
     public override void Activate()
     {
@@ -66,6 +80,7 @@ public class DartLauncherTrap : AbstractTrap {
 
     public override void EnableTrap()
     {
+        
         isEnabled = true;
         if(fireOnEnable)
         {
@@ -78,7 +93,7 @@ public class DartLauncherTrap : AbstractTrap {
     {
         if (isEnabled && !active)
         {
-            Shoot();
+            Invoke("Shoot",shootCooldown);
         }
 
     }

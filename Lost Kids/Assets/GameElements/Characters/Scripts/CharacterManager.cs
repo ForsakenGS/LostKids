@@ -110,6 +110,10 @@ public class CharacterManager : MonoBehaviour {
     /// </summary>
     /// <param name="check"></param>
     public static void CheckPointReached(CheckPoint check) {
+        if (activeCheckPoint != check)
+        {
+            activeCheckPoint.Deactivate();
+        }
         activeCheckPoint = check;
         for (int i = 0; i < characterStatusList.Count; i++) {
             if (characterStatusList[i].gameObject != activeCharacter) {
