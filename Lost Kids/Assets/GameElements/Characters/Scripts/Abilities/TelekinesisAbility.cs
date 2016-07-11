@@ -81,4 +81,12 @@ public class TelekinesisAbility : CharacterAbility {
     public void SetUsableObject(UsableObject obj) {
         usableObj = obj;
     }
+
+    public void TelekinesisAnimationEnded() {
+        // Comprueba si se está utilizando algún objeto
+        if ((usableObj == null) || (!usableObj.onUse)) {
+            // Se da por finalizada la habilidad
+            GetComponent<AbilityController>().DeactivateActiveAbility();
+        }
+    }
 }

@@ -62,14 +62,21 @@ public abstract class CharacterAbility : MonoBehaviour {
     protected CharacterMovement characterMovement;
     private float initExecutionTime;
     // Referencias a managers
-    protected InputManagerTLK inputManager;
 
     // Use this for references
     void Awake() {
         characterStatus = GetComponent<CharacterStatus>();
         characterMovement = GetComponent<CharacterMovement>();
         audioLoader = GetComponent<AudioLoader>();
-        inputManager = GameObject.Find("InputManagerTLK").GetComponent<InputManagerTLK>();
+    }
+
+    /// <summary>
+    /// Método para indicar que la animación de la habilidad ha terminado, por lo que la ejecución debe finalizar también
+    /// </summary>
+    public void AbilityAnimationEnded() {
+        // Desbloquea el personaje y finaliza la ejecución de la habilidad
+        characterStatus.UnlockByAnimation();
+        GetComponent<AbilityController>().DeactivateActiveAbility();
     }
 
     /// <summary>
@@ -128,23 +135,6 @@ public abstract class CharacterAbility : MonoBehaviour {
         return (energy >= initialConsumption);
     }
 
-    //    {
-    //    bool res = active;
-    //    if (execution) {
-    //        if (!fixedExecutionTime) {
-    //            characterStatus.EndAbility(this);
-    //            res = EndExecution();
-    //        } else {
-    //            res = false;
-    //        }
-    //    }
-    //    if (res) {
-    //        active = false;
-    //    }
-
-    //    return res;
-    //}
-
     /// <summary>
     /// Desactiva la ejecución de la habilidad si es posible
     /// </summary>
@@ -189,17 +179,17 @@ public abstract class CharacterAbility : MonoBehaviour {
                 }
             }
             // Se decrementa el tiempo de ejecución
-            if ((executionTime > 0.0f) && (initExecutionTime > 0.0f)) {
-                executionTime -= Time.deltaTime;
-                if (executionTime <= 0.0f) {
-                    // Si la habilidad es de de tiempo fijo, debe terminar su ejecución
-                    if (fixedExecutionTime) {
-                        GetComponent<AbilityController>().DeactivateActiveAbility();
-                    }
-                    // Reinicia contador de tiempo
-                    executionTime = initExecutionTime;
-                }
-            }
+            //if ((executionTime > 0.0f) && (initExecutionTime > 0.0f)) {
+            //    executionTime -= Time.deltaTime;
+            //    if (executionTime <= 0.0f) {
+            //        // Si la habilidad es de de tiempo fijo, debe terminar su ejecución
+            //        if (fixedExecutionTime) {
+            //            GetComponent<AbilityController>().DeactivateActiveAbility();
+            //        }
+            //        // Reinicia contador de tiempo
+            //        executionTime = initExecutionTime;
+            //    }
+            //}
         } else if (energy < maxEnergy) {
             // No en ejecución y la energía restante no está completa, luego se va recuperando
             if (timeToRestoreEnergy == 0.0f) {

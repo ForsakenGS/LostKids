@@ -33,6 +33,7 @@ public class AbilityController : MonoBehaviour {
         activeAbility = null;
     }
 
+    // Activa la habilidad pasada como parámetro
     bool ActivateAbility(CharacterAbility ability) {
         bool res = (ability.CanBeStarted()) && (characterStatus.CanStartAbility(ability));
         if (res) {
@@ -56,13 +57,6 @@ public class AbilityController : MonoBehaviour {
             // Se desactiva la habilidad 1
             DeactivateAbility(ability1);
         }
-        //else {
-        //    // Se desactiva la habilidad 2, que está activa
-        //    if (DeactivateAbility(ability2)) {
-        //        // Se activa la habilidad 1 porque se ha podido desactivar la habilidad 2
-        //        ActivateAbility(ability1);
-        //    }
-        //}
     }
 
     /// <summary>
@@ -76,15 +70,9 @@ public class AbilityController : MonoBehaviour {
             // Se desactiva la habilidad 2
             DeactivateAbility(ability2);
         }
-        //else {
-        //    // Se desactiva la habilidad 1, que está activa
-        //    if (DeactivateAbility(ability1)) {
-        //        // Se activa la habilidad 2 porque se ha podido desactivar la habilidad 1
-        //        ActivateAbility(ability2);
-        //    }
-        //}
     }
 
+    // Desactiva la habilidad pasada como parámetro
     bool DeactivateAbility(CharacterAbility ability) {
         bool res = activeAbility.DeactivateAbility();
         if (res) {
@@ -95,6 +83,10 @@ public class AbilityController : MonoBehaviour {
         return res;
     }
 
+    /// <summary>
+    /// Función para desactivar la habilidad activa en el momento de la llamada
+    /// </summary>
+    /// <returns></returns>
     public bool DeactivateActiveAbility() {
         return DeactivateAbility(activeAbility);
     }
