@@ -9,15 +9,20 @@ public class BreakAbility : CharacterAbility {
     /// <summary>
     /// Altura sobre la posición del personaje desde la que se lanza el rayo
     /// </summary>
-	public float height = -0.5f;
+	public float height = 1f;
     /// <summary>
     /// Retraso para ejecutar el daño
     /// </summary>
     public float delay = 0.4f;
 
+    private BreakableObject objectToBreak;
+    private bool breakPoint;
+
     // Use this for initialization
     void Start() {
         AbilityInitialization();
+        objectToBreak = null;
+        breakPoint = false;
         abilityName = AbilityName.Break;
     }
 
@@ -26,15 +31,26 @@ public class BreakAbility : CharacterAbility {
     /// </summary>
     /// <returns><c>true</c> si se pudo parar la ejecución, <c>false</c> si no fue posible.</returns>
     public override bool DeactivateAbility() {
-        bool res = (active && (executionTime <= 0));
+        bool res = (active && breakPoint);
         if (res) {
-            // Termina ejecución y bloque brevemente al jugador
+            // Termina ejecución y bloquea al jugador para evitar que se mueva durante la animación
             active = false;
-            inputManager.LockTime(0.5f);
+            objectToBreak = null;
+            breakPoint = false;
             CallEventDeactivateAbility();
         }
 
         return res;
+    }
+
+    /// <summary>
+    /// Indica que la animación de romper ha alcanzado el punto en que debe romperse el objeto determinado
+    /// </summary>
+    public void BreakAnimationPoint() {
+        if (objectToBreak != null) {
+            objectToBreak.TakeHit();
+        }
+        breakPoint = true;
     }
 
     /// <summary>
@@ -58,7 +74,7 @@ public class BreakAbility : CharacterAbility {
             if (Physics.Raycast(detectRay, out hitInfo)) {
                 // Si el objeto se puede romper, le da un golpe
                 if (hitInfo.collider.tag.Equals("Breakable")) {
-                    hitInfo.collider.GetComponent<BreakableObject>().TakeHit(delay);
+                    objectToBreak = hitInfo.collider.GetComponent<BreakableObject>();
                 }
             }
         }
