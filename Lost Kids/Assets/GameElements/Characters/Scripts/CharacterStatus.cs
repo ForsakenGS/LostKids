@@ -303,8 +303,6 @@ public class CharacterStatus : MonoBehaviour {
             iTween.ShakePosition(Camera.main.gameObject, new Vector3(1, 1, 0), 0.5f);
 
             XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 1, 1);
-            //InputManager.ActiveDevice.Vibrate(100f);
-
             Invoke("DeathNotification", 0.5f);
 
         }
@@ -605,7 +603,8 @@ public class CharacterStatus : MonoBehaviour {
         AudioManager.Stop(stepSound);
         AudioManager.Play(sacrificeSound, false, 1);
         GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
-        rigBody.isKinematic = true;
+        //rigBody.isKinematic = true;
+
     }
 
     /// <summary>

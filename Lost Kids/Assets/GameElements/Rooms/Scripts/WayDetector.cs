@@ -49,6 +49,8 @@ public class WayDetector : MonoBehaviour {
             // Comprueba si el efecto es de mostrar u ocultar
             if (toShow) {
                 affectedRoomSettings.enabled = true;
+                affectedRoomSettings.ShowRoom();
+                /*
                 if (!affectedRoom.activeInHierarchy) {
                     // La habitación no está habilitada, luego la habilita y muestra
                     affectedRoom.SetActive(true);
@@ -56,6 +58,7 @@ public class WayDetector : MonoBehaviour {
                     // Muestra la habitación
                     affectedRoomSettings.ShowRoom();
                 }
+                */
             } else if (affectedRoom.activeInHierarchy) {
                 // Oculta la habitación
                 affectedRoomSettings.HideRoom();

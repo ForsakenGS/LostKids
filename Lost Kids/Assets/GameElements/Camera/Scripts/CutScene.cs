@@ -10,6 +10,10 @@ public class CutScene : MonoBehaviour {
 
     public float cutSceneTime=1;
 
+    public bool alwaysShow = false;
+
+    private bool shown = false;
+
     public void Start()
     {
 
@@ -17,13 +21,17 @@ public class CutScene : MonoBehaviour {
 
     public void BeginCutScene(CutSceneManager.FadeInOutAction method)
     {
-        if(timed)
+        if (alwaysShow || !shown)
         {
-            CutSceneManager.StartCutScene(cutSceneCamera,method,cutSceneTime);
-        }
-        else
-        {
-            CutSceneManager.StartCutScene(cutSceneCamera, method);
+            shown = true;
+            if (timed)
+            {
+                CutSceneManager.StartCutScene(cutSceneCamera, method, cutSceneTime);
+            }
+            else
+            {
+                CutSceneManager.StartCutScene(cutSceneCamera, method);
+            }
         }
     }
 
