@@ -68,11 +68,7 @@ public class ActivableMovement : MonoBehaviour, IActivable {
     {
         //Si se va a mostrar un cutscene
         cutScene = GetComponent<CutScene>();
-        /*
-        if (hasFadeCutScene) {
-            activableFade = GetComponent<ActivableFade>();
-        }
-        */
+
         audioLoader = GetComponent<AudioLoader>();
         if(audioLoader) {
             activationSound = audioLoader.GetSound("Activation");
@@ -119,7 +115,10 @@ public class ActivableMovement : MonoBehaviour, IActivable {
 
         if (!isOpen)
         {
-            AudioManager.Play(activationSound, false, 1);
+            if(activationSound!=null)
+            {
+                AudioManager.Play(activationSound, false, 1);
+            }
 
             //Se cancela un movimiento previo y se mueve la puerta a su posicion de apertura
             StopAllCoroutines();
@@ -184,13 +183,8 @@ public class ActivableMovement : MonoBehaviour, IActivable {
     {
         if(cutScene!=null)
         {
-
             cutScene.BeginCutScene(MoveObject);
-        /*
-        if(hasFadeCutScene) {
 
-            activableFade.StartCutScene(cutSceneCamera);
-         */
         }else {
             //Es necesario incluir el metodo dentro dentro de activate, para poder referenciar de manera generica al script
             MoveObject();

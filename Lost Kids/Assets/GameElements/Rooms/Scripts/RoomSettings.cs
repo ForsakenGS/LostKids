@@ -115,6 +115,9 @@ public class RoomSettings : MonoBehaviour {
         {
             r.enabled = true;
         }*/
+        
+        //iTween.ScaleTo(gameObject, new Vector3(0.1f, 0.1f, 0.1f), 2);
+        //Destroy(gameObject, 2);
     }
 
     // Se ejecuta al habilitar el script
@@ -133,6 +136,7 @@ public class RoomSettings : MonoBehaviour {
             prepared = true;
             // Bloqueo al jugador
             InputManagerTLK.SetLock(true);
+            
             // Bloques de las paredes
             /*foreach (Transform wall in walls) {
                 //objectsToPrepare += 1;
@@ -165,6 +169,16 @@ public class RoomSettings : MonoBehaviour {
         {
             r.enabled = false;
         }*/
+        gameObject.SetActive(true);
+        /*
+        if (!prepared)
+        {
+            prepared = true;
+            transform.localScale = Vector3.zero;
+            gameObject.SetActive(true);
+            iTween.ScaleTo(gameObject, Vector3.one, 2);
+        }
+        */
     }
 
     IEnumerator WaitEndOfPreparation() {

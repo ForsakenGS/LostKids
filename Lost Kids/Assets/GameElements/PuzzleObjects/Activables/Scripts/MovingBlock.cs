@@ -25,6 +25,9 @@ public class MovingBlock : MonoBehaviour, IActivable {
     private Vector3 startPosition;
     private Vector3 endPosition;
 
+    private CutScene cutScene;
+    private AudioSource moveSound;
+
     //Variable de control sobre el movimiento del bloque
     private bool isMoving
     {
@@ -37,7 +40,8 @@ public class MovingBlock : MonoBehaviour, IActivable {
     // Use this for initialization
     void Start()
     {
-
+        cutScene = GetComponent<CutScene>();
+        moveSound = GetComponent<AudioSource>();
         //Se guarda la posicion inicial del bloque
         startPosition = this.transform.position;
         //Se calcula un offset ( distancia a la que se movera) en funcion al tamaño y direccion de apertura
@@ -76,6 +80,10 @@ public class MovingBlock : MonoBehaviour, IActivable {
     {
         if (!onPosition)
         {
+            if(moveSound!=null)
+            {
+                AudioManager.Play(moveSound, false, 1);
+            }
             //Se cancela un movimiento previo y se mueve el bloque a su posicion final
             StopAllCoroutines();
             StartCoroutine(MoveBlock(endPosition));
@@ -108,8 +116,6 @@ public class MovingBlock : MonoBehaviour, IActivable {
             transform.position = Vector3.Lerp(beginPosition, pos, t); // interpola el movimiento entre dos puntos
             yield return null;
         }
-        //Al terminar de moverse actualizamos el estado de la puerta, comprobando en que posicion esta
-        //Final = abierta , Inicial = cerrada
         isMoving = false;
         if (transform.position.Equals(endPosition))
         {
@@ -128,8 +134,16 @@ public class MovingBlock : MonoBehaviour, IActivable {
     /// </summary>
     public void Activate()
     {
-        //Es necesario incluir el metodo dentro dentro de activate, para poder referenciar de manera generica al script
-        BeginMove();
+        if (cutScene != null)
+        {
+            cutScene.BeginCutScene(BeginMove);
+
+        }
+        else {
+            //Es necesario incluir el metodo dentro dentro de activate, para poder referenciar de manera generica al script
+            BeginMove();
+        }
+        
     }
 
     /// <summary>

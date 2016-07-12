@@ -47,12 +47,12 @@ public class CharacterStatus : MonoBehaviour {
     public int currentRoom = 0;
 
     // Personaje
-    private State characterState;
-    private float totalJumpImpulse;
     public float maxJumpImpulse;
     public State initialCharacterState;
     public CharacterName characterName;
-    private bool jumpButtonUp = false;
+    private State characterState;
+    private float totalJumpImpulse;
+    private bool jumpButtonUp;
     private float sacrificeHeight;
     private bool lockedByAnimation;
     // Audio variables
@@ -84,9 +84,7 @@ public class CharacterStatus : MonoBehaviour {
     // Use this for initialization
     void Start() {
         // Inicialización
-        characterState = initialCharacterState;
-        sacrificeHeight = 0.0f;
-        lockedByAnimation = false;
+        Initialization();
         //Se saca el objeto del padre para poder añadirlo como hijo a nuevos elementos
         transform.parent = null;
         // Obtención sonidos
@@ -175,6 +173,14 @@ public class CharacterStatus : MonoBehaviour {
         if (characterState.Equals(State.Falling)) {
             characterMovement.ExtraGravity();
         }
+    }
+
+    void Initialization() {
+        characterState = initialCharacterState;
+        totalJumpImpulse = 0.0f;
+        jumpButtonUp = false;
+        sacrificeHeight = 0.0f;
+        lockedByAnimation = false;
     }
 
     /// <summary>
@@ -297,8 +303,6 @@ public class CharacterStatus : MonoBehaviour {
             iTween.ShakePosition(Camera.main.gameObject, new Vector3(1, 1, 0), 0.5f);
 
             XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 1, 1);
-            //InputManager.ActiveDevice.Vibrate(100f);
-
             Invoke("DeathNotification", 0.5f);
 
         }
@@ -545,9 +549,25 @@ public class CharacterStatus : MonoBehaviour {
     /// Restaura los valores del personaje a la configuración inicial
     /// </summary>
     public void ResetCharacter() {
-        characterState = initialCharacterState;
+        // Reinicia los elementos con los que puede estar interaccionando el personaje
+        switch (characterState) {
+            case State.Using:
+                playerUse.StopUsing();
+                break;
+            case State.Pushing:
+            case State.Telekinesis:
+            case State.AstralProjection:
+            case State.Sprint:
+            case State.Breaking:
+            case State.BigJumping:
+                GetComponent<AbilityController>().DeactivateActiveAbility();
+                break;
+        }
+        // Reinicia a los valores por defecto
+        Initialization();
         characterAnimator.Rebind();
-        totalJumpImpulse = 0.0f;
+        // Esconde el tooltip del jugador
+        GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
     }
 
     /// <summary>
@@ -583,7 +603,8 @@ public class CharacterStatus : MonoBehaviour {
         AudioManager.Stop(stepSound);
         AudioManager.Play(sacrificeSound, false, 1);
         GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
-        rigBody.isKinematic = true;
+        //rigBody.isKinematic = true;
+
     }
 
     /// <summary>
