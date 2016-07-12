@@ -2,6 +2,11 @@
 using InControl;
 
 public class InputManagerTLK : MonoBehaviour {
+    /// <summary>
+    /// Valor mínimo para considerar movimiento del jugador
+    /// </summary>
+    public float minValueMovButton = 0f;
+
     // Controles del juego
     InputControlType character1Control = InputControlType.DPadLeft;
     InputControlType character2Control = InputControlType.DPadUp;
@@ -102,7 +107,7 @@ public class InputManagerTLK : MonoBehaviour {
     void FixedUpdate() {
         if (locked == 0) {
             // Character movement
-            if ((horizontalButton != 0) || (verticalButton != 0f)) {
+            if ((Mathf.Abs(horizontalButton) >= minValueMovButton) || (Mathf.Abs(verticalButton) >= minValueMovButton)) {
                 characterStatus.MovementButtons(horizontalButton, verticalButton);
                 horizontalButton = 0.0f;
                 verticalButton = 0.0f;
@@ -229,6 +234,9 @@ public class InputManagerTLK : MonoBehaviour {
             if (!GameManager.paused) {
                 PausePanel.ShowPanel();
                 GameManager.PauseGame();
+                Lock();
+            } else {
+                Unlock();
             }
         } else if (locked == 0) {
             // Switch Players Buttons
