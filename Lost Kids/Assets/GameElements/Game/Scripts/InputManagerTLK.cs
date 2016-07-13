@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using InControl;
 
 public class InputManagerTLK : MonoBehaviour {
@@ -6,6 +7,14 @@ public class InputManagerTLK : MonoBehaviour {
     /// Valor mínimo para considerar movimiento del jugador
     /// </summary>
     public float minValueMovButton = 0f;
+    /// <summary>
+    /// EventSystem sobre el que ejecutar los eventos del mando 
+    /// </summary>
+    public EventSystem eventSystem;
+    /// <summary>
+    /// Menú de pausa
+    /// </summary>
+    public GameObject pauseMenu;
 
     // Controles del juego
     InputControlType character1Control = InputControlType.DPadLeft;
@@ -14,12 +23,16 @@ public class InputManagerTLK : MonoBehaviour {
     InputControlType nextCharacterControl = InputControlType.RightTrigger;
     InputControlType prevCharacterControl = InputControlType.LeftTrigger;
     InputControlType jumpControl = InputControlType.Action1;
-    InputControlType Ability2Control = InputControlType.RightBumper;
+    InputControlType ability2Control = InputControlType.RightBumper;
     InputControlType useControl = InputControlType.Action3;
-    InputControlType Ability1Control = InputControlType.LeftBumper;
+    InputControlType ability1Control = InputControlType.LeftBumper;
     InputControlType menuControl = InputControlType.Command;
     InputControlType sacrificeControl = InputControlType.Action4;
     InputControlType crouchControl = InputControlType.Action2;
+    InputControlType menuDownControl = InputControlType.DPadDown;
+    InputControlType menuUpControl = InputControlType.DPadUp;
+    InputControlType menuLeftControl = InputControlType.DPadLeft;
+    InputControlType menuRightControl = InputControlType.DPadRight;
 
     private static int locked;
     private CharacterStatus characterStatus;
@@ -29,6 +42,7 @@ public class InputManagerTLK : MonoBehaviour {
     private float horizontalButton;
     private float verticalButton;
     private int jumpButton;
+    private bool menuMode;
 
     // Use this for references
     void Awake() {
@@ -149,10 +163,10 @@ public class InputManagerTLK : MonoBehaviour {
                 res = prevCharacterControl;
                 break;
             case "Ability2":
-                res = Ability2Control;
+                res = ability2Control;
                 break;
             case "Ability1":
-                res = Ability1Control;
+                res = ability1Control;
                 break;
             case "Crouch":
                 res = crouchControl;
@@ -162,6 +176,18 @@ public class InputManagerTLK : MonoBehaviour {
                 break;
             case "Menu":
                 res = menuControl;
+                break;
+            case "MenuDown":
+                res = menuDownControl;
+                break;
+            case "MenuUp":
+                res = menuUpControl;
+                break;
+            case "MenuLeft":
+                res = menuLeftControl;
+                break;
+            case "MenuRight":
+                res = menuRightControl;
                 break;
         }
 
@@ -188,11 +214,6 @@ public class InputManagerTLK : MonoBehaviour {
         locked += 1;
     }
 
-    //public void LockTime(float time) {
-    //    Lock();
-    //    Invoke("Unlock", time);
-    //}
-
     void OnDisable() {
         // Suscripciones a eventos
         CharacterManager.ActiveCharacterChangedEvent -= CharacterComponentsUpdate;
@@ -216,26 +237,23 @@ public class InputManagerTLK : MonoBehaviour {
     }
 
     static void Unlock() {
-        //if (!hardLocked) {
         if (locked > 0) {
             locked -= 1;
         }
-        //}
     }
-
-    //public void UnlockTime(float time) {
-    //    Unlock();
-    //    Invoke("Lock", time);
-    //}
 
     // Manage general inputs
     void Update() {
         if (ButtonDown("Menu")) {
             if (!GameManager.paused) {
+                Lock();
                 PausePanel.ShowPanel();
                 GameManager.PauseGame();
-                Lock();
+                menuMode = true;
             } else {
+                menuMode = false;
+                GameManager.ResumeGame();
+                PausePanel.HidePanel();
                 Unlock();
             }
         } else if (locked == 0) {
@@ -280,6 +298,29 @@ public class InputManagerTLK : MonoBehaviour {
             } else if (ButtonUp("Sacrifice")) {
                 characterStatus.SacrificeButtonUp();
             }
+        } else if (menuMode) {
+            // Submit button
+            if (ButtonDown("Jump")) {
+                ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, new BaseEventData(eventSystem), ExecuteEvents.submitHandler);
+            }
+            // Direction buttons
+            if (ButtonDown("MenuUp")) {
+                AxisEventData axisEventData = new AxisEventData(eventSystem);
+                axisEventData.moveDir = MoveDirection.Up;
+                ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
+            } else if (ButtonDown("MenuDown")) {
+                AxisEventData axisEventData = new AxisEventData(eventSystem);
+                axisEventData.moveDir = MoveDirection.Down;
+                ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
+            } else if (ButtonDown("MenuLeft")) {
+                AxisEventData axisEventData = new AxisEventData(eventSystem);
+                axisEventData.moveDir = MoveDirection.Left;
+                ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
+            } else if (ButtonDown("MenuRight")) {
+                AxisEventData axisEventData = new AxisEventData(eventSystem);
+                axisEventData.moveDir = MoveDirection.Right;
+                ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
+            }
         } else {
             //Pasar mensajes
             if (ButtonDown("Jump")) {
@@ -288,12 +329,6 @@ public class InputManagerTLK : MonoBehaviour {
                 }
             }
         }
-        //if (hardLocked) {
-        //    Debug.Log("hard");
-        //}
-        //if (locked) {
-        //    Debug.Log("looo");
-        //}
     }
 
     public void OnApplicationQuit() {
