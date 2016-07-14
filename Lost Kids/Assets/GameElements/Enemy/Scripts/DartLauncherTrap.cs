@@ -17,7 +17,7 @@ public class DartLauncherTrap : AbstractTrap {
 
     private List<GameObject> projectilePool;
 
-    private int projectilePoolSize = 5;
+    private int projectilePoolSize = 10;
 
     AudioSource shootSound;
 
@@ -103,15 +103,25 @@ public class DartLauncherTrap : AbstractTrap {
         if (isEnabled)
         {
             active = true;
-            GameObject dart = GetNextDart();
-            if (dart != null)
+            //Se detecta que no haya nadad justo delante para que no  se instancie el dardo dentro de un objeto
+            Ray detectRay = new Ray(transform.position, transform.forward);
+#if UNITY_EDITOR
+            Debug.DrawRay(detectRay.origin, detectRay.direction, Color.green, shooterOffset + 1);
+#endif
+            RaycastHit hitInfo;
+            if (!Physics.Raycast(detectRay, out hitInfo, shooterOffset + 1))             
             {
-                dart.SetActive(true);
-                dart.transform.position = this.transform.position + transform.forward * shooterOffset;
-                dart.transform.rotation = this.transform.rotation;
-                dart.GetComponent<Rigidbody>().velocity = transform.forward * dartSpeed;
-                AudioManager.Play(shootSound, false, 1, 0.8f, 1.2f);
-                shootParticles.Play();
+        
+                GameObject dart = GetNextDart();
+                if (dart != null)
+                {
+                    dart.SetActive(true);
+                    dart.transform.position = this.transform.position + transform.forward * shooterOffset;
+                    dart.transform.rotation = this.transform.rotation;
+                    dart.GetComponent<Rigidbody>().velocity = transform.forward * dartSpeed;
+                    AudioManager.Play(shootSound, false, 1, 0.8f, 1.2f);
+                    shootParticles.Play();
+                }
             }
             Invoke("Shoot", shootCooldown);
         }
