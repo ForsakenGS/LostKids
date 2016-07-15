@@ -8,8 +8,6 @@ using System;
 /// </summary>
 public class Lever : UsableObject {
 
-    private AudioLoader audioLoader;
-
     private AudioSource leverOnSound;
     private AudioSource leverOffSound;
 
@@ -17,8 +15,6 @@ public class Lever : UsableObject {
     new void Start () {
         //Se llama al start de UsableObject
         base.Start();
-
-        audioLoader = GetComponent<AudioLoader>();
 
         leverOnSound = audioLoader.GetSound("LeverOn");
         leverOffSound = audioLoader.GetSound("LeverOff");

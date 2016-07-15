@@ -59,7 +59,13 @@ public abstract class UsableObject : MonoBehaviour {
     {
         get; set;
     }
-    
+
+    [HideInInspector]
+    public AudioLoader audioLoader;
+
+    private AudioSource timeSound;
+    private AudioSource fastTimeSound;
+
     /// <summary>
     /// Es necesario llamar a esta funcion desde los scripts que heredan mediante base.Start
     /// </summary>
@@ -80,6 +86,12 @@ public abstract class UsableObject : MonoBehaviour {
             canUse = true;
         }
 
+        audioLoader = GetComponent<AudioLoader>();
+        if (type.Equals(UsableTypes.Timed))
+        {
+            timeSound = audioLoader.GetSound("TickTack");
+            fastTimeSound = audioLoader.GetSound("FastTickTack");
+        }
     }
 	
 	// Update is called once per frame
@@ -117,12 +129,34 @@ public abstract class UsableObject : MonoBehaviour {
 
             if (type.Equals(UsableTypes.Timed))
             {
+                
                 Invoke("CancelUse", activeTime);
+                if (timeSound != null && fastTimeSound != null)
+                {
+                    if (activeTime > 3)
+                    {
+                        AudioManager.Play(timeSound, true, 1);
+                        Invoke("ShortTimeRemaining", activeTime - 3);
+                    }
+                    else
+                    {
+                        AudioManager.Play(fastTimeSound, false, 1);
+                    }
+                }
             }
 
 
         }
 
+    }
+
+    public void ShortTimeRemaining()
+    {
+        if (timeSound != null)
+        {
+            AudioManager.Stop(timeSound);
+            AudioManager.Play(fastTimeSound, false, 1);
+        }
     }
 
     /// <summary>
@@ -146,6 +180,7 @@ public abstract class UsableObject : MonoBehaviour {
             {
                 puzzleManager.NotifyChange(this, false);
             }
+            
         }
     }
 
