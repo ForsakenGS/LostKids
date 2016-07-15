@@ -14,7 +14,6 @@ public class WayDetector : MonoBehaviour {
     private GameObject affectedRoom;
     private RoomSettings affectedRoomSettings;
     private WaySettings way;
-
     // Use this for references
     void Awake() {
         // Configuración general del pasillo
@@ -48,20 +47,13 @@ public class WayDetector : MonoBehaviour {
         if (CharacterManager.IsActiveCharacter(col.gameObject)) {
             // Comprueba si el efecto es de mostrar u ocultar
             if (toShow) {
-                affectedRoomSettings.enabled = true;
+
                 affectedRoomSettings.ShowRoom();
-                /*
-                if (!affectedRoom.activeInHierarchy) {
-                    // La habitación no está habilitada, luego la habilita y muestra
-                    affectedRoom.SetActive(true);
-                } else {
-                    // Muestra la habitación
-                    affectedRoomSettings.ShowRoom();
-                }
-                */
+                GetComponent<Collider>().enabled = false;
             } else if (affectedRoom.activeInHierarchy) {
                 // Oculta la habitación
                 affectedRoomSettings.HideRoom();
+                GetComponent<Collider>().enabled = false;
             }
         }
     }
