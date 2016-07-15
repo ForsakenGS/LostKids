@@ -98,6 +98,11 @@ public class DartLauncherTrap : AbstractTrap {
 
     }
 
+    public override void FireTrapOneShot()
+    {
+        
+    }
+
     public void Shoot()
     {
         if (isEnabled)
