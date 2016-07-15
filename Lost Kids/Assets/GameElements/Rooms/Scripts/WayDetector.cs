@@ -53,6 +53,7 @@ public class WayDetector : MonoBehaviour {
             } else if (affectedRoom.activeInHierarchy) {
                 // Oculta la habitación
                 affectedRoomSettings.HideRoom();
+                GetComponent<Collider>().enabled = false;
             }
         }
     }

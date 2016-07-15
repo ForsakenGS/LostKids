@@ -33,11 +33,15 @@ public class RoomSettings : MonoBehaviour {
     public Transform puzzleElements;
     public Transform walls;
 
-    private ParticleSystem particles;
+   
     //private GameObject frontWall;
     public float preparationTime = 2;
     private int objectsToPrepare;
     private bool prepared;
+
+    //Efectos
+    private ParticleSystem particles;
+    private AudioSource preparationSound;
 
     // Use this for references & content generation
     void Awake() {
@@ -47,13 +51,7 @@ public class RoomSettings : MonoBehaviour {
         exit = transform.Find("Exit");
         puzzleElements = transform.Find("PuzzleElements");
         walls = transform.Find("Walls");
-
-        Transform particlesTransform = transform.Find("PreparationParticles");
-        if(particlesTransform!=null)
-        {
-            particles=particlesTransform.GetComponent<ParticleSystem>();
-        }
-
+        preparationSound = GetComponent<AudioSource>();
         //frontWall = walls.Find("FrontWall").gameObject;
 
     }
@@ -133,10 +131,16 @@ public class RoomSettings : MonoBehaviour {
 
         if(particles!=null)
         {
-            particles.transform.position = exit.transform.position + Vector3.back * 5;
+            particles.transform.position = exit.transform.position + Vector3.back * 7;
             particles.Play();
         }
+
         InputManagerTLK.SetLock(true);
+        if(preparationSound!=null)
+        {
+            AudioManager.Play(preparationSound, false, 1);
+        }
+
         InputManagerTLK.BeginVibrationTimed(200, 100, preparationTime + 0.5f, true);
         Invoke("PreparationEnd", preparationTime);
         iTween.ShakePosition(gameObject, new Vector3(0.5f, 0.5f, 0.5f), 2.5f);
@@ -145,7 +149,10 @@ public class RoomSettings : MonoBehaviour {
         iTween.MoveTo(gameObject, iTween.Hash("position",exit.transform.position,"time", preparationTime,"delay",0.5f));
         iTween.ScaleTo(gameObject,iTween.Hash("scale", Vector3.zero, "time",preparationTime,"delay",0.5f));
 
-        Destroy(gameObject, preparationTime + 0.2f);
+        
+        Destroy(gameObject, preparationTime + 0.6f);
+        Destroy(particles, preparationTime + 0.6f);
+        
     }
 
     /// <summary>
@@ -158,6 +165,11 @@ public class RoomSettings : MonoBehaviour {
 
         Invoke("PreparationEnd", preparationTime);
         prepared = true;
+
+        if (preparationSound != null)
+        {
+            AudioManager.Play(preparationSound, false, 1);
+        }
 
         InputManagerTLK.BeginVibrationTimed(100, 200, preparationTime + 0.5f, true);
         iTween.ShakePosition(gameObject, new Vector3(0.5f, 0.5f, 0.5f), preparationTime + 0.6f);
@@ -213,6 +225,14 @@ public class RoomSettings : MonoBehaviour {
         gameObject.SetActive(true);
         if (!prepared)
         {
+            particles.loop = false;
+            ParticleSystem.EmissionModule em = particles.emission;
+            ParticleSystem.MinMaxCurve rate = em.rate;
+            rate.constantMax = 20;
+            rate.constantMin = 20;
+            em.rate = rate;
+            particles.Stop();
+            particles.Play();
             transform.localScale = Vector3.zero;
             Invoke("PrepareRoom", 0.2f);
         }
@@ -230,6 +250,11 @@ public class RoomSettings : MonoBehaviour {
     void PreparationEnd()
     {
         InputManagerTLK.SetLock(false);
+    }
+
+    public void SetParticles(ParticleSystem ps)
+    {
+        particles = ps;
     }
 
     private readonly object locker = new object();
