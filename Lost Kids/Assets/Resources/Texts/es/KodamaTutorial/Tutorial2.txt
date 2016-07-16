@@ -1,4 +1,4 @@
-<kodama> Hello again! Let me introduce your new very best friend, Akai! As you can see, she has a cool mask too, GENUINE Kodama manufacture hehe. Why dont you let her show you her skills? Use -2- to select her, and -1- to get control back. See you!
-<kodama> Now its time to see Akai's INCREDIBLE strength. Remember how to use abilities? Show us how you BREAK through that wall. Easy job, right? He he...
-<kodama> YAY! You did it! You are LITTLE step closer now. But Akai can't just DESTROY things, right? You can also move very very heavy objects. Quite useful skill, isn't it? Use it to find a way to the next room!
-<kodama> Don't try to left your friend back!. You'll have to cooperate later.
+<kodama> ¡Hola de nuevo! ¡Permíteme presentarte a tu nueva amiga, Akai! Como puedes ver, ella tambíen tiene una máscara muy chula, hecha POR MÍ je je. ¿Por qué no le dejas que te enseñe sus habilidades? Pulsa -2- para seleccionarla y -1- para recuperar el control. ¡Nos vemos!
+<kodama> Es hora de ver la INCREÍBLE fuerza de Akai. ¿Recuerdas cómo usar las habilidades? ¡Enséñanos cómo se rompe ese muro de ahí! ¿Fácil, no? Je je...
+<kodama> ¡YAY! ¡Lo habéis conseguido! Ahora estáis un POQUITO más cerca. Pero Akai no sólo puede DESTRUIR cosas. También puede mover objetos pesados, muy pesados. Una habilidad muy interesante, ¿a que sí? Úsala para llegar a la siguiente sala.
+<kodama> ¡No dejes a tu amigo atrás! Tendréis que cooperar más adelante.

@@ -66,7 +66,6 @@ public class LocalizationManager : MonoBehaviour {
         // Actualiza los componentes Text con key
         foreach (string key in keys) {
             string path = key.Substring(category.Length + 1).Replace('.', '/');
-            Debug.Log(path);
             GameObject.Find(path).GetComponent<Text>().text = languageManager.GetTextValue(key);
         }
     }
