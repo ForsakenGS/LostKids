@@ -25,6 +25,8 @@ public class Door : MonoBehaviour, IActivable {
     //Posicion inicial y final de la puerta ( cerrada / abierta )
     private Vector3 startPosition;
     private Vector3 endPosition;
+    Vector3 offset = new Vector3(0, 0, 0);
+    private bool initialized = false;
 
     //Variable de control sobre el movimiento de la puerta
     private bool isMoving
@@ -34,7 +36,7 @@ public class Door : MonoBehaviour, IActivable {
 
     //Variable auxiliar al movimiento de la puerta
     private Vector3 beginPosition;
-
+    
 
     private AudioLoader audioLoader;
 
@@ -80,11 +82,10 @@ public class Door : MonoBehaviour, IActivable {
             closeSound = audioLoader.GetSound("Close");
         }
 
-        //Se guarda la posicion inicial de la puerta
-        startPosition = this.transform.position;
+
         //Se calcula un offset ( distancia a la que se movera) en funcion al tamaño y direccion de apertura
         Vector3 size = transform.localScale*2;//REVISAR!!!!!!!!!!!!!!!!!!!//GetComponent<Renderer>().bounds.size;
-        Vector3 offset = new Vector3(0, 0, 0);
+        
         switch (openDirection)
         {
             case Direction.Down:
@@ -116,6 +117,7 @@ public class Door : MonoBehaviour, IActivable {
 
     public void OpenDoor()
     {
+        //Si se activa pro primera vez, guarda su posicion original
 
         if (!isOpen)
         {
@@ -182,7 +184,13 @@ public class Door : MonoBehaviour, IActivable {
     /// </summary>
     public void Activate()
     {
-        if(cutScene!=null)
+        if (!initialized)
+        {
+            initialized = true;
+            startPosition = transform.position;
+            endPosition = startPosition + offset;
+        }
+        if (cutScene!=null)
         {
             cutScene.BeginCutScene(OpenDoor);
 

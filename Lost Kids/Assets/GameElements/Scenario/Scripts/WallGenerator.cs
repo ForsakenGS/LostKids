@@ -22,7 +22,7 @@ public class WallGenerator : MonoBehaviour {
     
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         GameObject newWall;
         wallSize = wallPrefabs[0].GetComponent<Renderer>().bounds.size.x;
         Vector3 offset;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class SpikesTrap : AbstractTrap
 {
@@ -80,6 +81,12 @@ public class SpikesTrap : AbstractTrap
 
     }
 
+
+    public override void FireTrapOneShot()
+    {
+        FireTrap();
+        Invoke("Hide", activeTime);
+    }
 
 
     public void Show()

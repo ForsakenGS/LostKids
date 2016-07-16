@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using InControl;
+using System.Collections;
 
 public class InputManagerTLK : MonoBehaviour {
     /// <summary>
@@ -44,10 +45,15 @@ public class InputManagerTLK : MonoBehaviour {
     private int jumpButton;
     private bool menuMode;
 
+
+    private static InputManagerTLK instance=null;
     // Use this for references
     void Awake() {
         characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
         messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
+
+        instance = this;
+
     }
 
     // Use this for initialization
@@ -217,6 +223,7 @@ public class InputManagerTLK : MonoBehaviour {
     void OnDisable() {
         // Suscripciones a eventos
         CharacterManager.ActiveCharacterChangedEvent -= CharacterComponentsUpdate;
+        EndVibration();
     }
 
     void OnEnable() {
@@ -331,7 +338,102 @@ public class InputManagerTLK : MonoBehaviour {
         }
     }
 
-    public void OnApplicationQuit() {
+    public static void BeginVibration(float leftAmount,float rightAmount)
+    {
+        XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, leftAmount, rightAmount);
+    }
+
+    public static void BeginVibration(float amount)
+    {
+        XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, amount, amount);
+    }
+
+    public static void BeginVibrationTimed(float amount,float duration)
+    {
+        XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, amount, amount);
+        Instance().Invoke("endVibration",duration);
+    }
+
+    public static void BeginVibrationTimed(float leftAmount, float rightAmount,float duration)
+    {
+        XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, leftAmount, rightAmount);
+        Instance().Invoke("endVibration", duration);
+    }
+
+    public static void BeginVibrationTimed(float amount, float duration,bool fading)
+    {
+        XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, amount, amount);
+        if (!fading)
+        {
+            Instance().Invoke("endVibration", duration);
+        }
+        else
+        {
+            instance.StartCoroutine(instance.FadeVibration(amount, duration));
+        }
+    }
+
+    public static void BeginVibrationTimed(float leftAmount, float rightAmount, float duration,bool fading)
+    {   
+        XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, leftAmount, rightAmount);
+        if (!fading)
+        {
+            Instance().Invoke("endVibration", duration);
+        }
+        else
+        {
+            instance.StartCoroutine(instance.FadeVibration(leftAmount,rightAmount, duration));
+        }
+    }
+
+    private IEnumerator FadeVibration(float initialVibration,float time)
+    {
+        float vibration = initialVibration;
+        float t = 0;
+        while (t < time)
+        {
+            vibration = Mathf.Lerp(vibration, 0, t/time);
+            t += Time.deltaTime;
+            BeginVibration(vibration);
+            yield return null;
+        }
+        EndVibration();
+        yield return null;
+    }
+
+    private IEnumerator FadeVibration(float initialLeftVibration,float initialRightVibration, float time)
+    {
+        float leftVibration = initialLeftVibration;
+        float rightVibration = initialRightVibration;
+        float t = 0;
+        while (t < time)
+        {
+            leftVibration = Mathf.Lerp(leftVibration, 0, t / time);
+            rightVibration = Mathf.Lerp(rightVibration, 0, t / time);
+            t += Time.deltaTime;
+            BeginVibration(leftVibration, rightVibration);
+            yield return null;
+        }
+        EndVibration();
+        yield return null;
+    }
+
+    public static void EndVibration()
+    {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 0, 0);
+    }
+
+    private void endVibration()
+    {
+        XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 0, 0);
+    }
+
+    public static InputManagerTLK Instance()
+    {
+        return instance;
+    }
+
+    public void OnApplicationQuit() {
+        EndVibration();
     }
 }

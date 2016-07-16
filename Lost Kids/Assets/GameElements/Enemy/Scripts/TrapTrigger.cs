@@ -6,6 +6,10 @@ public class TrapTrigger : MonoBehaviour {
 
     public List<AbstractTrap> targets;
 
+    public bool oneShot;
+
+    public bool disableOnShot;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -20,10 +24,21 @@ public class TrapTrigger : MonoBehaviour {
     {
         if(col.gameObject.CompareTag("Player"))
         {
-            foreach(AbstractTrap trap in targets)
-            {
-                trap.FireTrap();
+            if(oneShot) {
+                foreach (AbstractTrap trap in targets)
+                {
+                    trap.FireTrapOneShot();
+                    if(disableOnShot) {
+                        this.gameObject.SetActive(false);
+                    }
+                }
+            } else {
+                foreach (AbstractTrap trap in targets)
+                {
+                    trap.FireTrap();
+                }
             }
+            
         }
     }
 }
