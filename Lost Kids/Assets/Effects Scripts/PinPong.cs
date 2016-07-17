@@ -3,18 +3,19 @@ using System.Collections;
 
 public class PinPong : MonoBehaviour {
 
+    public float delay = 0.0f;
     public float floatSpeed = 0.1f;
     public float floatDistance = 1;
     private Vector3 basePosition;
 
 	// Use this for initialization
 	void Awake () {
-	    basePosition = transform.position;
+	    basePosition = transform.localPosition;
 	}
 
     void OnEnable()
     {
-        MoveUp();
+        Invoke("MoveUp", delay);
     }
 
     void OnDisable()

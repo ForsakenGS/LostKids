@@ -103,9 +103,9 @@ public class LevelGenerator : MonoBehaviour {
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-
-    }
 #endif
+    }
+
 
     void InstantiateLevel()
     {
