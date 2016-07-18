@@ -80,7 +80,7 @@ public class MessageManager : MonoBehaviour {
     // Use this for references
     void Awake() {
         // Elige el fichero de texto acorde al idioma
-        if (GameObject.Find("LocalizationManager").GetComponent<LocalizationManager>().language.Equals("es")) {
+        if (LocalizationManager.language.Equals("es")) {
             messageFile = spanishMessageFile;
         } else {
             messageFile = englishMessageFile;

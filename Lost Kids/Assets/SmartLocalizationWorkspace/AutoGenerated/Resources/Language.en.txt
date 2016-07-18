@@ -234,7 +234,7 @@
 		<value>Credits</value>
 	</data>
 	<data name="TLK.UI.Intro.Canvas.StartButton.Text" xml:space="preserve">
-		<value>Starto</value>
+		<value>Start</value>
 	</data>
 	<data name="TLK.UI.LanguageSelection.Canvas.Panel.EnglishButton.Text" xml:space="preserve">
 		<value>English</value>

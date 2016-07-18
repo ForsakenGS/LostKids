@@ -7,22 +7,42 @@ using UnityEngine.SceneManagement;
 public class LocalizationManager : MonoBehaviour {
     public List<string> scenesWithPauseMenu;
 
-    // Categoría de la escena
-    private string sceneName;
-    // Gestor del idioma
-    private LanguageManager languageManager;
     // Idioma elegido
-    public string language {
+    public static string language {
         get { return _language; }
         set { _language = value; languageManager.ChangeLanguage(_language); }
     }
-    public string _language;
+    private static string _language;
+
+    // Categoría de la escena
+    private string sceneName;
+    // Gestor del idioma
+    private static LanguageManager languageManager;
+    // Instancia de LocalizationManager
+    private static LocalizationManager instance;
 
     void Awake() {
-        DontDestroyOnLoad(gameObject);
+        if (instance == null) {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+            _language = "es";
+            InitializationAndLocalization();
+        } else if (!instance.Equals(this)) {
+            Destroy(gameObject);
+        }
     }
 
     void OnLevelWasLoaded() {
+        InitializationAndLocalization();
+    }
+
+    public void ChangeLanguage(string lang) {
+        if (instance != null) {
+            language = lang;
+        }
+    }
+
+    void InitializationAndLocalization() {
         // Inicilización del gestor
         languageManager = LanguageManager.Instance;
         languageManager.ChangeLanguage(_language);
@@ -32,17 +52,6 @@ public class LocalizationManager : MonoBehaviour {
         LocalizateScene(sceneName);
     }
 
-    void OnChangeLanguage(LanguageManager newLanguageManager) {
-        languageManager = newLanguageManager;
-        // Localización de la escena
-        LocalizateScene(sceneName);
-    }
-
-    public void ChangeLanguage(string lang) {
-        language = lang;
-        languageManager.ChangeLanguage(language);
-    }
-
     void LocalizateScene(string scene) {
         // Actualiza elementos Text de la intefaz
         UpdateTextComponents("TLK.UI." + sceneName);
@@ -50,6 +59,12 @@ public class LocalizationManager : MonoBehaviour {
         if (scenesWithPauseMenu.Contains(scene)) {
             UpdateTextComponents("TLK.PauseMenu");
         }
+    }
+
+    void OnChangeLanguage(LanguageManager newLanguageManager) {
+        languageManager = newLanguageManager;
+        // Localización de la escena
+        LocalizateScene(sceneName);
     }
 
     void UpdateTextComponents(string category) {
