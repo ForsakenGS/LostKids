@@ -7,9 +7,8 @@ public class Flicker : MonoBehaviour {
 
 	//Agregamos las variables de Texto y Strings
 	Text textoParpadeante;
-	string textoQueParpadea = "START";
-	string textoEnBlanco = "";
-	string textoEstatico = "START";
+	string textoQueParpadea;
+	string textoEnBlanco;
 
 	//Agregamos una bandera que sera nuestro identificador para cambiar el texto
 	bool estaParpadeando = true;
@@ -19,8 +18,12 @@ public class Flicker : MonoBehaviour {
 		//obtenemos el componente del texto
 		textoParpadeante = GetComponent<Text>();
 
-		//llamamos al coroutine de la funcion de TextoParpadeo
-		StartCoroutine(TextoParpadeo());
+        // Inicializa los textos
+        textoQueParpadea = textoParpadeante.text;
+        textoEnBlanco = "";
+
+        //llamamos al coroutine de la funcion de TextoParpadeo
+        StartCoroutine(TextoParpadeo());
 
 	}
 

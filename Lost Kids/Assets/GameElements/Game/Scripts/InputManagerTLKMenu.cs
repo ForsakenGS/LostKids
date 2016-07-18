@@ -61,7 +61,9 @@ public class InputManagerTLKMenu : MonoBehaviour {
     }
 
     void OnDisable() {
-        eventSystem.gameObject.SetActive(false);
+        if (eventSystem != null) {
+            eventSystem.gameObject.SetActive(false);
+        }
     }
 
     void OnEnable() {
@@ -69,7 +71,7 @@ public class InputManagerTLKMenu : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update() {
         // Submit button
         if (ButtonDown("Submit")) {
             ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, new BaseEventData(eventSystem), ExecuteEvents.submitHandler);

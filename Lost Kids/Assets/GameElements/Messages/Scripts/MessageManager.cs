@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class MessageManager : MonoBehaviour {
-    //Fichero que contiene los mensajes
-    public TextAsset messageFile;
+    //Ficheros que contienen los mensajes
+    public TextAsset englishMessageFile;
+    public TextAsset spanishMessageFile;
+    private TextAsset messageFile;
     // Máximo de líneas por mensaje
     public int maxLines = 3;
     // Máximo de caracteres por línea
@@ -74,6 +76,16 @@ public class MessageManager : MonoBehaviour {
     /// </summary>
     private enum State { NoMessage, FastMessage, EndMessage, NextMessage, NextConversationMessage };
     private State messageState;
+
+    // Use this for references
+    void Awake() {
+        // Elige el fichero de texto acorde al idioma
+        if (GameObject.Find("LocalizationManager").GetComponent<LocalizationManager>().language.Equals("es")) {
+            messageFile = spanishMessageFile;
+        } else {
+            messageFile = englishMessageFile;
+        }
+    }
 
     // Use this for initialization
     void Start() {
