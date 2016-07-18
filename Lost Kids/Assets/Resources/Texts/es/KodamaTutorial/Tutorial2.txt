@@ -1,4 +1,5 @@
-<kodama> ¡Hola de nuevo! ¡Permíteme presentarte a tu nueva amiga, Akai! Como puedes ver, ella tambíen tiene una máscara muy chula, hecha POR MÍ je je. ¿Por qué no le dejas que te enseñe sus habilidades? Pulsa -2- para seleccionarla y -1- para recuperar el control. ¡Nos vemos!
-<kodama> Es hora de ver la INCREÍBLE fuerza de Akai. ¿Recuerdas cómo usar las habilidades? ¡Enséñanos cómo se rompe ese muro de ahí! ¿Fácil, no? Je je...
-<kodama> ¡YAY! ¡Lo habéis conseguido! Ahora estáis un POQUITO más cerca. Pero Akai no sólo puede DESTRUIR cosas. También puede mover objetos pesados, muy pesados. Una habilidad muy interesante, ¿a que sí? Úsala para llegar a la siguiente sala.
-<kodama> ¡No dejes a tu amigo atrás! Tendréis que cooperar más adelante.
+<kodama> Â¡Hola de nuevo! Â¡PermÃ­teme presentarte a tu nueva amiga, Akai! Como puedes ver, ella tambÃ­en tiene una mÃ¡scara muy chula, hecha POR MÃ je je. Â¿Por quÃ© no le dejas que te enseÃ±e sus habilidades? Pulsa -2- para seleccionarla y -1- para recuperar el control. Â¡Nos vemos!
+<kodama> Es hora de ver la INCREÃBLE fuerza de Akai. Â¿Recuerdas cÃ³mo usar las habilidades? Â¡EnsÃ©Ã±anos cÃ³mo se rompe ese muro de ahÃ­! Â¿FÃ¡cil, no? Je je...
+<kodama> Â¡YAY! Â¡Lo habÃ©is conseguido! Ahora estÃ¡is un POQUITO mÃ¡s cerca. Pero Akai no sÃ³lo puede DESTRUIR cosas. TambiÃ©n puede mover objetos pesados, muy pesados. Una habilidad muy interesante, Â¿a que sÃ­? Ãšsala para llegar a la siguiente sala.
+<kodama> Â¡No dejes a tu amigo atrÃ¡s! TendrÃ©is que cooperar mÃ¡s adelante.
+<kodama> Â¡Oh, eso duele! En esta pesadilla podrÃ©is morir, pero vuestras almas irÃ¡n al Ãºltimo Tori activo desde donde podrÃ©is restaurarlas. Â¡AsÃ­ que ya sabes que tienes que hacer ahora!

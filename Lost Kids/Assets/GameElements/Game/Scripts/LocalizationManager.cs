@@ -9,8 +9,6 @@ public class LocalizationManager : MonoBehaviour {
 
     // Categoría de la escena
     private string sceneName;
-    // Instancia única del manager
-    private static LocalizationManager instance;
     // Gestor del idioma
     private LanguageManager languageManager;
     // Idioma elegido
@@ -21,13 +19,7 @@ public class LocalizationManager : MonoBehaviour {
     public string _language;
 
     void Awake() {
-        // Patrón Singleton
-        if (instance == null) {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else if (!instance.Equals(this)) {
-            Destroy(gameObject);
-        }
+        DontDestroyOnLoad(gameObject);
     }
 
     void OnLevelWasLoaded() {
