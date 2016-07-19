@@ -80,7 +80,7 @@ public class MessageManager : MonoBehaviour {
     // Use this for references
     void Awake() {
         // Elige el fichero de texto acorde al idioma
-        if (LocalizationManager.language.Equals("es")) {
+        if ((LocalizationManager.language == null) || (LocalizationManager.language.Equals("es"))) {
             messageFile = spanishMessageFile;
         } else {
             messageFile = englishMessageFile;
@@ -92,8 +92,6 @@ public class MessageManager : MonoBehaviour {
 
         audioLoader = GetComponent<AudioLoader>();
         messagesSfxs = new ArrayList();
-
-
 
         //Rellenamos el array de efectos de sonido
         messagesSfxs.Add(audioLoader.GetSound("Message1"));

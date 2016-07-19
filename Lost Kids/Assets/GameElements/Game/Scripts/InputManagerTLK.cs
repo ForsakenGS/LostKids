@@ -306,24 +306,27 @@ public class InputManagerTLK : MonoBehaviour {
                 characterStatus.SacrificeButtonUp();
             }
         } else if (menuMode) {
+            // Controla únicamente la entrada por mando, ya que el EventSystem no lo hace
             // Submit button
-            if (ButtonDown("Jump")) {
+            if (GetControlDown(GetButtonControl("Jump"))) {
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, new BaseEventData(eventSystem), ExecuteEvents.submitHandler);
             }
             // Direction buttons
-            if (ButtonDown("MenuUp")) {
+            if (GetControlDown(GetButtonControl("MenuUp"))) {
                 AxisEventData axisEventData = new AxisEventData(eventSystem);
                 axisEventData.moveDir = MoveDirection.Up;
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
-            } else if (ButtonDown("MenuDown")) {
+                Debug.Log("arriba");
+            } else if (GetControlDown(GetButtonControl("MenuDown"))) {
                 AxisEventData axisEventData = new AxisEventData(eventSystem);
                 axisEventData.moveDir = MoveDirection.Down;
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
-            } else if (ButtonDown("MenuLeft")) {
+                Debug.Log("abajo");
+            } else if (GetControlDown(GetButtonControl("MenuLeft"))) {
                 AxisEventData axisEventData = new AxisEventData(eventSystem);
                 axisEventData.moveDir = MoveDirection.Left;
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
-            } else if (ButtonDown("MenuRight")) {
+            } else if (GetControlDown(GetButtonControl("MenuRight"))) {
                 AxisEventData axisEventData = new AxisEventData(eventSystem);
                 axisEventData.moveDir = MoveDirection.Right;
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
