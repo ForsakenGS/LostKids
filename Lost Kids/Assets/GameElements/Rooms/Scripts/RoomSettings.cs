@@ -33,9 +33,15 @@ public class RoomSettings : MonoBehaviour {
     public Transform puzzleElements;
     public Transform walls;
 
+   
     //private GameObject frontWall;
+    public float preparationTime = 2;
     private int objectsToPrepare;
     private bool prepared;
+
+    //Efectos
+    private ParticleSystem particles;
+    private AudioSource preparationSound;
 
     // Use this for references & content generation
     void Awake() {
@@ -45,9 +51,16 @@ public class RoomSettings : MonoBehaviour {
         exit = transform.Find("Exit");
         puzzleElements = transform.Find("PuzzleElements");
         walls = transform.Find("Walls");
-
+        preparationSound = GetComponent<AudioSource>();
         //frontWall = walls.Find("FrontWall").gameObject;
-        
+
+    }
+
+    // Se ejecuta al habilitar el script
+    void OnEnable()
+    {
+        // Efecto de preparación de la habitación
+        //PrepareRoom();
     }
 
     // Use this for initialization
@@ -115,15 +128,31 @@ public class RoomSettings : MonoBehaviour {
         {
             r.enabled = true;
         }*/
-        
-        //iTween.ScaleTo(gameObject, new Vector3(0.1f, 0.1f, 0.1f), 2);
-        //Destroy(gameObject, 2);
-    }
 
-    // Se ejecuta al habilitar el script
-    void OnEnable() {
-        // Efecto de preparación de la habitación
-        PrepareRoom();
+        if(particles!=null)
+        {
+            particles.transform.position = exit.transform.position + Vector3.back * 7;
+            particles.Play();
+        }
+
+        InputManagerTLK.SetLock(true);
+        if(preparationSound!=null)
+        {
+            AudioManager.Play(preparationSound, false, 1);
+        }
+
+        InputManagerTLK.BeginVibrationTimed(200, 100, preparationTime + 0.5f, true);
+        Invoke("PreparationEnd", preparationTime);
+        iTween.ShakePosition(gameObject, new Vector3(0.5f, 0.5f, 0.5f), 2.5f);
+        
+        iTween.ShakePosition(Camera.main.gameObject, new Vector3(0.5f, 0.5f, 0.5f), preparationTime + 0.5f);
+        iTween.MoveTo(gameObject, iTween.Hash("position",exit.transform.position,"time", preparationTime,"delay",0.5f));
+        iTween.ScaleTo(gameObject,iTween.Hash("scale", Vector3.zero, "time",preparationTime,"delay",0.5f));
+
+        
+        Destroy(gameObject, preparationTime + 0.6f);
+        Destroy(particles, preparationTime + 0.6f);
+        
     }
 
     /// <summary>
@@ -131,32 +160,54 @@ public class RoomSettings : MonoBehaviour {
     /// todos los objetos del puzzle
     /// </summary>
     public bool PrepareRoom() {
-        bool res = !prepared;
-        if (!prepared) {
-            prepared = true;
-            // Bloqueo al jugador
-            InputManagerTLK.SetLock(true);
-            
-            // Bloques de las paredes
-            /*foreach (Transform wall in walls) {
-                //objectsToPrepare += 1;
-                //StartCoroutine("FreeFallEffect", wall);
-            }
-            // Elementos del puzzle
-            foreach (Transform wall in puzzleElements) {
-                //objectsToPrepare += 1;
-                //StartCoroutine("FreeFallEffect", wall);
-            }
-            // Elementos decorativos
-            foreach (Transform wall in decoration) {
-                //objectsToPrepare += 1;
-                //StartCoroutine("FreeFallEffect", wall);
-            }*/
-            // Espera para que la habitación termine de estar preparada
-            StartCoroutine("WaitEndOfPreparation");
+     
+        InputManagerTLK.SetLock(true);
+
+        Invoke("PreparationEnd", preparationTime);
+        prepared = true;
+
+        if (preparationSound != null)
+        {
+            AudioManager.Play(preparationSound, false, 1);
         }
 
-        return res;
+        InputManagerTLK.BeginVibrationTimed(100, 200, preparationTime + 0.5f, true);
+        iTween.ShakePosition(gameObject, new Vector3(0.5f, 0.5f, 0.5f), preparationTime + 0.6f);
+        iTween.ShakePosition(Camera.main.gameObject, new Vector3(0.5f, 0.5f, 0.5f), preparationTime + 0.6f);
+        iTween.ScaleTo(gameObject, iTween.Hash("scale", Vector3.one, "time", preparationTime, "delay", 0.5f));
+        return true;
+
+        /*
+     bool res = !prepared;
+     if (!prepared) {
+         prepared = true;
+         // Bloqueo al jugador
+         InputManagerTLK.SetLock(true);
+
+         // Bloques de las paredes
+         /*foreach (Transform wall in walls) {
+             //objectsToPrepare += 1;
+             //StartCoroutine("FreeFallEffect", wall);
+         }
+         // Elementos del puzzle
+         foreach (Transform wall in puzzleElements) {
+             //objectsToPrepare += 1;
+             //StartCoroutine("FreeFallEffect", wall);
+         }
+         // Elementos decorativos
+         foreach (Transform wall in decoration) {
+             //objectsToPrepare += 1;
+             //StartCoroutine("FreeFallEffect", wall);
+         }
+         // Espera para que la habitación termine de estar preparada
+         StartCoroutine("WaitEndOfPreparation");
+     }
+
+     return res;
+     */
+
+
+
     }
 
     /// <summary>
@@ -169,16 +220,23 @@ public class RoomSettings : MonoBehaviour {
         {
             r.enabled = false;
         }*/
+        //gameObject.SetActive(true);
+        
         gameObject.SetActive(true);
-        /*
         if (!prepared)
         {
-            prepared = true;
+            particles.loop = false;
+            ParticleSystem.EmissionModule em = particles.emission;
+            ParticleSystem.MinMaxCurve rate = em.rate;
+            rate.constantMax = 20;
+            rate.constantMin = 20;
+            em.rate = rate;
+            particles.Stop();
+            particles.Play();
             transform.localScale = Vector3.zero;
-            gameObject.SetActive(true);
-            iTween.ScaleTo(gameObject, Vector3.one, 2);
+            Invoke("PrepareRoom", 0.2f);
         }
-        */
+        
     }
 
     IEnumerator WaitEndOfPreparation() {
@@ -187,6 +245,16 @@ public class RoomSettings : MonoBehaviour {
         InputManagerTLK.SetLock(false);
         // Muestra la habitación
         ShowRoom();
+    }
+
+    void PreparationEnd()
+    {
+        InputManagerTLK.SetLock(false);
+    }
+
+    public void SetParticles(ParticleSystem ps)
+    {
+        particles = ps;
     }
 
     private readonly object locker = new object();

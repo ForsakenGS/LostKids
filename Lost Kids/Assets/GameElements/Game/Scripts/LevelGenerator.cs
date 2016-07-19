@@ -78,6 +78,9 @@ public class LevelGenerator : MonoBehaviour {
     //Listado de referencias a los scripts de las rooms (para obtener su informacion)
     private List<RoomSettings> roomsList;
 
+    //Particulas de aparicion de la sala
+    public ParticleSystem roomParticles;
+
     // Use this for initialization
     void Start () {
 
@@ -95,18 +98,21 @@ public class LevelGenerator : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.G))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-
+#endif
     }
+
 
     void InstantiateLevel()
     {
         Vector3 nextRoomPosition = transform.position;
         GameObject prev = null;
         GameObject room=null;
+        ParticleSystem particles;
         for (int i = 0; i < levelStructure.Count; i++)
         {  
             room=Instantiate(levelStructure[i], nextRoomPosition, Quaternion.identity) as GameObject;
@@ -126,6 +132,8 @@ public class LevelGenerator : MonoBehaviour {
             
             if(room.GetComponent<RoomSettings>()!= null)
             {
+                particles = Instantiate(roomParticles, nextRoomPosition + Vector3.right * 7, Quaternion.identity) as ParticleSystem;
+                room.GetComponent<RoomSettings>().SetParticles(particles);
                 TranslateRoom(room);
             }
             

@@ -24,6 +24,8 @@ public class MovingBlock : MonoBehaviour, IActivable {
     //Posicion inicial y final del bloque
     private Vector3 startPosition;
     private Vector3 endPosition;
+    private Vector3 offset = new Vector3(0, 0, 0);
+    private bool initialized = false;
 
     private CutScene cutScene;
     private AudioSource moveSound;
@@ -43,10 +45,10 @@ public class MovingBlock : MonoBehaviour, IActivable {
         cutScene = GetComponent<CutScene>();
         moveSound = GetComponent<AudioSource>();
         //Se guarda la posicion inicial del bloque
-        startPosition = this.transform.position;
+        //startPosition = this.transform.position;
         //Se calcula un offset ( distancia a la que se movera) en funcion al tamaño y direccion de apertura
         
-        Vector3 offset = new Vector3(0, 0, 0);
+        
         switch (openDirection)
         {
             case Direction.Down:
@@ -65,7 +67,7 @@ public class MovingBlock : MonoBehaviour, IActivable {
         }
 
         //Se guara la posicion final del bloque 
-        endPosition = startPosition + offset;
+        //endPosition = startPosition + offset;
 
 
     }
@@ -78,6 +80,7 @@ public class MovingBlock : MonoBehaviour, IActivable {
 
     public void BeginMove()
     {
+
         if (!onPosition)
         {
             if(moveSound!=null)
@@ -134,6 +137,14 @@ public class MovingBlock : MonoBehaviour, IActivable {
     /// </summary>
     public void Activate()
     {
+        //Si se activa pro primera vez, guarda su posicion original
+        if (!initialized)
+        {
+            initialized = true;
+            startPosition = transform.position;
+            endPosition = startPosition + offset;
+        }
+
         if (cutScene != null)
         {
             cutScene.BeginCutScene(BeginMove);

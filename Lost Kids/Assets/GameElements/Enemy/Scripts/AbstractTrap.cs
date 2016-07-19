@@ -22,6 +22,7 @@ public abstract class AbstractTrap : MonoBehaviour,IActivable {
     public abstract void DisableTrap();
     public abstract void EnableTrap();
     public abstract void FireTrap();
+    public abstract void FireTrapOneShot();
 
     public abstract void Activate();
     public abstract void CancelActivation();

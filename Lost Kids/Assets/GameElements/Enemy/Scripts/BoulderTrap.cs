@@ -83,6 +83,11 @@ public class BoulderTrap : AbstractTrap {
 
     }
 
+    public override void FireTrapOneShot()
+    {
+        
+    }
+
     public void Launch()
     {
         if (isEnabled && !active)

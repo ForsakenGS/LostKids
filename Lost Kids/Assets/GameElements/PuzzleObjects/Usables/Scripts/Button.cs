@@ -11,7 +11,6 @@ using System;
 /// </summary>
 public class Button : UsableObject {
 
-    
 
     //Profundidad a la quese hunde el boton
     public float pushDeph = 0.5f;
@@ -23,14 +22,13 @@ public class Button : UsableObject {
     private Vector3 startPosition;
     //Posicion final cuando este pulsado
     private Vector3 endPosition;
+    private bool initialized = false;
 
     //Posicion auxiliar de comienzo cuando se activa/desactiva
     private Vector3 beginPosition;
 
     //Variable para estado de moviemiento
     private bool isMoving = false;
-
-    private AudioLoader audioLoader;
 
     private AudioSource buttonUpSound;
     private AudioSource buttonDownSound;
@@ -40,12 +38,6 @@ public class Button : UsableObject {
     {
         //Funcionalidad base para los usables
         base.Start();
-
-        //Almacena posiciones iniciales y finales ( activado y desactivado )
-        startPosition = transform.position;
-        endPosition = transform.position - new Vector3(0, pushDeph, 0);
-
-        audioLoader = GetComponent<AudioLoader>();
 
         buttonUpSound = audioLoader.GetSound("ButtonUp");
         buttonDownSound = audioLoader.GetSound("ButtonDown");
@@ -64,7 +56,15 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnTriggerEnter(Collider col)
     {
-        if(CharacterManager.IsActiveCharacter(col.gameObject) || col.gameObject.tag.Equals("Pushable"))
+        //Si se activa pro primera vez, guarda su posicion original
+        if (!initialized)
+        {
+            initialized = true;
+            startPosition = transform.position;
+            endPosition = transform.position - new Vector3(0, pushDeph, 0);
+        }
+
+        if (CharacterManager.IsActiveCharacter(col.gameObject) || col.gameObject.tag.Equals("Pushable"))
         {
             StopAllCoroutines();
 
@@ -94,7 +94,14 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnCollisionEnter(Collision col)
     {
-        
+        //Si se activa pro primera vez, guarda su posicion original
+        if (!initialized)
+        {
+            initialized = true;
+            startPosition = transform.position;
+            endPosition = transform.position - new Vector3(0, pushDeph, 0);
+        }
+
         if (!onUse && (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable") ) && col.gameObject.transform.position.y > transform.position.y+0.3f)
         {
             col.transform.parent = transform;
@@ -127,8 +134,8 @@ public class Button : UsableObject {
     /// </summary>
     override public void Use()
     {
-     
-        if(!onUse) {
+
+        if (!onUse) {
             
             //Comportamiento generico de un usable. (Activar objeto o notificar al puzzle segun situacion)
             base.Use();

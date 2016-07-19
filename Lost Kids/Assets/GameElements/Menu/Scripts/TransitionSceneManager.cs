@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using InControl;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
@@ -21,8 +21,9 @@ public class TransitionSceneManager : MonoBehaviour {
 
 
     private bool inputAvailable = false;
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start() {
         messageManager = MessageManager.GetComponent<MessageManager>();
         /*
         levelData = GameData.getLevelData(previousScene);
@@ -44,43 +45,40 @@ public class TransitionSceneManager : MonoBehaviour {
         fader = GetComponent<SceneFade>();
         fader.nextScene = nextScene;
         fader.StartScene();
-        
-        Invoke("StartMessages", fader.fadeSpeed*2);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if(inputAvailable && Input.GetButtonDown("Jump"))
-        {
-            if (!messageManager.MessageEnded())
-            {
+
+        Invoke("StartMessages", fader.fadeSpeed * 2);
+    }
+
+    // Update is called once per frame
+    void Update() {
+        if (inputAvailable && SkipMessageInput()) {
+            if (!messageManager.MessageEnded()) {
                 messageManager.SkipText();
                 inputAvailable = false;
                 Invoke("AllowInput", 1);
-            }
-            else
-            {
-
+            } else {
                 fader.EndScene();
             }
         }
-	
-	}
+    }
+
+    // Devuelve si el jugador desea pasar el mensaje
+    bool SkipMessageInput() {
+        InputControl skipInput = InputManager.ActiveDevice.GetControl(InputControlType.Action1);
+        return ((Input.GetButton("Submit")) || (skipInput.IsPressed) || (skipInput.WasPressed));
+    }
 
 
-    void StartMessages()
-    {
+    void StartMessages() {
         List<int> indexList = new List<int>(messagesCount);
-        for(int i=0;i<messagesCount;i++)
-        {
+        for (int i = 0; i < messagesCount; i++) {
             indexList.Add(i);
         }
         messageManager.ShowConversation(indexList);
         inputAvailable = true;
     }
 
-    void AllowInput()
-    {
+    void AllowInput() {
         inputAvailable = true;
     }
 }
