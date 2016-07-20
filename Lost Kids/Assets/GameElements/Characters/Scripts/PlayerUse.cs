@@ -24,15 +24,15 @@ public class PlayerUse : MonoBehaviour {
 
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         rayOffset = new Vector3(0, GetComponentInChildren<Renderer>().bounds.size.y / 2, 0);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    }
+
+    // Update is called once per frame
+    void Update() {
+
+    }
 
     public bool CanUse() {
         bool res = false;
@@ -47,7 +47,8 @@ public class PlayerUse : MonoBehaviour {
             if (!hit.collider.isTrigger) {
                 objectInUse = hit.collider.gameObject.GetComponent<UsableObject>();
                 if (objectInUse != null) {
-                    res = objectInUse.canUse;
+                    // Comprueba qeu siel personaje se encuentra en la zona correcta y el objeto no está en uso
+                    res = (objectInUse.canUse && !objectInUse.onUse);
                 }
             }
         }
@@ -55,35 +56,30 @@ public class PlayerUse : MonoBehaviour {
         return res;
     }
 
-    public bool Use()
-    {
-		//Se lanza un rayo hacia delante, sumando cierta altura para no lanzarlo desde el suelo
+    public bool Use() {
+        //Se lanza un rayo hacia delante, sumando cierta altura para no lanzarlo desde el suelo
         Ray usingRay = new Ray(this.transform.position + rayOffset, this.transform.forward);
 
         //Debug para poder visualizar el rayo en el inspector
-        Debug.DrawLine(this.transform.position + rayOffset, this.transform.position + rayOffset +this.transform.forward*useDistance,Color.red);
+        Debug.DrawLine(this.transform.position + rayOffset, this.transform.position + rayOffset + this.transform.forward * useDistance, Color.red);
 
         RaycastHit hit;
-        if (Physics.Raycast(usingRay, out hit, useDistance))
-        {
-            if(!hit.collider.isTrigger) {
+        if (Physics.Raycast(usingRay, out hit, useDistance)) {
+            if (!hit.collider.isTrigger) {
                 objectInUse = hit.collider.gameObject.GetComponent<UsableObject>();
-                if(objectInUse!=null)
-                {
+                if (objectInUse != null) {
                     onCooldown = true;
                     Invoke("ResetCooldown", useCooldown);
 
                     //Se obtiene la normal del HIT para saber que parte del objeto ha encontrado el usable.
                     //Solo se permite usar los objetos desde la parte de atras ( un angulo de 180 respecto al frente )
-                    Vector3 normalLocal= hit.transform.TransformDirection(hit.normal);
+                    Vector3 normalLocal = hit.transform.TransformDirection(hit.normal);
                     float angle = Vector3.Angle(hit.normal, hit.transform.forward);
 
-                    if (objectInUse.canUse)
-                    {
-                    
+                    if (objectInUse.canUse) {
+
                         objectInUse.Use();
-                        if (objectInUse.type.Equals(UsableTypes.Hold))
-                        {
+                        if (objectInUse.type.Equals(UsableTypes.Hold)) {
                             isUsing = true;
                             Vector3 frontPosition = hit.point + GetComponent<CapsuleCollider>().radius * hit.normal;
                             Vector3 lookPosition = hit.point;
@@ -97,7 +93,7 @@ public class PlayerUse : MonoBehaviour {
                 }
             }
         }
-		return isUsing;
+        return isUsing;
     }
 
     public bool IsKodama() {
@@ -125,8 +121,7 @@ public class PlayerUse : MonoBehaviour {
     /// Devuelve true si el jugador esta usando algun objeto
     /// </summary>
     /// <returns></returns>
-    public bool IsUsing()
-    {
+    public bool IsUsing() {
         return isUsing;
     }
 
@@ -134,19 +129,16 @@ public class PlayerUse : MonoBehaviour {
     /// <summary>
     /// Detiene el uso del objeto
     /// </summary>
-    public void StopUsing()
-    {
-        if (isUsing)
-        {
+    public void StopUsing() {
+        if (isUsing) {
             isUsing = false;
             objectInUse.CancelUse();
             objectInUse = null;
         }
-        
+
     }
 
-    void ResetCooldown()
-    {
+    void ResetCooldown() {
         onCooldown = false;
     }
 }
