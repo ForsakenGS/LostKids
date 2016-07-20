@@ -522,10 +522,11 @@ public class CharacterStatus : MonoBehaviour {
                             // El jugador deja de usar el objeto
                             characterState = State.Idle;
                             characterAnimator.SetTrigger("Idle");
-                            //inputManager.LockTime(0.2f);
                         }
                     }
                 }
+                // Para el sonido de los pasos
+                AudioManager.Stop(stepSound);
                 break;
             case State.AstralProjection:
                 // Comprueba si puede usar el objeto

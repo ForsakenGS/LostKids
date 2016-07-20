@@ -74,10 +74,15 @@ public class AbilityController : MonoBehaviour {
 
     // Desactiva la habilidad pasada como parámetro
     bool DeactivateAbility(CharacterAbility ability) {
-        bool res = activeAbility.DeactivateAbility();
+        bool res = (ability != null);
         if (res) {
-            characterStatus.EndAbility(activeAbility);
-            activeAbility = null;
+            res = ability.DeactivateAbility();
+            if (res) {
+                characterStatus.EndAbility(ability);
+                if (ability.Equals(activeAbility)) {
+                    activeAbility = null;
+                }
+            }
         }
 
         return res;
