@@ -10,6 +10,7 @@ public class PausePanel : MonoBehaviour {
     GameObject controlsPanel;
     GameObject menuConfirmPanel;
     GameObject desktopConfirmPanel;
+    GameObject background;
 
     UnityEngine.UI.Button resumeButton;
     UnityEngine.UI.Button settingsButton;
@@ -45,6 +46,7 @@ public class PausePanel : MonoBehaviour {
             controlsPanel = transform.Find("ControlsPanel").gameObject;
             menuConfirmPanel = transform.Find("MenuConfirm").gameObject;
             desktopConfirmPanel = transform.Find("DesktopConfirm").gameObject;
+            background = transform.Find("Background").gameObject;
 
             resumeButton = transform.Find("MainPanel/ResumeButton").GetComponent<UnityEngine.UI.Button>();
             settingsButton=transform.Find("MainPanel/SettingsButton").GetComponent<UnityEngine.UI.Button>();
@@ -74,6 +76,7 @@ public class PausePanel : MonoBehaviour {
     public void Show()
     {    
         mainPanel.SetActive(true);
+        background.SetActive(true);
         
     }
 
@@ -81,6 +84,7 @@ public class PausePanel : MonoBehaviour {
     {
         GameManager.ResumeGame();
         mainPanel.SetActive(false);
+        background.SetActive(false);
     }
 
     public void ShowMenuConfirmationPanel()

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CharactersDetector : UsableObject {
 
 
-    public List<GameObject> RequiredCharacters;
+    private List<GameObject> RequiredCharacters;
 
     private HashSet<GameObject> charactersInside;
 
@@ -18,6 +18,18 @@ public class CharactersDetector : UsableObject {
         CharacterStatus.KillCharacterEvent -= CharacterDied;
     }
 
+    void Awake() {
+                GameObject[] chars = GameObject.FindGameObjectsWithTag("Player");
+
+        RequiredCharacters = new List<GameObject>();
+
+        for(int i = 0; i < 3; i++) {
+
+            RequiredCharacters.Add(chars[i]);
+
+        }
+    }
+
 	// Use this for initialization
 	new void Start () {
 
@@ -27,6 +39,9 @@ public class CharactersDetector : UsableObject {
         AoiIcon = canvas.transform.Find("Aoi");
         AkaiIcon = canvas.transform.Find("Akai");
         KiIcon = canvas.transform.Find("Ki");
+
+
+
 
 	    charactersInside = new HashSet<GameObject>();
 	}
