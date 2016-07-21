@@ -17,12 +17,8 @@ public class InputManagerTLKMenu : MonoBehaviour {
     InputControlType menuControl = InputControlType.Command;
 
     bool ButtonDown(string button) {
-        // Entrada por teclado
-        bool res = Input.GetButtonDown(button);
-        if (!res) {
-            // Entrada por mando
-            res = GetControlDown(GetButtonControl(button));
-        }
+        // Entrada por mando
+        bool res = GetControlDown(GetButtonControl(button));
 
         return res;
     }
