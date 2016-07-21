@@ -44,24 +44,13 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// Tiempo necesario para restaurar por completo la energía, desde 0 a maxEnergy
     /// </summary>
     public float timeToRestoreEnergy = 5;
-    /// <summary>
-    /// Tiempo de ejecución de la habilidad
-    /// </summary>
-    public float executionTime = 1;
-    /// <summary>
-    /// Determina si la habilidad posee un tiempo de ejecución fijo y no permite el cambio a otra habilidad.
-    /// </summary>
-    public bool fixedExecutionTime = false;
 
     // Parámetros básicos de la habilidad
     protected bool active;
     protected AudioLoader audioLoader;
-    //protected bool execution;
     protected float energy;
     protected CharacterStatus characterStatus;
     protected CharacterMovement characterMovement;
-    private float initExecutionTime;
-    // Referencias a managers
 
     // Use this for references
     void Awake() {
@@ -85,7 +74,7 @@ public abstract class CharacterAbility : MonoBehaviour {
     protected void AbilityInitialization() {
         active = false;
         energy = 0.0f;
-        initExecutionTime = executionTime;
+        //initExecutionTime = executionTime;
     }
 
     /// <summary>
@@ -173,23 +162,11 @@ public abstract class CharacterAbility : MonoBehaviour {
             if (normalConsumption > 0.0f) {
                 // Se decrementa la energía
                 AddEnergy(-(Time.deltaTime * normalConsumption));
-                if (energy <= 0.0) {
-                    // La habilidad debe terminar su ejecución
-                    GetComponent<AbilityController>().DeactivateActiveAbility();
-                }
             }
-            // Se decrementa el tiempo de ejecución
-            //if ((executionTime > 0.0f) && (initExecutionTime > 0.0f)) {
-            //    executionTime -= Time.deltaTime;
-            //    if (executionTime <= 0.0f) {
-            //        // Si la habilidad es de de tiempo fijo, debe terminar su ejecución
-            //        if (fixedExecutionTime) {
-            //            GetComponent<AbilityController>().DeactivateActiveAbility();
-            //        }
-            //        // Reinicia contador de tiempo
-            //        executionTime = initExecutionTime;
-            //    }
-            //}
+            // Comprueba si la habilidad debe terminar su ejecución
+            if (energy <= 0.0) {
+                GetComponent<AbilityController>().DeactivateActiveAbility();
+            }
         } else if (energy < maxEnergy) {
             // No en ejecución y la energía restante no está completa, luego se va recuperando
             if (timeToRestoreEnergy == 0.0f) {

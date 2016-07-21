@@ -21,12 +21,15 @@ public class AstralProjectionAbility : CharacterAbility {
     private AstralProjectionWall wall = null;
     // Sonido de habilidad
     private AudioSource astralProjectionSound;
+    // La animación terminó
+    private bool animationEnded;
 
     // Use this for initialization
     void Start() {
         AbilityInitialization();
         astralProjectionSound = audioLoader.GetSound("AstralProjection");
         abilityName = AbilityName.AstralProjection;
+        animationEnded = false;
     }
 
     /// <summary>
@@ -62,19 +65,23 @@ public class AstralProjectionAbility : CharacterAbility {
     public override bool DeactivateAbility() {
         bool ended = active;
         if (active) {
-            // Se para la ejecución de la habilidad
-            active = false;
-            AudioManager.Stop(astralProjectionSound);
-            CallEventDeactivateAbility();
-            // Comprueba si la proyección astral se llevó a cabo
-            if (staticCharacter != null) {
-                // El personaje vuelve a la posición original con los parámetros originales y se elimina la copia
-                characterStatus.astralSpeed = 0.0f;
-                transform.position = staticCharacter.transform.localPosition;
-                Destroy(staticCharacter);
-                staticCharacter = null;
+            // Comprueba si la animación terminó
+            if (animationEnded) {
+                // Se para la ejecución de la habilidad
+                active = false;
+                animationEnded = false;
+                AudioManager.Stop(astralProjectionSound);
+                CallEventDeactivateAbility();
+                // Comprueba si la proyección astral se llevó a cabo
+                if (staticCharacter != null) {
+                    // El personaje vuelve a la posición original con los parámetros originales y se elimina la copia
+                    characterStatus.astralSpeed = 0.0f;
+                    transform.position = staticCharacter.transform.localPosition;
+                    Destroy(staticCharacter);
+                    staticCharacter = null;
+                }
             } else {
-                fixedExecutionTime = false;
+                ended = false;
             }
         }
 
@@ -85,6 +92,8 @@ public class AstralProjectionAbility : CharacterAbility {
     /// Indica que la animación de proyección astral se ha terminado
     /// </summary>
     public void EndProjectionAnimationPoint() {
+        // Indica que la animación terminó
+        animationEnded = true;
         // Si no se ha llevado a cabo la proyección, se desactiva la habilidad
         if (staticCharacter == null) {
             GetComponent<AbilityController>().DeactivateActiveAbility();
