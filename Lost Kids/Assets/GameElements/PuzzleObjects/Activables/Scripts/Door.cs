@@ -211,6 +211,13 @@ public class Door : MonoBehaviour, IActivable {
     /// </summary>
     public void CancelActivation()
     {
+        //Si se activa pro primera vez, guarda su posicion original
+        if (!initialized)
+        {
+            initialized = true;
+            startPosition = transform.position;
+            endPosition = startPosition + offset;
+        }
         //Es necesario incluir el metodo dentro dentro de activate, para poder referenciar de manera generica al script
         CloseDoor();
     }

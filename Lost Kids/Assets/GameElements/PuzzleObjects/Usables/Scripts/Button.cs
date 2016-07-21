@@ -152,8 +152,15 @@ public class Button : UsableObject {
     /// </summary>
     override public void CancelUse()
     {
-        
-            AudioManager.Play(buttonUpSound, false, 1);
+
+        //Si se activa pro primera vez, guarda su posicion original
+        if (!initialized)
+        {
+            initialized = true;
+            startPosition = transform.position;
+            endPosition = transform.position - new Vector3(0, pushDeph, 0);
+        }
+        AudioManager.Play(buttonUpSound, false, 1);
 
             //Comportamiento base generico para todos los objetos usables
             base.CancelUse();

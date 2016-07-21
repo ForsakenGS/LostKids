@@ -77,6 +77,7 @@ public class PausePanel : MonoBehaviour {
     {    
         mainPanel.SetActive(true);
         background.SetActive(true);
+        resumeButton.Select();
         
     }
 
@@ -84,6 +85,10 @@ public class PausePanel : MonoBehaviour {
     {
         GameManager.ResumeGame();
         mainPanel.SetActive(false);
+        controlsPanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        desktopConfirmPanel.SetActive(false);
+        menuConfirmPanel.SetActive(false);
         background.SetActive(false);
     }
 
@@ -171,6 +176,7 @@ public class PausePanel : MonoBehaviour {
 
     public static void HidePanel()
     {
+
         instance.Hide();
     }
 

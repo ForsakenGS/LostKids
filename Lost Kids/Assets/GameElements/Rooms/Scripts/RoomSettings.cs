@@ -43,6 +43,8 @@ public class RoomSettings : MonoBehaviour {
     private ParticleSystem particles;
     private AudioSource preparationSound;
 
+    private Transform initialCamTransform;
+
     // Use this for references & content generation
     void Awake() {
         objectsToPrepare = 0;
@@ -140,11 +142,12 @@ public class RoomSettings : MonoBehaviour {
         {
             AudioManager.Play(preparationSound, false, 1);
         }
+        initialCamTransform = Camera.main.transform;
+        Invoke("PreparationEnd", preparationTime + 0.5f);
 
         InputManagerTLK.BeginVibrationTimed(200, 100, preparationTime + 0.5f, true);
-        Invoke("PreparationEnd", preparationTime);
-        iTween.ShakePosition(gameObject, new Vector3(0.5f, 0.5f, 0.5f), 2.5f);
-        
+
+        iTween.ShakePosition(gameObject, new Vector3(0.5f, 0.5f, 0.5f), 2.5f);   
         iTween.ShakePosition(Camera.main.gameObject, new Vector3(0.5f, 0.5f, 0.5f), preparationTime + 0.5f);
         iTween.MoveTo(gameObject, iTween.Hash("position",exit.transform.position,"time", preparationTime,"delay",0.5f));
         iTween.ScaleTo(gameObject,iTween.Hash("scale", Vector3.zero, "time",preparationTime,"delay",0.5f));
@@ -163,7 +166,9 @@ public class RoomSettings : MonoBehaviour {
      
         InputManagerTLK.SetLock(true);
 
-        Invoke("PreparationEnd", preparationTime);
+        initialCamTransform = Camera.main.transform;
+        Invoke("PreparationEnd", preparationTime + 0.5f);
+
         prepared = true;
 
         if (preparationSound != null)
@@ -177,51 +182,13 @@ public class RoomSettings : MonoBehaviour {
         iTween.ScaleTo(gameObject, iTween.Hash("scale", Vector3.one, "time", preparationTime, "delay", 0.5f));
         return true;
 
-        /*
-     bool res = !prepared;
-     if (!prepared) {
-         prepared = true;
-         // Bloqueo al jugador
-         InputManagerTLK.SetLock(true);
-
-         // Bloques de las paredes
-         /*foreach (Transform wall in walls) {
-             //objectsToPrepare += 1;
-             //StartCoroutine("FreeFallEffect", wall);
-         }
-         // Elementos del puzzle
-         foreach (Transform wall in puzzleElements) {
-             //objectsToPrepare += 1;
-             //StartCoroutine("FreeFallEffect", wall);
-         }
-         // Elementos decorativos
-         foreach (Transform wall in decoration) {
-             //objectsToPrepare += 1;
-             //StartCoroutine("FreeFallEffect", wall);
-         }
-         // Espera para que la habitación termine de estar preparada
-         StartCoroutine("WaitEndOfPreparation");
-     }
-
-     return res;
-     */
-
-
-
     }
 
     /// <summary>
     /// Función a ejecutar cada vez que el personaje activo entre en la habitación
     /// </summary>
     public void ShowRoom() {
-        // Modifica la transparencia de la pared horizontal frontal
-        //frontWall.GetComponent<Renderer>().enabled = false;
-        /*foreach (Renderer r in frontWall.GetComponentsInChildren<Renderer>())
-        {
-            r.enabled = false;
-        }*/
-        //gameObject.SetActive(true);
-        
+
         gameObject.SetActive(true);
         if (!prepared)
         {
@@ -249,6 +216,7 @@ public class RoomSettings : MonoBehaviour {
 
     void PreparationEnd()
     {
+        Camera.main.transform.position = initialCamTransform.position;
         InputManagerTLK.SetLock(false);
     }
 
