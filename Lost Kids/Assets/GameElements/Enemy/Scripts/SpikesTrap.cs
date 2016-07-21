@@ -94,6 +94,7 @@ public class SpikesTrap : AbstractTrap
         if (isEnabled)
         {
             active = true;
+            GetComponent<Renderer>().enabled = true;
             moveParticles.Play();
             AudioManager.Play(moveSound, false, 1, 0.8f, 1.1f);
             iTween.MoveTo(gameObject, iTween.Hash("y", 0, "time", moveTime, "easetype", iTween.EaseType.easeOutQuad, "oncomplete", "Active"));
@@ -111,6 +112,7 @@ public class SpikesTrap : AbstractTrap
     public void Hide()
     {
         active = false;
+        GetComponent<Renderer>().enabled = false;
         moveParticles.Play();
         AudioManager.Play(moveSound, false, 1, 0.8f, 1.1f);
         iTween.MoveTo(gameObject, iTween.Hash("y", -2, "time", moveTime, "easetype", iTween.EaseType.easeInQuad, "oncomplete", "Inactive"));    

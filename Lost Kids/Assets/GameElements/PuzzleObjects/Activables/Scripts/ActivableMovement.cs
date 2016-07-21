@@ -188,7 +188,7 @@ public class ActivableMovement : MonoBehaviour, IActivable {
             endPosition = startPosition + offset;
         }
 
-        if (cutScene!=null)
+        if (cutScene!=null && (!cutScene.shown || cutScene.alwaysShow))
         {
             cutScene.BeginCutScene(MoveObject);
 

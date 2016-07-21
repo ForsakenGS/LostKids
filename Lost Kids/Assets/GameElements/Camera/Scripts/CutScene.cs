@@ -12,7 +12,8 @@ public class CutScene : MonoBehaviour {
 
     public bool alwaysShow = false;
 
-    private bool shown = false;
+    [HideInInspector]
+    public bool shown = false;
 
     public void Start()
     {
