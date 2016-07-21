@@ -9,12 +9,15 @@ public class TelekinesisAbility : CharacterAbility {
     private UsableObject usableObj = null;
     // Sonido de habilidad
     private AudioSource telekinesisSound;
+    // La animación terminó
+    private bool animationEnded;
 
     // Use this for initialization
     void Start() {
         AbilityInitialization();
         telekinesisSound = audioLoader.GetSound("Telekinesis");
         abilityName = AbilityName.Telekinesis;
+        animationEnded = false;
     }
 
     /// <summary>
@@ -32,13 +35,10 @@ public class TelekinesisAbility : CharacterAbility {
             // Comprueba si hay un objeto que se pueda ejecutar
             if (usableObj != null) {
                 usableObj.Use();
-                // Si el objeto no permanece en uso, se fija el tiempo de ejecución 
+                // Si el objeto no permanece en uso, se elimina referencia a él
                 if (!usableObj.onUse) {
-                    fixedExecutionTime = true;
+                    usableObj = null;
                 }
-            } else {
-                // Fija tiempo de ejecución para parar la habilidad
-                fixedExecutionTime = true;
             }
         }
         // Realiza el consumo de energía aunque no haya activado ningún objeto
@@ -54,21 +54,21 @@ public class TelekinesisAbility : CharacterAbility {
     public override bool DeactivateAbility() {
         bool changed = active;
         if (active) {
-            if ((fixedExecutionTime) && (executionTime <= 0)) {
-                // Tiempo de ejecución fijado y terminado
-                active = false;
-                fixedExecutionTime = false;
-            } else if (!fixedExecutionTime) {
-                // No tiene tiempo de ejecución fijado
+            // Comprueba si la animación terminó
+            if (animationEnded) {
                 active = false;
                 // Deja de usar el objeto, si procede
                 if (usableObj != null) {
                     usableObj.CancelUse();
                 }
+                // Desactiva resto parámetros
+                AudioManager.Stop(telekinesisSound);
+                animationEnded = false;
+                usableObj = null;
+                CallEventDeactivateAbility();
+            } else {
+                changed = false;
             }
-            // Desactiva sonido
-            AudioManager.Stop(telekinesisSound);
-            CallEventDeactivateAbility();
         }
 
         return changed;
@@ -82,9 +82,11 @@ public class TelekinesisAbility : CharacterAbility {
         usableObj = obj;
     }
 
-    public void TelekinesisAnimationEnded() {
+    public void EndTelekinesisAnimationPoint() {
+        // Indica que la animación terminó
+        animationEnded = true;
         // Comprueba si se está utilizando algún objeto
-        if ((usableObj == null) || (!usableObj.onUse)) {
+        if (usableObj == null) {
             // Se da por finalizada la habilidad
             GetComponent<AbilityController>().DeactivateActiveAbility();
         }

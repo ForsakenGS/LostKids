@@ -60,14 +60,14 @@ public class BreakAbility : CharacterAbility {
             AddEnergy(-initialConsumption);
             active = true;
             CallEventActivateAbility();
-            Ray detectRay = new Ray(this.transform.position + Vector3.up * height, this.transform.forward * breakDistance);
+            Ray detectRay = new Ray(transform.position + Vector3.up * height, transform.forward);
             // helper to visualise the ground check ray in the scene view
             #if UNITY_EDITOR
-            Debug.DrawRay(detectRay.origin, detectRay.direction, Color.green, 1);
+            Debug.DrawRay(detectRay.origin, transform.forward, Color.green, 1);
             #endif
             // Detecta el objeto situado delante del personaje
             RaycastHit hitInfo;
-            if (Physics.Raycast(detectRay, out hitInfo)) {
+            if (Physics.Raycast(detectRay, out hitInfo, breakDistance)) {
                 // Si el objeto se puede romper, le da un golpe
                 if (hitInfo.collider.tag.Equals("Breakable")) {
                     objectToBreak = hitInfo.collider.GetComponent<BreakableObject>();
