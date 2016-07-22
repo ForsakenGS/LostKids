@@ -7,6 +7,7 @@
 public class TelekinesisAbility : CharacterAbility {
     // Objeto activable mediante la habilidad
     private UsableObject usableObj = null;
+    private bool isUsing;
     // Sonido de habilidad
     private AudioSource telekinesisSound;
     // La animación terminó
@@ -18,6 +19,7 @@ public class TelekinesisAbility : CharacterAbility {
         telekinesisSound = audioLoader.GetSound("Telekinesis");
         abilityName = AbilityName.Telekinesis;
         animationEnded = false;
+        isUsing = false;
     }
 
     /// <summary>
@@ -37,7 +39,9 @@ public class TelekinesisAbility : CharacterAbility {
                 usableObj.Use();
                 // Si el objeto no permanece en uso, se elimina referencia a él
                 if (!usableObj.onUse) {
-                    usableObj = null;
+                    //usableObj = null;
+                } else {
+                    isUsing = true;
                 }
             }
         }
@@ -58,13 +62,15 @@ public class TelekinesisAbility : CharacterAbility {
             if (animationEnded) {
                 active = false;
                 // Deja de usar el objeto, si procede
-                if (usableObj != null) {
+                //if (usableObj != null) {
+                if (isUsing) {
                     usableObj.CancelUse();
                 }
                 // Desactiva resto parámetros
                 AudioManager.Stop(telekinesisSound);
                 animationEnded = false;
-                usableObj = null;
+                //usableObj = null;
+                isUsing = false;
                 CallEventDeactivateAbility();
             } else {
                 changed = false;
@@ -86,7 +92,8 @@ public class TelekinesisAbility : CharacterAbility {
         // Indica que la animación terminó
         animationEnded = true;
         // Comprueba si se está utilizando algún objeto
-        if (usableObj == null) {
+        //if (usableObj == null) {
+        if (!isUsing) {
             // Se da por finalizada la habilidad
             GetComponent<AbilityController>().DeactivateActiveAbility();
         }

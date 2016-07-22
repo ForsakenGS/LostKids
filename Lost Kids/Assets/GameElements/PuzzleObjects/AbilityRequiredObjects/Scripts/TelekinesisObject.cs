@@ -21,7 +21,9 @@ public class TelekinesisObject : MonoBehaviour {
 
     void OnTriggerEnter(Collider col) {
         // Comprueba que la colisión se realiza con el jugador con la habilidad 'Telekinesis'
-        ability = col.gameObject.GetComponent<TelekinesisAbility>();
+        if ((ability == null) && (col.gameObject.tag.Equals("Player"))) {
+            ability = col.gameObject.GetComponent<TelekinesisAbility>();
+        }
         if (ability != null) {
             // Asigna el objeto a la habilidad
             ability.SetUsableObject(gameObject.GetComponent<UsableObject>());

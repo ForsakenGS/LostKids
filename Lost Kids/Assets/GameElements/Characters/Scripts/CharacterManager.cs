@@ -233,20 +233,22 @@ public class CharacterManager : MonoBehaviour {
         }
         int actualIndex = characterList.IndexOf(activeCharacter);
         int nextIndex = actualIndex+1;
-        
+        if (nextIndex >= characterList.Count) {
+            nextIndex = 0;
+        }
         bool found = false;
         while(nextIndex!=actualIndex && !found)
         {
-            if(nextIndex>=characterList.Count)
-            {
-                nextIndex = 0;
-            }
+
             if(nextIndex!=actualIndex && characterStatusList[nextIndex].IsAvailable())
             {
                 ActivateCharacter(nextIndex);
                 found = true;
             }
             nextIndex++;
+            if (nextIndex >= characterList.Count) {
+                nextIndex = 0;
+            }
         }
     }
 
@@ -261,20 +263,23 @@ public class CharacterManager : MonoBehaviour {
         }
         int actualIndex = characterList.IndexOf(activeCharacter);
         int nextIndex = actualIndex - 1;
+        if (nextIndex < 0) {
+            nextIndex = characterList.Count - 1;
+        }
 
         bool found = false;
         while (nextIndex != actualIndex && !found)
         {
-            if (nextIndex < 0)
-            {
-                nextIndex = characterList.Count-1;
-            }
+
             if (characterStatusList[nextIndex].IsAvailable())
             {
                 ActivateCharacter(nextIndex);
                 found = true;
             }
-            nextIndex++;
+            nextIndex--;
+            if (nextIndex < 0) {
+                nextIndex = characterList.Count - 1;
+            }
         }
     }
 

@@ -164,7 +164,7 @@ public abstract class CharacterAbility : MonoBehaviour {
                 AddEnergy(-(Time.deltaTime * normalConsumption));
             }
             // Comprueba si la habilidad debe terminar su ejecución
-            if (energy <= 0.0) {
+            if (energy <= 0.0f) {
                 GetComponent<AbilityController>().DeactivateActiveAbility();
             }
         } else if (energy < maxEnergy) {

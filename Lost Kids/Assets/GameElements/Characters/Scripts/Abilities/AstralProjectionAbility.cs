@@ -37,20 +37,29 @@ public class AstralProjectionAbility : CharacterAbility {
     /// </summary>
     /// <returns><c>true</c>, si la habilidad se inició con éxito, <c>false</c> si no fue posible.</returns>
     public override bool ActivateAbility() {
-        bool started = !active;
-        if (!active) {
-            // Comienza la ejecución de la habilidad
-            active = true;
-            AudioManager.Play(astralProjectionSound, true, 1);
-            CallEventActivateAbility();
-            // Comprueba si hay una pared sobre la que se pueda ejecutar
-            if (wall != null) {
-                // Crea un doble del personaje y la proyección astral
-                staticCharacter = (GameObject) Instantiate(characterDuringProjection, transform.position, transform.rotation);
-                transform.position = wall.GetAstralProjectionPosition();
-                // Modifica los parámetros de la proyección astral
-                characterStatus.astralSpeed = speedModifier * characterStatus.standingSpeed;
+        bool started = false;
+        if (wall != null) {
+            started = !active;
+            if (!active) {
+                // Comienza la ejecución de la habilidad
+                active = true;
+                AudioManager.Play(astralProjectionSound, true, 1);
+                CallEventActivateAbility();
+                // Comprueba si hay una pared sobre la que se pueda ejecutar
+                if (wall != null) {
+                    // Crea un doble del personaje y la proyección astral
+                    staticCharacter = (GameObject) Instantiate(characterDuringProjection, transform.position, transform.rotation);
+                    transform.position = wall.GetAstralProjectionPosition();
+                    // Modifica los parámetros de la proyección astral
+                    characterStatus.astralSpeed = speedModifier * characterStatus.standingSpeed;
+                }
             }
+        } else {
+            //Guarrería para solucionar problema con Ki y su bloqueo en habilidad proyección
+            active = true;
+            started = true;
+            CallEventActivateAbility();
+            Invoke("EndProjectionAnimationPoint", 1.0f);
         }
         // Realiza el consumo de energía aunque no haya activado ningún objeto
         AddEnergy(-initialConsumption);
