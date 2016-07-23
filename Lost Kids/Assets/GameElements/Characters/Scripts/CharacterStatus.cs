@@ -169,9 +169,9 @@ public class CharacterStatus : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        // Aplica gravedad extra sobre el personaje si está cayendo
+        // Aplica gravedad extra sobre el personaje si está cayendo o en 
         if (characterState.Equals(State.Falling)) {
-            characterMovement.ExtraGravity();
+            characterMovement.ExtraGravity(1);
         }
     }
 
@@ -497,6 +497,12 @@ public class CharacterStatus : MonoBehaviour {
                 }
                 break;
         }
+        // Si el personaje está sobre le suelo, la gravedad es 0    HAY QUE CAMBIAR!!!
+        //if (characterMovement.CharacterIsGrounded()) {
+        //    rigBody.useGravity = false;
+        //} else {
+        //    rigBody.useGravity = true;
+        //}
     }
 
     /// <summary>
@@ -562,6 +568,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.Breaking:
             case State.BigJumping:
                 GetComponent<AbilityController>().DeactivateActiveAbility();
+                GetComponent<AbilityController>().ResetAbilities();
                 break;
         }
         // Reinicia a los valores por defecto
@@ -600,6 +607,7 @@ public class CharacterStatus : MonoBehaviour {
     void SacrificeStart() {
         // Efecto y sonido del "sacrificio"
         characterState = State.Sacrifice;
+        rigBody.velocity = Vector3.zero;
         SetAnimatorTrigger("Sacrifice");
         AudioManager.Stop(stepSound);
         AudioManager.Play(sacrificeSound, false, 1);

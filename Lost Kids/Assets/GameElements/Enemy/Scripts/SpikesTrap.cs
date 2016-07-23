@@ -13,6 +13,10 @@ public class SpikesTrap : AbstractTrap
     public float activeTime = 1f;
     public float inactiveTime = 1.5f;
 
+    public float moveDistance = 2.0f;
+
+    private Vector3 initPosition;
+
     AudioSource moveSound;
 
     void Awake()
@@ -29,6 +33,8 @@ public class SpikesTrap : AbstractTrap
     // Use this for initialization
     void Start()
     {
+        initPosition = transform.position;
+
         if (enabled && fireOnEnable)
         {
             Show();
@@ -97,7 +103,7 @@ public class SpikesTrap : AbstractTrap
             //GetComponent<Renderer>().enabled = true;
             moveParticles.Play();
             AudioManager.Play(moveSound, false, 1, 0.8f, 1.1f);
-            iTween.MoveTo(gameObject, iTween.Hash("y", 0, "time", moveTime, "easetype", iTween.EaseType.easeOutQuad, "oncomplete", "Active"));
+            iTween.MoveTo(gameObject, iTween.Hash("y", initPosition.y+moveDistance, "time", moveTime, "easetype", iTween.EaseType.easeOutQuad, "oncomplete", "Active"));
         }
     }
 
@@ -115,7 +121,7 @@ public class SpikesTrap : AbstractTrap
         //GetComponent<Renderer>().enabled = false;
         moveParticles.Play();
         AudioManager.Play(moveSound, false, 1, 0.8f, 1.1f);
-        iTween.MoveTo(gameObject, iTween.Hash("y", -2, "time", moveTime, "easetype", iTween.EaseType.easeInQuad, "oncomplete", "Inactive"));    
+        iTween.MoveTo(gameObject, iTween.Hash("y", initPosition.y, "time", moveTime, "easetype", iTween.EaseType.easeInQuad, "oncomplete", "Inactive"));    
     }
 
     public void Inactive()
