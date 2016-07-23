@@ -154,10 +154,6 @@ public abstract class CharacterAbility : MonoBehaviour {
         return active;
     }
 
-    public void Reset() {
-        AbilityInitialization();
-    }
-
     // Update is called once per frame
     void Update() {
         // Control de la energía de habilidad

@@ -15,6 +15,6 @@ public class ParallaxCatcher : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
         //transform.position = player.position + relLightPos;
-        transform.position = new Vector3(target.position.x + relLightPos.x,transform.position.y,target.position.z + relLightPos.z);
+        transform.position = new Vector3(target.position.x + relLightPos.x,transform.position.y,transform.position.z);
 	}
 }

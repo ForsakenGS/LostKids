@@ -39,10 +39,10 @@ public class CutSceneManager : MonoBehaviour {
         barMovementTime = BarMovementTime;
         blackBarTop = transform.Find("BlackBarTop").GetComponent<RectTransform>();
         topBarStartPos = blackBarTop.anchoredPosition;
-        topBarEndPos = topBarStartPos + Vector2.down * (blackBarTop.rect.height-40);
+        topBarEndPos = topBarStartPos + Vector2.down * blackBarTop.rect.height;
         blackBarBot = transform.Find("BlackBarBot").GetComponent<RectTransform>();
         botBarStartPos = blackBarBot.anchoredPosition;
-        botBarEndPos = botBarStartPos + Vector2.up * (blackBarBot.rect.height-40);
+        botBarEndPos = botBarStartPos + Vector2.up * blackBarBot.rect.height;
 
     }
 

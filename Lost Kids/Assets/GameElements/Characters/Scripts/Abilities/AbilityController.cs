@@ -103,9 +103,4 @@ public class AbilityController : MonoBehaviour {
     public CharacterAbility GetActiveAbility() {
         return activeAbility;
     }
-
-    public void ResetAbilities() {
-        ability1.Reset();
-        ability2.Reset();
-    }
 }

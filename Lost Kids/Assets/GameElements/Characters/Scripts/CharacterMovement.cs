@@ -120,9 +120,9 @@ public class CharacterMovement : MonoBehaviour {
     /// <summary>
     /// Provoca un efecto de gravedad extra sobre el personaje
     /// </summary>
-	public void ExtraGravity(float f) {
+	public void ExtraGravity() {
         // Extra gravity to fall down quickly
-        rigBody.AddForce(new Vector3(0, -1 * extraGravity * f, 0), ForceMode.Force);
+        rigBody.AddForce(new Vector3(0, -1 * extraGravity, 0), ForceMode.Force);
     }
 
     /// <summary>

@@ -251,10 +251,6 @@ public class InputManagerTLK : MonoBehaviour {
 
     // Manage general inputs
     void Update() {
-        // Para reiniciar lso personajes si se quedan bloqueados    HAY QUE CAMBIAR!!!
-        if (Input.GetKeyDown(KeyCode.Y)) {
-            characterStatus.ResetCharacter();
-        }
         if (ButtonDown("Menu")) {
             if (!GameManager.paused) {
                 Lock();
