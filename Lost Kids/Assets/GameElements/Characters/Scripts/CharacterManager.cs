@@ -180,30 +180,44 @@ public class CharacterManager : MonoBehaviour {
         int index = characterStatusList.IndexOf(character);
         float distanceToCheckPoint = Vector3.Distance(character.transform.position, activeCheckPoint.GetSpawnZone(index));
 
-
-        iTween.MoveTo(character.gameObject, activeCheckPoint.GetSpawnZone(index), distanceToCheckPoint / resurrectionSpeed);
+        iTween.MoveTo(character.gameObject, iTween.Hash("position", activeCheckPoint.GetSpawnZone(index), "time",distanceToCheckPoint / resurrectionSpeed,
+            "oncomplete", "ReviveCharacter","oncompletetarget",gameObject,"oncompleteparams",index));
         if (GetAvailableCharacter() == -1) {
             CutSceneManager.FadeIn();
         }
         //characterList[index].transform.position = activeCheckPoint.GetSpawnZone(index);
         characterStatusList[index].currentRoom = activeCheckPoint.room;
-        Invoke("ActivateAvailableCharacter", distanceToCheckPoint / resurrectionSpeed);
+        //Invoke("ActivateAvailableCharacter", distanceToCheckPoint / resurrectionSpeed);
 
     }
 
-    /// <summary>
-    /// Activa el siguiente personaje disponible tras la muerte.
-    /// Si no hay ninguno, resucita a los 3 en el ultimo checkpoint
-    /// </summary>
-    public void ActivateAvailableCharacter() {
+    public void ReviveCharacter(int index) {
         int nextIndex = GetAvailableCharacter();
         if (nextIndex != -1) {
-            ActivateCharacter(nextIndex);
+            //ActivateCharacter(nextIndex);
+            characterStatusList[index].Ressurect();
         } else {
             ResetCheckPoint();
         }
     }
 
+
+    ///FUNCION ANTIGUA PARA BORRAR
+    /// <summary>,"
+    /// Activa el siguiente personaje disponible tras la muerte.
+    /// Si no hay ninguno, resucita a los 3 en el ultimo checkpoint
+    /// </summary>
+    /*
+    public void ActivateAvailableCharacter() {
+        int nextIndex = GetAvailableCharacter();
+        if (nextIndex != -1) {
+            //ActivateCharacter(nextIndex);
+            activeCharacter.GetComponent<CharacterStatus>().Ressurect();
+        } else {
+            ResetCheckPoint();
+        }
+    }
+    */
 
     /// <summary>
     /// Devuelve el indice del proximo personaje disponible

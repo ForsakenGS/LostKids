@@ -28,9 +28,6 @@ public class TrapTrigger : MonoBehaviour {
                 foreach (AbstractTrap trap in targets)
                 {
                     trap.FireTrapOneShot();
-                    if(disableOnShot) {
-                        this.gameObject.SetActive(false);
-                    }
                 }
             } else {
                 foreach (AbstractTrap trap in targets)
@@ -38,7 +35,10 @@ public class TrapTrigger : MonoBehaviour {
                     trap.FireTrap();
                 }
             }
-            
+            if (disableOnShot) {
+                this.gameObject.SetActive(false);
+            }
+
         }
     }
 }

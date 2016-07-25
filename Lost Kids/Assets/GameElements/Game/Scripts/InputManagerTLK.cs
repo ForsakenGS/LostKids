@@ -285,14 +285,12 @@ public class InputManagerTLK : MonoBehaviour {
                 abilityControl.ActivateAbility1();
             } else if (ButtonDown("Ability2")) {
                 abilityControl.ActivateAbility2();
-            }
+            } else 
             // Use Button
             if (ButtonDown("Use")) {
                 characterStatus.UseButton();
-            }
-            // Movement buttons
-            horizontalButton = ButtonValue("Horizontal");
-            verticalButton = ButtonValue("Vertical");
+            }else
+            
             // Jump button
             if (ButtonDown("Jump")) {
                 jumpButton = 2;
@@ -304,11 +302,14 @@ public class InputManagerTLK : MonoBehaviour {
                 }
             }
             // Suicide button
-            if (Button("Sacrifice")) {
-                characterStatus.SacrificeButton();
-            } else if (ButtonUp("Sacrifice")) {
-                characterStatus.SacrificeButtonUp();
-            }
+            //if (Button("Sacrifice")) {
+            //    characterStatus.SacrificeButton();
+            //} else if (ButtonUp("Sacrifice")) {
+            //    characterStatus.SacrificeButtonUp();
+            //}
+            // Movement buttons
+            horizontalButton = ButtonValue("Horizontal");
+            verticalButton = ButtonValue("Vertical");
         } else if (menuMode) {
             // Controla únicamente la entrada por mando, ya que el EventSystem no lo hace
             // Submit button

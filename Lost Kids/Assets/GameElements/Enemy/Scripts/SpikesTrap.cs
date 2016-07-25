@@ -19,6 +19,8 @@ public class SpikesTrap : AbstractTrap
 
     AudioSource moveSound;
 
+    bool initialized = false;
+
     void Awake()
     {
         
@@ -33,8 +35,6 @@ public class SpikesTrap : AbstractTrap
     // Use this for initialization
     void Start()
     {
-        initPosition = transform.position;
-
         if (enabled && fireOnEnable)
         {
             Show();
@@ -97,6 +97,10 @@ public class SpikesTrap : AbstractTrap
 
     public void Show()
     {
+        if(!initialized) {
+            initialized = true;
+            initPosition = transform.position;
+        }
         if (isEnabled)
         {
             active = true;
@@ -117,6 +121,10 @@ public class SpikesTrap : AbstractTrap
 
     public void Hide()
     {
+        if (!initialized) {
+            initialized = true;
+            initPosition = transform.position;
+        }
         active = false;
         //GetComponent<Renderer>().enabled = false;
         moveParticles.Play();

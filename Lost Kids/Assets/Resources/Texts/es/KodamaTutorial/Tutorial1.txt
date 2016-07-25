@@ -1,3 +1,3 @@
 <kodama> Hmm... ¿Ya por aquí? ¿Te gusta tu nueva máscara? Bueno, necesito estar seguro de que estás preparado antes de seguir. ¡Encuéntrame en la próxima sala para comenzar!
 <kodama> Tu primer reto... La máscara que te he dado no solo te hace parecer INCREÍBLE, sino que también aumenta tus habilidades! Usa -L1- para usar tu nueva habilidad de Super Salto y búscame en la próxima sala cuando quieras seguir aprendiendo.
-<kodama> ¡Guau! ¿Has visto lo alto que puedes saltar? ¡INCREÍBLE! Ahora te toca ser rápido, muy rápido... Usa -R1- para llegar a la puerta a tiempo. ¡Buena suerte!
+<kodama> ¡Guau! ¿Has visto lo alto que puedes saltar? ¡INCREÍBLE! Ahora te toca ser rápido, muy rápido... Salta sobre el botón y usa -R1- para llegar a la puerta a tiempo. ¡Buena suerte!
