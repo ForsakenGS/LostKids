@@ -619,7 +619,7 @@ public class CharacterStatus : MonoBehaviour {
     /// <summary>
     /// Función para indicar que el botón de sacrificio ha sido pulsado, sacrificando al personaje sólo en caso de encontrarse en los estados adecuados
     /// </summary>
-    public void SacrificeButton() {
+    public void SacrificeButtons() {
         // Comprueba el estado del jugador
         switch (characterState) {
             case State.Sacrifice:
@@ -644,7 +644,7 @@ public class CharacterStatus : MonoBehaviour {
     /// <summary>
     /// Función para indicar que el botón de sacrificio se ha dejado de pulsar, anulando el sacrificio del personaje si aún no se ha llevado a cabo
     /// </summary>
-    public void SacrificeButtonUp() {
+    public void SacrificeButtonsUp() {
         // Comprueba el estado del jugador
         switch (characterState) {
             case State.Sacrifice:
