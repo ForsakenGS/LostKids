@@ -107,5 +107,6 @@ public class AbilityController : MonoBehaviour {
     public void ResetAbilities() {
         ability1.Reset();
         ability2.Reset();
+        activeAbility = null;
     }
 }

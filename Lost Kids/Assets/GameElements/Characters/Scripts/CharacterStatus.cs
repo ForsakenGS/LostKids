@@ -239,6 +239,16 @@ public class CharacterStatus : MonoBehaviour {
                 totalJumpImpulse = firstJumpImpulse;
                 SetAnimatorTrigger("Jump");
                 break;
+            case State.Sprint:
+                // Termina la habilidad de Sprint
+                if (GetComponent<AbilityController>().DeactivateActiveAbility()) {
+                    AudioManager.Stop(stepSound);
+                    characterState = State.Jumping;
+                    characterMovement.Jump(firstJumpImpulse, true);
+                    totalJumpImpulse = firstJumpImpulse;
+                    SetAnimatorTrigger("Jump");
+                }
+                break;
             case State.AstralProjection:
                 // Impulso inicial de la proyección astral al levitar
                 characterMovement.Jump(3 * astralJumpImpulse, false);
@@ -557,20 +567,11 @@ public class CharacterStatus : MonoBehaviour {
     /// </summary>
     public void ResetCharacter() {
         // Reinicia los elementos con los que puede estar interaccionando el personaje
-        switch (characterState) {
-            case State.Using:
-                playerUse.StopUsing();
-                break;
-            case State.Pushing:
-            case State.Telekinesis:
-            case State.AstralProjection:
-            case State.Sprint:
-            case State.Breaking:
-            case State.BigJumping:
-                GetComponent<AbilityController>().DeactivateActiveAbility();
-                GetComponent<AbilityController>().ResetAbilities();
-                break;
+        if (characterState.Equals(State.Using)) {
+            playerUse.StopUsing();
         }
+        // Reinicia el estado de las habilidades
+        GetComponent<AbilityController>().ResetAbilities();
         // Reinicia a los valores por defecto
         Initialization();
         characterAnimator.Rebind();

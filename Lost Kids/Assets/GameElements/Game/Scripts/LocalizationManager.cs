@@ -23,17 +23,22 @@ public class LocalizationManager : MonoBehaviour {
 
     void Awake() {
         if (instance == null) {
+            // Primera instancia de LocalizationManager
             instance = this;
             DontDestroyOnLoad(gameObject);
             _language = "es";
             InitializationAndLocalization();
         } else if (!instance.Equals(this)) {
+            // Otra instancia creada
             Destroy(gameObject);
         }
     }
 
     void OnLevelWasLoaded() {
-        InitializationAndLocalization();
+        // Comprueba si es la instancia correcta
+        if ((instance != null) && (instance.Equals(this))) {
+            InitializationAndLocalization();
+        }
     }
 
     public void ChangeLanguage(string lang) {

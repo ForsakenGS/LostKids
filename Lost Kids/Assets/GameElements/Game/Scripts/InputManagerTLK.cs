@@ -229,6 +229,15 @@ public class InputManagerTLK : MonoBehaviour {
         CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
     }
 
+    public void ResumeGame() {
+        if (menuMode) {
+            menuMode = false;
+            GameManager.ResumeGame();
+            PausePanel.HidePanel();
+            Unlock();
+        }
+    }
+
     /// <summary>
     /// Función para bloquear/desbloquear el paso de instrucciones al personaje 
     /// </summary>
@@ -250,9 +259,9 @@ public class InputManagerTLK : MonoBehaviour {
     // Manage general inputs
     void Update() {
         // Para reiniciar lso personajes si se quedan bloqueados    HAY QUE CAMBIAR!!!
-        //if (Input.GetKeyDown(KeyCode.Y)) {
-        //    characterStatus.ResetCharacter();
-        //}
+        if (Input.GetKeyDown(KeyCode.Y)) {
+            characterStatus.ResetCharacter();
+        }
         if (ButtonDown("Menu")) {
             if (!GameManager.paused) {
                 Lock();
@@ -260,10 +269,7 @@ public class InputManagerTLK : MonoBehaviour {
                 GameManager.PauseGame();
                 menuMode = true;
             } else {
-                menuMode = false;
-                GameManager.ResumeGame();
-                PausePanel.HidePanel();
-                Unlock();
+                ResumeGame();
             }
         } else if (locked == 0) {
             // Switch Players Buttons
