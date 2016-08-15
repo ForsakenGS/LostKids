@@ -59,6 +59,7 @@ public class CharacterManager : MonoBehaviour {
         activeCheckPoint.ActivateMuted();
 
         activeCharacter = characterList[0];
+        activeCharacter.GetComponent<CharacterStatus>().playerParticles.IntensifyColor();
         if (ActiveCharacterChangedEvent != null) {
 
             ActiveCharacterChangedEvent();
@@ -145,6 +146,7 @@ public class CharacterManager : MonoBehaviour {
     public void ActivateCharacter(int index) {
         if ((IsAvailable(index)) && (!activeCharacter.Equals(characterList[index]))) {
             activeCharacter.GetComponent<AudioListener>().enabled = false;
+            activeCharacter.GetComponent<CharacterStatus>().playerParticles.AttenuateColor();
 
             //Si el personaje esta empujando un objeto, lo suelta
             if (activeCharacter.GetComponent<PushAbility>() != null) {
@@ -153,6 +155,7 @@ public class CharacterManager : MonoBehaviour {
 
             activeCharacter = characterList[index];
             activeCharacter.GetComponent<AudioListener>().enabled = true;
+            activeCharacter.GetComponent<CharacterStatus>().playerParticles.IntensifyColor();
             //activeCharacter.GetComponent<CharacterStatus>().currentRoom = activeCheckPoint.room;
 
             if (ActiveCharacterChangedEvent != null) {

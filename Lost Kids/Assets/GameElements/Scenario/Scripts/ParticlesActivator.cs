@@ -1,14 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class VortexActivator : MonoBehaviour {
+public class ParticlesActivator : MonoBehaviour {
 
     private ParticleSystem particles;
+    private float emissionRate;
+
+    private Color color;
+    private float alphaBase;
 
 	// Use this for initialization
 	void Awake () {
         particles = GetComponent<ParticleSystem>();
-        particles.Stop();
+
+        var em = particles.emission;
+        emissionRate = em.rate.constantMax;
+
+        color = particles.startColor;
+        alphaBase = color.a;
+
 	}
 	
 	// Update is called once per frame
@@ -26,5 +36,33 @@ public class VortexActivator : MonoBehaviour {
         if(particles.isPlaying) {
             particles.Stop();
         }
+    }
+
+    public void IncreaseEmission(float em) {
+        var emis = particles.emission;
+        var rate = emis.rate;
+        rate.constantMax = em;
+
+        emis.rate = rate;
+    }
+
+    public void DecreaseEmission() {
+        var emis = particles.emission;
+        var rate = emis.rate;
+        rate.constantMax = emissionRate;
+
+        emis.rate = rate;
+    }
+
+    public void IntensifyColor() {
+        particles.startColor = new Color(color.r, color.g, color.b, 1.0f);
+
+        Debug.Log(particles.startColor.a);
+    }
+
+    public void AttenuateColor() {
+        particles.startColor = new Color(color.r, color.g, color.b, alphaBase);
+
+        Debug.Log(particles.startColor.a);
     }
 }

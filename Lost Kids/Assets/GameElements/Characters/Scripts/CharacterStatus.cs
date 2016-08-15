@@ -46,8 +46,17 @@ public class CharacterStatus : MonoBehaviour {
     //Habitacion en la que se encuentra el personaje
     public int currentRoom = 0;
 
+
     // Personaje
     public float maxJumpImpulse;
+
+    //Particulas
+    private ParticlesActivator deadParticles;
+    private ParticlesActivator resurrectionParticles;
+    [HideInInspector]
+    public ParticlesActivator playerParticles;
+    public float abilityEmissionRate = 150.0f;
+
     public State initialCharacterState;
     public CharacterName characterName;
     private State characterState;
@@ -63,8 +72,7 @@ public class CharacterStatus : MonoBehaviour {
     private AudioSource stepSound;
     private AudioSource pushSound;
 
-    private ParticlesActivator deadParticles;
-    private ParticlesActivator resurrectionParticles;
+
 
     // Use this for initialization
     void Awake() {
@@ -79,6 +87,7 @@ public class CharacterStatus : MonoBehaviour {
         rigBody = GetComponent<Rigidbody>();
         deadParticles = transform.Find("DeadParticles").gameObject.GetComponent<ParticlesActivator>();
         resurrectionParticles = transform.Find("ResurrectionParticles").gameObject.GetComponent<ParticlesActivator>();
+        playerParticles = transform.Find("PlayerParticles").gameObject.GetComponent<ParticlesActivator>();
     }
 
     // Use this for initialization
@@ -110,6 +119,10 @@ public class CharacterStatus : MonoBehaviour {
             if (res) {
                 // Detiene el sonido de andar, que es el único que puede estar reproduciéndose
                 AudioManager.Stop(stepSound);
+
+                //INCREMENTAR EL NUMERO DE PARTICULAS
+                playerParticles.IncreaseEmission(abilityEmissionRate);
+
                 // Actualiza el estado del personaje
                 switch (ability.abilityName) {
                     case AbilityName.AstralProjection:
@@ -366,6 +379,10 @@ public class CharacterStatus : MonoBehaviour {
     /// </summary>
     /// <param name="ability">Habilidad cuya ejecución se desea finalizar</param>
     public void EndAbility(CharacterAbility ability) {
+
+        //PARAR CANTIDAD DE PARTICULAS
+        playerParticles.DecreaseEmission();
+
         switch (ability.abilityName) {
             //case AbilityName.AstralProjection:
             //case AbilityName.Break:

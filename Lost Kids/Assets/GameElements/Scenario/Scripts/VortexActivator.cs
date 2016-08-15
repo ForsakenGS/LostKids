@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ParticlesActivator : MonoBehaviour {
+public class VortexActivator : MonoBehaviour {
 
     private ParticleSystem particles;
 
