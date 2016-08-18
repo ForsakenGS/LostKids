@@ -60,7 +60,6 @@ public class CharacterStatus : MonoBehaviour {
     private AudioSource resurrectSound;
     private AudioSource dieSound;
     private AudioSource sacrificeSound;
-    private AudioSource stepSound;
     private AudioSource pushSound;
 
     private ParticlesActivator deadParticles;
@@ -92,7 +91,6 @@ public class CharacterStatus : MonoBehaviour {
         resurrectSound = audioLoader.GetSound("Resurrect");
         dieSound = audioLoader.GetSound("Die");
         sacrificeSound = audioLoader.GetSound("Sacrifice");
-        stepSound = audioLoader.GetSound("Steps");
         pushSound = audioLoader.GetSound("Push");
     }
 
@@ -108,8 +106,6 @@ public class CharacterStatus : MonoBehaviour {
             // Estados desde los que se puede iniciar cualquier habilidad: Walking, Idle
             res = (characterState.Equals(State.Walking) || characterState.Equals(State.Idle));
             if (res) {
-                // Detiene el sonido de andar, que es el único que puede estar reproduciéndose
-                AudioManager.Stop(stepSound);
                 // Actualiza el estado del personaje
                 switch (ability.abilityName) {
                     case AbilityName.AstralProjection:
@@ -233,7 +229,6 @@ public class CharacterStatus : MonoBehaviour {
             case State.Walking:
             case State.Idle:
                 // Comienza la acción de saltar
-                AudioManager.Stop(stepSound);
                 characterState = State.Jumping;
                 characterMovement.Jump(firstJumpImpulse, true);
                 totalJumpImpulse = firstJumpImpulse;
@@ -242,7 +237,6 @@ public class CharacterStatus : MonoBehaviour {
             case State.Sprint:
                 // Termina la habilidad de Sprint
                 if (GetComponent<AbilityController>().DeactivateActiveAbility()) {
-                    AudioManager.Stop(stepSound);
                     characterState = State.Jumping;
                     characterMovement.Jump(firstJumpImpulse, true);
                     totalJumpImpulse = firstJumpImpulse;
@@ -305,7 +299,6 @@ public class CharacterStatus : MonoBehaviour {
             GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
             GetComponentInChildren<Renderer>().enabled = false; //Temporal
             rigBody.isKinematic = true;
-            AudioManager.Stop(stepSound);
             AudioManager.Play(dieSound, false, 1);
             //Reinicia el transform en caso de morir estando subido a una plataforma
             transform.parent = null;
@@ -412,11 +405,9 @@ public class CharacterStatus : MonoBehaviour {
             case State.Walking:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
-                    AudioManager.Stop(stepSound);
                     characterState = State.Falling;
                     SetAnimatorTrigger("Fall");
                 } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
-                    characterMovement.PlayerHasStopped();
                     characterState = State.Idle;
                     characterAnimator.ResetTrigger("Walk");
                     SetAnimatorTrigger("Idle");
@@ -426,7 +417,6 @@ public class CharacterStatus : MonoBehaviour {
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Jumping;
-                    //SetAnimatorTrigger("Fall");
                 }
                 break;
             case State.Falling:
@@ -477,8 +467,6 @@ public class CharacterStatus : MonoBehaviour {
                     GetComponent<AbilityController>().DeactivateActiveAbility();
                     characterState = State.Falling;
                     SetAnimatorTrigger("Fall");
-                } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
-                    characterMovement.PlayerHasStopped();
                 }
                 break;
             case State.Crouching:
@@ -541,8 +529,6 @@ public class CharacterStatus : MonoBehaviour {
                         }
                     }
                 }
-                // Para el sonido de los pasos
-                AudioManager.Stop(stepSound);
                 break;
             case State.AstralProjection:
                 // Comprueba si puede usar el objeto
@@ -610,7 +596,6 @@ public class CharacterStatus : MonoBehaviour {
         characterState = State.Sacrifice;
         rigBody.velocity = Vector3.zero;
         SetAnimatorTrigger("Sacrifice");
-        AudioManager.Stop(stepSound);
         AudioManager.Play(sacrificeSound, false, 1);
         GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
         //rigBody.isKinematic = true;
