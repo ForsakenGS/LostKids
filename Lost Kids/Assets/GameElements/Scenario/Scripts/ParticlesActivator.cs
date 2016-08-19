@@ -57,12 +57,10 @@ public class ParticlesActivator : MonoBehaviour {
     public void IntensifyColor() {
         particles.startColor = new Color(color.r, color.g, color.b, 1.0f);
 
-        Debug.Log(particles.startColor.a);
     }
 
     public void AttenuateColor() {
         particles.startColor = new Color(color.r, color.g, color.b, alphaBase);
 
-        Debug.Log(particles.startColor.a);
     }
 }

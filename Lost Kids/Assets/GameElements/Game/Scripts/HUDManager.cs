@@ -31,6 +31,9 @@ public class HUDManager : MonoBehaviour {
     private CharacterAbility selectedAbility;
     private GameObject activeCharacter;
 
+    public GameObject cooldownNotification;
+    private GameObject canvas;
+
     //Use this for references
     void Awake() {
         // Oculta la interfaz relativa a los jugadores deshabilitados
@@ -43,6 +46,8 @@ public class HUDManager : MonoBehaviour {
         if (ki == null) {
             Destroy(kiCharacterUI.parent.gameObject);
         }
+
+        canvas = transform.Find("HUDCanvas").gameObject;
     }
 
     // Use this for initialization
@@ -209,7 +214,41 @@ public class HUDManager : MonoBehaviour {
         // Selecciona la interfaz relativa a la habilidad y modifica el relleno de la imagen
         Transform abilityUI = GetAbilityUIRectTransform(ability.GetType());
         float amount = ability.GetAvailableEnergy() / ability.GetMaxEnergy();
-        abilityUI.Find("Full").GetComponent<Image>().fillAmount = amount;
+        GameObject full = abilityUI.Find("Full").gameObject;
+        full.GetComponent<Image>().fillAmount = amount;
+
+        if(amount >= 1) {
+            //Lanzar Imagen segun habilidad
+            //Transform abilityCooldown = GetAbilityCooldownRectTransform(ability.GetType());
+            cooldownNotification.GetComponent<CooldownNotification>().ShowNotification(full.GetComponent<Image>().sprite);
+        }
+    }
+
+    // Devuelve el componente RectTransform de la habilidad indicada
+    RectTransform GetAbilityCooldownRectTransform(System.Type abilityType) {
+        RectTransform abilityUI = null;
+        switch (abilityType.ToString()) {
+            case "BigJumpAbility":
+                abilityUI = bigJumpAbilityUI;
+                break;
+            case "SprintAbility":
+                abilityUI = sprintAbilityUI;
+                break;
+            case "BreakAbility":
+                abilityUI = breakAbilityUI;
+                break;
+            case "PushAbility":
+                abilityUI = pushAbilityUI;
+                break;
+            case "TelekinesisAbility":
+                abilityUI = telekinesisAbilityUI;
+                break;
+            case "AstralProjectionAbility":
+                abilityUI = astralProjectionAbilityUI;
+                break;
+        }
+
+        return abilityUI;
     }
 
     // Devuelve el componente RectTransform de la habilidad indicada
