@@ -28,6 +28,10 @@ public class HUDManager : MonoBehaviour {
     public RectTransform telekinesisAbilityUI;
     public RectTransform astralProjectionAbilityUI;
     public RectTransform sakeUI;
+    public RectTransform timerUI;
+
+    private Image timerImage;
+    private bool timerActive = false;
 
     private CharacterAbility selectedAbility;
     private GameObject activeCharacter;
@@ -35,6 +39,7 @@ public class HUDManager : MonoBehaviour {
     public GameObject cooldownNotification;
     private GameObject canvas;
 
+    public static HUDManager instance;
     //Use this for references
     void Awake() {
         // Oculta la interfaz relativa a los jugadores deshabilitados
@@ -47,8 +52,9 @@ public class HUDManager : MonoBehaviour {
         if (ki == null) {
             Destroy(kiCharacterUI.parent.gameObject);
         }
-
+        timerImage = timerUI.GetComponent<Image>();
         canvas = transform.Find("HUDCanvas").gameObject;
+        instance = this;
     }
 
     // Use this for initialization
@@ -478,5 +484,32 @@ public class HUDManager : MonoBehaviour {
         } else {
             ShowInventoryObject(false, "SakeBottle");
         }
+    }
+
+
+    public static void UpdateTimer(float value)
+    {
+        if (instance.timerImage.enabled)
+        {
+            instance.timerImage.fillAmount = value;
+        }
+    }
+
+    public static void StartTimer()
+    {
+        instance.timerImage.enabled = true;
+        instance.timerImage.fillAmount = 1;
+        instance.timerActive = true;
+
+    }
+
+    public static void StopTimer()
+    {
+        instance.timerImage.enabled = false;
+        instance.timerActive = false;
+    }
+    public static bool TimerActive()
+    {
+        return instance.timerActive;
     }
 }
