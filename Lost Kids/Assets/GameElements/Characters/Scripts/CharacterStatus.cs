@@ -116,9 +116,6 @@ public class CharacterStatus : MonoBehaviour {
             res = (characterState.Equals(State.Walking) || characterState.Equals(State.Idle));
             if (res) {
 
-                // Detiene el sonido de andar, que es el único que puede estar reproduciéndose
-                AudioManager.Stop(stepSound);
-
                 //INCREMENTAR EL NUMERO DE PARTICULAS
                 playerParticles.IncreaseEmission(abilityEmissionRate);
 
