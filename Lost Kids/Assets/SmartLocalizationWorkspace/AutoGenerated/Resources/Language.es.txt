@@ -236,15 +236,6 @@
 	<data name="TLK.UI.Intro.Canvas.StartButton.Text" xml:space="preserve">
 		<value>Empezar</value>
 	</data>
-	<data name="TLK.UI.LanguageSelection.Canvas.Panel.EnglishButton.Text" xml:space="preserve">
-		<value>Inglés</value>
-	</data>
-	<data name="TLK.UI.LanguageSelection.Canvas.Panel.SpanishButton.Text" xml:space="preserve">
-		<value>Castellano</value>
-	</data>
-	<data name="TLK.UI.LanguageSelection.Canvas.Panel.Title" xml:space="preserve">
-		<value>Selección de idioma</value>
-	</data>
 	<data name="TLK.UI.LevelSelection.LevelSelectionUI.BackButton.Text" xml:space="preserve">
 		<value>Atrás</value>
 	</data>

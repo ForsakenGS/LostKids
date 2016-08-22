@@ -21,15 +21,15 @@ public class InputManagerTLK : MonoBehaviour {
     InputControlType character1Control = InputControlType.DPadLeft;
     InputControlType character2Control = InputControlType.DPadUp;
     InputControlType character3Control = InputControlType.DPadRight;
-    InputControlType nextCharacterControl = InputControlType.RightTrigger;
-    InputControlType prevCharacterControl = InputControlType.LeftTrigger;
+    InputControlType nextCharacterControl = InputControlType.RightBumper;
+    InputControlType prevCharacterControl = InputControlType.LeftBumper;
     InputControlType jumpControl = InputControlType.Action1;
-    InputControlType ability2Control = InputControlType.RightBumper;
+    InputControlType ability2Control = InputControlType.Action2;
     InputControlType useControl = InputControlType.Action3;
-    InputControlType ability1Control = InputControlType.LeftBumper;
+    InputControlType ability1Control = InputControlType.Action4;
     InputControlType menuControl = InputControlType.Command;
-    InputControlType sacrificeControl = InputControlType.Action4;
-    InputControlType crouchControl = InputControlType.Action2;
+    InputControlType sacrifice1Control = InputControlType.LeftTrigger;
+    InputControlType sacrifice2Control = InputControlType.RightTrigger;
     InputControlType menuDownControl = InputControlType.DPadDown;
     InputControlType menuUpControl = InputControlType.DPadUp;
     InputControlType menuLeftControl = InputControlType.DPadLeft;
@@ -45,15 +45,13 @@ public class InputManagerTLK : MonoBehaviour {
     private int jumpButton;
     private bool menuMode;
 
+    private static InputManagerTLK instance = null;
 
-    private static InputManagerTLK instance=null;
     // Use this for references
     void Awake() {
         characterManager = GameObject.FindGameObjectWithTag("CharacterManager").GetComponent<CharacterManager>();
         messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
-
         instance = this;
-
     }
 
     // Use this for initialization
@@ -174,11 +172,11 @@ public class InputManagerTLK : MonoBehaviour {
             case "Ability1":
                 res = ability1Control;
                 break;
-            case "Crouch":
-                res = crouchControl;
+            case "Sacrifice1":
+                res = sacrifice1Control;
                 break;
-            case "Sacrifice":
-                res = sacrificeControl;
+            case "Sacrifice2":
+                res = sacrifice2Control;
                 break;
             case "Menu":
                 res = menuControl;
@@ -231,6 +229,15 @@ public class InputManagerTLK : MonoBehaviour {
         CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
     }
 
+    public void ResumeGame() {
+        if (menuMode) {
+            menuMode = false;
+            GameManager.ResumeGame();
+            PausePanel.HidePanel();
+            Unlock();
+        }
+    }
+
     /// <summary>
     /// Función para bloquear/desbloquear el paso de instrucciones al personaje 
     /// </summary>
@@ -262,10 +269,7 @@ public class InputManagerTLK : MonoBehaviour {
                 GameManager.PauseGame();
                 menuMode = true;
             } else {
-                menuMode = false;
-                GameManager.ResumeGame();
-                PausePanel.HidePanel();
-                Unlock();
+                ResumeGame();
             }
         } else if (locked == 0) {
             // Switch Players Buttons
@@ -279,18 +283,17 @@ public class InputManagerTLK : MonoBehaviour {
                 characterManager.ActivateNextCharacter();
             } else if (ButtonDown("PrevCharacter")) {
                 characterManager.ActivatePreviousCharacter();
-            }
+            } else
             // Abilities Buttons
             if (ButtonDown("Ability1")) {
                 abilityControl.ActivateAbility1();
             } else if (ButtonDown("Ability2")) {
                 abilityControl.ActivateAbility2();
-            } else 
+            } else
             // Use Button
             if (ButtonDown("Use")) {
                 characterStatus.UseButton();
-            }else
-            
+            } else
             // Jump button
             if (ButtonDown("Jump")) {
                 jumpButton = 2;
@@ -300,13 +303,13 @@ public class InputManagerTLK : MonoBehaviour {
                 if (jumpButton != 2) {
                     jumpButton = 1;
                 }
-            }
+            } else
             // Suicide button
-            //if (Button("Sacrifice")) {
-            //    characterStatus.SacrificeButton();
-            //} else if (ButtonUp("Sacrifice")) {
-            //    characterStatus.SacrificeButtonUp();
-            //}
+            if ((Button("Sacrifice1")) && (Button("Sacrifice2"))) {
+                characterStatus.SacrificeButtons();
+            } else if ((ButtonUp("Sacrifice1")) || (ButtonUp("Sacrifice2"))) {
+                characterStatus.SacrificeButtonsUp();
+            }
             // Movement buttons
             horizontalButton = ButtonValue("Horizontal");
             verticalButton = ButtonValue("Vertical");
@@ -321,12 +324,10 @@ public class InputManagerTLK : MonoBehaviour {
                 AxisEventData axisEventData = new AxisEventData(eventSystem);
                 axisEventData.moveDir = MoveDirection.Up;
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
-                Debug.Log("arriba");
             } else if (GetControlDown(GetButtonControl("MenuDown"))) {
                 AxisEventData axisEventData = new AxisEventData(eventSystem);
                 axisEventData.moveDir = MoveDirection.Down;
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
-                Debug.Log("abajo");
             } else if (GetControlDown(GetButtonControl("MenuLeft"))) {
                 AxisEventData axisEventData = new AxisEventData(eventSystem);
                 axisEventData.moveDir = MoveDirection.Left;
@@ -338,7 +339,7 @@ public class InputManagerTLK : MonoBehaviour {
             }
         } else {
             //Pasar mensajes
-            if (ButtonDown("Jump")) {
+            if (ButtonDown("Use")) {
                 if (messageManager.ShowingMessage()) {
                     messageManager.SkipText();
                 }
@@ -346,61 +347,47 @@ public class InputManagerTLK : MonoBehaviour {
         }
     }
 
-    public static void BeginVibration(float leftAmount,float rightAmount)
-    {
+    public static void BeginVibration(float leftAmount, float rightAmount) {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, leftAmount, rightAmount);
     }
 
-    public static void BeginVibration(float amount)
-    {
+    public static void BeginVibration(float amount) {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, amount, amount);
     }
 
-    public static void BeginVibrationTimed(float amount,float duration)
-    {
+    public static void BeginVibrationTimed(float amount, float duration) {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, amount, amount);
-        Instance().Invoke("endVibration",duration);
+        Instance().Invoke("endVibration", duration);
     }
 
-    public static void BeginVibrationTimed(float leftAmount, float rightAmount,float duration)
-    {
+    public static void BeginVibrationTimed(float leftAmount, float rightAmount, float duration) {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, leftAmount, rightAmount);
         Instance().Invoke("endVibration", duration);
     }
 
-    public static void BeginVibrationTimed(float amount, float duration,bool fading)
-    {
+    public static void BeginVibrationTimed(float amount, float duration, bool fading) {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, amount, amount);
-        if (!fading)
-        {
+        if (!fading) {
             Instance().Invoke("endVibration", duration);
-        }
-        else
-        {
+        } else {
             instance.StartCoroutine(instance.FadeVibration(amount, duration));
         }
     }
 
-    public static void BeginVibrationTimed(float leftAmount, float rightAmount, float duration,bool fading)
-    {   
+    public static void BeginVibrationTimed(float leftAmount, float rightAmount, float duration, bool fading) {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, leftAmount, rightAmount);
-        if (!fading)
-        {
+        if (!fading) {
             Instance().Invoke("endVibration", duration);
-        }
-        else
-        {
-            instance.StartCoroutine(instance.FadeVibration(leftAmount,rightAmount, duration));
+        } else {
+            instance.StartCoroutine(instance.FadeVibration(leftAmount, rightAmount, duration));
         }
     }
 
-    private IEnumerator FadeVibration(float initialVibration,float time)
-    {
+    private IEnumerator FadeVibration(float initialVibration, float time) {
         float vibration = initialVibration;
         float t = 0;
-        while (t < time)
-        {
-            vibration = Mathf.Lerp(vibration, 0, t/time);
+        while (t < time) {
+            vibration = Mathf.Lerp(vibration, 0, t / time);
             t += Time.deltaTime;
             BeginVibration(vibration);
             yield return null;
@@ -409,13 +396,11 @@ public class InputManagerTLK : MonoBehaviour {
         yield return null;
     }
 
-    private IEnumerator FadeVibration(float initialLeftVibration,float initialRightVibration, float time)
-    {
+    private IEnumerator FadeVibration(float initialLeftVibration, float initialRightVibration, float time) {
         float leftVibration = initialLeftVibration;
         float rightVibration = initialRightVibration;
         float t = 0;
-        while (t < time)
-        {
+        while (t < time) {
             leftVibration = Mathf.Lerp(leftVibration, 0, t / time);
             rightVibration = Mathf.Lerp(rightVibration, 0, t / time);
             t += Time.deltaTime;
@@ -426,18 +411,15 @@ public class InputManagerTLK : MonoBehaviour {
         yield return null;
     }
 
-    public static void EndVibration()
-    {
+    public static void EndVibration() {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 0, 0);
     }
 
-    private void endVibration()
-    {
+    private void endVibration() {
         XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 0, 0);
     }
 
-    public static InputManagerTLK Instance()
-    {
+    public static InputManagerTLK Instance() {
         return instance;
     }
 

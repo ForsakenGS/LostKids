@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class HUDManager : MonoBehaviour {
     // Tamaño del HUD del personaje activo
@@ -194,7 +195,7 @@ public class HUDManager : MonoBehaviour {
             }
         }
         trf.parent.GetComponent<RectTransform>().sizeDelta /= (1 + modificationSelectedCharacter);
-        trf.parent.SetParent(unselectedCharacters);
+        SetCharacterAsUnselected(activeCharacter, trf, character);
         // Se modifica la interfaz del personaje actualmente seleccionado
         activeCharacter = character;
         trf = GetCharacterUIRectTransform(activeCharacter);
@@ -409,6 +410,36 @@ public class HUDManager : MonoBehaviour {
             alphaObj = 1;
         }
         GetInventoryObjectUITransform(obj).Find("Full").GetComponent<CanvasRenderer>().SetAlpha(alphaObj);
+    }
+
+    // Coloca el icono del anterior personaje seleccionado en su posición correcta dentro del listado de personajes no seleccionados
+    private void SetCharacterAsUnselected(GameObject activeCharacter, RectTransform trfAC, GameObject newActiveCharacter) {
+        // Añade el icono al listado
+        trfAC.parent.SetParent(unselectedCharacters);
+        // Lo coloca en el orden correcto
+        switch (newActiveCharacter.GetComponent<CharacterStatus>().characterName) {
+            case CharacterName.Aoi:
+                if (activeCharacter.GetComponent<CharacterStatus>().characterName.Equals(CharacterName.Akai)) {
+                    trfAC.parent.SetAsFirstSibling();
+                } else {
+                    trfAC.parent.SetAsLastSibling();
+                }
+                break;
+            case CharacterName.Akai:
+                if (activeCharacter.GetComponent<CharacterStatus>().characterName.Equals(CharacterName.Ki)) {
+                    trfAC.parent.SetAsFirstSibling();
+                } else {
+                    trfAC.parent.SetAsLastSibling();
+                }
+                break;
+            case CharacterName.Ki:
+                if (activeCharacter.GetComponent<CharacterStatus>().characterName.Equals(CharacterName.Aoi)) {
+                    trfAC.parent.SetAsFirstSibling();
+                } else {
+                    trfAC.parent.SetAsLastSibling();
+                }
+                break;
+        }
     }
 
     // Inicialización de la transparencia de los distintos elementos del HUD
