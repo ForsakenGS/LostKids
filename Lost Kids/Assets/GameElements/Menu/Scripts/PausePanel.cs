@@ -84,6 +84,7 @@ public class PausePanel : MonoBehaviour {
     public void Hide()
     {
         GameManager.ResumeGame();
+        InputManagerTLK.SetMenuMode(false);
         mainPanel.SetActive(false);
         controlsPanel.SetActive(false);
         settingsPanel.SetActive(false);

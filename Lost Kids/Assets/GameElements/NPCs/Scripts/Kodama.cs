@@ -45,9 +45,24 @@ public class Kodama : UsableObject {
         else
         {
             cutScene.BeginCutScene(BeginConversation);
+            Invoke("MoveCharacterToFront",0.5f);
         }
     }
 
+    private void MoveCharacterToFront()
+    {
+        GameObject character = CharacterManager.GetActiveCharacter();
+        Vector3 newCharacterPos = character.transform.position;
+        newCharacterPos.z = transform.position.z;
+        newCharacterPos.x = transform.position.x;
+        newCharacterPos += transform.forward * 1.8f;
+        character.transform.position = newCharacterPos;
+        Vector3 lookPosition = transform.position;
+        lookPosition.y = newCharacterPos.y;
+        character.transform.LookAt(lookPosition);
+
+
+    }
     private void BeginConversation()
     {
         messageManager.ShowConversation(indexList);

@@ -81,13 +81,24 @@ public class PlayerUse : MonoBehaviour {
                         objectInUse.Use();
                         if (objectInUse.type.Equals(UsableTypes.Hold)) {
                             isUsing = true;
-                            Vector3 frontPosition = hit.point + GetComponent<CapsuleCollider>().radius * hit.normal;
-                            Vector3 lookPosition = hit.point;
-                            lookPosition.y = transform.position.y;
-                            frontPosition.y = transform.position.y;
-                            this.transform.position = frontPosition;
+ 
+                            if(objectInUse.usePosition!=null)
+                            {
+                                this.transform.position = objectInUse.usePosition.position;
+                                Vector3 look = objectInUse.transform.position;
+                                look.y = transform.position.y;
+                                this.transform.LookAt(look);
+                            }
+                            else
+                            {
+                                Vector3 frontPosition = hit.point + GetComponent<CapsuleCollider>().radius * hit.normal;
+                                Vector3 lookPosition = hit.point;
+                                lookPosition.y = transform.position.y;
+                                frontPosition.y = transform.position.y;
+                                this.transform.position = frontPosition;
 
-                            this.transform.LookAt(lookPosition);
+                                this.transform.LookAt(lookPosition);
+                            }
                         }
                     }
                 }

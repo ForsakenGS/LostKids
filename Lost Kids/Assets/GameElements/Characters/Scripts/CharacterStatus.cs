@@ -684,6 +684,23 @@ public class CharacterStatus : MonoBehaviour {
     }
 
     /// <summary>
+    /// Reproduce la animacion de victoria y en caso de ser final de nivel, bloquea el personaje hasta que los demas lo completen
+    /// </summary>
+    public void Victory(bool levelEnd)
+    {
+        //Girar al personaje para que se va de frente mejor?
+        transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+
+        /*
+        SetAnimatorTrigger("Victory");
+        LockByAnimation();
+        if(levelEnd)
+        {
+            LockByAnimation();
+        }
+        */
+    }
+    /// <summary>
     /// Cambia el estado asustado del personaje
     /// </summary>
     /// <param name="scared">true para ponerlo asustado, false para que deje de estarlo</param>

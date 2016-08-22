@@ -444,4 +444,17 @@ public class InputManagerTLK : MonoBehaviour {
     public void OnApplicationQuit() {
         EndVibration();
     }
+
+    public static void SetMenuMode(bool menuMode)
+    {
+        instance.menuMode = menuMode;
+        if(menuMode)
+        {
+            Lock();
+        }
+        else
+        {
+            Unlock();
+        }
+    }
 }

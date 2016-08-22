@@ -102,4 +102,20 @@ public class PushableObject : MonoBehaviour {
         }
     }
 
+    void OnTriggerEnter(Collider col)
+    {
+        if(col.CompareTag("Player"))
+        {
+            col.transform.parent = transform;
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        if (col.CompareTag("Player") && col.transform.parent==transform)
+        {
+            col.transform.parent = null;
+        }
+    }
+
 }

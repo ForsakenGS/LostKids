@@ -27,9 +27,15 @@ public class HUDManager : MonoBehaviour {
     public RectTransform telekinesisAbilityUI;
     public RectTransform astralProjectionAbilityUI;
     public RectTransform sakeUI;
+    public RectTransform timerUI;
+
+    private Image timerImage;
 
     private CharacterAbility selectedAbility;
     private GameObject activeCharacter;
+
+    private bool timerActive = false;
+    public static HUDManager instance = null;
 
     //Use this for references
     void Awake() {
@@ -43,6 +49,7 @@ public class HUDManager : MonoBehaviour {
         if (ki == null) {
             Destroy(kiCharacterUI.parent.gameObject);
         }
+        instance = this;
     }
 
     // Use this for initialization
@@ -75,6 +82,8 @@ public class HUDManager : MonoBehaviour {
         CharacterInventory.ObjectRequestedEvent += ObjectRequested;
         CharacterStatus.KillCharacterEvent += CharacterKilled;
         CharacterStatus.ResurrectCharacterEvent += CharacterResurrected;
+
+        timerImage = timerUI.GetComponent<Image>();
     }
 
     // Se ejecuta cuando se termina la ejecución de una habilidad
@@ -408,5 +417,32 @@ public class HUDManager : MonoBehaviour {
         } else {
             ShowInventoryObject(false, "SakeBottle");
         }
+    }
+
+
+    public static void UpdateTimer(float value)
+    {
+        if(instance.timerImage.enabled)
+        {
+            instance.timerImage.fillAmount = value;
+        }
+    }
+
+    public static void StartTimer()
+    {
+        instance.timerImage.enabled = true;
+        instance.timerImage.fillAmount = 1;
+        instance.timerActive = true;
+
+    }
+
+    public static void StopTimer()
+    {
+        instance.timerImage.enabled = false;
+        instance.timerActive = false;
+    }
+    public static bool TimerActive()
+    {
+        return instance.timerActive;
     }
 }

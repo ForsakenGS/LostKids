@@ -164,7 +164,7 @@ public class RoomSettings : MonoBehaviour {
     /// </summary>
     public bool PrepareRoom() {
      
-        InputManagerTLK.SetLock(true);
+        //InputManagerTLK.SetLock(true);
 
         initialCamTransform = Camera.main.transform;
         Invoke("PreparationEnd", preparationTime + 0.5f);
@@ -190,6 +190,7 @@ public class RoomSettings : MonoBehaviour {
     public void ShowRoom() {
 
         gameObject.SetActive(true);
+        InputManagerTLK.SetLock(true);
         if (!prepared)
         {
             particles.loop = false;

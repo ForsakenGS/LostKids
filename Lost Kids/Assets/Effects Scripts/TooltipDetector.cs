@@ -61,6 +61,26 @@ public class TooltipDetector : MonoBehaviour {
         }
     }
 
+    void OnTriggerStay(Collider other)
+    {
+        if (icon != null)
+        {
+            if (CharacterManager.IsActiveCharacter(other.gameObject))
+            {
+                icon.ActiveCanvas(false);
+                GameObject character=other.gameObject;
+            
+                Ray usingRay = new Ray(character.transform.position + Vector3.up, character.transform.forward);
+
+                RaycastHit hit;
+                if (Physics.Raycast(usingRay, out hit, 2) && hit.collider.transform==this.transform.parent)
+                {
+                    icon.ActiveCanvas(true);
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Cuando el jugador sale de la zona, desactiva su icono y la posibilidad de usar el objeto
     /// </summary>

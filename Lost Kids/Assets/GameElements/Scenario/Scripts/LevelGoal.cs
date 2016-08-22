@@ -13,6 +13,8 @@ public class LevelGoal : MonoBehaviour {
     private LevelData levelData;
 
     public string nextLevel;
+
+    private bool reached;
 	// Use this for initialization
 	void Start () {
 
@@ -31,6 +33,8 @@ public class LevelGoal : MonoBehaviour {
         if(CharacterManager.IsActiveCharacter(col.gameObject))
         {
             charactersOnGoal.Add(col.gameObject);
+            col.GetComponent<CharacterStatus>().Victory(true);
+            CharacterManager.instance.Invoke("ActivateNextCharacter", 1);
             CheckGoalCompleted();
         }
     }
@@ -47,13 +51,14 @@ public class LevelGoal : MonoBehaviour {
     bool CheckGoalCompleted()
     {
 
-        if (charactersOnGoal.Count == characterList.Count)
+        if (charactersOnGoal.Count == characterList.Count && !reached)
         {
+            reached = true;
             GameManager.CompleteLevel(SceneManager.GetActiveScene().name);
             LevelManager.LevelEnd(nextLevel);
 
         }
-        return false;
+        return reached;
         
     }
 

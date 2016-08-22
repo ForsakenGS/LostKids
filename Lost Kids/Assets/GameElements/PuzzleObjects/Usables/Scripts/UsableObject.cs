@@ -66,6 +66,8 @@ public abstract class UsableObject : MonoBehaviour {
     private AudioSource timeSound;
     private AudioSource fastTimeSound;
 
+    public Transform usePosition;
+
     /// <summary>
     /// Es necesario llamar a esta funcion desde los scripts que heredan mediante base.Start
     /// </summary>
@@ -96,6 +98,7 @@ public abstract class UsableObject : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 	
 	}
 
@@ -129,18 +132,22 @@ public abstract class UsableObject : MonoBehaviour {
 
             if (type.Equals(UsableTypes.Timed))
             {
-                
-                Invoke("CancelUse", activeTime);
-                if (timeSound != null && fastTimeSound != null)
+                if (!HUDManager.TimerActive())
                 {
-                    if (activeTime > 3)
+                    HUDManager.StartTimer();
+                    StartCoroutine(SetTimer(activeTime));
+                    Invoke("CancelUse", activeTime);
+                    if (timeSound != null && fastTimeSound != null)
                     {
-                        AudioManager.Play(timeSound, true, 1);
-                        Invoke("ShortTimeRemaining", activeTime - 3);
-                    }
-                    else
-                    {
-                        AudioManager.Play(fastTimeSound, false, 1);
+                        if (activeTime > 3)
+                        {
+                            AudioManager.Play(timeSound, true, 1);
+                            Invoke("ShortTimeRemaining", activeTime - 3);
+                        }
+                        else
+                        {
+                            AudioManager.Play(fastTimeSound, false, 1);
+                        }
                     }
                 }
             }
@@ -180,8 +187,25 @@ public abstract class UsableObject : MonoBehaviour {
             {
                 puzzleManager.NotifyChange(this, false);
             }
-            
+            AudioManager.Stop(timeSound);
+            AudioManager.Stop(fastTimeSound);
+            HUDManager.StopTimer();
+            StopCoroutine("SetTimer");
+
         }
+    }
+
+    public IEnumerator SetTimer(float amount)
+    {
+        float rate = 1 / amount;
+        float i = 1;
+        while (i > 0)
+        {
+            i -= Time.deltaTime * rate;
+            HUDManager.UpdateTimer(i);
+            yield return 0;
+        }
+        
     }
 
 }

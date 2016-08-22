@@ -239,7 +239,7 @@ public class CharacterManager : MonoBehaviour {
     /// <summary>
     /// Activa el siguiente personaje siempre que se encuentre alguno disponible
     /// </summary>
-    public  void ActivateNextCharacter()
+    public void ActivateNextCharacter()
     {
         if (characterList.Count == 1)
         {
@@ -265,6 +265,7 @@ public class CharacterManager : MonoBehaviour {
             }
         }
     }
+
 
     /// <summary>
     /// Activa el anterior personaje siempre que se encuentre alguno disponible
