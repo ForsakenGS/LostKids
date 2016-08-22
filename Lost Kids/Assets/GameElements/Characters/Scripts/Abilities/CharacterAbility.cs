@@ -47,6 +47,7 @@ public abstract class CharacterAbility : MonoBehaviour {
 
     // Parámetros básicos de la habilidad
     protected bool active;
+    private bool timeStopped = false;
     protected AudioLoader audioLoader;
     protected float energy;
     protected CharacterStatus characterStatus;
@@ -82,14 +83,17 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// </summary>
     /// <param name="energyModif">Cantidad de energía a incrementar</param>
     protected void AddEnergy(float energyModif) {
-        // Incrementa la energía, sin sobrepasar el límite máximo
-        energy += energyModif;
-        if (energy > maxEnergy) {
-            energy = maxEnergy;
-        }
-        // Lanza el evento para informar que la energía de la habilidad ha sido modificada
-        if (ModifiedAbilityEnergyEvent != null) {
-            ModifiedAbilityEnergyEvent(this);
+        // Comprueba si el tiempo de habilidad está parado
+        if (!timeStopped) {
+            // Incrementa la energía, sin sobrepasar el límite máximo
+            energy += energyModif;
+            if (energy > maxEnergy) {
+                energy = maxEnergy;
+            }
+            // Lanza el evento para informar que la energía de la habilidad ha sido modificada
+            if (ModifiedAbilityEnergyEvent != null) {
+                ModifiedAbilityEnergyEvent(this);
+            }
         }
     }
 
@@ -156,6 +160,14 @@ public abstract class CharacterAbility : MonoBehaviour {
 
     public void Reset() {
         AbilityInitialization();
+    }
+
+    public void ResumeTime() {
+        timeStopped = false;
+    }
+
+    public void StopTime() {
+        timeStopped = true;
     }
 
     // Update is called once per frame

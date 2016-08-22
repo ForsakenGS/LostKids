@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class HUDManager : MonoBehaviour {
     // Tamaño del HUD del personaje activo
@@ -27,15 +28,12 @@ public class HUDManager : MonoBehaviour {
     public RectTransform telekinesisAbilityUI;
     public RectTransform astralProjectionAbilityUI;
     public RectTransform sakeUI;
-    public RectTransform timerUI;
-
-    private Image timerImage;
 
     private CharacterAbility selectedAbility;
     private GameObject activeCharacter;
 
-    private bool timerActive = false;
-    public static HUDManager instance = null;
+    public GameObject cooldownNotification;
+    private GameObject canvas;
 
     //Use this for references
     void Awake() {
@@ -49,7 +47,8 @@ public class HUDManager : MonoBehaviour {
         if (ki == null) {
             Destroy(kiCharacterUI.parent.gameObject);
         }
-        instance = this;
+
+        canvas = transform.Find("HUDCanvas").gameObject;
     }
 
     // Use this for initialization
@@ -82,8 +81,6 @@ public class HUDManager : MonoBehaviour {
         CharacterInventory.ObjectRequestedEvent += ObjectRequested;
         CharacterStatus.KillCharacterEvent += CharacterKilled;
         CharacterStatus.ResurrectCharacterEvent += CharacterResurrected;
-
-        timerImage = timerUI.GetComponent<Image>();
     }
 
     // Se ejecuta cuando se termina la ejecución de una habilidad
@@ -198,7 +195,7 @@ public class HUDManager : MonoBehaviour {
             }
         }
         trf.parent.GetComponent<RectTransform>().sizeDelta /= (1 + modificationSelectedCharacter);
-        trf.parent.SetParent(unselectedCharacters);
+        SetCharacterAsUnselected(activeCharacter, trf, character);
         // Se modifica la interfaz del personaje actualmente seleccionado
         activeCharacter = character;
         trf = GetCharacterUIRectTransform(activeCharacter);
@@ -218,7 +215,41 @@ public class HUDManager : MonoBehaviour {
         // Selecciona la interfaz relativa a la habilidad y modifica el relleno de la imagen
         Transform abilityUI = GetAbilityUIRectTransform(ability.GetType());
         float amount = ability.GetAvailableEnergy() / ability.GetMaxEnergy();
-        abilityUI.Find("Full").GetComponent<Image>().fillAmount = amount;
+        GameObject full = abilityUI.Find("Full").gameObject;
+        full.GetComponent<Image>().fillAmount = amount;
+
+        if(amount >= 1) {
+            //Lanzar Imagen segun habilidad
+            //Transform abilityCooldown = GetAbilityCooldownRectTransform(ability.GetType());
+            cooldownNotification.GetComponent<CooldownNotification>().ShowNotification(full.GetComponent<Image>().sprite);
+        }
+    }
+
+    // Devuelve el componente RectTransform de la habilidad indicada
+    RectTransform GetAbilityCooldownRectTransform(System.Type abilityType) {
+        RectTransform abilityUI = null;
+        switch (abilityType.ToString()) {
+            case "BigJumpAbility":
+                abilityUI = bigJumpAbilityUI;
+                break;
+            case "SprintAbility":
+                abilityUI = sprintAbilityUI;
+                break;
+            case "BreakAbility":
+                abilityUI = breakAbilityUI;
+                break;
+            case "PushAbility":
+                abilityUI = pushAbilityUI;
+                break;
+            case "TelekinesisAbility":
+                abilityUI = telekinesisAbilityUI;
+                break;
+            case "AstralProjectionAbility":
+                abilityUI = astralProjectionAbilityUI;
+                break;
+        }
+
+        return abilityUI;
     }
 
     // Devuelve el componente RectTransform de la habilidad indicada
@@ -381,6 +412,36 @@ public class HUDManager : MonoBehaviour {
         GetInventoryObjectUITransform(obj).Find("Full").GetComponent<CanvasRenderer>().SetAlpha(alphaObj);
     }
 
+    // Coloca el icono del anterior personaje seleccionado en su posición correcta dentro del listado de personajes no seleccionados
+    private void SetCharacterAsUnselected(GameObject activeCharacter, RectTransform trfAC, GameObject newActiveCharacter) {
+        // Añade el icono al listado
+        trfAC.parent.SetParent(unselectedCharacters);
+        // Lo coloca en el orden correcto
+        switch (newActiveCharacter.GetComponent<CharacterStatus>().characterName) {
+            case CharacterName.Aoi:
+                if (activeCharacter.GetComponent<CharacterStatus>().characterName.Equals(CharacterName.Akai)) {
+                    trfAC.parent.SetAsFirstSibling();
+                } else {
+                    trfAC.parent.SetAsLastSibling();
+                }
+                break;
+            case CharacterName.Akai:
+                if (activeCharacter.GetComponent<CharacterStatus>().characterName.Equals(CharacterName.Ki)) {
+                    trfAC.parent.SetAsFirstSibling();
+                } else {
+                    trfAC.parent.SetAsLastSibling();
+                }
+                break;
+            case CharacterName.Ki:
+                if (activeCharacter.GetComponent<CharacterStatus>().characterName.Equals(CharacterName.Aoi)) {
+                    trfAC.parent.SetAsFirstSibling();
+                } else {
+                    trfAC.parent.SetAsLastSibling();
+                }
+                break;
+        }
+    }
+
     // Inicialización de la transparencia de los distintos elementos del HUD
     void TransparencyInitialization() {
         // AoiUI
@@ -417,32 +478,5 @@ public class HUDManager : MonoBehaviour {
         } else {
             ShowInventoryObject(false, "SakeBottle");
         }
-    }
-
-
-    public static void UpdateTimer(float value)
-    {
-        if(instance.timerImage.enabled)
-        {
-            instance.timerImage.fillAmount = value;
-        }
-    }
-
-    public static void StartTimer()
-    {
-        instance.timerImage.enabled = true;
-        instance.timerImage.fillAmount = 1;
-        instance.timerActive = true;
-
-    }
-
-    public static void StopTimer()
-    {
-        instance.timerImage.enabled = false;
-        instance.timerActive = false;
-    }
-    public static bool TimerActive()
-    {
-        return instance.timerActive;
     }
 }

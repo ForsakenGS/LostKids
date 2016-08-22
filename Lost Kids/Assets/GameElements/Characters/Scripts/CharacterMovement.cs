@@ -16,15 +16,16 @@ public class CharacterMovement : MonoBehaviour {
     private Rigidbody rigBody;
     private Collider standingColl;
     private Collider crouchingColl;
-    // Último valores del jugador registrados
+    // Últimos valores del jugador registrados
     private float lastYCoord;
     private Vector3 lastPosition;
     private float playerSpeed;
     // Audio variables
     private AudioLoader audioLoader;
-    private AudioSource stepSound;
     private AudioSource jumpSound;
     private AudioSource pushSound;
+    private AudioSource step0Sound;
+    private AudioSource step1Sound;
 
     // Use this for references
     void Awake() {
@@ -43,9 +44,10 @@ public class CharacterMovement : MonoBehaviour {
         lastPosition = transform.position;
 
         audioLoader = GetComponent<AudioLoader>();
-        stepSound = audioLoader.GetSound("Steps");
         jumpSound = audioLoader.GetSound("Jump");
         pushSound = audioLoader.GetSound("Push");
+        step0Sound = audioLoader.GetSound("Step0");
+        step1Sound = audioLoader.GetSound("Step1");
     }
 
     /// <summary>
@@ -179,7 +181,6 @@ public class CharacterMovement : MonoBehaviour {
         rigBody.AddForce(impulse, ForceMode.Force);
         // Sonido del salto
         if (sound) {
-            AudioManager.Stop(stepSound);
             AudioManager.Play(jumpSound, false, 1);
         }
     }
@@ -210,7 +211,6 @@ public class CharacterMovement : MonoBehaviour {
             rigBody.AddForce(forceToApply * speed, ForceMode.Force);
 
             if (!pushSound.isPlaying) {
-                AudioManager.Stop(stepSound);
                 AudioManager.Play(pushSound, true, 1);
             }
         }
@@ -226,10 +226,6 @@ public class CharacterMovement : MonoBehaviour {
         if (!forceToApply.Equals(Vector3.zero)) {
             rigBody.AddForce(forceToApply * speed, ForceMode.Force);
             Rotating(forceToApply.x, forceToApply.z);
-
-            if ((sound) && (!stepSound.isPlaying)) {
-                AudioManager.Play(stepSound, true, 1, 0.9f, 1.1f);
-            }
         }
     }
 
@@ -237,10 +233,7 @@ public class CharacterMovement : MonoBehaviour {
     /// Función para indicar que el personaje se ha parado
     /// </summary>
     public void PlayerHasStopped() {
-        if (stepSound.isPlaying) {
-            // Sonido de andar
-            stepSound.Stop();
-        } else if ((pushSound) && (pushSound.isPlaying)) {
+        if ((pushSound) && (pushSound.isPlaying)) {
             // Sonido de empujar
             pushSound.Stop();
         }
@@ -271,6 +264,14 @@ public class CharacterMovement : MonoBehaviour {
         crouchingColl.enabled = false;
         transform.Translate(new Vector3(0, 0.5f, 0));
         transform.localScale += new Vector3(0, 0.5f, 0); // CAMBIAR! No se debe modificar el tamaño del objeto
+    }
+
+    public void StepSound(int step) {
+        if (step == 0) {
+            AudioManager.Play(step0Sound, false, 1, 0.9f, 1.1f);
+        } else {
+            AudioManager.Play(step1Sound, false, 1, 0.9f, 1.1f);
+        }
     }
 
     // Update is called once per frame

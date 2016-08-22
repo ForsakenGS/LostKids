@@ -104,8 +104,32 @@ public class AbilityController : MonoBehaviour {
         return activeAbility;
     }
 
+    void OnDisable() {
+        CutSceneManager.CutSceneActivation -= StopAbilitiesTime;
+        CutSceneManager.CutSceneDeactivation -= ResumeAbilitiesTime;
+    }
+
+    void OnEnable() {
+        CutSceneManager.CutSceneActivation += StopAbilitiesTime;
+        CutSceneManager.CutSceneDeactivation += ResumeAbilitiesTime;
+    }
+
+    /// <summary>
+    /// Resetea el estado de las dos habilidades del personaje
+    /// </summary>
     public void ResetAbilities() {
         ability1.Reset();
         ability2.Reset();
+        activeAbility = null;
+    }
+
+    void ResumeAbilitiesTime() {
+        ability1.ResumeTime();
+        ability2.ResumeTime();
+    }
+
+    void StopAbilitiesTime() {
+        ability1.StopTime();
+        ability2.StopTime();
     }
 }
