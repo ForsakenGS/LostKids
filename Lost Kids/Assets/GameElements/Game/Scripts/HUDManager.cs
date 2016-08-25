@@ -219,15 +219,18 @@ public class HUDManager : MonoBehaviour {
     // Se ejecuta cuando se produce un cambio en la cantidad de energía de la habilidad determinada
     void EnergyModified(CharacterAbility ability) {
         // Selecciona la interfaz relativa a la habilidad y modifica el relleno de la imagen
-        Transform abilityUI = GetAbilityUIRectTransform(ability.GetType());
+        RectTransform abilityUI = GetAbilityUIRectTransform(ability.GetType());
         float amount = ability.GetAvailableEnergy() / ability.GetMaxEnergy();
         GameObject full = abilityUI.Find("Full").gameObject;
         full.GetComponent<Image>().fillAmount = amount;
 
         if(amount >= 1) {
-            //Lanzar Imagen segun habilidad
-            //Transform abilityCooldown = GetAbilityCooldownRectTransform(ability.GetType());
-            cooldownNotification.GetComponent<CooldownNotification>().ShowNotification(full.GetComponent<Image>().sprite);
+            //Comprueba si se trata del jugador activo
+            if(abilityUI.GetComponentInChildren<CanvasRenderer>().GetAlpha().Equals(1)) {
+
+                //Lanzar Imagen segun habilidad
+                cooldownNotification.GetComponent<CooldownNotification>().ShowNotification(full.GetComponent<Image>().sprite);
+            }
         }
     }
 

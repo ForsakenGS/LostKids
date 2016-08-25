@@ -17,14 +17,24 @@ public class Neko : MonoBehaviour {
     public void Show()
     {
         visible = true;
+
         //Animacion del gato
 
-        GetComponent<Renderer>().enabled = true;
+        Renderer[] nekoParts = GetComponentsInChildren<Renderer>();
+        
+        for(int i = 0; i < nekoParts.Length; i++) {
+            nekoParts[i].enabled = true;
+        }
     }
 
     public void Hide()
     {
         visible = false;
-        GetComponent<Renderer>().enabled = false;
+        
+        Renderer[] nekoParts = GetComponentsInChildren<Renderer>();
+        
+        for(int i = 0; i < nekoParts.Length; i++) {
+            nekoParts[i].enabled = true;
+        }
     }
 }

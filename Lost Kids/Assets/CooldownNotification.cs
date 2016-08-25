@@ -19,12 +19,12 @@ public class CooldownNotification : MonoBehaviour {
         StopAllCoroutines();
         GetComponent<Image>().sprite = spr;
         GetComponent<Image>().color = new Color(1,1,1,0);
-        Invoke("HideNotification", 1.5f);
-        iTween.FadeTo(gameObject, 0.4f, 1.0f);
+        Invoke("HideNotification", 0.8f);
+        iTween.FadeTo(gameObject, 0.4f, 0.5f);
         
     }
 
     public void HideNotification() {
-       iTween.FadeTo(gameObject, 0, 1.0f);
+       iTween.FadeTo(gameObject, 0, 0.5f);
     }
 }
