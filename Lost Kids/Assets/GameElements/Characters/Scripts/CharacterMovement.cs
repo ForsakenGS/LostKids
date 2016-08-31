@@ -210,7 +210,7 @@ public class CharacterMovement : MonoBehaviour {
         if (!forceToApply.Equals(Vector3.zero)) {
             rigBody.AddForce(forceToApply * speed, ForceMode.Force);
 
-            if (!pushSound.isPlaying) {
+            if ((!pushSound.isPlaying) && (!PlayerIsStopped())) {
                 AudioManager.Play(pushSound, true, 1);
             }
         }
