@@ -10,6 +10,8 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Spike
+    4300002: kunai
+    4300004: Kunai
   materials:
     importMaterials: 0
     materialName: 0
