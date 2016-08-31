@@ -35,12 +35,15 @@ public class AbilityController : MonoBehaviour {
 
     // Activa la habilidad pasada como parámetro
     bool ActivateAbility(CharacterAbility ability) {
-        bool res = (ability.CanBeStarted()) && (characterStatus.CanStartAbility(ability));
+        // Comprueba si la habilidad puede activarse
+        bool res = ability.CanBeStarted();
         if (res) {
-            res = ability.ActivateAbility();
+            res = ((characterStatus.CanStartAbility(ability)) && (ability.ActivateAbility()));
             if (res) {
                 activeAbility = ability;
             }
+        } else {
+            characterStatus.NegationAnimation();
         }
 
         return res;

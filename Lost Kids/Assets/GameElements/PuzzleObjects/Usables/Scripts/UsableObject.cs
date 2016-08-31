@@ -187,11 +187,12 @@ public abstract class UsableObject : MonoBehaviour {
             {
                 puzzleManager.NotifyChange(this, false);
             }
-            AudioManager.Stop(timeSound);
-            AudioManager.Stop(fastTimeSound);
-            HUDManager.StopTimer();
-            StopCoroutine("SetTimer");
-
+            if (type.Equals(UsableTypes.Timed)) {
+                AudioManager.Stop(timeSound);
+                AudioManager.Stop(fastTimeSound);
+                HUDManager.StopTimer();
+                StopCoroutine("SetTimer");
+            }
         }
     }
 

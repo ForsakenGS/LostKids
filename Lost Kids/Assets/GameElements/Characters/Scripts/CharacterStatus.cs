@@ -42,13 +42,11 @@ public class CharacterStatus : MonoBehaviour {
     public float crouchingSpeed = 4000f;
     public float pushingSpeed = 4000f;
     public float maxSacrificeHeight;
+    public float maxJumpImpulse;
+    public float maxAstralJumpImpulse;
 
     //Habitacion en la que se encuentra el personaje
     public int currentRoom = 0;
-
-
-    // Personaje
-    public float maxJumpImpulse;
 
     //Particulas
     private ParticlesActivator deadParticles;
@@ -70,8 +68,6 @@ public class CharacterStatus : MonoBehaviour {
     private AudioSource dieSound;
     private AudioSource sacrificeSound;
     private AudioSource pushSound;
-
-
 
     // Use this for initialization
     void Awake() {
@@ -115,11 +111,8 @@ public class CharacterStatus : MonoBehaviour {
             // Estados desde los que se puede iniciar cualquier habilidad: Walking, Idle
             res = (characterState.Equals(State.Walking) || characterState.Equals(State.Idle));
             if (res) {
-
                 //INCREMENTAR EL NUMERO DE PARTICULAS
                 playerParticles.IncreaseEmission(abilityEmissionRate);
-
-
                 // Actualiza el estado del personaje
                 switch (ability.abilityName) {
                     case AbilityName.AstralProjection:
@@ -182,6 +175,8 @@ public class CharacterStatus : MonoBehaviour {
         // Aplica gravedad extra sobre el personaje si está cayendo o en 
         if (characterState.Equals(State.Falling)) {
             characterMovement.ExtraGravity(1);
+        } else if (characterState.Equals(State.AstralProjection)) {
+            characterMovement.ExtraGravity(0.1f);
         }
     }
 
@@ -226,7 +221,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.AstralProjection:
                 if (!jumpButtonUp) {
                     // Comprueba si ha alcanzado el impulso de salto inicial
-                    if (totalJumpImpulse < firstJumpImpulse) {
+                    if (totalJumpImpulse < maxAstralJumpImpulse) {
                         characterMovement.Jump(astralJumpImpulse, false);
                         totalJumpImpulse += astralJumpImpulse;
                     }
@@ -350,7 +345,6 @@ public class CharacterStatus : MonoBehaviour {
                 case State.Idle:
                     characterMovement.MoveCharacterNormal(horizontal, vertical, standingSpeed / 2, true);
                     characterState = State.Walking;
-                    characterAnimator.ResetTrigger("Idle");
                     SetAnimatorTrigger("Walk");
                     break;
                 case State.Walking:
@@ -376,6 +370,12 @@ public class CharacterStatus : MonoBehaviour {
                     break;
             }
         }
+    }
+
+    public void NegationAnimation() {
+        // Ejecuta la animación y bloquea al personaje
+        //SetAnimatorTrigger("Negation");
+        //LockByAnimation();
     }
 
     /// <summary>
