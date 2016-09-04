@@ -61,9 +61,9 @@ public class InputManagerTLK : MonoBehaviour {
         horizontalButton = 0.0f;
         verticalButton = 0.0f;
         jumpButton = 0;
-        CharacterComponentsUpdate();
+        CharacterComponentsUpdate(CharacterManager.GetActiveCharacter());
         // Suscripciones a eventos
-        CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
+        //CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
     }
 
     bool Button(string button) {
@@ -115,8 +115,8 @@ public class InputManagerTLK : MonoBehaviour {
     }
 
     // Update references to current character
-    void CharacterComponentsUpdate() {
-        GameObject player = CharacterManager.GetActiveCharacter();
+    void CharacterComponentsUpdate(GameObject character) {
+        GameObject player = character;
         abilityControl = player.GetComponent<AbilityController>();
         characterStatus = player.GetComponent<CharacterStatus>();
     }

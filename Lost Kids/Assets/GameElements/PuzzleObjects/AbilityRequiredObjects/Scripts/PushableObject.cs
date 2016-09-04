@@ -16,54 +16,48 @@ public class PushableObject : MonoBehaviour {
 
 
 
-	// Use this for initialization
-	void Start () { 
+    // Use this for initialization
+    void Start() {
 
         size = GetComponent<Collider>().bounds.size;
         rigidBody = GetComponent<Rigidbody>();
 
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
-    public void Release()
-    {
+    // Update is called once per frame
+    void Update() {
+
+    }
+
+    public void Release() {
         gameObject.layer = LayerMask.NameToLayer("Default");
-        if (IsGrounded())
-        {
+        if (IsGrounded()) {
             rigidBody.isKinematic = true;
-        } 
+        }
         pushAbility = null;
     }
 
-    public void Grab(PushAbility pa)
-    {
+    public void Grab(PushAbility pa) {
         rigidBody.isKinematic = false;
         gameObject.layer = LayerMask.NameToLayer("PushableObjects");
         pushAbility = pa;
     }
 
-    private bool IsGrounded()
-    {
+    private bool IsGrounded() {
         bool grounded = false;
         int rayCnt = 0;
         Vector3 ray = new Vector3();
 
-        do
-        {
+        do {
             // Elige el rayo a lanzar
-            switch (rayCnt)
-            {
+            switch (rayCnt) {
                 case 0:
 
                     ray = transform.position;
                     break;
                 case 1:
-                    ray = transform.position + (Vector3.forward * size.z/2);
+                    ray = transform.position + (Vector3.forward * size.z / 2);
                     break;
                 case 2:
                     ray = transform.position + (Vector3.back * size.z / 2);
@@ -85,35 +79,27 @@ public class PushableObject : MonoBehaviour {
 
         return grounded;
     }
-    
-    void OnCollisionExit(Collision col)
-    {
-        if(!CharacterManager.IsActiveCharacter(col.gameObject) && pushAbility!=null && !IsGrounded())
-        {
-            pushAbility.ReleaseObject();
+
+    void OnCollisionExit(Collision col) {
+        if (!CharacterManager.IsActiveCharacter(col.gameObject) && pushAbility != null && !IsGrounded()) {
+            pushAbility.gameObject.GetComponent<AbilityController>().DeactivateActiveAbility();
         }
     }
-    
-    void OnCollisionEnter(Collision col)
-    {
-        if(pushAbility == null && IsGrounded())
-        {
+
+    void OnCollisionEnter(Collision col) {
+        if (pushAbility == null && IsGrounded()) {
             rigidBody.isKinematic = true;
         }
     }
 
-    void OnTriggerEnter(Collider col)
-    {
-        if(col.CompareTag("Player"))
-        {
+    void OnTriggerEnter(Collider col) {
+        if (col.CompareTag("Player")) {
             col.transform.parent = transform;
         }
     }
 
-    void OnTriggerExit(Collider col)
-    {
-        if (col.CompareTag("Player") && col.transform.parent==transform)
-        {
+    void OnTriggerExit(Collider col) {
+        if (col.CompareTag("Player") && col.transform.parent == transform) {
             col.transform.parent = null;
         }
     }

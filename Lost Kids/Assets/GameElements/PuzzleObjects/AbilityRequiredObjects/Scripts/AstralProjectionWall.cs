@@ -2,20 +2,7 @@
 using System.Collections;
 
 public class AstralProjectionWall : MonoBehaviour {
-    /// <summary>
-    /// Distancia de detección del objeto respecto al personaje con la habilidad 'Telekinesis'
-    /// </summary>
-    public float detectionDistance = 2.0f;
-
     private Transform astralDestination;
-
-    void Awake() {
-        // Actualiza el collider del TooltipDetector
-        BoxCollider bc = transform.Find("TooltipDetector").GetComponent<BoxCollider>();
-        Vector3 size = bc.size;
-        bc.size = new Vector3(size.x, size.y, detectionDistance);
-        bc.center = new Vector3(0, 0, -detectionDistance / 2);
-    }
 
     // Use this for initialization
     void Start() {

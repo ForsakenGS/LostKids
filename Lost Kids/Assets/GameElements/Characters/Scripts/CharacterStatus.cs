@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Clase para definir los diferentes personajes que pueden implementar una máquina de estados
@@ -100,19 +101,17 @@ public class CharacterStatus : MonoBehaviour {
     }
 
     /// <summary>
-    /// Comprueba si es posible comenzar la ejecución de una habilidad concreta, modificando el estado en que se encuentra el personaje
+    /// Comienza la ejecución de una habilidad concreta, modificando el estado en que se encuentra el personaje
     /// </summary>
     /// <param name="ability">Habilidad que se desea iniciar a ejecutar</param>
     /// <returns><c>true</c> si es posible iniciar la habilidad, en cuyo caso modifica además el estado del personaje; <c>false</c> en otro caso</returns>
-    public bool CanStartAbility(CharacterAbility ability) {
+    public bool StartAbility(CharacterAbility ability) {
         // Comprueba que el personaje no esté bloqueado por alguna animación
         bool res = !lockedByAnimation;
         if (res) {
             // Estados desde los que se puede iniciar cualquier habilidad: Walking, Idle
             res = (characterState.Equals(State.Walking) || characterState.Equals(State.Idle));
             if (res) {
-                //INCREMENTAR EL NUMERO DE PARTICULAS
-                playerParticles.IncreaseEmission(abilityEmissionRate);
                 // Actualiza el estado del personaje
                 switch (ability.abilityName) {
                     case AbilityName.AstralProjection:
@@ -140,16 +139,24 @@ public class CharacterStatus : MonoBehaviour {
                         SetAnimatorTrigger("Telekinesis");
                         break;
                 }
+                //INCREMENTAR EL NUMERO DE PARTICULAS
+                playerParticles.IncreaseEmission(abilityEmissionRate);
+                // Inicia la habilidad
+                res = ability.ActivateAbility();
             }
         }
 
         return res;
     }
 
+    public bool CurrentStateIs(State s) {
+        return characterState.Equals(s);
+    }
+
     /// <summary>
     /// Función para indicar que el botón de agacharse ha sido pulsado, cambiando el estado del personaje a 'Crouching' en caso de ser necesario.
     /// </summary>
-	public void CrouchButton() {
+    public void CrouchButton() {
         switch (characterState) {
             case State.Crouching:
                 characterMovement.Stand();
@@ -282,11 +289,6 @@ public class CharacterStatus : MonoBehaviour {
                 kill = false;
                 break;
             case State.Pushing:
-                //Si muere mientras empuja un objeto, lo debe soltar
-                if (GetComponent<PushAbility>() != null) {
-                    GetComponent<PushAbility>().ReleaseObject();
-                }
-                break;
             case State.BigJumping:
             case State.Breaking:
             case State.Telekinesis:
@@ -373,9 +375,12 @@ public class CharacterStatus : MonoBehaviour {
     }
 
     public void NegationAnimation() {
-        // Ejecuta la animación y bloquea al personaje
-        //SetAnimatorTrigger("Negation");
-        //LockByAnimation();
+        // Comprueba si se puede ejecutar la animación
+        if ((!lockedByAnimation) && ((characterState.Equals(State.Walking) || characterState.Equals(State.Idle)))) {
+            // Ejecuta la animación y bloquea al personaje
+            //SetAnimatorTrigger("Negation");
+            //LockByAnimation();
+        }
     }
 
     /// <summary>
@@ -470,7 +475,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.Pushing:
                 //TEMPORAL!! Suelta el objeto si el personaje se cae
                 if (!characterMovement.CharacterIsGrounded()) {
-                    GetComponent<PushAbility>().ReleaseObject();
+                    GetComponent<AbilityController>().DeactivateActiveAbility();
                     characterState = State.Falling;
                     SetAnimatorTrigger("Fall");
                 }
@@ -690,8 +695,7 @@ public class CharacterStatus : MonoBehaviour {
     /// <summary>
     /// Reproduce la animacion de victoria y en caso de ser final de nivel, bloquea el personaje hasta que los demas lo completen
     /// </summary>
-    public void Victory(bool levelEnd)
-    {
+    public void Victory(bool levelEnd) {
         //Girar al personaje para que se va de frente mejor?
         transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
 

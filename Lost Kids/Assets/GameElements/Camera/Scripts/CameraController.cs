@@ -106,7 +106,7 @@ public class CameraController : MonoBehaviour {
     }
 
     //Funcion que se activa con el evento de cambio de personaje
-    private void CameraToActivePlayer() {
+    private void CameraToActivePlayer(GameObject character) {
         ChangeCamera(characterStatus.currentRoom);
     }
 

@@ -137,8 +137,8 @@ public class CameraManager : MonoBehaviour {
     }
 
     //Funcion que se activa con el evento de cambio de personaje
-    private void CameraToActivePlayer() {
-        ChangeCamera(CharacterManager.GetActiveCharacter().GetComponent<CharacterStatus>().currentRoom);
+    private void CameraToActivePlayer(GameObject character) {
+        ChangeCamera(character.GetComponent<CharacterStatus>().currentRoom);
     }
 
 
