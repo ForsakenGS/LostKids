@@ -367,7 +367,7 @@ public class CharacterStatus : MonoBehaviour {
                 case State.Pushing:
                     // Calcula si el personaje empuja o arrastra hacia él la caja y selecciona animación
                     Vector3 pushNormal = GetComponent<PushAbility>().GetPushNormal();
-                    characterAnimator.SetBool("isPushing", ((pushNormal.z * vertical < 0.0f) || (pushNormal.x * horizontal > 0.0f)));
+                    characterAnimator.SetBool("isPushing", ((pushNormal.z * vertical < 0.0f) || (pushNormal.x * horizontal < 0.0f)));
                     characterMovement.MoveCharacterAxes(horizontal, vertical, pushingSpeed, pushNormal);
                     break;
             }
