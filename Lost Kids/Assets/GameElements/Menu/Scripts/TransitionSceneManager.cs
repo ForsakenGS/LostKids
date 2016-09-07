@@ -21,6 +21,7 @@ public class TransitionSceneManager : MonoBehaviour {
 
 
     private bool inputAvailable = false;
+    private bool inTransition = false;
 
     // Use this for initialization
     void Start() {
@@ -56,7 +57,8 @@ public class TransitionSceneManager : MonoBehaviour {
                 messageManager.SkipText();
                 inputAvailable = false;
                 Invoke("AllowInput", 1);
-            } else {
+            } else if (!inTransition){
+                inTransition = true;
                 fader.EndScene();
             }
         }
