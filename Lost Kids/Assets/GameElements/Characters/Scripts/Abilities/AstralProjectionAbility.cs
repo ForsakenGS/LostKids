@@ -109,6 +109,15 @@ public class AstralProjectionAbility : CharacterAbility {
         }
     }
 
+    public override bool SetReady(bool r, GameObject go = null, RaycastHit hitInfo = default(RaycastHit)) {
+        ready = r;
+        if (r) {
+            wall = go.GetComponent<AstralProjectionWall>();
+        }
+
+        return ready;
+    }
+
     /// <summary>
     /// Asigna el objeto de tipo 'AstralProjectionWall' sobre el que se ejecuta la habilidad en ese momento
     /// </summary>

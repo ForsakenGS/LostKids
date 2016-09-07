@@ -55,26 +55,30 @@ public class BreakAbility : CharacterAbility {
     /// <returns><c>true</c>, si se pudo iniciar la ejecución, <c>false</c> si no fue posible.</returns>
     public override bool ActivateAbility() {
         bool started = !active;
-        if (!active){
+        if (!active) {
             // Consumo de energía inicial
             AddEnergy(-initialConsumption);
-            active = true;
-            CallEventActivateAbility();
-            Ray detectRay = new Ray(transform.position + Vector3.up * height, transform.forward);
-            // helper to visualise the ground check ray in the scene view
-            #if UNITY_EDITOR
-            Debug.DrawRay(detectRay.origin, transform.forward, Color.green, 1);
-            #endif
-            // Detecta el objeto situado delante del personaje
-            RaycastHit hitInfo;
-            if (Physics.Raycast(detectRay, out hitInfo, breakDistance)) {
-                // Si el objeto se puede romper, le da un golpe
-                if (hitInfo.collider.tag.Equals("Breakable")) {
-                    objectToBreak = hitInfo.collider.GetComponent<BreakableObject>();
-                }
+            if (ready) {
+                active = true;
+                started = true;
+                CallEventActivateAbility();
+            } else {
+                started = false;
             }
         }
 
         return started;
+    }
+
+    public override bool SetReady(bool r, GameObject go = null, RaycastHit hitInfo = default(RaycastHit)) {
+        if ((r) && (hitInfo.collider.tag.Equals("Breakable"))) {
+            // La habilidad está lista para ser usada
+            ready = true;
+            objectToBreak = hitInfo.collider.GetComponent<BreakableObject>();
+        } else {
+            ready = false;
+        }
+
+        return ready;
     }
 }

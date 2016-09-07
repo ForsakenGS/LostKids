@@ -16,6 +16,7 @@ public class BigJumpAbility : CharacterAbility {
     void Start() {
         AbilityInitialization();
         abilityName = AbilityName.BigJump;
+        ready = true;
     }
 
     /// <summary>
@@ -45,5 +46,9 @@ public class BigJumpAbility : CharacterAbility {
         }
 
         return started;
+    }
+
+    public override bool SetReady(bool r, GameObject go = null, RaycastHit hitInfo = default(RaycastHit)) {
+        return ready;
     }
 }

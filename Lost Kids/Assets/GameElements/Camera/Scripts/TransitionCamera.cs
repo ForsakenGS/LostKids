@@ -32,30 +32,26 @@ public class TransitionCamera : MonoBehaviour {
     }
 
     void Start() {
-
-        RefreshPlayer();
-
+        RefreshPlayer(CharacterManager.GetActiveCharacter());
     }
 
     //Al activarse el script se añade la función RefreshPlayer
-    void OnEnable()
-    {
-        RefreshPlayer();
+    void OnEnable() {
+        RefreshPlayer(CharacterManager.GetActiveCharacter());
         CharacterManager.ActiveCharacterChangedEvent += RefreshPlayer;
     }
 
     //Al desactivarse el script se desuscriben las funciones
-    void OnDisable()
-    {
+    void OnDisable() {
         CharacterManager.ActiveCharacterChangedEvent -= RefreshPlayer;
     }
 
 
-    void FixedUpdate(){
+    void FixedUpdate() {
 
         //Si está realizandose la transicion
         if (isSlerping) {
-            
+
             //Se calcula el tiempo desde el inicio
             float timeSinceStarted = Time.time - timeStartedSlerping;
 
@@ -65,19 +61,19 @@ public class TransitionCamera : MonoBehaviour {
             Vector3 fit;
 
             //Ajuste provisional de la transición
-            if(percentageComplete < 0.5f) {
+            if (percentageComplete < 0.5f) {
                 fit = Vector3.right * 5 * percentageComplete;
-            }else {
+            } else {
                 fit = Vector3.right * 5 * (1 - percentageComplete);
             }
 
             //Se actualiza la posicion dentro de la curva
             transform.position = Vector3.Slerp(startPosition, endPosition, percentageComplete) + fit;// + Vector3.right*10*percentageComplete;
-            
+
 
             //Si se ha completado la transicion
             if (percentageComplete >= 1.0f) {
-                
+
                 isSlerping = false;
                 //Se llama al fin del cambio de cámaras
                 scCameraManager.FinishChangingCameras();
@@ -97,7 +93,7 @@ public class TransitionCamera : MonoBehaviour {
 
     //Función para iniciar la transición
     public void StartSlerping(Vector3 endPos) {
-        
+
         //Actualizamos las posiciones inicial y final
         startPosition = transform.position;
         endPosition = endPos;
@@ -110,8 +106,7 @@ public class TransitionCamera : MonoBehaviour {
     }
 
     //Función para mirar suavemente al jugador
-    void SmoothLookAt(GameObject pos)
-    {
+    void SmoothLookAt(GameObject pos) {
 
         //Se calcula la posición relativa del jugador a la cámara
         Vector3 relPlayerPosition = pos.transform.position - transform.position;
@@ -123,8 +118,8 @@ public class TransitionCamera : MonoBehaviour {
         transform.rotation = Quaternion.Slerp(transform.rotation, lookAtRotation, smooth * Time.deltaTime);
     }
 
-    private void RefreshPlayer() {
-        activePlayer = CharacterManager.GetActiveCharacter();
+    private void RefreshPlayer(GameObject character) {
+        activePlayer = character;
     }
 
 }

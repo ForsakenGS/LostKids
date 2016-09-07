@@ -5,10 +5,10 @@
 /// modifica la velocidad del personaje según speedModifier y decrementa la energía de la habilidad.
 /// </summary>
 public class SprintAbility : CharacterAbility {
-	/// <summary>
-	/// Modificador de velocidad sobre la establecida por defecto
-	/// </summary>
-	public float speedModifier = 2.0f;
+    /// <summary>
+    /// Modificador de velocidad sobre la establecida por defecto
+    /// </summary>
+    public float speedModifier = 2.0f;
 
     // Referencias
     private Rigidbody rig;
@@ -17,6 +17,7 @@ public class SprintAbility : CharacterAbility {
     void Start() {
         AbilityInitialization();
         abilityName = AbilityName.Sprint;
+        ready = true;
         rig = GetComponent<Rigidbody>();
     }
 
@@ -24,35 +25,35 @@ public class SprintAbility : CharacterAbility {
     /// Termina la ejecución de la habilidad, reestableciendo la velocidad del personaje
     /// </summary>
     /// <returns><c>true</c>, si la ejecución se terminó realmente, <c>false</c> en otro caso.</returns>
-    public override bool DeactivateAbility () {
-		bool ended = active;
-		if (active) {
-			// Se para la ejecución de la habilidad
-			active = false;
-			//characterStatus.standingSpeed /= speedModifier;
+    public override bool DeactivateAbility() {
+        bool ended = active;
+        if (active) {
+            // Se para la ejecución de la habilidad
+            active = false;
+            //characterStatus.standingSpeed /= speedModifier;
             CallEventDeactivateAbility();
-		}
+        }
 
-		return ended;
-	}
+        return ended;
+    }
 
-	/// <summary>
-	/// Comienza la ejecución de la habilidad, aumentando la velocidad del personaje
-	/// </summary>
-	/// <returns><c>true</c>, si la habilidad se inició con éxito, <c>false</c> si no fue posible.</returns>
-	public override bool ActivateAbility () {
-		bool started = false;
-		if (!active) {
-			// Comienza la ejecución de la habilidad
-			active = true;
+    /// <summary>
+    /// Comienza la ejecución de la habilidad, aumentando la velocidad del personaje
+    /// </summary>
+    /// <returns><c>true</c>, si la habilidad se inició con éxito, <c>false</c> si no fue posible.</returns>
+    public override bool ActivateAbility() {
+        bool started = false;
+        if (!active) {
+            // Comienza la ejecución de la habilidad
+            active = true;
             started = true;
             AddEnergy(-initialConsumption);
             //characterStatus.standingSpeed *= speedModifier;
             CallEventActivateAbility();
         }
 
-		return started;
-	}
+        return started;
+    }
 
     void FixedUpdate() {
         // Si la habilidad está activa, reproduce la fuerza
@@ -60,5 +61,9 @@ public class SprintAbility : CharacterAbility {
         if (active) {
             rig.AddForce(speedModifier * transform.forward, ForceMode.Acceleration);
         }
+    }
+
+    public override bool SetReady(bool r, GameObject go = null, RaycastHit hitInfo = default(RaycastHit)) {
+        return ready;
     }
 }
