@@ -38,7 +38,7 @@ public class AbilityController : MonoBehaviour {
         // Comprueba si la habilidad puede activarse
         bool res = ability.CanBeStarted();
         if (res) {
-            res = ((characterStatus.CanStartAbility(ability)) && (ability.ActivateAbility()));
+            res = characterStatus.StartAbility(ability);
             if (res) {
                 activeAbility = ability;
             }

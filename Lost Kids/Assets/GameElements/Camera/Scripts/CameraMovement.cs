@@ -31,7 +31,7 @@ public class CameraMovement : MonoBehaviour {
             cameraScrollers.Add(g.GetComponent<CameraScroller>());
         }
 
-        RefreshPlayer();
+        RefreshPlayer(CharacterManager.GetActiveCharacter());
         UpdateParams();
 
     }
@@ -65,14 +65,14 @@ public class CameraMovement : MonoBehaviour {
 
 
 
-    private void RefreshPlayer()
+    private void RefreshPlayer(GameObject character)
     {
+        player = character.transform;
+        //if (CharacterManager.GetActiveCharacter() != null) {
+        //    player = character.transform;
 
-        if (CharacterManager.GetActiveCharacter() != null) {
-            player = CharacterManager.GetActiveCharacter().transform;
-
-            //UpdateParams();
-        }
+        //    //UpdateParams();
+        //}
     }
 
     public void UpdateParams() {

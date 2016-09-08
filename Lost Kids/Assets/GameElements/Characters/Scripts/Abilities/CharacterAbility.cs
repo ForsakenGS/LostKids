@@ -47,6 +47,7 @@ public abstract class CharacterAbility : MonoBehaviour {
 
     // Parámetros básicos de la habilidad
     protected bool active;
+    protected bool ready;
     private bool timeStopped = false;
     protected AudioLoader audioLoader;
     protected float energy;
@@ -75,7 +76,6 @@ public abstract class CharacterAbility : MonoBehaviour {
     protected void AbilityInitialization() {
         active = false;
         energy = 0.0f;
-        //initExecutionTime = executionTime;
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// </summary>
     /// <returns><c>true</c> si es posible iniciarla, <c>false</c> si no es posible</returns>
     public bool CanBeStarted() {
-        return (energy >= initialConsumption);
+        return ((energy >= initialConsumption) && (ready));
     }
 
     /// <summary>
@@ -165,6 +165,8 @@ public abstract class CharacterAbility : MonoBehaviour {
     public void ResumeTime() {
         timeStopped = false;
     }
+
+    public abstract bool SetReady(bool r, GameObject go = null, RaycastHit hitInfo = default(RaycastHit));
 
     public void StopTime() {
         timeStopped = true;

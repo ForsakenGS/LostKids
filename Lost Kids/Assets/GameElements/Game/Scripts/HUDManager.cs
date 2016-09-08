@@ -135,9 +135,9 @@ public class HUDManager : MonoBehaviour {
     }
 
     // Se ejecuta cuando se produce un cambio de personaje
-    void CharacterChanged() {
+    void CharacterChanged(GameObject character) {
         // Modifica la interfaz del personaje seleccionado
-        GameObject newActiveCharacter = CharacterManager.GetActiveCharacter();
+        GameObject newActiveCharacter = character;
         CharacterSelected(newActiveCharacter);
         //AbilitySelected(newActiveCharacter.GetComponent<AbilityController>().GetActiveAbility());
         UpdateInventory();

@@ -80,6 +80,15 @@ public class TelekinesisAbility : CharacterAbility {
         return changed;
     }
 
+    public override bool SetReady(bool r, GameObject go = null, RaycastHit hitInfo = default(RaycastHit)) {
+        ready = r;
+        if (r) {
+            usableObj = go.GetComponent<UsableObject>();
+        }
+
+        return ready;
+    }
+
     /// <summary>
     /// Asigna el objeto de tipo 'Usable' que se puede activar con la habilidad en ese momento
     /// </summary>

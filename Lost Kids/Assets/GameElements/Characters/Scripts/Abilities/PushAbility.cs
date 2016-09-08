@@ -8,14 +8,64 @@ public class PushAbility : CharacterAbility {
     private Transform targetTransform;
     private GameObject targetGameObject;
     private Vector3 pushNormal;
+    private RaycastHit targetHitInfo;
 
     CharacterJoint joint;
 
     // Use this for initialization
     void Start() {
         AbilityInitialization();
+        ready = false;
         height = GetComponent<Renderer>().bounds.size.y / 2;
         abilityName = AbilityName.Push;
+    }
+
+    /// <summary>
+    /// Inicia la ejecución de la habilidad de empujar
+    /// </summary>
+    /// <returns><c>true</c>, si se pudo iniciar la ejecución, <c>false</c> si no fue posible.</returns>
+    public override bool ActivateAbility() {
+        if (!active) {
+            // Consumo de energía inicial
+            AddEnergy(-initialConsumption);
+            //Ray detectRay = new Ray(transform.position + Vector3.up * height, transform.forward);
+            //Ray detectRay = new Ray(this.transform.position + Vector3.up * height, this.transform.forward * pushDistance);
+            // helper to visualise the ground check ray in the scene view
+//#if UNITY_EDITOR
+            //Debug.DrawRay(detectRay.origin, transform.forward, Color.green, 1);
+//#endif
+            // Detecta el objeto situado delante del personaje
+            //RaycastHit hitInfo;
+            //if (Physics.Raycast(detectRay, out hitInfo, pushDistance)) {
+                //if (hitInfo.collider.tag.Equals("Pushable")) {
+                if (ready) {
+                    // El objeto se puede empujar
+                    active = true;
+                    CallEventActivateAbility();
+                    //Se obtiene la normal de la direccion por donde se agarra el objeto
+                    pushNormal = targetHitInfo.normal;
+                    targetTransform = targetHitInfo.collider.transform;
+                    //Se coloca el personaje alineado con el objeto y se rota para que mire a el
+                    //Posicion
+                    Vector3 newPosition = targetHitInfo.collider.transform.position + (targetHitInfo.collider.bounds.size.z / 2 + GetComponent<CapsuleCollider>().radius) * targetHitInfo.normal;
+                    newPosition.y = transform.position.y;
+                    newPosition -= 0.2f * transform.forward;
+                    this.transform.position = newPosition;
+                    //Rotacion
+                    Vector3 lookPosition = targetHitInfo.collider.transform.position;
+                    lookPosition.y = transform.position.y;
+                    this.transform.LookAt(lookPosition);
+                    //Se crea un joint fisico para enlazar los objetos
+                    GrabObject(targetHitInfo.collider.gameObject, transform.InverseTransformPoint(transform.position + Vector3.up * height), targetTransform.InverseTransformPoint(targetHitInfo.point));
+                }
+            //}
+            if (!active) {
+                // Desactiva la habilidad en el CharacterStatus
+                characterStatus.EndAbility(this);
+            }
+        }
+
+        return active;
     }
 
     /// <summary>
@@ -26,6 +76,7 @@ public class PushAbility : CharacterAbility {
         if (active) {
             active = false;
             ReleaseObject();
+            characterStatus.EndAbility(this);
             pushNormal = Vector3.zero;
             CallEventDeactivateAbility();
         }
@@ -41,54 +92,7 @@ public class PushAbility : CharacterAbility {
         return pushNormal;
     }
 
-    /// <summary>
-    /// Inicia la ejecución de la habilidad de empujar
-    /// </summary>
-    /// <returns><c>true</c>, si se pudo iniciar la ejecución, <c>false</c> si no fue posible.</returns>
-    public override bool ActivateAbility() {
-        if (!active) {
-            // Consumo de energía inicial
-            AddEnergy(-initialConsumption);
-
-            Ray detectRay = new Ray(this.transform.position + Vector3.up * height, this.transform.forward * pushDistance);
-            // helper to visualise the ground check ray in the scene view
-#if UNITY_EDITOR
-            Debug.DrawRay(detectRay.origin, detectRay.direction, Color.green, pushDistance);
-#endif
-            // Detecta el objeto situado delante del personaje
-            RaycastHit hitInfo;
-            if (Physics.Raycast(detectRay, out hitInfo)) {
-                if (hitInfo.collider.tag.Equals("Pushable")) {
-                    // El objeto se puede empujar
-                    active = true;
-                    CallEventActivateAbility();
-                    //Se obtiene la normal de la direccion por donde se agarra el objeto
-                    pushNormal = hitInfo.normal;
-                    targetTransform = hitInfo.collider.transform;
-                    //Se coloca el personaje alineado con el objeto y se rota para que mire a el
-                    //Posicion
-                    Vector3 newPosition = hitInfo.collider.transform.position + (hitInfo.collider.bounds.size.z / 2 + GetComponent<CapsuleCollider>().radius) * hitInfo.normal;
-                    newPosition.y = transform.position.y;
-                    newPosition -= 0.2f * transform.forward;
-                    this.transform.position = newPosition;
-                    //Rotacion
-                    Vector3 lookPosition = hitInfo.collider.transform.position;
-                    lookPosition.y = transform.position.y;
-                    this.transform.LookAt(lookPosition);
-                    //Se crea un joint fisico para enlazar los objetos
-                    GrabObject(hitInfo.collider.gameObject, transform.InverseTransformPoint(detectRay.origin), targetTransform.InverseTransformPoint(hitInfo.point));
-                }
-            }
-            if (!active) {
-                // Desactiva la habilidad en el CharacterStatus
-                characterStatus.EndAbility(this);
-            }
-        }
-
-        return active;
-    }
-
-    public void GrabObject(GameObject go, Vector3 origin, Vector3 target) {
+    void GrabObject(GameObject go, Vector3 origin, Vector3 target) {
         targetGameObject = go;
         targetGameObject.transform.position += Vector3.up * 0.05f;
         joint = gameObject.AddComponent<CharacterJoint>();
@@ -113,17 +117,26 @@ public class PushAbility : CharacterAbility {
 
     }
 
-    public void ReleaseObject() {
+    void ReleaseObject() {
         if (joint != null) {
             Destroy(joint);
             if (targetGameObject != null) {
                 targetGameObject.GetComponent<PushableObject>().Release();
-                characterStatus.EndAbility(this);
-                if (active) {
-                    DeactivateAbility();
-                }
             }
         }
         targetGameObject = null;
+    }
+
+    public override bool SetReady(bool r, GameObject go = null, RaycastHit hitInfo = default(RaycastHit)) {
+        if ((r) && (hitInfo.collider.tag.Equals("Pushable"))) {
+            Debug.Log("esPushable");
+            // La habilidad está lista para ser usada
+            ready = true;
+            targetHitInfo = hitInfo;
+        } else {
+            ready = false;
+        }
+
+        return ready;
     }
 }
