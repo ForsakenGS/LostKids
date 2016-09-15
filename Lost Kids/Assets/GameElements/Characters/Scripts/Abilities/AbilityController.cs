@@ -9,10 +9,6 @@ using System.Collections;
 /// </summary>
 public class AbilityController : MonoBehaviour {
     public delegate void AbilityChanged(CharacterAbility abilityaffected);
-    /// <summary>
-    /// Evento para informar del cambio de habilidad activa a otros scripts
-    /// </summary>
-    public static event AbilityChanged SelectedAbilityEvent;
 
     private CharacterAbility ability1;
     private CharacterAbility ability2;

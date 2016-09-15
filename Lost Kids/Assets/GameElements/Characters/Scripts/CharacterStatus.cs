@@ -27,7 +27,6 @@ public class CharacterStatus : MonoBehaviour {
 
     //Referencia al manager de personajes
     public GameObject characterManagerPrefab;
-    private InputManagerTLK inputManager;
     private CharacterManager characterManager;
     private CharacterMovement characterMovement;
     private PlayerUse playerUse;
@@ -76,7 +75,6 @@ public class CharacterStatus : MonoBehaviour {
         if (characterManagerPrefab == null) {
             characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
         }
-        inputManager = GameObject.Find("InputManagerTLK").GetComponent<InputManagerTLK>();
         characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         characterMovement = GetComponent<CharacterMovement>();
         playerUse = GetComponent<PlayerUse>();
