@@ -75,6 +75,7 @@ public class BreakAbility : CharacterAbility {
             // La habilidad está lista para ser usada
             ready = true;
             objectToBreak = hitInfo.collider.GetComponent<BreakableObject>();
+            objectToBreak.SetBreakPoint(hitInfo.point);
         } else {
             ready = false;
         }
