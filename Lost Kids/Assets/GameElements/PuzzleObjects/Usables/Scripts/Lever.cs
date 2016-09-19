@@ -10,6 +10,11 @@ public class Lever : UsableObject {
 
     private AudioSource leverOnSound;
     private AudioSource leverOffSound;
+    private Animator leverAnimator;
+
+    void Awake() {
+        leverAnimator = GetComponentInParent<Animator>();
+    }
 
     // Use this for initialization
     new void Start () {
@@ -39,7 +44,7 @@ public class Lever : UsableObject {
 
             //Es necesario añadir funcionalidad adicional como Sonido o animaciones
             AudioManager.Play(leverOnSound, false, 1);
-
+            leverAnimator.SetTrigger("UseActivation");
         }
     }
 
@@ -54,6 +59,7 @@ public class Lever : UsableObject {
 
             //Es necesario añadir funcionalidad adicional como Sonido o animaciones
             AudioManager.Play(leverOffSound, false, 1);
+            leverAnimator.SetTrigger("UseDeactivation");
         }
     }
 

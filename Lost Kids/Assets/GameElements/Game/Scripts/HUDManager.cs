@@ -37,7 +37,6 @@ public class HUDManager : MonoBehaviour {
     private GameObject activeCharacter;
 
     public GameObject cooldownNotification;
-    private GameObject canvas;
 
     public static HUDManager instance;
     //Use this for references
@@ -53,7 +52,6 @@ public class HUDManager : MonoBehaviour {
             Destroy(kiCharacterUI.parent.gameObject);
         }
         timerImage = timerUI.GetComponent<Image>();
-        canvas = transform.Find("HUDCanvas").gameObject;
         instance = this;
     }
 

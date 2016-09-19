@@ -22,17 +22,17 @@ public class CharacterStatus : MonoBehaviour {
     /// <summary>
     /// Clase para definir los diferentes estados en los que se puede encontrar un personaje
     /// </summary>
-    public enum State { AstralProjection, Breaking, BigJumping, Crouching, Dead, Falling, Idle, Jumping, Pushing, Sacrifice, Scared, Sprint, Walking, Telekinesis, Using }
+    public enum State { AstralProjection, Breaking, BigJumping, Crouching, Dead, Falling, Idle, Jumping, Pushing, Sacrifice, Scared, Sprint, Walking, Telekinesis, Using, Victory }
 
 
     //Referencia al manager de personajes
     public GameObject characterManagerPrefab;
-    private InputManagerTLK inputManager;
     private CharacterManager characterManager;
     private CharacterMovement characterMovement;
     private PlayerUse playerUse;
     private Animator characterAnimator;
     private Rigidbody rigBody;
+    private SpecialIdleController specialIdleController;
 
     public float astralSpeed = 0.0f;
     public float standingSpeed = 8000f;
@@ -75,12 +75,12 @@ public class CharacterStatus : MonoBehaviour {
         if (characterManagerPrefab == null) {
             characterManagerPrefab = GameObject.FindGameObjectWithTag("CharacterManager");
         }
-        inputManager = GameObject.Find("InputManagerTLK").GetComponent<InputManagerTLK>();
         characterManager = characterManagerPrefab.GetComponent<CharacterManager>();
         characterMovement = GetComponent<CharacterMovement>();
         playerUse = GetComponent<PlayerUse>();
         characterAnimator = GetComponent<Animator>();
         rigBody = GetComponent<Rigidbody>();
+        specialIdleController = GetComponent<SpecialIdleController>();
         deadParticles = transform.Find("DeadParticles").gameObject.GetComponent<ParticlesActivator>();
         resurrectionParticles = transform.Find("ResurrectionParticles").gameObject.GetComponent<ParticlesActivator>();
         playerParticles = transform.Find("PlayerParticles").gameObject.GetComponent<ParticlesActivator>();
@@ -378,8 +378,8 @@ public class CharacterStatus : MonoBehaviour {
         // Comprueba si se puede ejecutar la animación
         if ((!lockedByAnimation) && ((characterState.Equals(State.Walking) || characterState.Equals(State.Idle)))) {
             // Ejecuta la animación y bloquea al personaje
-            //SetAnimatorTrigger("Negation");
-            //LockByAnimation();
+            SetAnimatorTrigger("Negation");
+            LockByAnimation();
         }
     }
 
@@ -414,14 +414,21 @@ public class CharacterStatus : MonoBehaviour {
         // Comprueba si es necesario un cambio de estado
         switch (characterState) {
             case State.Breaking:
+                // La habilidad debe terminarse
                 GetComponent<AbilityController>().DeactivateActiveAbility();
                 characterState = State.Idle;
+                break;
+            case State.Victory:
+                // El personaje debe repetir la animación
+                SetAnimatorTrigger("Victory");
+                lockedByAnimation = true;
                 break;
         }
     }
 
     // Update is called once per frame
     void Update() {
+        // Velocidad jugador
         characterAnimator.SetFloat("speed", characterMovement.GetPlayerSpeed(true));
         // Comprueba si el jugador está apoyado sobre alguna superficie 
         switch (characterState) {
@@ -440,6 +447,8 @@ public class CharacterStatus : MonoBehaviour {
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Jumping;
+                } else if ((!specialIdleController.isActiveAndEnabled) && (!lockedByAnimation)) {
+                    specialIdleController.enabled = true;
                 }
                 break;
             case State.Falling:
@@ -457,12 +466,6 @@ public class CharacterStatus : MonoBehaviour {
                     characterState = State.Falling;
                     SetAnimatorTrigger("Fall");
                 }
-                //else if (characterMovement.CharacterIsGrounded()) {  // Comprueba si el jugador está apoyado en alguna superficie 
-                //    jumpButtonUp = false;
-                //    totalJumpImpulse = 0.0f;
-                //    characterState = State.Idle;
-                //    SetAnimatorTrigger("Land");
-                //}
                 break;
             case State.BigJumping:
                 // Si empieza a caer, cambia de estado
@@ -502,6 +505,7 @@ public class CharacterStatus : MonoBehaviour {
                 break;
             case State.Dead:
             case State.Sacrifice:
+            case State.Victory:
                 break;
             case State.AstralProjection:
                 // Comprueba si el jugador está apoyado en alguna superficie 
@@ -518,12 +522,6 @@ public class CharacterStatus : MonoBehaviour {
                 }
                 break;
         }
-        // Si el personaje está sobre le suelo, la gravedad es 0    HAY QUE CAMBIAR!!!
-        //if (characterMovement.CharacterIsGrounded()) {
-        //    rigBody.useGravity = false;
-        //} else {
-        //    rigBody.useGravity = true;
-        //}
     }
 
     /// <summary>
@@ -677,6 +675,7 @@ public class CharacterStatus : MonoBehaviour {
         characterAnimator.ResetTrigger("Scared");
         characterAnimator.ResetTrigger("Sacrifice");
         characterAnimator.ResetTrigger("Use");
+        characterAnimator.ResetTrigger("Victory");
         // Desactiva triggers de las habilidades
         if (characterName.Equals(CharacterName.Aoi)) {
             characterAnimator.ResetTrigger("BigJump");
@@ -698,15 +697,13 @@ public class CharacterStatus : MonoBehaviour {
     public void Victory(bool levelEnd) {
         //Girar al personaje para que se va de frente mejor?
         transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
-
-        /*
+        // Ejecuta la animación
         SetAnimatorTrigger("Victory");
         LockByAnimation();
-        if(levelEnd)
-        {
-            LockByAnimation();
+        if (levelEnd) {
+            // Fin del nivel
+            characterState = State.Victory;
         }
-        */
     }
     /// <summary>
     /// Cambia el estado asustado del personaje
