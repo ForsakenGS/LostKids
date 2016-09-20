@@ -31,6 +31,7 @@ public abstract class BreakableObject : MonoBehaviour, IBreakable {
         {
             GameObject broken = Instantiate(brokenObject, transform.position, transform.rotation) as GameObject;
             broken.GetComponent<BrokenWood>().Break(breakPoint);
+            Destroy(gameObject);
         }
 
     }

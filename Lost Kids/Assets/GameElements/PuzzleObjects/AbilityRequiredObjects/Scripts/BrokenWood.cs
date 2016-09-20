@@ -34,7 +34,8 @@ public class BrokenWood : MonoBehaviour {
     private void DestroyPiece(GameObject piece)
     {
         float destroyTime = pieceLifeSpan + (Random.Range(-0.2f, 0.2f));
-        iTween.FadeTo(piece, 0f, destroyTime);
-        Destroy(piece, destroyTime);
+        iTween.ScaleTo(piece,iTween.Hash("scale", Vector3.zero,"time",destroyTime,"delay",destroyTime,"easetype",iTween.EaseType.easeInOutSine ));
+        
+        Destroy(piece, 2*destroyTime);
     }
 }
