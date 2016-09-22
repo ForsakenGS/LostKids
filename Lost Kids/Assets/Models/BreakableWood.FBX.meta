@@ -1,0 +1,173 @@
+fileFormatVersion: 2
+guid: 45a457d460ef33d4d98aff81330e4827
+timeCreated: 1474221294
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Marco1
+    100004: Marco10
+    100006: Marco2
+    100008: Marco3
+    100010: Marco4
+    100012: Marco5
+    100014: Marco6
+    100016: Marco7
+    100018: Marco8
+    100020: Marco9
+    100022: Piece 10
+    100024: Piece1
+    100026: Piece2
+    100028: Piece3
+    100030: Piece4
+    100032: Piece5
+    100034: Piece6
+    100036: Piece7
+    100038: Piece8
+    100040: Piece9
+    400000: //RootNode
+    400002: Marco1
+    400004: Marco10
+    400006: Marco2
+    400008: Marco3
+    400010: Marco4
+    400012: Marco5
+    400014: Marco6
+    400016: Marco7
+    400018: Marco8
+    400020: Marco9
+    400022: Piece 10
+    400024: Piece1
+    400026: Piece2
+    400028: Piece3
+    400030: Piece4
+    400032: Piece5
+    400034: Piece6
+    400036: Piece7
+    400038: Piece8
+    400040: Piece9
+    2300000: Marco1
+    2300002: Marco10
+    2300004: Marco2
+    2300006: Marco3
+    2300008: Marco4
+    2300010: Marco5
+    2300012: Marco6
+    2300014: Marco7
+    2300016: Marco8
+    2300018: Marco9
+    2300020: Piece 10
+    2300022: Piece1
+    2300024: Piece2
+    2300026: Piece3
+    2300028: Piece4
+    2300030: Piece5
+    2300032: Piece6
+    2300034: Piece7
+    2300036: Piece8
+    2300038: Piece9
+    3300000: Marco1
+    3300002: Marco10
+    3300004: Marco2
+    3300006: Marco3
+    3300008: Marco4
+    3300010: Marco5
+    3300012: Marco6
+    3300014: Marco7
+    3300016: Marco8
+    3300018: Marco9
+    3300020: Piece 10
+    3300022: Piece1
+    3300024: Piece2
+    3300026: Piece3
+    3300028: Piece4
+    3300030: Piece5
+    3300032: Piece6
+    3300034: Piece7
+    3300036: Piece8
+    3300038: Piece9
+    4300000: Marco6
+    4300002: Piece3
+    4300004: Piece5
+    4300006: Piece9
+    4300008: Piece1
+    4300010: Piece4
+    4300012: Piece6
+    4300014: Marco3
+    4300016: Marco1
+    4300018: Marco9
+    4300020: Piece7
+    4300022: Piece 10
+    4300024: Marco4
+    4300026: Marco5
+    4300028: Marco10
+    4300030: Marco7
+    4300032: Marco2
+    4300034: Piece8
+    4300036: Piece2
+    4300038: Marco8
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 1
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

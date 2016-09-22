@@ -19,10 +19,13 @@ public class PausePanel : MonoBehaviour {
     UnityEngine.UI.Button quitButton;
 
     UnityEngine.UI.Button settingsBackButton;
+    UnityEngine.UI.Button controlsBackButton;
+    /*
     UnityEngine.UI.Button controlsKeyboardButton;
     UnityEngine.UI.Button controlsPadButton;
+    */
 
-    
+
 
 
 
@@ -55,8 +58,11 @@ public class PausePanel : MonoBehaviour {
             quitButton=transform.Find("MainPanel/QuitButton").GetComponent<UnityEngine.UI.Button>();
 
             settingsBackButton= transform.Find("Settings/BackButton").GetComponent<UnityEngine.UI.Button>();
+            controlsBackButton = transform.Find("ControlsPanel/BackButton").GetComponent<UnityEngine.UI.Button>();
+            /*
             controlsKeyboardButton = transform.Find("ControlsPanel/KeyboardButton").GetComponent<UnityEngine.UI.Button>();
             controlsPadButton = transform.Find("ControlsPanel/PadButton").GetComponent<UnityEngine.UI.Button>();
+            */
 
 
         }
@@ -139,7 +145,9 @@ public class PausePanel : MonoBehaviour {
     {
         mainPanel.SetActive(false);
         controlsPanel.SetActive(true);
+        controlsBackButton.Select();
 
+        /*
         if(Input.GetJoystickNames().Length>0 && !Input.GetJoystickNames()[0].Equals(""))
         {
             controlsPadButton.Select();
@@ -150,6 +158,7 @@ public class PausePanel : MonoBehaviour {
             controlsKeyboardButton.Select();
             controlsKeyboardButton.onClick.Invoke();
         }
+        */
     }
 
     public void HideControlsPanel()

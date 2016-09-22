@@ -119,11 +119,44 @@
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.BackButton.Text" xml:space="preserve">
 		<value>Back</value>
 	</data>
-	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.KeyboardButton.Text" xml:space="preserve">
-		<value>Keyboard</value>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.ActionText" xml:space="preserve">
+		<value>Action</value>
 	</data>
-	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.PadButton.Text" xml:space="preserve">
-		<value>Pad</value>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.JumpText" xml:space="preserve">
+		<value>Jump</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.MovementText" xml:space="preserve">
+		<value>Movement</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.NextCharacterText" xml:space="preserve">
+		<value>Select Next Character</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.PauseText" xml:space="preserve">
+		<value>Pause</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.PreviousCharacter" xml:space="preserve">
+		<value>Select Previous Character</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.SacrificeText" xml:space="preserve">
+		<value>(Both active) Sacrifice</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill1AkaiText" xml:space="preserve">
+		<value>Break</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill1AoiText" xml:space="preserve">
+		<value>Great Jump</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill1KiText" xml:space="preserve">
+		<value>Telekinesis</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill2AkaiText" xml:space="preserve">
+		<value>Push</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill2AoiText" xml:space="preserve">
+		<value>Sprint</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill2KiText" xml:space="preserve">
+		<value>Projection</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.Title" xml:space="preserve">
 		<value>Controls</value>
@@ -202,6 +235,12 @@
 	</data>
 	<data name="TLK.UI.Controls.Canvas.BackButton.Text" xml:space="preserve">
 		<value>Back</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill1Text" xml:space="preserve">
+		<value>Ability 1</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill2Text" xml:space="preserve">
+		<value>Ability 2</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.Title" xml:space="preserve">
 		<value>Controls</value>

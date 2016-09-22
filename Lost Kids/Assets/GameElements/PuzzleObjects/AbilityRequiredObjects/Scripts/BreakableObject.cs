@@ -15,11 +15,25 @@ public abstract class BreakableObject : MonoBehaviour, IBreakable {
 
     private AudioLoader audioLoader;
 
+    public GameObject brokenObject;
+
+    public Vector3 breakPoint;
+
     public void Break() {
         if (audioLoader != null && audioLoader.GetSound("Break") != null) {
             AudioManager.Play(audioLoader.GetSound("Break"), false, 1);
         }
-        StartCoroutine(gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
+        if (brokenObject == null)
+        {
+            StartCoroutine(gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
+        }
+        else
+        {
+            GameObject broken = Instantiate(brokenObject, transform.position, transform.rotation) as GameObject;
+            broken.GetComponent<BrokenWood>().Break(breakPoint);
+            Destroy(gameObject);
+        }
+
     }
 
     public virtual void TakeHit() {
@@ -77,5 +91,10 @@ public abstract class BreakableObject : MonoBehaviour, IBreakable {
 
     public int GetCurrentHitPoints() {
         return currentHitPoints;
+    }
+
+    public void SetBreakPoint(Vector3 point)
+    {
+        breakPoint = point;
     }
 }
