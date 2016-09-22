@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 1fbd07a167824f442b2a2f959c90b3f4
-timeCreated: 1465163167
+guid: 7fd3b6a4fb3aeeb4f9aff0b2672a3399
+timeCreated: 1474563210
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -76,7 +76,7 @@ ModelImporter:
     400066: Bip001 Spine1
     400068: Bip001 Spine2
     4300000: Aoi
-    7400000: AoiIdle0
+    7400000: AoiLeverActivate
     9500000: //RootNode
     13700000: Aoi
   materials:
@@ -101,17 +101,17 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: AoiIdle0
+      name: AoiLeverActivate
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 40
+      lastFrame: 67
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -244,8 +244,8 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 180
-    normalImportMode: 1
+    normalSmoothAngle: 60
+    normalImportMode: 0
     tangentImportMode: 3
   importAnimation: 1
   copyAvatar: 0

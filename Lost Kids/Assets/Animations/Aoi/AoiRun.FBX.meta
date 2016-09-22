@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 3c490844d56b98e41b745d7a172d3877
-timeCreated: 1465163057
+guid: 9a9c5f0416545ac448e8b26b6270b2db
+timeCreated: 1474563145
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -76,7 +76,7 @@ ModelImporter:
     400066: Bip001 Spine1
     400068: Bip001 Spine2
     4300000: Aoi
-    7400000: AoiWalk
+    7400000: AoiRun
     9500000: //RootNode
     13700000: Aoi
   materials:
@@ -101,7 +101,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: AoiWalk
+      name: AoiRun
       takeName: Take 001
       firstFrame: 0
       lastFrame: 25
@@ -123,21 +123,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.46301967
-        functionName: StepSound
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 1
-        messageOptions: 0
-      - time: 0
-        functionName: StepSound
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -258,8 +244,8 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 180
-    normalImportMode: 1
+    normalSmoothAngle: 60
+    normalImportMode: 0
     tangentImportMode: 3
   importAnimation: 1
   copyAvatar: 0

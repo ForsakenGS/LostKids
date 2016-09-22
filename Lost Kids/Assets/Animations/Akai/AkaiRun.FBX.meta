@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 4949ed16fb136da48b13a0ffce2f7907
-timeCreated: 1473677415
+guid: 22a392aa724e0a2468b814966e2f58bd
+timeCreated: 1474563556
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -82,7 +82,7 @@ ModelImporter:
     400072: Bip001 Spine1
     400074: Bip001 Spine2
     4300000: Akai
-    7400000: AkaiIdle
+    7400000: AkaiRun
     9500000: //RootNode
     13700000: Akai
   materials:
@@ -107,10 +107,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: AkaiIdle
+      name: AkaiRun
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 60
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
