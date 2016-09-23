@@ -534,11 +534,12 @@ public class CharacterStatus : MonoBehaviour {
     /// Función para indicar que el botón de uso ha sido pulsado, cambiando el estado del personaje a 'Idle' si el objeto usado es instantáneo, o a 'Using' en caso de que el objeto requiera ser mantenido para su uso.
     /// </summary>
     public void UseButton() {
-        // Comprueba que el personaje no esté bloqueado por alguna animación
-        if (!lockedByAnimation) {
-            switch (characterState) {
-                case State.Idle:
-                case State.Walking:
+
+        switch (characterState) {
+            case State.Idle:
+            case State.Walking:
+                // Comprueba que el personaje no esté bloqueado por alguna animación
+                if (!lockedByAnimation) {
                     // Comprueba si se trata del Kodama
                     if (playerUse.IsKodama()) {
                         playerUse.Use();
@@ -546,6 +547,7 @@ public class CharacterStatus : MonoBehaviour {
                         // Comprueba si puede usar el objeto
                         if (playerUse.CanUse()) {
                             // Animación de uso
+                            LockByAnimation();
                             characterAnimator.SetTrigger("Use");
                             if (playerUse.Use()) {
                                 // El jugador queda usando el objeto
@@ -558,23 +560,23 @@ public class CharacterStatus : MonoBehaviour {
                             }
                         }
                     }
-                    break;
-                case State.AstralProjection:
-                    // Comprueba si puede usar el objeto
-                    if (playerUse.CanUse()) {
-                        // Animación de uso
-                        characterAnimator.SetTrigger("Use");
-                        // Jugador usa el objeto
-                        playerUse.Use();
-                    }
-                    break;
-                case State.Using:
-                    playerUse.StopUsing();
-                    characterState = State.Idle;
-                    characterAnimator.SetBool("using", false);
-                    characterAnimator.SetTrigger("Idle");
-                    break;
-            }
+                }
+                break;
+            case State.AstralProjection:
+                // Comprueba si puede usar el objeto
+                if (playerUse.CanUse()) {
+                    // Animación de uso
+                    characterAnimator.SetTrigger("Use");
+                    // Jugador usa el objeto
+                    playerUse.Use();
+                }
+                break;
+            case State.Using:
+                playerUse.StopUsing();
+                characterState = State.Idle;
+                characterAnimator.SetBool("using", false);
+                characterAnimator.SetTrigger("Idle");
+                break;
         }
     }
 

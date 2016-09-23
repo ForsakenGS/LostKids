@@ -31,7 +31,7 @@ public class SpecialIdleController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (!onAnimation) {
+        if ((!CharacterManager.GetActiveCharacter().Equals(gameObject)) && (!onAnimation)) {
             // Comprueba que siga en estado Idle
             if (status.CurrentStateIs(CharacterStatus.State.Idle)) {
                 // Tiempo en estado Idle
