@@ -268,9 +268,9 @@ public class CharacterMovement : MonoBehaviour {
 
     public void StepSound(int step) {
         if (step == 0) {
-            AudioManager.Play(step0Sound, false, 1, 0.9f, 1.1f);
+            AudioManager.Play(step0Sound, false, 1, 0.8f, 1.2f);
         } else {
-            AudioManager.Play(step1Sound, false, 1, 0.9f, 1.1f);
+            AudioManager.Play(step1Sound, false, 1, 0.8f, 1.2f);
         }
     }
 

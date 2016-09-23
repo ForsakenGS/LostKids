@@ -157,16 +157,19 @@ public class CharacterStatus : MonoBehaviour {
     /// Función para indicar que el botón de agacharse ha sido pulsado, cambiando el estado del personaje a 'Crouching' en caso de ser necesario.
     /// </summary>
     public void CrouchButton() {
-        switch (characterState) {
-            case State.Crouching:
-                characterMovement.Stand();
-                characterState = State.Walking;
-                break;
-            case State.Idle:
-            case State.Walking:
-                characterMovement.Crouch();
-                characterState = State.Crouching;
-                break;
+        // Comprueba que el personaje no esté bloqueado por alguna animación
+        if (!lockedByAnimation) {
+            switch (characterState) {
+                case State.Crouching:
+                    characterMovement.Stand();
+                    characterState = State.Walking;
+                    break;
+                case State.Idle:
+                case State.Walking:
+                    characterMovement.Crouch();
+                    characterState = State.Crouching;
+                    break;
+            }
         }
     }
 
@@ -241,29 +244,32 @@ public class CharacterStatus : MonoBehaviour {
     /// Función para indicar que el botón de salto ha sido pulsado, cambiando el estado del personaje a 'Jumping' en caso de ser necesario.
     /// </summary>
 	public void JumpButtonDown() {
-        switch (characterState) {
-            case State.Walking:
-            case State.Idle:
-                // Comienza la acción de saltar
-                characterState = State.Jumping;
-                characterMovement.Jump(firstJumpImpulse, true);
-                totalJumpImpulse = firstJumpImpulse;
-                SetAnimatorTrigger("Jump");
-                break;
-            case State.Sprint:
-                // Termina la habilidad de Sprint
-                if (GetComponent<AbilityController>().DeactivateActiveAbility()) {
+        // Comprueba que el personaje no esté bloqueado por alguna animación
+        if (!lockedByAnimation) {
+            switch (characterState) {
+                case State.Walking:
+                case State.Idle:
+                    // Comienza la acción de saltar
                     characterState = State.Jumping;
                     characterMovement.Jump(firstJumpImpulse, true);
                     totalJumpImpulse = firstJumpImpulse;
                     SetAnimatorTrigger("Jump");
-                }
-                break;
-            case State.AstralProjection:
-                // Impulso inicial de la proyección astral al levitar
-                characterMovement.Jump(3 * astralJumpImpulse, false);
-                totalJumpImpulse += 3 * astralJumpImpulse;
-                break;
+                    break;
+                case State.Sprint:
+                    // Termina la habilidad de Sprint
+                    if (GetComponent<AbilityController>().DeactivateActiveAbility()) {
+                        characterState = State.Jumping;
+                        characterMovement.Jump(firstJumpImpulse, true);
+                        totalJumpImpulse = firstJumpImpulse;
+                        SetAnimatorTrigger("Jump");
+                    }
+                    break;
+                case State.AstralProjection:
+                    // Impulso inicial de la proyección astral al levitar
+                    characterMovement.Jump(3 * astralJumpImpulse, false);
+                    totalJumpImpulse += 3 * astralJumpImpulse;
+                    break;
+            }
         }
     }
 
@@ -528,25 +534,30 @@ public class CharacterStatus : MonoBehaviour {
     /// Función para indicar que el botón de uso ha sido pulsado, cambiando el estado del personaje a 'Idle' si el objeto usado es instantáneo, o a 'Using' en caso de que el objeto requiera ser mantenido para su uso.
     /// </summary>
     public void UseButton() {
+
         switch (characterState) {
             case State.Idle:
             case State.Walking:
-                // Comprueba si se trata del Kodama
-                if (playerUse.IsKodama()) {
-                    playerUse.Use();
-                } else {
-                    // Comprueba si puede usar el objeto
-                    if (playerUse.CanUse()) {
-                        // Animación de uso
-                        characterAnimator.SetTrigger("Use");
-                        if (playerUse.Use()) {
-                            // El jugador queda usando el objeto
-                            characterState = State.Using;
-                            characterAnimator.SetBool("using", true);
-                        } else {
-                            // El jugador deja de usar el objeto
-                            characterState = State.Idle;
-                            characterAnimator.SetTrigger("Idle");
+                // Comprueba que el personaje no esté bloqueado por alguna animación
+                if (!lockedByAnimation) {
+                    // Comprueba si se trata del Kodama
+                    if (playerUse.IsKodama()) {
+                        playerUse.Use();
+                    } else {
+                        // Comprueba si puede usar el objeto
+                        if (playerUse.CanUse()) {
+                            // Animación de uso
+                            LockByAnimation();
+                            characterAnimator.SetTrigger("Use");
+                            if (playerUse.Use()) {
+                                // El jugador queda usando el objeto
+                                characterState = State.Using;
+                                characterAnimator.SetBool("using", true);
+                            } else {
+                                // El jugador deja de usar el objeto
+                                characterState = State.Idle;
+                                characterAnimator.SetTrigger("Idle");
+                            }
                         }
                     }
                 }
@@ -613,14 +624,16 @@ public class CharacterStatus : MonoBehaviour {
 
     // Se ejecuta cuando comienza el proceso de sacrificio del personaje
     void SacrificeStart() {
-        // Efecto y sonido del "sacrificio"
-        characterState = State.Sacrifice;
-        rigBody.velocity = Vector3.zero;
-        SetAnimatorTrigger("Sacrifice");
-        AudioManager.Play(sacrificeSound, false, 1);
-        GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
-        //rigBody.isKinematic = true;
-
+        // Comprueba que el personaje no esté bloqueado por alguna animación
+        if (!lockedByAnimation) {
+            // Efecto y sonido del "sacrificio"
+            characterState = State.Sacrifice;
+            rigBody.velocity = Vector3.zero;
+            SetAnimatorTrigger("Sacrifice");
+            AudioManager.Play(sacrificeSound, false, 1);
+            GetComponentInChildren<CharacterIcon>().ActiveCanvas(false);
+            //rigBody.isKinematic = true;
+        }
     }
 
     /// <summary>

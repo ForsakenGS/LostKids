@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: 26613b3fc84d7324795e19d11db27a4f
-timeCreated: 1465146880
+guid: 9a9c5f0416545ac448e8b26b6270b2db
+timeCreated: 1474563145
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Aoi
+    100000: Aoi
+    100002: //RootNode
     100004: Bip001
     100006: Bip001 Footsteps
     100008: Bip001 Hair
@@ -40,8 +40,8 @@ ModelImporter:
     100064: Bip001 Spine
     100066: Bip001 Spine1
     100068: Bip001 Spine2
-    400000: //RootNode
-    400002: Aoi
+    400000: Aoi
+    400002: //RootNode
     400004: Bip001
     400006: Bip001 Footsteps
     400008: Bip001 Hair
@@ -76,7 +76,7 @@ ModelImporter:
     400066: Bip001 Spine1
     400068: Bip001 Spine2
     4300000: Aoi
-    7400000: AkaiLandJump
+    7400000: AoiRun
     9500000: //RootNode
     13700000: Aoi
   materials:
@@ -101,17 +101,17 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: AkaiLandJump
+      name: AoiRun
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 14
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -124,19 +124,19 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0
-        functionName: LockByAnimation
+      - time: 0.4985604
+        functionName: StepSound
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 1
-        functionName: UnlockByAnimation
+      - time: 0.9748522
+        functionName: StepSound
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
-        intParameter: 0
+        intParameter: 1
         messageOptions: 0
       transformMask:
       - path: 
