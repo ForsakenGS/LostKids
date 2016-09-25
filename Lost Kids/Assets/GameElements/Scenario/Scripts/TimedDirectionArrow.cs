@@ -8,6 +8,7 @@ public class TimedDirectionArrow : MonoBehaviour {
     void OnEnable()
     {
         GetComponent<Renderer>().enabled = false;
+        iTween.ScaleTo(gameObject, Vector3.zero, 1);
         Invoke("ShowDirection", inactiveTime);
     }
 	// Use this for initialization
@@ -23,14 +24,22 @@ public class TimedDirectionArrow : MonoBehaviour {
     void ShowDirection()
     {
         GetComponent<Renderer>().enabled = true;
-        iTween.FadeFrom(gameObject, 0, 1);
+        iTween.ScaleTo(gameObject, iTween.Hash("scale", Vector3.one, "time", 2));
+    }
+
+    void HideDirection() {
+        iTween.ScaleTo(gameObject,iTween.Hash("scale",Vector3.zero,"time",2, "onComplete", "Hide"));
+    }
+
+    void Hide() {
+        GetComponent<Renderer>().enabled = false;
     }
 
     void OnTriggerEnter(Collider col)
     {
         if(!reached && CharacterManager.IsActiveCharacter(col.gameObject))
         {
-            Destroy(gameObject);
+            HideDirection();
         }
     }
 }
