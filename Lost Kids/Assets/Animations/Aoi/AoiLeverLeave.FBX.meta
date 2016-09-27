@@ -124,7 +124,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9993099
+      - time: 0.9978494
         functionName: UnlockByAnimation
         data: 
         objectReferenceParameter: {instanceID: 0}
