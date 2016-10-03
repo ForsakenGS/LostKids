@@ -10,23 +10,18 @@ public class ObjectRequester : UsableObject {
 
     //public GameObject fearSource;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    new void Start() {
         base.Start();
         type = UsableTypes.Instant;
         requestedObjectName = requested.GetComponent<InventoryObject>().objectName;
-	}
+    }
 
-
-    override public void Use()
-    {
-        if(CharacterManager.GetActiveCharacter().GetComponent< CharacterInventory>().GetObject(requestedObjectName))
-        {
+    override public void Use() {
+        if (CharacterManager.GetActiveCharacter().GetComponent<CharacterInventory>().GetObject(requestedObjectName)) {
             base.Use();
             //Sonido o lo que sea
-        }
-        else
-        {
+        } else {
             //Activar mensaje pidiendo botella o algo asi?
         }
     }
