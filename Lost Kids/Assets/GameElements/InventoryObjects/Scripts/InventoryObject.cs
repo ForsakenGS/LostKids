@@ -9,7 +9,7 @@ public class InventoryObject : MonoBehaviour {
         if (col.gameObject.CompareTag("Player")) {
             // Se trata del jugador, luego se añade al inventario y, si ha sido posible, queda eliminado
             if (col.gameObject.GetComponent<CharacterInventory>().AddObject(this)) {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
     }

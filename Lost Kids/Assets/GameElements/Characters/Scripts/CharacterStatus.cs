@@ -308,6 +308,9 @@ public class CharacterStatus : MonoBehaviour {
                 break;
         }
         if (kill) {
+            // Limpieza del inventario
+            GetComponent<CharacterInventory>().SetEmpty();
+            // Cambios de estado
             characterState = State.Dead;
             SetAnimatorTrigger("Dead");
             //Animacion, Efectos, Cambio de imagen.....
@@ -324,7 +327,6 @@ public class CharacterStatus : MonoBehaviour {
 
             XInputDotNetPure.GamePad.SetVibration(XInputDotNetPure.PlayerIndex.One, 1, 1);
             Invoke("DeathNotification", 0.5f);
-
         }
     }
 
@@ -334,6 +336,7 @@ public class CharacterStatus : MonoBehaviour {
             KillCharacterEvent(gameObject);
         }
         characterManager.CharacterKilled(this);
+        characterManager.ActivateNextCharacter();
     }
 
     public void LockByAnimation() {
@@ -453,8 +456,15 @@ public class CharacterStatus : MonoBehaviour {
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Jumping;
-                } else if ((!specialIdleController.isActiveAndEnabled) && (!lockedByAnimation)) {
-                    specialIdleController.enabled = true;
+                } else {
+                    // Comprobación con AnimatorController
+                    //if (characterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall")) {
+                    //    SetAnimatorTrigger("Land");
+                    //}
+                    // Idle especial
+                    if ((!specialIdleController.isActiveAndEnabled) && (!lockedByAnimation)) {
+                        specialIdleController.enabled = true;
+                    }
                 }
                 break;
             case State.Falling:
@@ -539,8 +549,8 @@ public class CharacterStatus : MonoBehaviour {
             case State.Walking:
                 // Comprueba que el personaje no esté bloqueado por alguna animación
                 if (!lockedByAnimation) {
-                    // Comprueba si se trata del Kodama
-                    if (playerUse.IsKodama()) {
+                    // Comprueba si se trata de un NPC
+                    if (playerUse.IsNPC()) {
                         playerUse.Use();
                     } else {
                         // Comprueba si puede usar el objeto
@@ -616,23 +626,30 @@ public class CharacterStatus : MonoBehaviour {
 
     // Se ejecuta cuando se termina el proceso de sacrificio del personaje
     void SacrificeEnd() {
-        AudioManager.Stop(sacrificeSound);
-        GetComponentInChildren<Renderer>().enabled = false; //Temporal
-        //rig.isKinematic = false;
-        // Actualización estado del personaje
-        characterState = State.Dead;
-        if (KillCharacterEvent != null) {
-            KillCharacterEvent(gameObject);
+        // Comprueba si se ha alcanzado distancia objetivo
+        if (sacrificeHeight >= maxSacrificeHeight) {
+            // Sitúa los objetos del inventario en posición personaje y vacía inventario
+            GetComponent<CharacterInventory>().SetEmptyToPosition(transform.position + 3 * Vector3.down);
+            AudioManager.Stop(sacrificeSound);
+            GetComponentInChildren<Renderer>().enabled = false;
+            // Actualización estado del personaje
+            sacrificeHeight = 0.0f;
+            characterState = State.Dead;
+            if (KillCharacterEvent != null) {
+                KillCharacterEvent(gameObject);
+            }
+            characterManager.CharacterKilled(this);
+            characterManager.ActivateNextCharacter();
         }
-        characterManager.CharacterKilled(this);
     }
 
     // Se ejecuta cuando comienza el proceso de sacrificio del personaje
     void SacrificeStart() {
         // Comprueba que el personaje no esté bloqueado por alguna animación
         if (!lockedByAnimation) {
-            // Efecto y sonido del "sacrificio"
+            // Actualización estado
             characterState = State.Sacrifice;
+            // Efecto y sonido del "sacrificio"
             rigBody.velocity = Vector3.zero;
             SetAnimatorTrigger("Sacrifice");
             AudioManager.Play(sacrificeSound, false, 1);
@@ -653,10 +670,6 @@ public class CharacterStatus : MonoBehaviour {
                     float d = 3.0f * Time.deltaTime;
                     transform.Translate(new Vector3(0, d, 0));
                     sacrificeHeight += d;
-                } else {
-                    // El personaje se sacrifica
-                    sacrificeHeight = 0.0f;
-                    SacrificeEnd();
                 }
                 break;
             case State.Idle:

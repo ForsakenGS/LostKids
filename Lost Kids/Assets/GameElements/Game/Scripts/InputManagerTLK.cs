@@ -35,7 +35,7 @@ public class InputManagerTLK : MonoBehaviour {
     InputControlType menuLeftControl = InputControlType.DPadLeft;
     InputControlType menuRightControl = InputControlType.DPadRight;
 
-    private static int locked;
+    private int locked;
     private CharacterStatus characterStatus;
     private AbilityController abilityControl;
     private MessageManager messageManager;
@@ -64,6 +64,16 @@ public class InputManagerTLK : MonoBehaviour {
         CharacterComponentsUpdate(CharacterManager.GetActiveCharacter());
         // Suscripciones a eventos
         //CharacterManager.ActiveCharacterChangedEvent += CharacterComponentsUpdate;
+    }
+
+    void AddLock() {
+        locked += 1;
+    }
+
+    void RemoveLock() {
+        if (locked > 0) {
+            locked -= 1;
+        }
     }
 
     bool Button(string button) {
@@ -119,6 +129,8 @@ public class InputManagerTLK : MonoBehaviour {
         GameObject player = character;
         abilityControl = player.GetComponent<AbilityController>();
         characterStatus = player.GetComponent<CharacterStatus>();
+        AddLock();
+        Invoke("RemoveLock", 0.25f);
     }
 
     // Manage inputs that produce physics
@@ -215,7 +227,7 @@ public class InputManagerTLK : MonoBehaviour {
     }
 
     static void Lock() {
-        locked += 1;
+        instance.AddLock();
     }
 
     void OnDisable() {
@@ -251,9 +263,7 @@ public class InputManagerTLK : MonoBehaviour {
     }
 
     static void Unlock() {
-        if (locked > 0) {
-            locked -= 1;
-        }
+        instance.RemoveLock();
     }
 
     // Manage general inputs
@@ -423,15 +433,11 @@ public class InputManagerTLK : MonoBehaviour {
         EndVibration();
     }
 
-    public static void SetMenuMode(bool menuMode)
-    {
+    public static void SetMenuMode(bool menuMode) {
         instance.menuMode = menuMode;
-        if(menuMode)
-        {
+        if (menuMode) {
             Lock();
-        }
-        else
-        {
+        } else {
             Unlock();
         }
     }
