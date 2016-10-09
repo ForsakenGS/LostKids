@@ -14,11 +14,15 @@ public class WayDetector : MonoBehaviour {
     private GameObject affectedRoom;
     private RoomSettings affectedRoomSettings;
     private WaySettings way;
+    private BackWall backWall;
+
     // Use this for references
     void Awake() {
         // Configuración general del pasillo
         way = transform.parent.parent.GetComponent<WaySettings>();
+        backWall = way.GetComponentInChildren<BackWall>();
 
+        backWall.Hide();
     }
 
     // Use this for initialization
@@ -54,6 +58,9 @@ public class WayDetector : MonoBehaviour {
                 // Oculta la habitación
                 affectedRoomSettings.HideRoom();
                 GetComponent<Collider>().enabled = false;
+
+                //Muestra la pared de no retorno
+                backWall.Show();
             }
         }
     }
