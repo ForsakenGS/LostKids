@@ -33,6 +33,12 @@ public class Button : UsableObject {
     private AudioSource buttonUpSound;
     private AudioSource buttonDownSound;
 
+    void OnDisable()
+    {
+        initialized = false;
+    }
+
+
     // Use this for initialization
     new void Start()
     {
@@ -56,16 +62,18 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnTriggerEnter(Collider col)
     {
-        //Si se activa pro primera vez, guarda su posicion original
-        if (!initialized)
-        {
-            initialized = true;
-            startPosition = transform.position;
-            endPosition = transform.position - new Vector3(0, pushDeph, 0);
-        }
 
-        if (CharacterManager.IsActiveCharacter(col.gameObject) || col.gameObject.tag.Equals("Pushable"))
+
+        if (!onUse && (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable")) && col.gameObject.transform.position.y > transform.position.y + 0.3f)
         {
+            //Si se activa pro primera vez, guarda su posicion original
+            if (!initialized)
+            {
+                initialized = true;
+                startPosition = transform.position;
+                endPosition = transform.position - new Vector3(0, pushDeph, 0);
+            }
+
             StopAllCoroutines();
 
             StartCoroutine(Move(endPosition));
@@ -94,16 +102,17 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnCollisionEnter(Collision col)
     {
-        //Si se activa pro primera vez, guarda su posicion original
-        if (!initialized)
-        {
-            initialized = true;
-            startPosition = transform.position;
-            endPosition = transform.position - new Vector3(0, pushDeph, 0);
-        }
 
         if (!onUse && (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable") ) && col.gameObject.transform.position.y > transform.position.y+0.3f)
         {
+            //Si se activa pro primera vez, guarda su posicion original
+            if (!initialized)
+            {
+                initialized = true;
+                startPosition = transform.position;
+                endPosition = transform.position - new Vector3(0, pushDeph, 0);
+            }
+
             col.transform.parent = transform;
             StopAllCoroutines();
 

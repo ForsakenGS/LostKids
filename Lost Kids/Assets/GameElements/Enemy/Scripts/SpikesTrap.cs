@@ -21,6 +21,22 @@ public class SpikesTrap : AbstractTrap
 
     bool initialized = false;
 
+    void OnEnable()
+    {
+        if (enabled && fireOnEnable)
+        {
+            Invoke("Show",0.5f);
+        }
+
+    }
+
+    void OnDisable()
+    {
+        initialized = false;
+        CancelInvoke();
+    }
+
+
     void Awake()
     {
         
@@ -35,10 +51,7 @@ public class SpikesTrap : AbstractTrap
     // Use this for initialization
     void Start()
     {
-        if (enabled && fireOnEnable)
-        {
-            Show();
-        }
+
 
     }
 

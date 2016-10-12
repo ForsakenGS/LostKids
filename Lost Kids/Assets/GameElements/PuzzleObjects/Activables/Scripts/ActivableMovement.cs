@@ -65,6 +65,13 @@ public class ActivableMovement : MonoBehaviour, IActivable {
         
     }
     */
+
+    void OnDisable()
+    {
+        initialized = false;
+    }
+
+
     // Use this for initialization
     void Start()
     {
