@@ -14,29 +14,24 @@ public class SettingsManager : MonoBehaviour {
     public Toggle musicToggle;
 
     public Toggle fullScreenToggle;
-
-
+    public Toggle tooltipsToggle;
 
     //Instancia para el singleton
     public static PausePanel instance { get; private set; }
     // Use this for initialization
 
-    void OnEnable()
-    {
+    void OnEnable() {
         UpdateSettings();
         EventSystem.current.SetSelectedGameObject(masterSlider.gameObject);
     }
 
 
-    void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-    
+    void Awake() {
+        if (instance != null && instance != this) {
+
             Destroy(gameObject);
         }
-        if (instance == null)
-        {
+        if (instance == null) {
 
             if (musicSlider == null)
                 musicSlider = transform.Find("Sounds/Music").GetComponentInChildren<Slider>();
@@ -50,9 +45,11 @@ public class SettingsManager : MonoBehaviour {
                 masterToggle = transform.Find("Sounds/Master").GetComponentInChildren<Toggle>();
             if (soundsToggle == null)
                 soundsToggle = transform.Find("Sounds/Sounds").GetComponentInChildren<Toggle>();
-            if (fullScreenToggle == null)
-            {
-                fullScreenToggle = transform.Find("Graphics").GetComponentInChildren<Toggle>();
+            if (fullScreenToggle == null) {
+                fullScreenToggle = transform.Find("Graphics/FullScreen/FullScreenCheck").GetComponent<Toggle>();
+            }
+            if (tooltipsToggle == null) {
+                tooltipsToggle = transform.Find("Graphics/Tooltips/TooltipsCheck").GetComponent<Toggle>();
             }
             UpdateSettings();
         }
@@ -61,17 +58,13 @@ public class SettingsManager : MonoBehaviour {
     /// <summary>
     /// Actualiza los valores que se muestran en la pantalla de opciones, leyendolos de las preferencias de juego
     /// </summary>
-    public void UpdateSettings()
-    {
+    public void UpdateSettings() {
         float volume = GameSettings.GetMasterVolume();
         masterSlider.value = volume;
 
-        if (masterToggle.isOn && volume > 0)
-        {
+        if (masterToggle.isOn && volume > 0) {
             masterToggle.isOn = false;
-        }
-        else if (!masterToggle.isOn && volume <= 0)
-        {
+        } else if (!masterToggle.isOn && volume <= 0) {
             masterToggle.isOn = true;
         }
 
@@ -79,106 +72,83 @@ public class SettingsManager : MonoBehaviour {
         volume = GameSettings.GetMusicVolume();
         musicSlider.value = volume;
 
-        if (musicToggle.isOn && volume > 0)
-        {
+        if (musicToggle.isOn && volume > 0) {
             musicToggle.isOn = false;
-        }
-        else if (!musicToggle.isOn && volume <= 0)
-        {
+        } else if (!musicToggle.isOn && volume <= 0) {
             musicToggle.isOn = true;
         }
 
         volume = GameSettings.GetSoundsVolume();
         soundsSlider.value = volume;
 
-        if (soundsToggle.isOn && volume > 0)
-        {
+        if (soundsToggle.isOn && volume > 0) {
             soundsToggle.isOn = false;
-        }
-        else if (!soundsToggle.isOn && volume <= 0)
-        {
+        } else if (!soundsToggle.isOn && volume <= 0) {
             soundsToggle.isOn = true;
         }
 
-
-        if (!fullScreenToggle.isOn && GameSettings.IsFullScreen())
-        {
+        if (!fullScreenToggle.isOn && GameSettings.IsFullScreen()) {
             fullScreenToggle.isOn = true;
-        }
-        else if (fullScreenToggle.isOn && !GameSettings.IsFullScreen())
-        {
+        } else if (fullScreenToggle.isOn && !GameSettings.IsFullScreen()) {
             fullScreenToggle.isOn = false;
         }
 
-    }
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+        if (!tooltipsToggle.isOn && TooltipManager.On) {
+            tooltipsToggle.isOn = true;
+        } else if (tooltipsToggle.isOn && !TooltipManager.On) {
+            tooltipsToggle.isOn = false;
+        }
 
-    public void ChangeMasterVolume(float value)
-    {
+    }
+    
+    public void ChangeMasterVolume(float value) {
 
         GameSettings.SetMasterVolume(value);
 
-        if (value > -80 && masterToggle.isOn)
-        {
+        if (value > -80 && masterToggle.isOn) {
             masterToggle.isOn = false;
         }
     }
 
-    public void ChangeMusicVolume(float value)
-    {
+    public void ChangeMusicVolume(float value) {
         GameSettings.SetMusicVolume(value);
-        if (value > -80 && musicToggle.isOn)
-        {
+        if (value > -80 && musicToggle.isOn) {
             musicToggle.isOn = false;
         }
     }
 
-    public void ChangeSoundsVolume(float value)
-    {
+    public void ChangeSoundsVolume(float value) {
         GameSettings.SetSoundsVolume(value);
-        if (value > -80 && soundsToggle.isOn)
-        {
+        if (value > -80 && soundsToggle.isOn) {
             soundsToggle.isOn = false;
         }
 
     }
 
 
-    public void MuteMusic(bool mute)
-    {
-        if (mute)
-        {
+    public void MuteMusic(bool mute) {
+        if (mute) {
             musicSlider.value = -80;
         }
     }
 
-    public void MuteMaster(bool mute)
-    {
-        if (mute)
-        {
+    public void MuteMaster(bool mute) {
+        if (mute) {
             masterSlider.value = -80;
         }
     }
 
-    public void MuteSounds(bool mute)
-    {
-        if (mute)
-        {
+    public void MuteSounds(bool mute) {
+        if (mute) {
             soundsSlider.value = -80;
         }
     }
 
-
-    public void ChangeFullScreen(bool value)
-    {
+    public void ChangeFullScreen(bool value) {
         GameSettings.SetFullScreen(value);
+    }
+
+    public void ChangeTooltips(bool value) {
+        TooltipManager.On = value;
     }
 }

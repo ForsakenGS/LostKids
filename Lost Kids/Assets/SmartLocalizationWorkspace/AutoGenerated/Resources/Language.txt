@@ -206,11 +206,14 @@
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.BackButton.Text" xml:space="preserve">
 		<value>Atrás</value>
 	</data>
-	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Graphics.FullScreenCheck.Label" xml:space="preserve">
+	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Graphics.FullScreen.FullScreenCheck.Label" xml:space="preserve">
 		<value>Pantalla Completa</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Graphics.GraphicSubtitle" xml:space="preserve">
 		<value>Configuración Gráfica</value>
+	</data>
+	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Graphics.Tooltips.TooltipsCheck.Label" xml:space="preserve">
+		<value>Tooltips</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Sounds.Master.MasterLabel" xml:space="preserve">
 		<value>Volumen General</value>
@@ -235,6 +238,33 @@
 	</data>
 	<data name="TLK.UI.Controls.Canvas.BackButton.Text" xml:space="preserve">
 		<value>Atrás</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.ActionText" xml:space="preserve">
+		<value>Acción</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.JumpText" xml:space="preserve">
+		<value>Saltar</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Movementtext" xml:space="preserve">
+		<value>Movimiento</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.NextCharacterText" xml:space="preserve">
+		<value>Seleccionar Personaje Siguiente</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.PauseText" xml:space="preserve">
+		<value>Pausa</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.PreviousCharacter" xml:space="preserve">
+		<value>Seleccionar Personaje Anterior</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.SacrificeText" xml:space="preserve">
+		<value>(Ambos pulsados) Sacrificio</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill1Text" xml:space="preserve">
+		<value>Habilidad 1</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill2Text" xml:space="preserve">
+		<value>Habilidad 2</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.Title" xml:space="preserve">
 		<value>Controles</value>
@@ -296,11 +326,14 @@
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.BackButton.Text" xml:space="preserve">
 		<value>Atrás</value>
 	</data>
-	<data name="TLK.UI.Settings.Canvas.SettingsUI.Graphics.FullScreenCheck.Label" xml:space="preserve">
+	<data name="TLK.UI.Settings.Canvas.SettingsUI.Graphics.FullScreen.FullScreenCheck.Label" xml:space="preserve">
 		<value>Pantalla Completa</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Graphics.GraphicSubtitle" xml:space="preserve">
 		<value>Configuración Gráfica</value>
+	</data>
+	<data name="TLK.UI.Settings.Canvas.SettingsUI.Graphics.Tooltips.TooltipsCheck.Label" xml:space="preserve">
+		<value>Tooltips</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Master.MasterLabel" xml:space="preserve">
 		<value>Volumen General</value>
@@ -326,10 +359,13 @@
 	<data name="TLK.UI.Settings.Canvas.Title" xml:space="preserve">
 		<value>Configuración</value>
 	</data>
-	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill1Text" xml:space="preserve">
-		<value>Habilidad 1</value>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.AoiSelectionText" xml:space="preserve">
+		<value>Aoi</value>
 	</data>
-	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill2Text" xml:space="preserve">
-		<value>Habilidad 2</value>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.AkaiSelectionText" xml:space="preserve">
+		<value>Akai</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.KiSelectionText" xml:space="preserve">
+		<value>Ki</value>
 	</data>
 </root>
