@@ -37,7 +37,11 @@ public class GameSettings :MonoBehaviour {
             musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
             soundsVolume = PlayerPrefs.GetFloat("SoundsVolume", 1f);
             UpdateAudioMixer();
-            fullScreen = PlayerPrefs.GetInt("FullScreen", 1) == 1;
+            int fs = 1;
+            if (!Screen.fullScreen) {
+                fs = 0;
+            }
+            fullScreen = PlayerPrefs.GetInt("FullScreen", fs) == 1;
             string lang = PlayerPrefs.GetString("Language", "English");
             if (lang.Equals("Spanish"))
             {

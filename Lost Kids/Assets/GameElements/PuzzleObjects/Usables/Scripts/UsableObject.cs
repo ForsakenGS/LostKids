@@ -29,8 +29,7 @@ public abstract class UsableObject : MonoBehaviour {
 
     //Flag para saber si esta activado
     [HideInInspector]
-    public bool onUse
-    {
+    public bool onUse {
         get; set;
     }
 
@@ -43,20 +42,18 @@ public abstract class UsableObject : MonoBehaviour {
     //Cuando el objeto forma parte de un puzzle, ignora su activable, 
     //y su funcion consiste en notificar al puzzle manager
     [HideInInspector]
-    public bool inPuzzle
-    {
+    public bool inPuzzle {
         get; set;
     }
 
     //Indica cuando el jugador puede usar el objeto. Se debe poner a true
     //Cuando el jugador se encuentra dentro de la zona de activacion ( tooltipdetector)
     [HideInInspector]
-    public bool canUse=false;
+    public bool canUse = false;
 
     //Referencia al manager del puzzle
     [HideInInspector]
-    public PuzzleManagerBase puzzleManager
-    {
+    public PuzzleManagerBase puzzleManager {
         get; set;
     }
 
@@ -71,44 +68,39 @@ public abstract class UsableObject : MonoBehaviour {
     /// <summary>
     /// Es necesario llamar a esta funcion desde los scripts que heredan mediante base.Start
     /// </summary>
-    public void Start () {
+    public void Start() {
 
         activables = new List<IActivable>();
 
         //Se guarda la referencia al script Activable
 
-        foreach (GameObject target in targets)
-        {
+        foreach (GameObject target in targets) {
             activables.Add(target.GetComponent<IActivable>());
         }
 
         //Si no tiene detector de uso, se asume que se puede usar desde cualquier posicion
-        if(GetComponentInChildren<TooltipDetector>()==null)
-        {
+        if (GetComponentInChildren<TooltipDetector>() == null) {
             canUse = true;
         }
 
         audioLoader = GetComponent<AudioLoader>();
-        if (type.Equals(UsableTypes.Timed))
-        {
+        if (type.Equals(UsableTypes.Timed)) {
             timeSound = audioLoader.GetSound("TickTack");
             fastTimeSound = audioLoader.GetSound("FastTickTack");
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
 
-	
-	}
+    // Update is called once per frame
+    void Update() {
+
+
+    }
 
     /// <summary>
     /// Activacion del objeto
     /// </summary>
-    public virtual void  Use()
-    {
-        if (!onUse)
-        {
+    public virtual void Use() {
+        if (!onUse) {
 
             /*
             if (!type.Equals(UsableTypes.Instant))
@@ -120,32 +112,25 @@ public abstract class UsableObject : MonoBehaviour {
 
             //Si no forma parte de un puzzle, activa su objetivo
             if (!inPuzzle) {
-                foreach(IActivable activable in activables) {
+                foreach (IActivable activable in activables) {
                     activable.Activate();
                 }
             }
             //Si forma parte de un puzzle, notifica su activacion al manager
-            else
-            {
+            else {
                 puzzleManager.NotifyChange(this, true);
             }
 
-            if (type.Equals(UsableTypes.Timed))
-            {
-                if (!HUDManager.TimerActive())
-                {
+            if (type.Equals(UsableTypes.Timed)) {
+                if (!HUDManager.TimerActive()) {
                     HUDManager.StartTimer();
                     StartCoroutine(SetTimer(activeTime));
                     Invoke("CancelUse", activeTime);
-                    if (timeSound != null && fastTimeSound != null)
-                    {
-                        if (activeTime > 3)
-                        {
+                    if (timeSound != null && fastTimeSound != null) {
+                        if (activeTime > 3) {
                             AudioManager.Play(timeSound, true, 1);
                             Invoke("ShortTimeRemaining", activeTime - 3);
-                        }
-                        else
-                        {
+                        } else {
                             AudioManager.Play(fastTimeSound, false, 1);
                         }
                     }
@@ -157,34 +142,39 @@ public abstract class UsableObject : MonoBehaviour {
 
     }
 
-    public void ShortTimeRemaining()
-    {
-        if (timeSound != null)
-        {
+    public void ShortTimeRemaining() {
+        if (timeSound != null) {
             AudioManager.Stop(timeSound);
             AudioManager.Play(fastTimeSound, false, 1);
+            HUDManager.FastTimer(fastTimeSound.clip.length);
+        }
+    }
+
+    void OnDestroy() {
+        // Desactiva el temporizador activo al destruirse, si lo tiene
+        if ((onUse) && (type.Equals(UsableTypes.Timed))) {
+            AudioManager.Stop(timeSound);
+            AudioManager.Stop(fastTimeSound);
+            HUDManager.StopTimer();
+            StopCoroutine("SetTimer");
         }
     }
 
     /// <summary>
     /// Cancela la activacion del objeto
     /// </summary>
-    public virtual void CancelUse()
-    {
-        if (onUse)
-        {
+    public virtual void CancelUse() {
+        if (onUse) {
 
             onUse = false;
             //Si no forma parte de un puzzle, desactiva su objetivo
-            if (!inPuzzle)
-            {
-                foreach(IActivable activable in activables) {
+            if (!inPuzzle) {
+                foreach (IActivable activable in activables) {
                     activable.CancelActivation();
                 }
             }
             //Si forma parte de un puzzle, notifica su desactivacion al manager
-            else
-            {
+            else {
                 puzzleManager.NotifyChange(this, false);
             }
             if (type.Equals(UsableTypes.Timed)) {
@@ -196,17 +186,20 @@ public abstract class UsableObject : MonoBehaviour {
         }
     }
 
-    public IEnumerator SetTimer(float amount)
-    {
+    public IEnumerator SetTimer(float amount) {
         float rate = 1 / amount;
+        float leftAmount = amount;
         float i = 1;
-        while (i > 0)
-        {
+        //while (i > 0)
+        while (leftAmount > 0.1f) {
             i -= Time.deltaTime * rate;
-            HUDManager.UpdateTimer(i);
+            leftAmount -= Time.deltaTime;
+            //HUDManager.UpdateTimer(i);
+            HUDManager.UpdateTimer(leftAmount);
             yield return 0;
         }
-        
+        HUDManager.UpdateTimer(0);
+
     }
 
 }

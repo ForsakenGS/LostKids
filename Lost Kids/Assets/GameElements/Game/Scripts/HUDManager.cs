@@ -30,7 +30,7 @@ public class HUDManager : MonoBehaviour {
     public RectTransform sakeUI;
     public RectTransform timerUI;
 
-    private Image timerImage;
+    private Text timerText;
     private bool timerActive = false;
 
     private CharacterAbility selectedAbility;
@@ -51,7 +51,7 @@ public class HUDManager : MonoBehaviour {
         if (ki == null) {
             Destroy(kiCharacterUI.parent.gameObject);
         }
-        timerImage = timerUI.GetComponent<Image>();
+        timerText = timerUI.GetComponentInChildren<Text>();
         instance = this;
     }
 
@@ -222,14 +222,20 @@ public class HUDManager : MonoBehaviour {
         GameObject full = abilityUI.Find("Full").gameObject;
         full.GetComponent<Image>().fillAmount = amount;
 
-        if(amount >= 1) {
+        if (amount >= 1) {
             //Comprueba si se trata del jugador activo
-            if(abilityUI.GetComponentInChildren<CanvasRenderer>().GetAlpha().Equals(1)) {
+            if (abilityUI.GetComponentInChildren<CanvasRenderer>().GetAlpha().Equals(1)) {
 
                 //Lanzar Imagen segun habilidad
                 cooldownNotification.GetComponent<CooldownNotification>().ShowNotification(full.GetComponent<Image>().sprite);
             }
         }
+    }
+
+    public static void FastTimer(float time) {
+        instance.timerUI.GetComponentInChildren<Animator>().speed *= 3;
+        iTween.ShakeRotation(instance.timerUI.gameObject, new Vector3(0, 0, 10), time);
+        iTween.ShakeScale(instance.timerUI.gameObject, new Vector3(0.1f, 0.1f, 0), time);
     }
 
     // Devuelve el componente RectTransform de la habilidad indicada
@@ -487,30 +493,29 @@ public class HUDManager : MonoBehaviour {
         }
     }
 
-
-    public static void UpdateTimer(float value)
-    {
-        if (instance.timerImage.enabled)
-        {
-            instance.timerImage.fillAmount = value;
-        }
+    public static void UpdateTimer(float value) {
+        //if (instance.timerImage.enabled) {
+        //    instance.timerImage.fillAmount = value;
+        //}
+        instance.timerText.text = Mathf.CeilToInt(value).ToString();
     }
 
-    public static void StartTimer()
-    {
-        instance.timerImage.enabled = true;
-        instance.timerImage.fillAmount = 1;
+    public static void StartTimer() {
+        //instance.timerImage.enabled = true;
+        //instance.timerImage.fillAmount = 1;
+        instance.timerUI.gameObject.SetActive(true);
         instance.timerActive = true;
 
     }
 
-    public static void StopTimer()
-    {
-        instance.timerImage.enabled = false;
+    public static void StopTimer() {
+        //instance.timerImage.enabled = false;
+        instance.timerUI.gameObject.SetActive(false);
+        instance.timerUI.GetComponentInChildren<Animator>().speed /= 3;
+        iTween.Stop(instance.timerUI.gameObject);
         instance.timerActive = false;
     }
-    public static bool TimerActive()
-    {
+    public static bool TimerActive() {
         return instance.timerActive;
     }
 }

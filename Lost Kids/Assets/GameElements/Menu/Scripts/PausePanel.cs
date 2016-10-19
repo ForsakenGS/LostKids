@@ -34,15 +34,12 @@ public class PausePanel : MonoBehaviour {
     // Use this for initialization
 
 
-    void Awake()
-    {
-        if (instance != null && instance != this)
-        {
+    void Awake() {
+        if (instance != null && instance != this) {
             // If that is the case, we destroy other instances
             Destroy(gameObject);
         }
-        if (instance == null)
-        {
+        if (instance == null) {
             instance = this;
             mainPanel = transform.Find("MainPanel").gameObject;
             settingsPanel = transform.Find("Settings").gameObject;
@@ -52,43 +49,38 @@ public class PausePanel : MonoBehaviour {
             background = transform.Find("Background").gameObject;
 
             resumeButton = transform.Find("MainPanel/ResumeButton").GetComponent<UnityEngine.UI.Button>();
-            settingsButton=transform.Find("MainPanel/SettingsButton").GetComponent<UnityEngine.UI.Button>();
+            settingsButton = transform.Find("MainPanel/SettingsButton").GetComponent<UnityEngine.UI.Button>();
             controlsButton = transform.Find("MainPanel/ControlsButton").GetComponent<UnityEngine.UI.Button>();
-            menuButton =transform.Find("MainPanel/MenuButton").GetComponent<UnityEngine.UI.Button>();
-            quitButton=transform.Find("MainPanel/QuitButton").GetComponent<UnityEngine.UI.Button>();
+            menuButton = transform.Find("MainPanel/MenuButton").GetComponent<UnityEngine.UI.Button>();
+            quitButton = transform.Find("MainPanel/QuitButton").GetComponent<UnityEngine.UI.Button>();
 
-            settingsBackButton= transform.Find("Settings/BackButton").GetComponent<UnityEngine.UI.Button>();
+            settingsBackButton = transform.Find("Settings/BackButton").GetComponent<UnityEngine.UI.Button>();
             controlsBackButton = transform.Find("ControlsPanel/BackButton").GetComponent<UnityEngine.UI.Button>();
             /*
             controlsKeyboardButton = transform.Find("ControlsPanel/KeyboardButton").GetComponent<UnityEngine.UI.Button>();
             controlsPadButton = transform.Find("ControlsPanel/PadButton").GetComponent<UnityEngine.UI.Button>();
             */
 
-
         }
     }
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    void Start() {
+
+    }
+
+    // Update is called once per frame
+    void Update() {
 
 
     }
 
 
 
-    public void Show()
-    {    
+    public void Show() {
         mainPanel.SetActive(true);
         background.SetActive(true);
-        resumeButton.Select();
-        
     }
 
-    public void Hide()
-    {
+    public void Hide() {
         GameManager.ResumeGame();
         InputManagerTLK.SetMenuMode(false);
         mainPanel.SetActive(false);
@@ -97,52 +89,47 @@ public class PausePanel : MonoBehaviour {
         desktopConfirmPanel.SetActive(false);
         menuConfirmPanel.SetActive(false);
         background.SetActive(false);
+        // Se cambia botón activo para que al mostrarse de nuevo el menú de pausa aparezca remarcado resumeButton correctamente
+        GetComponentInChildren<EventSystem>().SetSelectedGameObject(quitButton.gameObject);
     }
 
-    public void ShowMenuConfirmationPanel()
-    {
-        
+    public void ShowMenuConfirmationPanel() {
+
         mainPanel.SetActive(false);
         menuConfirmPanel.SetActive(true);
         menuConfirmPanel.transform.Find("NoButton").GetComponent<UnityEngine.UI.Button>().Select();
     }
-    public void HideMenuConfirmationPanel()
-    {
+    public void HideMenuConfirmationPanel() {
         menuConfirmPanel.SetActive(false);
         Show();
         menuButton.Select();
     }
 
-    public void ShowDesktopConfirmationPanel()
-    {
+    public void ShowDesktopConfirmationPanel() {
         mainPanel.SetActive(false);
         desktopConfirmPanel.SetActive(true);
         desktopConfirmPanel.transform.Find("NoButton").GetComponent<UnityEngine.UI.Button>().Select();
     }
-    public void HideDesktopConfirmationPanel()
-    {
+    public void HideDesktopConfirmationPanel() {
         desktopConfirmPanel.SetActive(false);
         Show();
         quitButton.Select();
     }
 
-    public void ShowSettingsPanel()
-    {
+    public void ShowSettingsPanel() {
         mainPanel.SetActive(false);
         settingsPanel.SetActive(true);
         settingsBackButton.Select();
     }
-    
 
-    public void HideSettingsPanel()
-    {
+
+    public void HideSettingsPanel() {
         settingsPanel.SetActive(false);
         Show();
         settingsButton.Select();
     }
 
-    public void ShowControlsPanel()
-    {
+    public void ShowControlsPanel() {
         mainPanel.SetActive(false);
         controlsPanel.SetActive(true);
         controlsBackButton.Select();
@@ -161,36 +148,31 @@ public class PausePanel : MonoBehaviour {
         */
     }
 
-    public void HideControlsPanel()
-    {
+    public void HideControlsPanel() {
         controlsPanel.SetActive(false);
         Show();
         controlsButton.Select();
     }
 
-    public void ChangeScene(string sc)
-    {
+    public void ChangeScene(string sc) {
         GameManager.GoToScene(sc);
     }
 
-    public void QuitGame()
-    {
+    public void QuitGame() {
         GameManager.QuitGame();
     }
-    
-    public static void ShowPanel()
-    {
+
+    public static void ShowPanel() {
         instance.Show();
         instance.resumeButton.Select();
     }
 
-    public static void HidePanel()
-    {
+    public static void HidePanel() {
 
         instance.Hide();
     }
 
-    
+
 
 
 }

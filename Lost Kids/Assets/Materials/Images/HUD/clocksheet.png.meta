@@ -1,0 +1,645 @@
+fileFormatVersion: 2
+guid: 2f2e2203bb62fa34b94bc9861ff22f41
+timeCreated: 1476869074
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: clocksheet_0
+    21300002: clocksheet_1
+    21300004: clocksheet_2
+    21300006: clocksheet_3
+    21300008: clocksheet_4
+    21300010: clocksheet_5
+    21300012: clocksheet_6
+    21300014: clocksheet_7
+    21300016: clocksheet_8
+    21300018: clocksheet_9
+    21300020: clocksheet_10
+    21300022: clocksheet_11
+    21300024: clocksheet_12
+    21300026: clocksheet_13
+    21300028: clocksheet_14
+    21300030: clocksheet_15
+    21300032: clocksheet_16
+    21300034: clocksheet_17
+    21300036: clocksheet_18
+    21300038: clocksheet_19
+    21300040: clocksheet_20
+    21300042: clocksheet_21
+    21300044: clocksheet_22
+    21300046: clocksheet_23
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: clocksheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 663
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_1
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 663
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_2
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 663
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_3
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 663
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_4
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 663
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_5
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 663
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 442
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_7
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 442
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_8
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 442
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_9
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 442
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_10
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 442
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_11
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 442
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 221
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_13
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 221
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_14
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 221
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_15
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 221
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_16
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 221
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_17
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 221
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 100, y: 88.5}
+        - {x: 100, y: 110.5}
+        - {x: -100, y: 110.5}
+        - {x: -100, y: 95.5}
+        - {x: -82, y: 64.5}
+        - {x: -100, y: -65.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 64.5}
+        - {x: 97, y: 77.5}
+    - name: clocksheet_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_19
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_20
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_21
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_22
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    - name: clocksheet_23
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 0
+        width: 200
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -100, y: 110.5}
+        - {x: -100, y: 82.5}
+        - {x: -78, y: 40.5}
+        - {x: -100, y: -48.5}
+        - {x: -100, y: -110.5}
+        - {x: 100, y: -110.5}
+        - {x: 100, y: 37.5}
+        - {x: 96, y: 76.5}
+        - {x: 100, y: 94.5}
+        - {x: 100, y: 110.5}
+      - - {x: -10, y: 110.5}
+        - {x: -9, y: 107.5}
+        - {x: 10, y: 107.5}
+        - {x: 12, y: 109.5}
+        - {x: 12, y: 110.5}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
