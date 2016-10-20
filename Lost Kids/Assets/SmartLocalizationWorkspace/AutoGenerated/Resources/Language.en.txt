@@ -129,16 +129,16 @@
 		<value>Movement</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.NextCharacterText" xml:space="preserve">
-		<value>Select Next Character</value>
+		<value>Next Character</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.PauseText" xml:space="preserve">
 		<value>Pause</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.PreviousCharacter" xml:space="preserve">
-		<value>Select Previous Character</value>
+		<value>Previous Character</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Both pressed) Sacrifice</value>
+		<value>(Both) Sacrifice</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill1AkaiText" xml:space="preserve">
 		<value>Break</value>

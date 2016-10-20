@@ -518,4 +518,8 @@ public class HUDManager : MonoBehaviour {
     public static bool TimerActive() {
         return instance.timerActive;
     }
+
+    public static void  SetPuzzleName(string str) {
+        instance.transform.Find("HUDCanvas/PuzzleName").GetComponent<Text>().text = str;
+    }
 }

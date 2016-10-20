@@ -188,6 +188,8 @@ public class RoomSettings : MonoBehaviour {
     /// Función a ejecutar cada vez que el personaje activo entre en la habitación
     /// </summary>
     public void ShowRoom() {
+        // Nombre puzzle, para debug
+        HUDManager.SetPuzzleName(gameObject.name);
 
         gameObject.SetActive(true);
         InputManagerTLK.SetLock(true);

@@ -8,7 +8,7 @@ using System.Linq;
 
 public enum GameLevels
 {
-    Tutorial1,Tutorial2,Tutorial3,Level1,Boss1,Level2,Boss2,Tutorial4
+    Tutorial1,Tutorial2,Tutorial3,Level1_1,Level1_2, Level1_3, BossKappa
 }
 
 
