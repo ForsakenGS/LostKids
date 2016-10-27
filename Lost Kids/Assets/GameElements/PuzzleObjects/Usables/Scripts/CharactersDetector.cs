@@ -16,10 +16,19 @@ public class CharactersDetector : UsableObject {
 
     void OnDisable() {
         CharacterStatus.KillCharacterEvent -= CharacterDied;
+        RoomSettings.RoomPreparedEvent -= ResetCanvas;
+    }
+
+    void OnEnable() {
+        CharacterStatus.KillCharacterEvent += CharacterDied;
+        RoomSettings.RoomPreparedEvent += ResetCanvas;
+
+        
     }
 
     void Awake() {
-                GameObject[] chars = GameObject.FindGameObjectsWithTag("Player");
+
+        GameObject[] chars = GameObject.FindGameObjectsWithTag("Player");
 
         RequiredCharacters = new List<GameObject>();
 
@@ -28,6 +37,13 @@ public class CharactersDetector : UsableObject {
             RequiredCharacters.Add(chars[i]);
 
         }
+
+        canvas = transform.Find("Canvas");
+        AoiIcon = canvas.transform.Find("Aoi");
+        AkaiIcon = canvas.transform.Find("Akai");
+        KiIcon = canvas.transform.Find("Ki");
+
+        charactersInside = new HashSet<GameObject>();
     }
 
 	// Use this for initialization
@@ -35,20 +51,12 @@ public class CharactersDetector : UsableObject {
 
         base.Start();
 
-        canvas = transform.Find("Canvas");
-        AoiIcon = canvas.transform.Find("Aoi");
-        AkaiIcon = canvas.transform.Find("Akai");
-        KiIcon = canvas.transform.Find("Ki");
 
-
-
-
-	    charactersInside = new HashSet<GameObject>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+	    
 	}
 
     void OnTriggerEnter(Collider col) {
@@ -142,5 +150,14 @@ public class CharactersDetector : UsableObject {
 
     void CharacterDied(GameObject character){
         CheckCharacterOut(character);
+    }
+
+    void ResetCanvas() {
+        if (canvas) {
+
+            canvas.gameObject.SetActive(false);
+            canvas.gameObject.SetActive(true);
+
+        }
     }
 }

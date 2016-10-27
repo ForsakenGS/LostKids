@@ -64,7 +64,7 @@ public class Button : UsableObject {
     {
 
 
-        if (!onUse && (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable")) && col.gameObject.transform.position.y > transform.position.y + 0.3f)
+        if (!onUse && col.gameObject.tag.Equals("Player") && col.gameObject.transform.position.y > transform.position.y + 0.3f)
         {
             //Si se activa pro primera vez, guarda su posicion original
             if (!initialized)
@@ -87,7 +87,7 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnTriggerExit(Collider col)
     {
-        if (CharacterManager.IsActiveCharacter(col.gameObject) || col.gameObject.tag.Equals("Pushable"))
+        if (CharacterManager.IsActiveCharacter(col.gameObject))
         {
             if(isMoving || type.Equals(UsableTypes.Hold))
             {
@@ -103,7 +103,7 @@ public class Button : UsableObject {
     void OnCollisionEnter(Collision col)
     {
 
-        if (!onUse && (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable") ) && col.gameObject.transform.position.y > transform.position.y+0.3f)
+        if (!onUse && col.gameObject.tag.Equals("Player") && col.gameObject.transform.position.y > transform.position.y+0.3f)
         {
             //Si se activa pro primera vez, guarda su posicion original
             if (!initialized)
@@ -127,7 +127,7 @@ public class Button : UsableObject {
     /// <param name="col"></param>
     void OnCollisionExit(Collision col)
     {
-        if (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Pushable"))
+        if (col.gameObject.tag.Equals("Player"))
         {
             col.transform.parent = null;
             if (isMoving || type.Equals(UsableTypes.Hold))

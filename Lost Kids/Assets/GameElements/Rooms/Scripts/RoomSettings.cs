@@ -45,6 +45,9 @@ public class RoomSettings : MonoBehaviour {
 
     private Transform initialCamTransform;
 
+    public delegate void RoomPrepared();
+    public static event RoomPrepared RoomPreparedEvent;
+
     // Use this for references & content generation
     void Awake() {
         objectsToPrepare = 0;
@@ -219,6 +222,7 @@ public class RoomSettings : MonoBehaviour {
     {
         Camera.main.transform.position = initialCamTransform.position;
         InputManagerTLK.SetLock(false);
+        if(RoomPreparedEvent != null)  RoomPreparedEvent();
     }
 
     public void SetParticles(ParticleSystem ps)
