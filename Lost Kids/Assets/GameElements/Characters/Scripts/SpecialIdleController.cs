@@ -4,6 +4,7 @@ using System.Collections;
 public class SpecialIdleController : MonoBehaviour {
     public int specialIdleCount;
     public float minTimeToShow;
+    public float minLoopTime;
 
     private Animator animator;
     private CharacterStatus status;
@@ -16,10 +17,23 @@ public class SpecialIdleController : MonoBehaviour {
         status = GetComponent<CharacterStatus>();
     }
 
+    void ActiveCharacterChanged(GameObject character) {
+        if (character.Equals(gameObject)) {
+            // Este personaje es el activo, luego se termina el SpecialIdle
+            animator.SetTrigger("Idle");
+        }
+    }
+
+    // Se desactiva el controlador
+    void OnDisable() {
+        CharacterManager.ActiveCharacterChangedEvent -= ActiveCharacterChanged;
+    }
+
     // Se activa el controlador
     void OnEnable() {
         idleTime = 0;
         onAnimation = false;
+        CharacterManager.ActiveCharacterChangedEvent += ActiveCharacterChanged;
     }
 
     public void SpecialIdleFinished() {
@@ -27,6 +41,12 @@ public class SpecialIdleController : MonoBehaviour {
         status.UnlockByAnimation();
         onAnimation = false;
         enabled = false;
+    }
+
+    void StopSpecialIdle() {
+        if ((enabled) && (onAnimation)) {
+            animator.SetTrigger("Idle");
+        }
     }
 
     // Update is called once per frame
@@ -44,6 +64,8 @@ public class SpecialIdleController : MonoBehaviour {
                         animator.SetInteger("idleNr", Random.Range(1, specialIdleCount + 1));
                         animator.SetTrigger("SpecialIdle");
                         onAnimation = true;
+                        // Cuándo parar la animación
+                        Invoke("StopSpecialIdle", minLoopTime + Random.Range(0.0f, 2.0f));
                     }
                 }
             } else {

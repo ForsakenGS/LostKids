@@ -42,6 +42,7 @@ public class TelekinesisAbility : CharacterAbility {
                     //usableObj = null;
                 } else {
                     isUsing = true;
+                    GetComponent<Animator>().SetBool("using", true);
                 }
             }
         }
@@ -62,7 +63,6 @@ public class TelekinesisAbility : CharacterAbility {
             if (animationEnded) {
                 active = false;
                 // Deja de usar el objeto, si procede
-                //if (usableObj != null) {
                 if (isUsing) {
                     usableObj.CancelUse();
                 }
@@ -71,6 +71,7 @@ public class TelekinesisAbility : CharacterAbility {
                 animationEnded = false;
                 //usableObj = null;
                 isUsing = false;
+                GetComponent<Animator>().SetBool("using", false);
                 CallEventDeactivateAbility();
             } else {
                 changed = false;

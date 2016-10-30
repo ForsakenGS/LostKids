@@ -24,7 +24,6 @@ public class CharacterStatus : MonoBehaviour {
     /// </summary>
     public enum State { AstralProjection, Breaking, BigJumping, Crouching, Dead, Falling, Idle, Jumping, Pushing, Sacrifice, Scared, Sprint, Walking, Telekinesis, Using, Victory }
 
-
     //Referencia al manager de personajes
     public GameObject characterManagerPrefab;
     private CharacterManager characterManager;
@@ -457,10 +456,6 @@ public class CharacterStatus : MonoBehaviour {
                 if (!characterMovement.CharacterIsGrounded()) {
                     characterState = State.Jumping;
                 } else {
-                    // Comprobación con AnimatorController
-                    //if (characterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall")) {
-                    //    SetAnimatorTrigger("Land");
-                    //}
                     // Idle especial
                     if ((!specialIdleController.isActiveAndEnabled) && (!lockedByAnimation)) {
                         specialIdleController.enabled = true;
@@ -509,6 +504,10 @@ public class CharacterStatus : MonoBehaviour {
                     GetComponent<AbilityController>().DeactivateActiveAbility();
                     characterState = State.Falling;
                     SetAnimatorTrigger("Fall");
+                } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
+                    GetComponent<AbilityController>().DeactivateActiveAbility();
+                    characterState = State.Idle;
+                    SetAnimatorTrigger("Idle");
                 }
                 break;
             case State.Crouching:
