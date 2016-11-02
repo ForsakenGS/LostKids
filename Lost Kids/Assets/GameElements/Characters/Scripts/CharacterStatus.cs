@@ -527,6 +527,10 @@ public class CharacterStatus : MonoBehaviour {
                 if (characterMovement.CharacterIsGrounded()) {
                     jumpButtonUp = false;
                     totalJumpImpulse = 0.0f;
+                    characterAnimator.SetBool("inAir", false);
+                } else {
+                    // Se encuentra levitando
+                    characterAnimator.SetBool("inAir", true);
                 }
                 break;
             default:
