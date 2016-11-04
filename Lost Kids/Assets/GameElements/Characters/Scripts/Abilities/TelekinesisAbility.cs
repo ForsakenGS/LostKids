@@ -42,7 +42,8 @@ public class TelekinesisAbility : CharacterAbility {
                     //usableObj = null;
                 } else {
                     isUsing = true;
-                    GetComponent<Animator>().SetBool("using", true);
+                    // Se modifica el componente Animator de Ki
+                    CharacterAnimationController.SetAnimatorPropUsing(CharacterName.Ki, true);
                 }
             }
         }
@@ -71,7 +72,8 @@ public class TelekinesisAbility : CharacterAbility {
                 animationEnded = false;
                 //usableObj = null;
                 isUsing = false;
-                GetComponent<Animator>().SetBool("using", false);
+                // Se modifica el componente Animator de Ki
+                CharacterAnimationController.SetAnimatorPropUsing(CharacterName.Ki, false);
                 CallEventDeactivateAbility();
             } else {
                 changed = false;

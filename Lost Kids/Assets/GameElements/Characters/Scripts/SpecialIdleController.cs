@@ -6,21 +6,19 @@ public class SpecialIdleController : MonoBehaviour {
     public float minTimeToShow;
     public float minLoopTime;
 
-    private Animator animator;
     private CharacterStatus status;
     private float idleTime;
     private bool onAnimation;
 
     // Referencias
     void Awake() {
-        animator = GetComponent<Animator>();
         status = GetComponent<CharacterStatus>();
     }
 
     void ActiveCharacterChanged(GameObject character) {
         if (character.Equals(gameObject)) {
             // Este personaje es el activo, luego se termina el SpecialIdle
-            animator.SetTrigger("Idle");
+            CharacterAnimationController.SetAnimatorTrigger(status.characterName, CharacterAnimationController.IDLE);
         }
     }
 
@@ -45,7 +43,7 @@ public class SpecialIdleController : MonoBehaviour {
 
     void StopSpecialIdle() {
         if ((enabled) && (onAnimation)) {
-            animator.SetTrigger("Idle");
+            CharacterAnimationController.SetAnimatorTrigger(status.characterName, CharacterAnimationController.IDLE);
         }
     }
 
@@ -59,10 +57,9 @@ public class SpecialIdleController : MonoBehaviour {
                 if (idleTime > minTimeToShow) {
                     // Decide si mostrar animación especial de Idle
                     if (Random.Range(0.0f, 1.0f) > 0.95f) {
-                        status.LockByAnimation();
                         // Decide qué animación mostrar
-                        animator.SetInteger("idleNr", Random.Range(1, specialIdleCount + 1));
-                        animator.SetTrigger("SpecialIdle");
+                        CharacterAnimationController.SetAnimatorPropIdleNr(status.characterName, Random.Range(1, specialIdleCount + 1));
+                        CharacterAnimationController.SetAnimatorTrigger(status.characterName, CharacterAnimationController.SPECIAL_IDLE);
                         onAnimation = true;
                         // Cuándo parar la animación
                         Invoke("StopSpecialIdle", minLoopTime + Random.Range(0.0f, 2.0f));
