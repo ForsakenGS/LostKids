@@ -4,22 +4,34 @@ using System.Collections;
 public class SpecialIdleController : MonoBehaviour {
     public int specialIdleCount;
     public float minTimeToShow;
+    public float minLoopTime;
 
-    private Animator animator;
     private CharacterStatus status;
     private float idleTime;
     private bool onAnimation;
 
     // Referencias
     void Awake() {
-        animator = GetComponent<Animator>();
         status = GetComponent<CharacterStatus>();
+    }
+
+    void ActiveCharacterChanged(GameObject character) {
+        if (character.Equals(gameObject)) {
+            // Este personaje es el activo, luego se termina el SpecialIdle
+            CharacterAnimationController.SetAnimatorTrigger(status.characterName, CharacterAnimationController.IDLE);
+        }
+    }
+
+    // Se desactiva el controlador
+    void OnDisable() {
+        CharacterManager.ActiveCharacterChangedEvent -= ActiveCharacterChanged;
     }
 
     // Se activa el controlador
     void OnEnable() {
         idleTime = 0;
         onAnimation = false;
+        CharacterManager.ActiveCharacterChangedEvent += ActiveCharacterChanged;
     }
 
     public void SpecialIdleFinished() {
@@ -27,6 +39,12 @@ public class SpecialIdleController : MonoBehaviour {
         status.UnlockByAnimation();
         onAnimation = false;
         enabled = false;
+    }
+
+    void StopSpecialIdle() {
+        if ((enabled) && (onAnimation)) {
+            CharacterAnimationController.SetAnimatorTrigger(status.characterName, CharacterAnimationController.IDLE);
+        }
     }
 
     // Update is called once per frame
@@ -39,11 +57,12 @@ public class SpecialIdleController : MonoBehaviour {
                 if (idleTime > minTimeToShow) {
                     // Decide si mostrar animación especial de Idle
                     if (Random.Range(0.0f, 1.0f) > 0.95f) {
-                        status.LockByAnimation();
                         // Decide qué animación mostrar
-                        animator.SetInteger("idleNr", Random.Range(1, specialIdleCount + 1));
-                        animator.SetTrigger("SpecialIdle");
+                        CharacterAnimationController.SetAnimatorPropIdleNr(status.characterName, Random.Range(1, specialIdleCount + 1));
+                        CharacterAnimationController.SetAnimatorTrigger(status.characterName, CharacterAnimationController.SPECIAL_IDLE);
                         onAnimation = true;
+                        // Cuándo parar la animación
+                        Invoke("StopSpecialIdle", minLoopTime + Random.Range(0.0f, 2.0f));
                     }
                 }
             } else {

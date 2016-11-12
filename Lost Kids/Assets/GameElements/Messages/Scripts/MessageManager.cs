@@ -31,6 +31,10 @@ public class MessageManager : MonoBehaviour {
     [Header("Tanuki Settings")]
     public string tanukiTag = "tanuki";
     public Sprite tanukiImg;
+    // Imagen y etiqueta Kappa
+    [Header("Kappa Settings")]
+    public string kappaTag = "kappa";
+    public Sprite kappaImg;
     // Imagen y etiqueta Aoi
     [Header("Aoi Settings")]
     public string aoiTag = "aoi";
@@ -112,7 +116,7 @@ public class MessageManager : MonoBehaviour {
 
         //Se cargan los mensajes desde fichero
         FillMessages();
-       
+
     }
 
     /// <summary>
@@ -127,7 +131,7 @@ public class MessageManager : MonoBehaviour {
         string[] formatText = fullText.Split("\n"[0]);
 
         //Se añaden las lineas al vector de mensajes
-        for (int i = 0; i < formatText.Length; i++) {
+        for (int i = 0 ; i < formatText.Length ; i++) {
             messages.Add((string) formatText[i]);
         }
 
@@ -145,7 +149,7 @@ public class MessageManager : MonoBehaviour {
         frame.gameObject.SetActive(true);
         text.gameObject.SetActive(true);
 
-        
+
         //Se bloquea el resto del juego
         if (LockEvent != null) {
             LockEvent();
@@ -188,19 +192,21 @@ public class MessageManager : MonoBehaviour {
     Sprite CharacterImage(string message) {
         // Kodama es el personaje por defecto
         Sprite img = shownImg.sprite;
-        string tag = message.Substring(1, message.IndexOf('>')-1);
+        string tag = message.Substring(1, message.IndexOf('>') - 1);
         if (tag.Equals(kodamaTag)) {
             img = kodamaImg;
-        }else if (tag.Equals(tanukiTag)) {
-                img = tanukiImg;
-            } else if (tag.Equals(aoiTag)) {
-                img = aoiImg;
-            } else if (tag.Equals(akaiTag)) {
-                img = akaiImg;
-            } else if (tag.Equals(kiTag)) {
-                img = kiImg;
-            }
-        
+        } else if (tag.Equals(tanukiTag)) {
+            img = tanukiImg;
+        } else if (tag.Equals(aoiTag)) {
+            img = aoiImg;
+        } else if (tag.Equals(akaiTag)) {
+            img = akaiImg;
+        } else if (tag.Equals(kiTag)) {
+            img = kiImg;
+        } else if (tag.Equals(kappaTag)) {
+            img = kappaImg;
+        }
+
 
 
         return img;
@@ -214,7 +220,7 @@ public class MessageManager : MonoBehaviour {
         string[] words = msg.Split(' ');
         // Inserta las palabras una a una para formar las distintas líneas
         lines.Insert(0, "");
-        for (int i = 1; i < words.Length; ++i) {
+        for (int i = 1 ; i < words.Length ; ++i) {
             if (lines[lines.Count - 1].Length + words[i].Length >= maxCharacterLine) {
                 lines.Insert(lines.Count, words[i]);
             } else {
@@ -238,18 +244,17 @@ public class MessageManager : MonoBehaviour {
         text.text = string.Empty;
 
         //Se recorren los indices para mostrar los mensajes en pantalla
-        for (int i = startIndex; i < endIndex; i++) {
+        for (int i = startIndex ; i < endIndex ; i++) {
             //Se extrae la linea como array de caracteres
             char[] line = lines[i].ToCharArray();
 
             //Se recorre la linea y se va añadiendo letra a letra con un retraso de la velocidad de letra
-            for (int j = 0; j < line.Length; j++) {
+            for (int j = 0 ; j < line.Length ; j++) {
                 text.text += line[j];
                 //Se reconocen algunos caracteres especiales (. , ) que modifiquen la velocidad del texto
-                switch(line[j])
-                {
+                switch (line[j]) {
                     case '.':
-                        yield return new WaitForSeconds(4*letterSpeed);
+                        yield return new WaitForSeconds(4 * letterSpeed);
                         break;
                     case '!':
                         yield return new WaitForSeconds(4 * letterSpeed);
@@ -258,13 +263,13 @@ public class MessageManager : MonoBehaviour {
                         yield return new WaitForSeconds(4 * letterSpeed);
                         break;
                     case ',':
-                        yield return new WaitForSeconds(2*letterSpeed);
+                        yield return new WaitForSeconds(2 * letterSpeed);
                         break;
                     default:
                         yield return new WaitForSeconds(letterSpeed);
                         break;
                 }
-                
+
             }
             //Se añade el salto de linea
             text.text += "\n";
@@ -287,8 +292,7 @@ public class MessageManager : MonoBehaviour {
     /// </summary>
     /// <param name="conversation">Listado con los índices de los mensajes que conforman la conversación</param>
     public void ShowConversation(List<int> conversation) {
-        if (ConversationStartEvent != null)
-        {
+        if (ConversationStartEvent != null) {
             ConversationStartEvent();
         }
         StartCoroutine(ShowConversationRoutine(conversation));
@@ -301,19 +305,17 @@ public class MessageManager : MonoBehaviour {
     /// <returns></returns>
     IEnumerator ShowConversationRoutine(List<int> conversation) {
         isConversation = true;
-        for (int mesIndex = 0; mesIndex < conversation.Count; ++mesIndex) {
+        for (int mesIndex = 0 ; mesIndex < conversation.Count ; ++mesIndex) {
             // Espera a que el mensaje anterior termine de mostrarse por pantalla
-            if (ShowingMessage())
-            {
-                while (!(MessageEnded()))
-                {
+            if (ShowingMessage()) {
+                while (!(MessageEnded())) {
                     yield return new WaitForSeconds(0.1f);
                 }
             }
             // Si se trata del último mensaje de la conversación, desactiva el flag 
             if (mesIndex == conversation.Count - 1) {
                 isConversation = false;
-            }            
+            }
             // Muestra el mensaje
             ShowMessage(conversation[mesIndex]);
         }
@@ -367,8 +369,7 @@ public class MessageManager : MonoBehaviour {
                     UnlockEvent();
                 }
 
-                if (ConversationEndEvent != null)
-                {
+                if (ConversationEndEvent != null) {
                     ConversationEndEvent();
                 }
                 //Se oculta la interfaz de mensajes
@@ -393,8 +394,7 @@ public class MessageManager : MonoBehaviour {
     /// Funcion que devuelve si se esta mostrando un mensaje
     /// </summary>
     /// <returns></returns>
-    public bool ShowingMessage()
-    {
+    public bool ShowingMessage() {
         return (!messageState.Equals(State.NoMessage));
     }
 }

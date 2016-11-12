@@ -42,6 +42,8 @@ public class TelekinesisAbility : CharacterAbility {
                     //usableObj = null;
                 } else {
                     isUsing = true;
+                    // Se modifica el componente Animator de Ki
+                    CharacterAnimationController.SetAnimatorPropUsing(CharacterName.Ki, true);
                 }
             }
         }
@@ -62,7 +64,6 @@ public class TelekinesisAbility : CharacterAbility {
             if (animationEnded) {
                 active = false;
                 // Deja de usar el objeto, si procede
-                //if (usableObj != null) {
                 if (isUsing) {
                     usableObj.CancelUse();
                 }
@@ -71,6 +72,8 @@ public class TelekinesisAbility : CharacterAbility {
                 animationEnded = false;
                 //usableObj = null;
                 isUsing = false;
+                // Se modifica el componente Animator de Ki
+                CharacterAnimationController.SetAnimatorPropUsing(CharacterName.Ki, false);
                 CallEventDeactivateAbility();
             } else {
                 changed = false;

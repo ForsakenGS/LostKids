@@ -129,16 +129,16 @@
 		<value>Movimiento</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.NextCharacterText" xml:space="preserve">
-		<value>Seleccionar Personaje Siguiente</value>
+		<value>Personaje Siguiente</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.PauseText" xml:space="preserve">
 		<value>Pausa</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.PreviousCharacter" xml:space="preserve">
-		<value>Seleccionar Personaje Anterior</value>
+		<value>Personaje Anterior</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Ambos pulsados) Sacrificio</value>
+		<value>(Ambos) Sacrificio</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill1AkaiText" xml:space="preserve">
 		<value>Romper</value>
@@ -242,8 +242,17 @@
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.ActionText" xml:space="preserve">
 		<value>Acción</value>
 	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.AkaiSelectionText" xml:space="preserve">
+		<value>Akai</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.AoiSelectionText" xml:space="preserve">
+		<value>Aoi</value>
+	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.JumpText" xml:space="preserve">
 		<value>Saltar</value>
+	</data>
+	<data name="TLK.UI.Controls.Canvas.ControlsFrame.KiSelectionText" xml:space="preserve">
+		<value>Ki</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Movementtext" xml:space="preserve">
 		<value>Movimiento</value>
@@ -358,14 +367,5 @@
 	</data>
 	<data name="TLK.UI.Settings.Canvas.Title" xml:space="preserve">
 		<value>Configuración</value>
-	</data>
-	<data name="TLK.UI.Controls.Canvas.ControlsFrame.AoiSelectionText" xml:space="preserve">
-		<value>Aoi</value>
-	</data>
-	<data name="TLK.UI.Controls.Canvas.ControlsFrame.AkaiSelectionText" xml:space="preserve">
-		<value>Akai</value>
-	</data>
-	<data name="TLK.UI.Controls.Canvas.ControlsFrame.KiSelectionText" xml:space="preserve">
-		<value>Ki</value>
 	</data>
 </root>

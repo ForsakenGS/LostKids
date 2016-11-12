@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class Tanuki : UsableObject {
@@ -17,6 +18,7 @@ public class Tanuki : UsableObject {
     private CutScene fearCutScene;
     private GameObject canvas;
     private MessageManager messageManager;
+    private Animator animator;
 
     // Use this for references
     void Awake() {
@@ -24,6 +26,7 @@ public class Tanuki : UsableObject {
         cutScene = GetComponent<CutScene>();
         fearCutScene = targets[0].GetComponent<CutScene>();
         canvas = GetComponentInChildren<Canvas>().gameObject;
+        animator = GetComponent<Animator>();
         ChangeTooltipStatus(TooltipManager.On);
     }
 
@@ -51,6 +54,15 @@ public class Tanuki : UsableObject {
         canvas.SetActive(status);
     }
 
+    /// <summary>
+    /// Called when TanukiIdle animation ends and chooses if TanukiSoftKits animation is played
+    /// </summary>
+    public void IdleFinished() {
+        if (Random.Range(0,3) == 2) {
+            animator.SetTrigger("SoftHits");
+        }
+    }
+
     void OnEnable() {
         TooltipManager.TooltipOnOff += ChangeTooltipStatus;
     }
@@ -59,16 +71,26 @@ public class Tanuki : UsableObject {
         TooltipManager.TooltipOnOff -= ChangeTooltipStatus;
     }
 
+    void SolveFearAnimation() {
+        animator.SetTrigger("HardHits");
+    }
+
+    void SolveFear() {
+        if (fearCutScene == null) {
+            base.Use();
+        } else {
+            fearCutScene.BeginCutScene(base.Use);
+        }
+        Invoke("ShowThanksConversation", fearCutScene.cutSceneTime + 0.5f);
+    }
+
     override public void Use() {
         // Comprueba si el personaje posee el objeto solicitado
         if (CharacterManager.GetActiveCharacter().GetComponent<CharacterInventory>().GetObject(requestedObjectName)) {
             // Eliminación del miedo
-            if (fearCutScene == null) {
-                base.Use();
-            } else {
-                fearCutScene.BeginCutScene(base.Use);
-            }
-            Invoke("ShowThanksConversation", fearCutScene.cutSceneTime + 0.5f);
+            cutScene.BeginCutScene(SolveFearAnimation);
+            Invoke("MoveCharacterToFront", 0.5f);
+            Invoke("SolveFear", 3.5f);
         } else {
             // Muestra la conversación para pedir el objeto
             if (cutScene == null) {

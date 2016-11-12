@@ -51,16 +51,16 @@ public class WayDetector : MonoBehaviour {
         if (CharacterManager.IsActiveCharacter(col.gameObject)) {
             // Comprueba si el efecto es de mostrar u ocultar
             if (toShow) {
-
                 affectedRoomSettings.ShowRoom();
                 GetComponent<Collider>().enabled = false;
             } else if (affectedRoom.activeInHierarchy) {
                 // Oculta la habitación
                 affectedRoomSettings.HideRoom();
                 GetComponent<Collider>().enabled = false;
-
                 //Muestra la pared de no retorno
                 backWall.Show();
+                // Nombre puzzle, para debug
+                HUDManager.SetPuzzleName("No Puzzle");
             }
         }
     }

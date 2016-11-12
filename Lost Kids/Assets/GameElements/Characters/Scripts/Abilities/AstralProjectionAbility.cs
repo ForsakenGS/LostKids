@@ -49,6 +49,7 @@ public class AstralProjectionAbility : CharacterAbility {
                 if (wall != null) {
                     // Crea un doble del personaje y la proyección astral
                     staticCharacter = (GameObject) Instantiate(characterDuringProjection, transform.position, transform.rotation);
+                    staticCharacter.GetComponent<AstralProjectionEnding>().ability = this;
                     transform.position = wall.GetAstralProjectionPosition();
                     // Modifica los parámetros de la proyección astral
                     characterStatus.astralSpeed = speedModifier * characterStatus.standingSpeed;

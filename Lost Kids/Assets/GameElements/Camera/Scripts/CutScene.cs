@@ -8,36 +8,21 @@ public class CutScene : MonoBehaviour {
 
     public bool timed = false;
 
-    public float cutSceneTime=1;
+    public float cutSceneTime = 1;
 
     public bool alwaysShow = false;
 
     [HideInInspector]
     public bool shown = false;
 
-    public void Start()
-    {
-
-    }
-
-    public void BeginCutScene(CutSceneManager.FadeInOutAction method)
-    {
-        if (alwaysShow || !shown)
-        {
+    public void BeginCutScene(CutSceneManager.FadeInOutAction method) {
+        if (alwaysShow || !shown) {
             shown = true;
-            if (timed)
-            {
+            if (timed) {
                 CutSceneManager.StartCutScene(cutSceneCamera, method, cutSceneTime);
-            }
-            else
-            {
+            } else {
                 CutSceneManager.StartCutScene(cutSceneCamera, method);
             }
         }
     }
-
-  
-
-
 }
-

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: fafc10159398c55419e5b79d63485a30
-timeCreated: 1474563786
+guid: ca7f1d0676fb78a43b717def94dede3f
+timeCreated: 1478772350
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -107,7 +107,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -119,21 +119,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.54272515
-        functionName: StepSound
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.9630525
-        functionName: StepSound
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 1
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
