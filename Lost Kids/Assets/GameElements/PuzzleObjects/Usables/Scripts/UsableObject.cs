@@ -90,12 +90,6 @@ public abstract class UsableObject : MonoBehaviour {
         }
     }
 
-    // Update is called once per frame
-    void Update() {
-
-
-    }
-
     /// <summary>
     /// Activacion del objeto
     /// </summary>

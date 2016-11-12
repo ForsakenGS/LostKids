@@ -1,18 +1,18 @@
 fileFormatVersion: 2
-guid: 2281af3e69347bc4dbe3803f55bed0f7
-timeCreated: 1474042310
+guid: 5a7608d03e983b64cabaabfa1cfc720a
+timeCreated: 1478768764
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Handle
-    100002: //RootNode
-    400000: Handle
-    400002: //RootNode
-    2300000: Handle
-    2300002: //RootNode
-    3300000: Handle
-    3300002: //RootNode
+    100000: //RootNode
+    100002: Handle
+    400000: //RootNode
+    400002: Handle
+    2300000: //RootNode
+    2300002: Handle
+    3300000: //RootNode
+    3300002: Handle
     4300000: Base
     4300002: Handle
     7400000: Take 001

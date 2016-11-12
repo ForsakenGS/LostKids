@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CharacterAnimationController : MonoBehaviour {
+public class CharacterAnimationController {
     // Referencias a hash de triggers
     public static readonly int ASTRAL_PROJECTION = Animator.StringToHash("AstralProjection");
     public static readonly int BIG_JUMP = Animator.StringToHash("BigJump");
