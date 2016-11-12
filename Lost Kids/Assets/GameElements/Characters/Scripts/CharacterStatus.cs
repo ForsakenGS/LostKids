@@ -566,9 +566,8 @@ public class CharacterStatus : MonoBehaviour {
                                 characterState = State.Using;
                                 CharacterAnimationController.SetAnimatorPropUsing(characterName, true);
                             } else {
-                                // El jugador deja de usar el objeto
+                                // El jugador no permanece usando el objeto
                                 characterState = State.Idle;
-                                CharacterAnimationController.SetAnimatorTrigger(characterName, CharacterAnimationController.IDLE);
                             }
                         }
                     }

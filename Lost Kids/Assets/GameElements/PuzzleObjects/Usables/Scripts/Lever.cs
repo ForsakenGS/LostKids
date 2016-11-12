@@ -55,11 +55,11 @@ public class Lever : UsableObject {
     override public void CancelUse()
     {
         if(onUse) {
-            base.CancelUse();
-
-            //Es necesario añadir funcionalidad adicional como Sonido o animaciones
+            // Efectos de cancelación
             AudioManager.Play(leverOffSound, false, 1);
             leverAnimator.SetTrigger("UseDeactivation");
+            // Cancela el uso
+            base.CancelUse();
         }
     }
 
