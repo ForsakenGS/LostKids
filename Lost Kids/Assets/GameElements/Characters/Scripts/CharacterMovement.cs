@@ -136,7 +136,8 @@ public class CharacterMovement : MonoBehaviour {
         float res = playerSpeed;
         if (normalized) {
             if (rigBody.velocity.magnitude > umbral) {
-                res += 1;
+                //if (playerSpeed > 0.25f)
+                    res += 1;
             }
         }
 
