@@ -81,6 +81,10 @@ public class LevelGenerator : MonoBehaviour {
     //Particulas de aparicion de la sala
     public ParticleSystem roomParticles;
 
+    [Header("Level Goal Configuration")]
+    public GameObject levelGoalPrefab;
+    public string levelGoalString;
+
     // Use this for initialization
     void Start () {
 
@@ -140,6 +144,9 @@ public class LevelGenerator : MonoBehaviour {
             nextRoomPosition = room.transform.FindChild("Exit").transform.position;
             prev = room;
         }
+        // Instancia el LevelGoal del nivel
+        room = Instantiate(levelGoalPrefab, nextRoomPosition, Quaternion.identity) as GameObject;
+        room.GetComponentInChildren<LevelGoal>().nextLevel = levelGoalString;
     }
 
     /// <summary>
