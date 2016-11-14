@@ -195,6 +195,7 @@ public class CharacterStatus : MonoBehaviour {
         jumpButtonUp = false;
         sacrificeHeight = 0.0f;
         lockedByAnimation = false;
+        playerParticles.DecreaseEmission();
     }
 
     /// <summary>
