@@ -19,7 +19,10 @@ public class Kodama : UsableObject {
         messageManager = GameObject.FindGameObjectWithTag("MessageManager").GetComponent<MessageManager>();
         cutScene = GetComponent<CutScene>();
         basePosition = transform.position;
-        canvas = GetComponentInChildren<Canvas>().gameObject;
+        if (GetComponentInChildren<Canvas>() != null)
+        {
+            canvas = GetComponentInChildren<Canvas>().gameObject;
+        }
         ChangeTooltipStatus(TooltipManager.On);
     }
 

@@ -4,7 +4,6 @@ using System;
 
 [RequireComponent(typeof(AudioLoader))]
 [RequireComponent(typeof(AudioSource))]
-[RequireComponent(typeof(TriangleExplosion))]
 public abstract class BreakableObject : MonoBehaviour, IBreakable {
 
 
@@ -23,7 +22,7 @@ public abstract class BreakableObject : MonoBehaviour, IBreakable {
         if (audioLoader != null && audioLoader.GetSound("Break") != null) {
             AudioManager.Play(audioLoader.GetSound("Break"), false, 1);
         }
-        if (brokenObject == null)
+        if (brokenObject == null && gameObject.GetComponent<TriangleExplosion>()!=null)
         {
             StartCoroutine(gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
         }

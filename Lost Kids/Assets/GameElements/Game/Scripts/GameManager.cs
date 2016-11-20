@@ -29,11 +29,14 @@ public class GameManager : MonoBehaviour {
     //Listado de todos los niveles del juego
     static List<string> levelList;
 
+    static GameManager instance;
     // Use this for initialization
     void Start () {
         Time.timeScale = 1;
         levelList = Enum.GetNames(typeof(GameLevels)).ToList();
         menuMusic = GameObject.FindGameObjectWithTag("MenuMusic");
+
+        instance = this;
 	}
 	
 	// Update is called once per frame
@@ -46,7 +49,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public static void GoToScene(string sc) {
-        SceneManager.LoadScene(sc);
+        instance.PrepareScene(sc);
     }
 
     public void PrepareScene(string sc) {
@@ -103,32 +106,48 @@ public class GameManager : MonoBehaviour {
         if(sc.Equals("Exit")) {
             ExitApplication();
         } else {
-            SceneManager.LoadScene(sc);
+            if (GetComponent<SceneFade>() != null)
+            {
+                GetComponent<SceneFade>().nextScene = sc;
+                GetComponent<SceneFade>().EndScene();
+            }
+            else
+            {
+                ChangeScene(sc);
+            }
         }
     }
 
+    public void ChangeScene(string sc)
+    {
+
+       SceneManager.LoadScene(sc);
+
+        return;
+    }
+
     public void GoToStartGame(string sc) {
-        SceneManager.LoadScene(sc);
+        PrepareScene(sc);
     }
 
     public void GoToOptions(string sc) {
-        SceneManager.LoadScene(sc);
+        PrepareScene(sc);
     }
 
     public void GoToCredits(string sc) {
-        SceneManager.LoadScene(sc);
+        PrepareScene(sc);
     }
 
     public void GoToLoadGame(string sc) {
-        SceneManager.LoadScene(sc);
+        PrepareScene(sc);
     }
 
     public void GoToMenu(string sc) {
-        SceneManager.LoadScene(sc);
+        PrepareScene(sc);
     }
 
     public void GoToYokaisDocs(string sc) {
-        SceneManager.LoadScene(sc);
+        PrepareScene(sc);
     }
 
     public static void PauseGame()

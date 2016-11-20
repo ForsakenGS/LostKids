@@ -19,10 +19,12 @@ public class Shooter : MonoBehaviour {
     private List<GameObject> projectiles;
 
     //Cantidad del pool
-    public int projectilePoolSize;
+    public int projectilePoolSize=5;
 
     //Varable para disparar en linea recta o hacia el target exacto
     public bool straightShot = true;
+
+    public Transform KappaShooter;
 
 
     // Use this for initialization
@@ -50,7 +52,7 @@ public class Shooter : MonoBehaviour {
         {
             if (!projectiles[i].activeInHierarchy)
             {
-                projectiles[i].transform.position = transform.Find("Shooter").position;
+                projectiles[i].transform.position = KappaShooter.position;
                 
                 projectiles[i].transform.LookAt(target.transform);
                 if (!straightShot)

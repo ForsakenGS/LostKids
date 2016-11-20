@@ -10,6 +10,9 @@ public class LevelSelectionButton : MonoBehaviour {
     public UnityEngine.UI.Button levelButton;  
     public bool unlocked=false;
 
+    public string levelName;
+    public Text levelLabel;
+
 	// Use this for initialization
 	void Start () {
         if(levelButton==null)
@@ -42,6 +45,11 @@ public class LevelSelectionButton : MonoBehaviour {
         {
             GameManager.GoToScene(level.ToString());
         }
+    }
+
+    public void Selected()
+    {
+        levelLabel.text = levelName;
     }
 
 }
