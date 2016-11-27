@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8d8f6dfe8100c7f40a28cb0cc85e9351
-timeCreated: 1477568362
+guid: 2497eb2ad489334459405a0fd5802b20
+timeCreated: 1479031751
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -99,8 +99,8 @@ ModelImporter:
     - serializedVersion: 16
       name: KiIdle2End
       takeName: Take 001
-      firstFrame: 0
-      lastFrame: 30
+      firstFrame: 100
+      lastFrame: 130
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -221,7 +221,7 @@ ModelImporter:
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
     isReadable: 1
   meshes:
     lODScreenPercentages: []
