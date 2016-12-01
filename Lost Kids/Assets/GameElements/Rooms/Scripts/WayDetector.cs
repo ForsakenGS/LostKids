@@ -22,7 +22,7 @@ public class WayDetector : MonoBehaviour {
         way = transform.parent.parent.GetComponent<WaySettings>();
         backWall = way.GetComponentInChildren<BackWall>();
 
-        backWall.Hide();
+        if(backWall) backWall.Hide();
     }
 
     // Use this for initialization
