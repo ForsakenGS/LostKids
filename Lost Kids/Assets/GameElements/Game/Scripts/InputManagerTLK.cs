@@ -138,6 +138,11 @@ public class InputManagerTLK : MonoBehaviour {
         if (locked == 0) {
             // Character movement
             if ((Mathf.Abs(horizontalButton) >= minValueMovButton) || (Mathf.Abs(verticalButton) >= minValueMovButton)) {
+                // Slow movement?
+                if (Input.GetButton("Slow")) {
+                    horizontalButton /= 4;
+                    verticalButton /= 4;
+                }
                 characterStatus.MovementButtons(horizontalButton, verticalButton);
                 horizontalButton = 0.0f;
                 verticalButton = 0.0f;

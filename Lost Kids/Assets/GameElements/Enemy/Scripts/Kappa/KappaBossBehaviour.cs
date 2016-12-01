@@ -25,6 +25,11 @@ public class KappaBossBehaviour : MonoBehaviour {
     //Lista de charcas
     public GameObject[] poolList;
 
+    public GameObject[] doorsList;
+
+    public GameObject introCutscene;
+    public GameObject defeatCutscene;
+
     [HideInInspector]
     //Estado de las charcas disponibles
     public List<Pool> availablePools;
@@ -61,6 +66,9 @@ public class KappaBossBehaviour : MonoBehaviour {
     //Variable auxiliar para obtener la distancia a un jugador
     private GameObject closestPlayer;
 
+    [HideInInspector]
+    public GameObject nextPool;
+
     //Variable auxiliar hacia donde apunta
     private Vector3 aimPosition;
 
@@ -74,14 +82,14 @@ public class KappaBossBehaviour : MonoBehaviour {
     private float minHeight;
 
     //Lista de jugadores detectados en su zona
-    private List<GameObject> playersOnSight;
+    private List<GameObject> playersOnSight = new List<GameObject>();
 
     //Variable auxiliar para el jugador al que va a matar :)
     private GameObject playerUnderAttack;
 
+    private bool initialized = false;
 
-    //Recompensa que se activa al derrotar al enemigo
-    public GameObject defeatReward;
+    private int currentRoom = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -95,18 +103,11 @@ public class KappaBossBehaviour : MonoBehaviour {
             availablePools[i].SetKappa(this);
         }
         //Se inicializa la lista de jugadores a tiro
-        playersOnSight = new List<GameObject>();
+        currentRoom = 0;
+        playersOnSight = CharacterManager.GetCharacterList();
 
-        //Se inicializa la posicion y los limites de altura
-        maxHeight = transform.position.y;
-        transform.position -= new Vector3(0, divingDepth, 0);
-        minHeight = transform.position.y;
-
-        //Comienza su comportamiento apareciendo
-        Invoke("StartAppearing", divingTime);
-
-	
 	}
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -124,76 +125,70 @@ public class KappaBossBehaviour : MonoBehaviour {
 	
 	}
 
+
+    public void BeginEncounter()
+    {
+        initialized = true;
+        Debug.Log("COMENZANDO ENCUENTRO CONTRA EL KAPPA");
+        actualPool = availablePools[0];
+        transform.position = actualPool.kappaActivePosition.position;
+        if (introCutscene != null)
+        {
+            introCutscene.GetComponent<CutScene>().BeginCutScene(StartDiving);
+        }
+        else
+        {
+            StartDiving();
+        }
+
+    }
+
     /// <summary>
     /// Dispara al jugador seleccionada como mas cercano
     /// </summary>
     void ShootAtPlayer()
     {
         //Actualiza su estado
-        currentState = States.Shooting;
+        ChangeState(States.Shooting);
         //Sonido de disparo
-        AudioManager.Play(audioLoader.GetSound("Spit"), false, 1);
+        //AudioManager.Play(audioLoader.GetSound("Spit"), false, 1);
         //Eecuta el disparo del objeto disparador
         shooter.ShootAtTarget(closestPlayer);
 
         //Lanza el reseteo de su estado en base al cooldown
-        Invoke("ShootCoolDown",shootCooldown);
+        Invoke("ResetShootCoolDown",shootCooldown);
     }
 
     /// <summary>
     /// Reinicia la posibilidad de dispararde nuevo
     /// </summary>
-    void ShootCoolDown()
+    void ResetShootCoolDown()
     {
-        currentState = States.Idle;
+        ChangeState(States.Idle);
     }
 
     /// <summary>
     /// Mueve al personaje a un pozo concreto introducido por parametro
     /// </summary>
     /// <param name="pool"></param>
-    private void MoveToPool(Pool pool)
+    public void ChangePool(GameObject pool)
     {
-        actualPool = pool;
-        Vector3 newPosition = actualPool.transform.position;
-        newPosition.y = transform.position.y;
-        transform.position = newPosition;
-
-    }
-    /// <summary>
-    /// Mueve al personaje a un pozo aleatorio de los disponibles en el momento
-    /// </summary>
-    private void MoveToNextPool()
-    {
-        //Busca un pozo disponible aleatorio, dando prioridad a los que tengan una piedra para romper
-        if(availablePools.Count>1)
+        if (!initialized)
         {
-            //Busca el primer pozo que tenga una piedra sin romper
-            for (int i = 0; i < availablePools.Count;i++)
-            {
-                if(!availablePools[i].rockDestroyed)
-                {
-                    actualPool = availablePools[i];
-                    break;
-                }
-            }
-            //Si no lo encuentra, se mueve a una aleatoria
-            if (actualPool == null)
-            {
-                actualPool = availablePools[Random.Range(0, availablePools.Count)];
-            }
+            BeginEncounter();
         }
         else
         {
-            actualPool = availablePools[0];
+            StartDiving();
+            nextPool = pool;
         }
-
-        //Se mueve a la posicion de la nueva charca
-        MoveToPool(actualPool);
-        
-        
     }
 
+    private void MoveToPool(GameObject pool)
+    {
+        transform.position = pool.GetComponent<Pool>().kappaInactivePosition.position;
+    }
+    
     public void StartAttacking()
     {
 
@@ -204,8 +199,8 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// </summary>
     public void StartDiving()
     {
+        ChangeState(States.Diving);
         CancelInvoke();
-        
         StartCoroutine(Dive());
     }
 
@@ -215,6 +210,7 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// </summary>
     public void StartAppearing()
     {
+        Debug.Log("INTENTANDO APARECER...");
         CancelInvoke();
         if (availablePools.Count < 1)
         {
@@ -222,11 +218,16 @@ public class KappaBossBehaviour : MonoBehaviour {
         }
         else
         {
-            if (actualPool == null)
+            if (availablePools.Contains(actualPool))
             {
-                MoveToNextPool();
+                StartCoroutine(Appear());
             }
-            StartCoroutine(Appear());
+            else
+            {
+                doorsList[currentRoom].GetComponent<Door>().Activate();
+                currentRoom++;
+                StartCoroutine(DestroyRock());
+            }
         }
     }
 
@@ -237,20 +238,14 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// <returns></returns>
     public IEnumerator Dive()
     {
-        AudioManager.Play(audioLoader.GetSound("Splash"), false, 1);
+
+        //AudioManager.Play(audioLoader.GetSound("Splash"), false, 1);
         GetComponent<Collider>().enabled = false;
-        playersOnSight.Clear();
-        currentState = States.Diving;
         
         //Se calcula la posicion destino y se comprueba que no exceda los limites
         Vector3 beginPosition = transform.position;
-        Vector3 endPos = beginPosition;
-        endPos.y -= divingDepth;
-        if(endPos.y<minHeight)
-        {
-            endPos.y = minHeight;
-        }
-
+        Vector3 endPos = actualPool.kappaInactivePosition.position;
+  
         //Se mueve hacia arriba a lo largo de varios frames
         float t = 0;
         while (t < 1f) 
@@ -259,8 +254,15 @@ public class KappaBossBehaviour : MonoBehaviour {
             transform.position = Vector3.Lerp(beginPosition, endPos, t); 
             yield return null;
         }
-        actualPool = null;
+
         yield return 0;
+
+        //Si  esta cambiando de pozo, se transporta al destino
+        if(nextPool!= null)
+        {
+            MoveToPool(nextPool);
+            nextPool = null;
+        }
 
         //Planifica la aparicion pasado el tiempo inmersion
         Invoke("StartAppearing", divingTime);
@@ -274,23 +276,14 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// <returns></returns>
     public IEnumerator DestroyRock()
     {
-        currentState = States.Breaking;
-        while (!actualPool.rockDestroyed)
+        ChangeState(States.Breaking);   
+        while (true)
         {
             actualPool.HitRock();
-            if (!actualPool.rockDestroyed)
-            {
-                yield return new WaitForSeconds(breakCooldown);
-            }
-            else
-            {
-                yield return 0;
-            }
+           yield return new WaitForSeconds(breakCooldown);
+
         }
-        //Una vez destruida la roca, reinicia su estado y aparece en el pozo
-        currentState = States.Idle;
-        yield return new WaitForSeconds(breakCooldown);
-        StartCoroutine(Appear());
+        yield return 0;
     }
 
     /// <summary>
@@ -300,62 +293,37 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// <returns></returns>
     public IEnumerator Appear()
     {
-            //Si el pozo ha sido bloqueada, vuelve a intentar aparecer en otro pozo disponible
-            if (!actualPool.available)
+        //Si el pozo ha sido bloqueada, vuelve a intentar aparecer en otro pozo disponible
+        if (!actualPool.available)
+        {
+            actualPool = null;
+        }
+        else
+        {
+            //AudioManager.Play(audioLoader.GetSound("Splash"), false, 1);
+
+            //Se calcula la posicion destino y se comprueba que no exceda los limites
+            Vector3 beginPosition = transform.position;
+            Vector3 endPos = actualPool.kappaActivePosition.position;
+           
+            //Se mueve a lo largo de varios frames
+            float t = 0;
+            while (t < 1f)
             {
-                actualPool = null;
-                StartAppearing();
+                t += Time.deltaTime * divingSpeed;
+                transform.position = Vector3.Lerp(beginPosition, endPos, t);
+                yield return null;
             }
-            else
-            {
-                //Si el pozo esta disponible pero la roca no esta destruida, comienza a romperla
-                if (!actualPool.rockDestroyed)
-                {
-                    StopAllCoroutines();
-                    CancelInvoke();
-                    StartCoroutine(DestroyRock());
-                }
-                else
-                {
-                    AudioManager.Play(audioLoader.GetSound("Splash"), false, 1);
+    
+            GetComponent<Collider>().enabled = true;
+            ChangeState(States.Idle);
 
-                    //Se calcula la posicion destino y se comprueba que no exceda los limites
-                    Vector3 beginPosition = transform.position;
-                    Vector3 endPos = beginPosition;
-                    endPos.y += divingDepth;
-                    if (endPos.y > maxHeight)
-                    {
-                        endPos.y = maxHeight;
-                    }
 
-                    //Se mueve a lo largo de varios frames
-                    float t = 0;
-                    while (t < 1f) 
-                    {
-                        t += Time.deltaTime * divingSpeed;
-                        transform.position = Vector3.Lerp(beginPosition, endPos, t); 
-                        yield return null;
-                    }
+            //Planifica su siguiente movimiento
+            Invoke("StartDiving", activeTime);
+        }
 
-                    yield return 0;
-                    GetComponent<Collider>().enabled = true;
-
-                    //Si esta apareciendo para atacar al jugador, lo mata al llegar arriba
-                    if (currentState.Equals(States.Attacking))
-                    {
-                        KillPlayer();
-                    }
-                    else
-                    {
-                        currentState = States.Idle;
-                    }
-
-                    //Planifica su siguiente movimiento
-                    Invoke("StartDiving", activeTime);
-                }
-            }
-        
-
+        yield return 0;
     }
 
 
@@ -365,10 +333,18 @@ public class KappaBossBehaviour : MonoBehaviour {
     private void Defeat()
     {
         CancelInvoke();
-        currentState = States.Dead;
+        ChangeState(States.Dead);
 
-        defeatReward.SetActive(true);
-        
+        if (defeatCutscene != null)
+        {
+            defeatCutscene.GetComponent<CutScene>().BeginCutScene(DefeatReward);
+        }
+
+    }
+
+    void DefeatReward()
+    {
+        doorsList[2].GetComponent<Door>().Activate();
     }
 
 
@@ -377,52 +353,34 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// </summary>
     /// <param name="pool">Pozo que ha cambiado</param>
     /// <param name="status">Nuevo estado del pozo</param>
-    public void PoolStatusChanged(Pool pool,bool status)
+    public void WellDisabled(Pool pool)
     {
-        if(status)
+        
+        if (availablePools.Contains(pool))
         {
-            if(!availablePools.Contains(pool))
+            availablePools.Remove(pool);
+            //Si se bloquea el pozo actual, se tiene que sumergir
+            if(pool.Equals(actualPool))
             {
-                availablePools.Add(pool);
+                CancelInvoke();
+                StartDiving();
             }
         }
-        else
-        {
-            if (availablePools.Contains(pool))
-            {
-                availablePools.Remove(pool);
-                //Si se bloquea el pozo actual, se tiene que sumergir
-                if(pool.Equals(actualPool))
-                {
-                    CancelInvoke();
-                    Invoke("StartDiving", 0);
-                }
-            }
-        }
+        
     }
 
-    /// <summary>
-    /// Detecta al jugador dentro de su area de disparo y lo añade a los jugadores a la vista
-    /// </summary>
-    /// <param name="col"></param>
-    void OnTriggerEnter(Collider col)
-    {
-        if(col.gameObject.CompareTag("Player"))
-        {
-            
-            if (!playersOnSight.Contains(col.gameObject))
-            {
-                playersOnSight.Add(col.gameObject);
-            }
-        }
-    }
-
+  
     /// <summary>
     /// Metodo que cambia la rotacion y devuelve el personaje mas cercano de los detectados
     /// </summary>
     /// <returns>GameObject correspondiente al personaje mas cercano</returns>
     public GameObject AimAtClosestPlayer()
     {
+        if(playersOnSight.Count==0)
+        {
+            playersOnSight = CharacterManager.GetCharacterList();
+        }
+
         closestDistance = float.MaxValue;
         closestPlayer = null;
         foreach(GameObject player in playersOnSight)
@@ -450,31 +408,24 @@ public class KappaBossBehaviour : MonoBehaviour {
 
 
     /// <summary>
-    /// Notifica por parte de un pozo de que el personaje esta en su radio
+    /// Detecta al jugador para atacarlo cuerpo a cuerpo
     /// 
     /// </summary>
-    /// <param name="pool">Pozo donde se encuentra el jugador</param>
-    /// <param name="player">GameObject correspondente al personaje</param>
-    public void PlayerOnPool(Pool pool,GameObject player)
+    public void OnTriggerEnter(Collider col)
     {
-        //Si el boss esta sumergido, emerge en el pozo para matar al jugador
-        if(currentState.Equals(States.Diving))
+        if (col.gameObject.CompareTag("Player"))
         {
-            CancelInvoke();
-            MoveToPool(pool);
-            StartAppearing();
-            //Animacion y sonido al matar al jugador
+            //Si el boss esta sumergido, emerge en el pozo para matar al jugador
+            if (currentState.Equals(States.Diving))
+            {
+                CancelInvoke();
+                StartAppearing();
 
-            ScarePlayer(player);
-
+            }
+            playerUnderAttack = col.gameObject;
+            KillPlayer();
         }
-        //Si el boss se encuentra ya en la piscina, mata al jugador
-        else if(currentState.Equals(States.Shooting)&& pool.Equals(actualPool))
-        {
-            //Animacion y sonido al matar al jugador
-            ScarePlayer(player);
 
-        }
 
     }
 
@@ -482,19 +433,24 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// Bloquea al jugador marcandolo como asustado, para poder matarlo tras ejecutar la animacion
     /// </summary>
     /// <param name="player"></param>
+    /*
     public void ScarePlayer(GameObject player)
     {
         playerUnderAttack = player;
-        currentState = States.Attacking;
+        ChangeState(States.Attacking);
         player.GetComponent<CharacterStatus>().SetScared(true);
     }
+    */
 
     /// <summary>
     /// Mata al jugador tras ejecutar una animacion de cuerpo a cuerpo
     /// </summary>
     public void KillPlayer()
     {
-
+        CancelInvoke();
+        GetComponent<Collider>().enabled = false;
+        ChangeState(States.Attacking);
+        playerUnderAttack.GetComponent<CharacterStatus>().SetScared(true);
         playerUnderAttack.GetComponent<CharacterStatus>().Invoke("Kill", 1);
         Invoke("EndAttack", 1.5f);
         playerUnderAttack = null;
@@ -505,6 +461,13 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// </summary>
     public void EndAttack()
     {
-        currentState = States.Idle;
+        ChangeState(States.Idle);
+        StartDiving();
+    }
+
+    void ChangeState(States newState)
+    {
+        Debug.Log("KAPPA CAMBIANDO A ESTADO: " + newState.ToString());
+        currentState = newState;
     }
 }

@@ -136,7 +136,9 @@ public class CharacterMovement : MonoBehaviour {
         float res = playerSpeed;
         if (normalized) {
             if (rigBody.velocity.magnitude > umbral) {
-                res += 1;
+                res *= 10;
+                //if (playerSpeed > 0.25f)
+                    res += 0.5f;
             }
         }
 
@@ -244,7 +246,7 @@ public class CharacterMovement : MonoBehaviour {
     /// </summary>
     /// <returns><c>true</c> si el jugador está parado, <c>false</c> si está en movimiento</returns>
     public bool PlayerIsStopped() {
-        return (GetPlayerSpeed(true) < 1);
+        return (GetPlayerSpeed(true) < 0.5);
     }
 
     // Change character's rotation to make it look at the direction it is going

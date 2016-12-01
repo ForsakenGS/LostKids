@@ -41,6 +41,10 @@ public class UISelector : MonoBehaviour {
         AudioManager.Play(audioLoader.GetSound("Selected"), false, 1);
         selectorColor.a = 1;
         selectorImage.color = selectorColor;
+        if (GetComponentInParent<LevelSelectionButton>() != null)
+        {
+            GetComponentInParent<LevelSelectionButton>().Selected();
+        }
 
     }
 

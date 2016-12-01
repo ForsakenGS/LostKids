@@ -27,7 +27,7 @@ public class BreakableRock : BreakableObject {
     {
         GetComponent<Rigidbody>().velocity = Vector3.up * 2;
 
-        base.TakeHit();
+        //base.TakeHit();
 
         
        

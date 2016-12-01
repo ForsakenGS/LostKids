@@ -73,6 +73,6 @@ public class SceneFade : MonoBehaviour {
 
     public void ChangeScene()
     {
-        gameManager.PrepareScene(nextScene);
+        gameManager.ChangeScene(nextScene);
     }
 }

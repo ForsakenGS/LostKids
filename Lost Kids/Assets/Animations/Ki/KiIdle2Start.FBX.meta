@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 76e63076a040aaa4788bda6b74d09070
-timeCreated: 1477568361
+guid: dec767c8e24351e41811c2aac9411b5d
+timeCreated: 1479031752
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -100,7 +100,7 @@ ModelImporter:
       name: KiIdle2Start
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 100
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
