@@ -14,11 +14,11 @@ public class FearSource : MonoBehaviour,IActivable {
     //Personajes a los que afecta el miedo
     public List<CharacterName> affectedCharacters;
 
-    //Material cuando el miedo esta activo
-    public Material activeMaterial;
+    //Objetos para desactivar
+    public GameObject[] ObjectsToDisable;
 
     //Material cuando el miedo esta desactivado
-    public Material inactiveMaterial;
+    public GameObject inactiveObject;
 
     //Referencia a la zona de aviso
     private WarningZone warningZone;
@@ -61,11 +61,16 @@ public class FearSource : MonoBehaviour,IActivable {
         }
         scaredCharacters.Clear();
 
-        //Cambia el aspecto y desactiva las zonas
-        GetComponent<Renderer>().material = inactiveMaterial;
+
         fearZone.DisableZone();
         warningZone.DisableZone();
-        
+
+        //Cambia el aspecto y desactiva las zonas
+        inactiveObject.SetActive(true);
+        inactiveObject.transform.parent = null;
+        for(int i = 0; i < ObjectsToDisable.Length; i++) {
+            ObjectsToDisable[i].SetActive(false);
+        }
     }
 
 
@@ -74,7 +79,13 @@ public class FearSource : MonoBehaviour,IActivable {
     /// </summary>
     public void EnableFear()
     {
-        GetComponent<Renderer>().material = activeMaterial;
+        this.gameObject.SetActive(true);
+
+        for (int i = 0; i < ObjectsToDisable.Length; i++)
+        {
+            ObjectsToDisable[i].SetActive(true);
+        }
+
         fearZone.EnableZone();
         warningZone.EnableZone();
     }
