@@ -30,7 +30,7 @@ public class BellsPuzzle : PuzzleManagerBase,IActivable {
 
     void Awake()
     {
-        initiator = transform.Find("Initiator").GetComponent<UsableObject>();
+        initiator = transform.Find("Initiator").GetComponentInChildren<UsableObject>();
     }
 
     // Use this for initialization
@@ -70,7 +70,7 @@ public class BellsPuzzle : PuzzleManagerBase,IActivable {
         for(int i=0;i<seq.Length;i++)
         {
             seq[i].PlaySound();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1.5f);
         }
         playingSequence = false;
        yield return 0;
