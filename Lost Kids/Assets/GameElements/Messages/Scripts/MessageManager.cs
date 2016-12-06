@@ -100,10 +100,6 @@ public class MessageManager : MonoBehaviour {
         //Rellenamos el array de efectos de sonido
         messagesSfxs.Add(audioLoader.GetSound("Message1"));
         messagesSfxs.Add(audioLoader.GetSound("Message2"));
-        messagesSfxs.Add(audioLoader.GetSound("Message3"));
-        messagesSfxs.Add(audioLoader.GetSound("Message4"));
-        messagesSfxs.Add(audioLoader.GetSound("Message5"));
-
         //Estado inicial
         messageState = State.NoMessage;
 

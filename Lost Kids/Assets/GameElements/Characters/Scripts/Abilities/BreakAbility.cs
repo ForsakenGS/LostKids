@@ -62,6 +62,7 @@ public class BreakAbility : CharacterAbility {
                 active = true;
                 started = true;
                 CallEventActivateAbility();
+                AudioManager.Play(audioLoader.GetSound("Break"),false,1);
             } else {
                 started = false;
             }

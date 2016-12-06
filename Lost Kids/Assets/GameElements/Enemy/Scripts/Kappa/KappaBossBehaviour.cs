@@ -37,9 +37,6 @@ public class KappaBossBehaviour : MonoBehaviour {
     //Charca en la que se encuentra actualmente
     private Pool actualPool;
 
-    //Profundidad a la que se sumerje
-    public float divingDepth = 3;
-
     //Tiempo que pasa bajo agua hasta aparecer de nuevo
     public float divingTime=2;
 
@@ -49,6 +46,7 @@ public class KappaBossBehaviour : MonoBehaviour {
     //Velocidad a la que se sumerje
     public float divingSpeed = 10;
 
+    public float shootRange = 15f;
     //Tiempo de recarga del disparo
     public float shootCooldown=1;
 
@@ -91,9 +89,13 @@ public class KappaBossBehaviour : MonoBehaviour {
 
     private int currentRoom = 0;
 
-	// Use this for initialization
-	void Start () {
+    public MessageManager messageManager;
+    // Listado con índices de los mensajes a mostrar
+    public List<int> indexList;
 
+    // Use this for initialization
+    void Start () {
+        
         audioLoader = GetComponent<AudioLoader>();
         shooter = GetComponent<Shooter>();
         //Se inicializa el estado de las charcas disponibles
@@ -134,13 +136,19 @@ public class KappaBossBehaviour : MonoBehaviour {
         transform.position = actualPool.kappaActivePosition.position;
         if (introCutscene != null)
         {
-            introCutscene.GetComponent<CutScene>().BeginCutScene(StartDiving);
+            introCutscene.GetComponent<CutScene>().BeginCutScene(BeginConversation);
+            MessageManager.ConversationEndEvent += StartDiving;
         }
         else
         {
             StartDiving();
         }
 
+    }
+
+    private void BeginConversation()
+    {
+        messageManager.ShowConversation(indexList);
     }
 
     /// <summary>
@@ -210,7 +218,6 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// </summary>
     public void StartAppearing()
     {
-        Debug.Log("INTENTANDO APARECER...");
         CancelInvoke();
         if (availablePools.Count < 1)
         {
@@ -381,7 +388,7 @@ public class KappaBossBehaviour : MonoBehaviour {
             playersOnSight = CharacterManager.GetCharacterList();
         }
 
-        closestDistance = float.MaxValue;
+        closestDistance = shootRange;
         closestPlayer = null;
         foreach(GameObject player in playersOnSight)
         {
@@ -396,12 +403,16 @@ public class KappaBossBehaviour : MonoBehaviour {
             }
         }
 
+      
+
         //Se gira para mirar al personaje mas cercano
         if(closestPlayer!=null)
         {
+            Debug.Log("KAPPA APUNTANDO A DISTANCIA DE :" + closestDistance);
             aimPosition = closestPlayer.transform.position;
             aimPosition.y = transform.position.y;
             transform.LookAt(aimPosition);
+            transform.Rotate(0, 180, 0);
         }
         return closestPlayer;
     }
@@ -467,7 +478,7 @@ public class KappaBossBehaviour : MonoBehaviour {
 
     void ChangeState(States newState)
     {
-        Debug.Log("KAPPA CAMBIANDO A ESTADO: " + newState.ToString());
+        //Debug.Log("KAPPA CAMBIANDO A ESTADO: " + newState.ToString());
         currentState = newState;
     }
 }

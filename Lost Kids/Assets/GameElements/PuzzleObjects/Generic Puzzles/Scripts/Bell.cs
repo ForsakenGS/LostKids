@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof (AudioSource))]
+[RequireComponent(typeof(AudioSource))]
 public class Bell : UsableObject {
 
     AudioSource bellSound;
@@ -10,30 +10,37 @@ public class Bell : UsableObject {
     {
         bellSound = GetComponent<AudioSource>();
     }
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         base.Start();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    }
 
-    public void Use()
+    // Update is called once per frame
+    void Update() {
+
+    }
+
+    public override void Use()
     {
         base.Use();
+        PlayAnimation();
     }
 
     public void PlayAnimation()
     {
-        //Se ejecuta la animacion de movimiento de la campana 
-        //( se ha separado del sonido para poder hacerlo opcional)
+        PlaySound();
+        iTween.PunchRotation(gameObject, iTween.Hash("z", -70, "time", 2f,"delay",0.5f));
+        Invoke("ResetUse", 2.1f);
     }
 
     public void PlaySound()
     {
-        AudioManager.Play(bellSound,false,1);
+        AudioManager.Play(bellSound, false, 1);
+    }
+
+    public void ResetUse()
+    {
+        onUse = false;
     }
 
 
