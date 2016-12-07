@@ -126,7 +126,7 @@
 		<value>Saltar</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.MovementText" xml:space="preserve">
-		<value>Movimiento</value>
+		<value>Andar/Correr</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.NextCharacterText" xml:space="preserve">
 		<value>Personaje Siguiente</value>
@@ -138,7 +138,7 @@
 		<value>Personaje Anterior</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Ambos) Sacrificio</value>
+		<value>(Ambos a la vez) Sacrificio</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill1AkaiText" xml:space="preserve">
 		<value>Romper</value>
@@ -213,7 +213,7 @@
 		<value>Configuración Gráfica</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Graphics.Tooltips.TooltipsCheck.Label" xml:space="preserve">
-		<value>Tooltips</value>
+		<value>Ayuda en pantalla</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Sounds.Master.MasterLabel" xml:space="preserve">
 		<value>Volumen General</value>
@@ -255,19 +255,19 @@
 		<value>Ki</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Movementtext" xml:space="preserve">
-		<value>Movimiento</value>
+		<value>Andar/Correr</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.NextCharacterText" xml:space="preserve">
-		<value>Seleccionar Personaje Siguiente</value>
+		<value>Personaje Siguiente</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.PauseText" xml:space="preserve">
 		<value>Pausa</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.PreviousCharacter" xml:space="preserve">
-		<value>Seleccionar Personaje Anterior</value>
+		<value>Personaje Anterior</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Ambos pulsados) Sacrificio</value>
+		<value>(Ambos a la vez) Sacrificio</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill1Text" xml:space="preserve">
 		<value>Habilidad 1</value>
@@ -342,7 +342,7 @@
 		<value>Configuración Gráfica</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Graphics.Tooltips.TooltipsCheck.Label" xml:space="preserve">
-		<value>Tooltips</value>
+		<value>Ayuda en pantalla</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Master.MasterLabel" xml:space="preserve">
 		<value>Volumen General</value>

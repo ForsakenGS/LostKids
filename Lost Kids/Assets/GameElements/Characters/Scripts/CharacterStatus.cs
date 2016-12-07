@@ -698,33 +698,6 @@ public class CharacterStatus : MonoBehaviour {
         }
     }
 
-    //void SetAnimatorTrigger(string trigger) {
-    //    // Desactiva cualquier otro posible trigger
-    //    characterAnimator.ResetTrigger("Idle");
-    //    characterAnimator.ResetTrigger("Walk");
-    //    characterAnimator.ResetTrigger("Jump");
-    //    characterAnimator.ResetTrigger("Fall");
-    //    characterAnimator.ResetTrigger("Land");
-    //    characterAnimator.ResetTrigger("Dead");
-    //    characterAnimator.ResetTrigger("Scared");
-    //    characterAnimator.ResetTrigger("Sacrifice");
-    //    characterAnimator.ResetTrigger("Use");
-    //    characterAnimator.ResetTrigger("Victory");
-    //    // Desactiva triggers de las habilidades
-    //    if (characterName.Equals(CharacterName.Aoi)) {
-    //        characterAnimator.ResetTrigger("BigJump");
-    //        characterAnimator.ResetTrigger("Sprint");
-    //    } else if (characterName.Equals(CharacterName.Akai)) {
-    //        characterAnimator.ResetTrigger("Break");
-    //        characterAnimator.ResetTrigger("Push");
-    //    } else {
-    //        characterAnimator.ResetTrigger("Telekinesis");
-    //        characterAnimator.ResetTrigger("AstralProjection");
-    //    }
-    //    // Activa el trigger correspondiente
-    //    characterAnimator.SetTrigger(trigger);
-    //}
-
     /// <summary>
     /// Reproduce la animacion de victoria y en caso de ser final de nivel, bloquea el personaje hasta que los demas lo completen
     /// </summary>
@@ -739,6 +712,7 @@ public class CharacterStatus : MonoBehaviour {
             characterState = State.Victory;
         }
     }
+
     /// <summary>
     /// Cambia el estado asustado del personaje
     /// </summary>

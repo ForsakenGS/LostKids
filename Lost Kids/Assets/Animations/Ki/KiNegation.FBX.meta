@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 165e2c3718244464999919804cb05bbb
-timeCreated: 1473677521
+guid: 8122f5df5cabd2e43af4d36814769c51
+timeCreated: 1481050021
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -100,7 +100,7 @@ ModelImporter:
       name: KiNegation
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 50
+      lastFrame: 45
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -120,7 +120,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9957806
+      - time: 1
         functionName: UnlockByAnimation
         data: 
         objectReferenceParameter: {instanceID: 0}

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8525eed882ced3842ac75b0d57097cad
-timeCreated: 1473677140
+guid: f1748cecc0f74eb4d96dcfabfa1c078e
+timeCreated: 1481025756
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -104,7 +104,7 @@ ModelImporter:
       name: AoiVictory
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 50
+      lastFrame: 70
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -124,7 +124,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9957806
+      - time: 1
         functionName: UnlockByAnimation
         data: 
         objectReferenceParameter: {instanceID: 0}

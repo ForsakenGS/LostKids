@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 10ebcf74bca370f4b9f1c7b031321c9e
-timeCreated: 1473677352
+guid: d431cc2d844f187479b688e4d8123e8a
+timeCreated: 1480868005
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -110,7 +110,7 @@ ModelImporter:
       name: AkaiNegation
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 50
+      lastFrame: 45
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -130,7 +130,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9957806
+      - time: 1
         functionName: UnlockByAnimation
         data: 
         objectReferenceParameter: {instanceID: 0}

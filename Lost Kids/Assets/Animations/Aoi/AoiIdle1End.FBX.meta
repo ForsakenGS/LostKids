@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: cc181c1b510368845a7aada5b1c560e7
-timeCreated: 1477568333
+guid: b8902ff881b28e542a04d1a0f7651a95
+timeCreated: 1481049165
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -104,7 +104,7 @@ ModelImporter:
       name: AoiIdle1End
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 15
+      lastFrame: 16
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
