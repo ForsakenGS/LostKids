@@ -199,7 +199,7 @@ public class Button : UsableObject {
             yield return null;
         }
         isMoving = false;
-        if(transform.position.Equals(endPosition))
+        if(transform.position.y<=endPosition.y+0.1f)
         {
             Use();
         }

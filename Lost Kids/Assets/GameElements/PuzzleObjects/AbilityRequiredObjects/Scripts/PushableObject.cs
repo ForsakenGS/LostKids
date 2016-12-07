@@ -15,11 +15,13 @@ public class PushableObject : MonoBehaviour {
     private PushAbility pushAbility;
 
 
+    public float groundedRayDistance = 1.2f;
+
 
     // Use this for initialization
     void Start() {
 
-        size = GetComponent<Collider>().bounds.size;
+        size = GetComponent<BoxCollider>().bounds.size;
         rigidBody = GetComponent<Rigidbody>();
 
 
@@ -27,15 +29,19 @@ public class PushableObject : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
+        if(pushAbility==null && IsGrounded())
+        {
+            rigidBody.isKinematic = true;
+        }
     }
 
     public void Release() {
         gameObject.layer = LayerMask.NameToLayer("Default");
-        if (IsGrounded()) {
-            rigidBody.isKinematic = true;
+        if (pushAbility != null)
+        {
+            pushAbility.gameObject.GetComponent<AbilityController>().DeactivateActiveAbility();
+            pushAbility = null;
         }
-        pushAbility = null;
     }
 
     public void Grab(PushAbility pa) {
@@ -69,8 +75,13 @@ public class PushableObject : MonoBehaviour {
                     ray = transform.position + (Vector3.right * size.x / 2);
                     break;
             }
+
+            if(gameObject.name.Contains("GiantRock"))
+            {
+                ray = transform.position + Vector3.down * groundedRayDistance;
+            }
             //ray.y += 0.05f;
-            //Debug.DrawLine(ray, ray + (Vector3.down ), Color.blue, 10000);
+            Debug.DrawLine(ray, ray + (Vector3.down*0.1f ), Color.blue, 10000);
             // Lanza el rayo y comprueba si colisiona con otro objeto
             grounded = (Physics.Raycast(ray, Vector3.down, 0.1f));
             rayCnt += 1;
@@ -81,7 +92,7 @@ public class PushableObject : MonoBehaviour {
     }
 
     void OnCollisionExit(Collision col) {
-        if (!CharacterManager.IsActiveCharacter(col.gameObject) && pushAbility != null && !IsGrounded()) {
+        if (!CharacterManager.IsActiveCharacter(col.gameObject) && pushAbility != null && !IsGrounded() && !col.gameObject.CompareTag("Breakable") && !col.gameObject.CompareTag("KappaRunway")) {
             pushAbility.gameObject.GetComponent<AbilityController>().DeactivateActiveAbility();
         }
     }

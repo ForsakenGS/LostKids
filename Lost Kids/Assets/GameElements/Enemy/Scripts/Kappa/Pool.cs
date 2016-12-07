@@ -38,8 +38,13 @@ public class Pool : MonoBehaviour {
         if(col.gameObject==rock)
         { 
             kappa.WellDisabled(this);
-            rock.GetComponent<PushableObject>().Release();
-            Destroy(rock.GetComponent<PushableObject>());
+            if (rock.GetComponent<PushableObject>() != null)
+            {
+                rock.GetComponent<PushableObject>().Release();
+                Destroy(rock.GetComponent<PushableObject>());
+                rock.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+            }
+           
             rock.transform.position = finalRockPosition.position;
         }
     }

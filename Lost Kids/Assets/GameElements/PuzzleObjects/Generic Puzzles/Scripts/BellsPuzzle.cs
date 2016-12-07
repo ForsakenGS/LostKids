@@ -30,7 +30,7 @@ public class BellsPuzzle : PuzzleManagerBase,IActivable {
 
     void Awake()
     {
-        initiator = transform.Find("Initiator").GetComponent<UsableObject>();
+        initiator = transform.Find("Initiator").GetComponentInChildren<UsableObject>();
     }
 
     // Use this for initialization
@@ -70,7 +70,7 @@ public class BellsPuzzle : PuzzleManagerBase,IActivable {
         for(int i=0;i<seq.Length;i++)
         {
             seq[i].PlaySound();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
         }
         playingSequence = false;
        yield return 0;
@@ -107,8 +107,7 @@ public class BellsPuzzle : PuzzleManagerBase,IActivable {
     {
         if (!playingSequence)
         {
-            //((Bell)sender).Animation();
-            ((Bell)sender).PlaySound();
+
             if (!solved)
             {
                 if (status && seq[sequenceStep].Equals(sender))
@@ -116,7 +115,8 @@ public class BellsPuzzle : PuzzleManagerBase,IActivable {
                     sequenceStep++;
                     if (sequenceStep == seq.Length)
                     {
-                        Solve();
+                        solved = true;
+                        Invoke("Solve",1.5f);
                     }
                 }
                 else
@@ -146,6 +146,10 @@ public class BellsPuzzle : PuzzleManagerBase,IActivable {
     public override void Solve()
     {
         result.GetComponent<IActivable>().Activate();
+        AudioManager.Play(GetComponent<AudioSource>(), false, 1);
+
+        iTween.ShakePosition(Camera.main.gameObject, new Vector3(1, 1, 0), 2f);
+
     }
 
 }

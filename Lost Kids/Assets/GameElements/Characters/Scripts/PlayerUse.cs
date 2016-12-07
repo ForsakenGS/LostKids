@@ -131,6 +131,11 @@ public class PlayerUse : MonoBehaviour {
         return res;
     }
 
+    public bool UsingLever()
+    {
+        return objectInUse != null && objectInUse.GetComponent<Lever>() != null;
+    }
+
     /// <summary>
     /// Devuelve true si el jugador esta usando algun objeto
     /// </summary>

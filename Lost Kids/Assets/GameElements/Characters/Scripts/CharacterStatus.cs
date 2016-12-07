@@ -560,9 +560,13 @@ public class CharacterStatus : MonoBehaviour {
                         // Comprueba si puede usar el objeto
                         if (playerUse.CanUse()) {
                             // Animación de uso
-                            LockByAnimation();
-                            CharacterAnimationController.SetAnimatorTrigger(characterName, CharacterAnimationController.USE);
-                            if (playerUse.Use()) {
+                            //SOLO SE HACE LA ANIMACION PARA LAS PALANCAS
+                            if (playerUse.UsingLever())
+                            {
+                                LockByAnimation();
+                                CharacterAnimationController.SetAnimatorTrigger(characterName, CharacterAnimationController.USE);
+                            }
+                            if (playerUse.Use() && playerUse.UsingLever()) {
                                 // El jugador queda usando el objeto
                                 characterState = State.Using;
                                 CharacterAnimationController.SetAnimatorPropUsing(characterName, true);

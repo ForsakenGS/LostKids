@@ -47,7 +47,7 @@ public class WaySettings : MonoBehaviour {
             // Separa el objeto instanciado de resto de posiciones posibles
             checkpoint.transform.parent = null;
         }
-        Destroy(trf.gameObject);
+        if(trf) Destroy(trf.gameObject);
         // Kodama
         trf = transform.FindChild("Kodama");
         if (hasKodama) {
@@ -59,7 +59,8 @@ public class WaySettings : MonoBehaviour {
             // Asigna la conversación a Kodama
             kodama.GetComponent<Kodama>().indexList = kodamaConversation;
         }
-        Destroy(trf.gameObject);        
+
+        if(trf) Destroy(trf.gameObject);        
         // Elementos de decoración
 
         // Referencias a componentes de la habitación

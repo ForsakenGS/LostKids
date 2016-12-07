@@ -54,7 +54,7 @@ public class Shooter : MonoBehaviour {
             {
                 projectiles[i].transform.position = KappaShooter.position;
                 
-                projectiles[i].transform.LookAt(target.transform);
+                projectiles[i].transform.LookAt(target.transform.position+Vector3.up*0.6f);
                 if (!straightShot)
                 {
                     projectiles[i].GetComponent<Rigidbody>().velocity = projectiles[i].transform.forward * projectileSpeed;

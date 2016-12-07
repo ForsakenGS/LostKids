@@ -92,7 +92,7 @@ public class CharacterManager : MonoBehaviour {
     public static void CheckPointActivation() {
         for (int i = 0 ; i < characterStatusList.Count ; i++) {
             if (!characterStatusList[i].IsAlive()) {
-                characterStatusList[i].Ressurect();
+                //characterStatusList[i].Ressurect();
             }
         }
     }

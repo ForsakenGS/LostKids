@@ -94,7 +94,11 @@ public class PushAbility : CharacterAbility {
 
     void GrabObject(GameObject go, Vector3 origin, Vector3 target) {
         targetGameObject = go;
-        targetGameObject.transform.position += Vector3.up * 0.05f;
+        targetGameObject.transform.position += Vector3.up * 0.1f;
+        if(go.name.Contains("GiantRock"))
+        {
+            targetGameObject.transform.position += Vector3.up * 0.1f;
+        }
         joint = gameObject.AddComponent<CharacterJoint>();
 
         Rigidbody targetRigidBody = targetGameObject.GetComponent<Rigidbody>();
@@ -129,7 +133,6 @@ public class PushAbility : CharacterAbility {
 
     public override bool SetReady(bool r, GameObject go = null, RaycastHit hitInfo = default(RaycastHit)) {
         if ((r) && (hitInfo.collider.tag.Equals("Pushable"))) {
-            Debug.Log("esPushable");
             // La habilidad está lista para ser usada
             ready = true;
             targetHitInfo = hitInfo;
