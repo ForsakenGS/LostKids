@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6055941308663534fb68042e15325314
-timeCreated: 1473677441
+guid: 99958df8a8ea13b4a8ec936648fab843
+timeCreated: 1480868005
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -82,7 +82,7 @@ ModelImporter:
     400072: Bip001 Spine1
     400074: Bip001 Spine2
     4300000: Akai
-    7400000: AkaiIdleSpecial2
+    7400000: AkaiIdle1
     9500000: //RootNode
     13700000: Akai
   materials:
@@ -107,10 +107,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: AkaiIdleSpecial2
+      name: AkaiIdle1
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 90
+      lastFrame: 56
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -130,7 +130,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.99578065
+      - time: 1
         functionName: SpecialIdleFinished
         data: 
         objectReferenceParameter: {instanceID: 0}

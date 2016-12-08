@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8191d874d03b6324bb96e0a260223ea2
-timeCreated: 1477470603
+guid: d99cd4fb3d053df4b9498fccfdf98a75
+timeCreated: 1480867515
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -168,7 +168,7 @@ ModelImporter:
       name: TanukiHardHits
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 120
+      lastFrame: 85
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

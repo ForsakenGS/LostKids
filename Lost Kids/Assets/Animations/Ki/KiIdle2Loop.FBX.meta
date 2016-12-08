@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: d64543fb2cba8994bb9cc71fac589771
-timeCreated: 1479031752
+guid: 91eb93697cd293b44bad8ec841b667df
+timeCreated: 1481051259
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -107,7 +107,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -214,7 +214,7 @@ ModelImporter:
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
     isReadable: 1
   meshes:
     lODScreenPercentages: []

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 2247ef0c7357956438ed1b87e6d18cc9
-timeCreated: 1477470602
+guid: 051d88895b0e3b947b0842175cc5949e
+timeCreated: 1480867514
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -168,7 +168,7 @@ ModelImporter:
       name: TanukiIdle
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 200
+      lastFrame: 148
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -188,7 +188,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.8059072
+      - time: 1
         functionName: IdleFinished
         data: 
         objectReferenceParameter: {instanceID: 0}

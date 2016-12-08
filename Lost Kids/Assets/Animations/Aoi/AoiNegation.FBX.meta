@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 15634e217686ccf42b657e8394a0b5c2
-timeCreated: 1473677086
+guid: ad724c869d46feb42a93b57714cd14b8
+timeCreated: 1481025553
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -104,7 +104,7 @@ ModelImporter:
       name: AoiNegation
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 50
+      lastFrame: 45
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -124,7 +124,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9957806
+      - time: 1
         functionName: UnlockByAnimation
         data: 
         objectReferenceParameter: {instanceID: 0}

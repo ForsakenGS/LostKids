@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 5b842020379210d4fa18138fa9412f84
-timeCreated: 1473677219
+guid: dce5c70d3f24500488e389879f0e158c
+timeCreated: 1481140977
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Aoi
+    100000: Akai
     100002: //RootNode
     100004: Bip001
     100006: Bip001 Footsteps
@@ -26,21 +26,24 @@ ModelImporter:
     100036: Bip001 L UpperArm
     100038: Bip001 Neck
     100040: Bip001 Pelvis
-    100042: Bip001 R Calf
-    100044: Bip001 R Clavicle
-    100046: Bip001 R Finger0
-    100048: Bip001 R Finger0Nub
-    100050: Bip001 R Foot
-    100052: Bip001 R Forearm
-    100054: Bip001 R Hand
-    100056: Bip001 R Thigh
-    100058: Bip001 R Toe0
-    100060: Bip001 R Toe0Nub
-    100062: Bip001 R UpperArm
-    100064: Bip001 Spine
-    100066: Bip001 Spine1
-    100068: Bip001 Spine2
-    400000: Aoi
+    100042: Bip001 Ponytail1
+    100044: Bip001 Ponytail11
+    100046: Bip001 Ponytail1Nub
+    100048: Bip001 R Calf
+    100050: Bip001 R Clavicle
+    100052: Bip001 R Finger0
+    100054: Bip001 R Finger0Nub
+    100056: Bip001 R Foot
+    100058: Bip001 R Forearm
+    100060: Bip001 R Hand
+    100062: Bip001 R Thigh
+    100064: Bip001 R Toe0
+    100066: Bip001 R Toe0Nub
+    100068: Bip001 R UpperArm
+    100070: Bip001 Spine
+    100072: Bip001 Spine1
+    100074: Bip001 Spine2
+    400000: Akai
     400002: //RootNode
     400004: Bip001
     400006: Bip001 Footsteps
@@ -61,24 +64,27 @@ ModelImporter:
     400036: Bip001 L UpperArm
     400038: Bip001 Neck
     400040: Bip001 Pelvis
-    400042: Bip001 R Calf
-    400044: Bip001 R Clavicle
-    400046: Bip001 R Finger0
-    400048: Bip001 R Finger0Nub
-    400050: Bip001 R Foot
-    400052: Bip001 R Forearm
-    400054: Bip001 R Hand
-    400056: Bip001 R Thigh
-    400058: Bip001 R Toe0
-    400060: Bip001 R Toe0Nub
-    400062: Bip001 R UpperArm
-    400064: Bip001 Spine
-    400066: Bip001 Spine1
-    400068: Bip001 Spine2
-    4300000: Aoi
-    7400000: AoiIdleSpecial1
+    400042: Bip001 Ponytail1
+    400044: Bip001 Ponytail11
+    400046: Bip001 Ponytail1Nub
+    400048: Bip001 R Calf
+    400050: Bip001 R Clavicle
+    400052: Bip001 R Finger0
+    400054: Bip001 R Finger0Nub
+    400056: Bip001 R Foot
+    400058: Bip001 R Forearm
+    400060: Bip001 R Hand
+    400062: Bip001 R Thigh
+    400064: Bip001 R Toe0
+    400066: Bip001 R Toe0Nub
+    400068: Bip001 R UpperArm
+    400070: Bip001 Spine
+    400072: Bip001 Spine1
+    400074: Bip001 Spine2
+    4300000: Akai
+    7400000: AkaiBreak
     9500000: //RootNode
-    13700000: Aoi
+    13700000: Akai
   materials:
     importMaterials: 1
     materialName: 0
@@ -101,10 +107,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: AoiIdleSpecial1
+      name: AkaiBreak
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 90
+      lastFrame: 32
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -124,8 +130,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.99578065
-        functionName: SpecialIdleFinished
+      - time: 0.49789026
+        functionName: BreakAnimationPoint
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: DeactivateActiveAbility
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -134,7 +147,7 @@ ModelImporter:
       transformMask:
       - path: 
         weight: 1
-      - path: Aoi
+      - path: Akai
         weight: 1
       - path: Bip001
         weight: 1
@@ -181,13 +194,22 @@ ModelImporter:
           Neck/Bip001 Head
         weight: 1
       - path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
-          Neck/Bip001 Head/Bip001 Hair
-        weight: 1
-      - path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
-          Neck/Bip001 Head/Bip001 Hair/Bip001 HairNub
-        weight: 1
-      - path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
           Neck/Bip001 Head/Bip001 HeadNub
+        weight: 1
+      - path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
+          Neck/Bip001 Head/Bip001 Ponytail1
+        weight: 1
+      - path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
+          Neck/Bip001 Head/Bip001 Ponytail1/Bip001 Ponytail11
+        weight: 1
+      - path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
+          Neck/Bip001 Head/Bip001 Ponytail1/Bip001 Ponytail11/Bip001 Hair
+        weight: 1
+      - path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
+          Neck/Bip001 Head/Bip001 Ponytail1/Bip001 Ponytail11/Bip001 Hair/Bip001 HairNub
+        weight: 1
+      - path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
+          Neck/Bip001 Head/Bip001 Ponytail1/Bip001 Ponytail11/Bip001 Ponytail1Nub
         weight: 1
       - path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
           Neck/Bip001 L Clavicle

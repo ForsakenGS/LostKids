@@ -126,7 +126,7 @@
 		<value>Jump</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.MovementText" xml:space="preserve">
-		<value>Movement</value>
+		<value>Walk/Run</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.NextCharacterText" xml:space="preserve">
 		<value>Next Character</value>
@@ -138,7 +138,8 @@
 		<value>Previous Character</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Both) Sacrifice</value>
+		<value>(Both at once)
+Back to last check point</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill1AkaiText" xml:space="preserve">
 		<value>Break</value>
@@ -210,19 +211,19 @@
 		<value>Full Screen</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Graphics.GraphicSubtitle" xml:space="preserve">
-		<value>Graphic Settings</value>
+		<value>Graphics Settings</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Graphics.Tooltips.TooltipsCheck.Label" xml:space="preserve">
-		<value>Tooltips</value>
+		<value>Hints on screen</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Sounds.Master.MasterLabel" xml:space="preserve">
-		<value>Master Volume</value>
+		<value>Global Sound</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Sounds.Master.MuteMasterCheck.Label" xml:space="preserve">
 		<value>Mute</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Sounds.Music.MusicLabel" xml:space="preserve">
-		<value>Music Volume</value>
+		<value>Music</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Sounds.Music.MuteMusicCheck.Label" xml:space="preserve">
 		<value>Mute</value>
@@ -231,7 +232,7 @@
 		<value>Mute</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Sounds.Sounds.SoundsLabel" xml:space="preserve">
-		<value>Sound Volume</value>
+		<value>SFX</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Sounds.SoundsSubtitle" xml:space="preserve">
 		<value>Sound Settings</value>
@@ -255,25 +256,26 @@
 		<value>Ki</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Movementtext" xml:space="preserve">
-		<value>Movement</value>
+		<value>Walk/Run</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.NextCharacterText" xml:space="preserve">
-		<value>Select Next Character</value>
+		<value>Next Character</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.PauseText" xml:space="preserve">
 		<value>Pause</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.PreviousCharacter" xml:space="preserve">
-		<value>Select Previous Character</value>
+		<value>Previous Character</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Both pressed) Sacrifice</value>
+		<value>(Both at once)
+Back to last check point</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill1Text" xml:space="preserve">
-		<value>Ability 1</value>
+		<value>Skill 1</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill2Text" xml:space="preserve">
-		<value>Ability 2</value>
+		<value>Skill 2</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.Title" xml:space="preserve">
 		<value>Controls</value>
@@ -339,19 +341,19 @@
 		<value>Full Screen</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Graphics.GraphicSubtitle" xml:space="preserve">
-		<value>Graphic Settings</value>
+		<value>Graphics Settings</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Graphics.Tooltips.TooltipsCheck.Label" xml:space="preserve">
-		<value>Tooltips</value>
+		<value>Hints on screen</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Master.MasterLabel" xml:space="preserve">
-		<value>Master Volume</value>
+		<value>Global Sound</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Master.MuteMasterCheck.Label" xml:space="preserve">
 		<value>Mute</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Music.MusicLabel" xml:space="preserve">
-		<value>Music Volume</value>
+		<value>Music</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Music.MuteMusicCheck.Label" xml:space="preserve">
 		<value>Mute</value>
@@ -360,7 +362,7 @@
 		<value>Mute</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Sounds.SoundsLabel" xml:space="preserve">
-		<value>Sound Volume</value>
+		<value>SFX</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.SoundsSubtitle" xml:space="preserve">
 		<value>Sound Settings</value>
