@@ -42,9 +42,10 @@ public class Pool : MonoBehaviour {
             {
                 rock.GetComponent<PushableObject>().Release();
                 Destroy(rock.GetComponent<PushableObject>());
-                rock.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+                
             }
-           
+            rock.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            rock.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
             rock.transform.position = finalRockPosition.position;
         }
     }

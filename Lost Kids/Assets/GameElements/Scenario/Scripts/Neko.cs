@@ -25,7 +25,7 @@ public class Neko : MonoBehaviour {
         for(int i = 0; i < nekoParts.Length; i++) {
             nekoParts[i].enabled = true;
         }
-        AudioManager.Play(GetComponent<AudioSource>(), false, 0.5f);
+        
     }
 
     public void Hide()
@@ -38,4 +38,11 @@ public class Neko : MonoBehaviour {
             nekoParts[i].enabled = true;
         }
     }
+
+    public void MIAU()
+    {
+        AudioManager.Play(GetComponent<AudioSource>(), false, 0.5f);
+    }
+
+
 }

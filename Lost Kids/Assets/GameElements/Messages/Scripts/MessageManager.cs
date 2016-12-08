@@ -367,6 +367,7 @@ public class MessageManager : MonoBehaviour {
 
                 if (ConversationEndEvent != null) {
                     ConversationEndEvent();
+                    ConversationEndEvent = null;
                 }
                 //Se oculta la interfaz de mensajes
                 frame.gameObject.SetActive(false);

@@ -136,10 +136,13 @@ public class ActivableMovement : MonoBehaviour, IActivable {
 
     public void DisableMovement()
     {
-        if(activationSound.isPlaying) {
+        if (activationSound != null)
+        { 
+        if (activationSound.isPlaying) {
             AudioManager.Stop(activationSound);
         }
         AudioManager.Play(activationSound, false, 1);
+        }
 
         //Se cancela un movimiento previo y se mueve la puerta a su posicion de cierre
         isOpen = false;

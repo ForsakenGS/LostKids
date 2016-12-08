@@ -149,6 +149,8 @@ public class BellsPuzzle : PuzzleManagerBase,IActivable {
         AudioManager.Play(GetComponent<AudioSource>(), false, 1);
 
         iTween.ShakePosition(Camera.main.gameObject, new Vector3(1, 1, 0), 2f);
+        InputManagerTLK.BeginVibrationTimed(1, 1);
+
 
     }
 

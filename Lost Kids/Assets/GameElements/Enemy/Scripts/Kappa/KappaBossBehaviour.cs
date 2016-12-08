@@ -30,9 +30,8 @@ public class KappaBossBehaviour : MonoBehaviour {
     public GameObject introCutscene;
     public GameObject defeatCutscene;
 
-    [HideInInspector]
     //Estado de las charcas disponibles
-    public List<Pool> availablePools;
+    private List<Pool> availablePools;
 
     //Charca en la que se encuentra actualmente
     private Pool actualPool;
@@ -98,6 +97,7 @@ public class KappaBossBehaviour : MonoBehaviour {
         
         audioLoader = GetComponent<AudioLoader>();
         shooter = GetComponent<Shooter>();
+        availablePools = new List<Pool>();
         //Se inicializa el estado de las charcas disponibles
         for (int i = 0; i < poolList.Length; i++)
         {
@@ -195,6 +195,7 @@ public class KappaBossBehaviour : MonoBehaviour {
     private void MoveToPool(GameObject pool)
     {
         transform.position = pool.GetComponent<Pool>().kappaInactivePosition.position;
+        actualPool = pool.GetComponent<Pool>();
     }
     
     public void StartAttacking()
@@ -208,6 +209,7 @@ public class KappaBossBehaviour : MonoBehaviour {
     public void StartDiving()
     {
         ChangeState(States.Diving);
+        StopAllCoroutines();
         CancelInvoke();
         StartCoroutine(Dive());
     }
@@ -219,8 +221,10 @@ public class KappaBossBehaviour : MonoBehaviour {
     public void StartAppearing()
     {
         CancelInvoke();
+        StopAllCoroutines();
         if (availablePools.Count < 1)
         {
+            StartCoroutine(DestroyRock());
             Defeat();
         }
         else
@@ -232,6 +236,9 @@ public class KappaBossBehaviour : MonoBehaviour {
             else
             {
                 doorsList[currentRoom].GetComponent<Door>().Activate();
+                iTween.ShakePosition(Camera.main.gameObject, new Vector3(1, 1, 0), 2f);
+                InputManagerTLK.BeginVibrationTimed(1, 1.5f, true);
+                messageManager.ShowMessage(currentRoom + 3);
                 currentRoom++;
                 StartCoroutine(DestroyRock());
             }
@@ -283,10 +290,11 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// <returns></returns>
     public IEnumerator DestroyRock()
     {
+       
         ChangeState(States.Breaking);   
         while (true)
         {
-            actualPool.HitRock();
+           actualPool.HitRock();
            yield return new WaitForSeconds(breakCooldown);
 
         }
@@ -340,18 +348,22 @@ public class KappaBossBehaviour : MonoBehaviour {
     private void Defeat()
     {
         CancelInvoke();
-        ChangeState(States.Dead);
-
         if (defeatCutscene != null)
         {
-            defeatCutscene.GetComponent<CutScene>().BeginCutScene(DefeatReward);
+            indexList = new List<int> { 5, 6 };
+            defeatCutscene.GetComponent<CutScene>().BeginCutScene(BeginConversation);
+            MessageManager.ConversationEndEvent += DefeatReward;
         }
 
     }
 
     void DefeatReward()
     {
+        InputManagerTLK.BeginVibrationTimed(1, 1.5f,true);
+        iTween.ShakePosition(Camera.main.gameObject, iTween.Hash("amount", new Vector3(1, 1, 0), "time", 1.5f, "delay", 0.5f));
         doorsList[2].GetComponent<Door>().Activate();
+        
+        ChangeState(States.Dead);
     }
 
 
@@ -408,7 +420,7 @@ public class KappaBossBehaviour : MonoBehaviour {
         //Se gira para mirar al personaje mas cercano
         if(closestPlayer!=null)
         {
-            Debug.Log("KAPPA APUNTANDO A DISTANCIA DE :" + closestDistance);
+            //Debug.Log("KAPPA APUNTANDO A DISTANCIA DE :" + closestDistance);
             aimPosition = closestPlayer.transform.position;
             aimPosition.y = transform.position.y;
             transform.LookAt(aimPosition);
@@ -478,6 +490,7 @@ public class KappaBossBehaviour : MonoBehaviour {
 
     void ChangeState(States newState)
     {
+
         //Debug.Log("KAPPA CAMBIANDO A ESTADO: " + newState.ToString());
         currentState = newState;
     }
