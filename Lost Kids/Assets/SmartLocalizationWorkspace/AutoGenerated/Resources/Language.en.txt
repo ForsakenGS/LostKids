@@ -138,8 +138,7 @@
 		<value>Previous Character</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Both at once)
-Back to last check point</value>
+		<value>(Both at once) Sacrifice</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill1AkaiText" xml:space="preserve">
 		<value>Break</value>
@@ -268,8 +267,7 @@ Back to last check point</value>
 		<value>Previous Character</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Both at once)
-Back to last check point</value>
+		<value>(Both at once) Sacrifice</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill1Text" xml:space="preserve">
 		<value>Skill 1</value>
