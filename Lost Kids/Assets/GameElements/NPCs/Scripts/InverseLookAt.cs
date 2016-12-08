@@ -8,11 +8,14 @@ public class InverseLookAt : MonoBehaviour {
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
+        if (CharacterManager.GetActiveCharacter() != null)
+        { 
         targetPos = CharacterManager.GetActiveCharacter().transform.position;
         targetPos.y = transform.position.y;
-        transform.LookAt(targetPos);	    
+        transform.LookAt(targetPos);
+        }
 	}
 }

@@ -134,6 +134,7 @@ public class CheckPoint : MonoBehaviour {
 
             //CharacterManager.SetActiveCheckPoint(this);
             neko.Show();
+            neko.MIAU();
             vortex.Show();
         }
     }

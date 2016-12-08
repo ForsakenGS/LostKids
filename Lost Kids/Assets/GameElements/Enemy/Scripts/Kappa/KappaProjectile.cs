@@ -3,7 +3,9 @@ using System.Collections;
 
 public class KappaProjectile : MonoBehaviour {
 
-    
+    public ParticleSystem destroyParticles;
+
+    private AudioSource destroySound;
     void OnEnable()
     {
         
@@ -11,6 +13,8 @@ public class KappaProjectile : MonoBehaviour {
 
     void Destroy()
     {
+        
+        Instantiate(destroyParticles,transform.position,Quaternion.identity);
         gameObject.SetActive(false);
     }
 
@@ -20,7 +24,7 @@ public class KappaProjectile : MonoBehaviour {
     }
 	// Use this for initialization
 	void Start () {
-	
+        destroySound = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -36,7 +40,11 @@ public class KappaProjectile : MonoBehaviour {
             {
                 col.gameObject.GetComponent<CharacterStatus>().Kill();
             }
-            Invoke("Destroy", 0);
+            if (!destroySound.isPlaying)
+            {
+                AudioManager.Play(destroySound, false, 0.5f);
+            }
+            Invoke("Destroy", 0.1f);
         }
     }
 }

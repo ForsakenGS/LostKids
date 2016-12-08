@@ -14,6 +14,16 @@ public class KodamaInvisibility : MonoBehaviour {
 	void Start () {
         bodyColor = body.GetComponent<Renderer>().material.color;
         faceColor= body.GetComponent<Renderer>().material.color;
+
+        if(minDistance==0)
+        {
+            bodyColor.a = 1;
+            body.GetComponent<Renderer>().material.color = bodyColor;
+
+            faceColor.a = 1;
+            face.GetComponent<Renderer>().material.color = faceColor;
+
+        }
     }
 	
 	// Update is called once per frame
