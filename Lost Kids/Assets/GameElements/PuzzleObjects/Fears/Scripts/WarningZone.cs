@@ -6,22 +6,22 @@ public class WarningZone : MonoBehaviour {
 
     private List<CharacterName> affected;
 
-    public Sprite tooltipImage;
-    private CharacterIcon icon;
+    //public Sprite tooltipImage;
+    //private CharacterIcon icon;
 
     void OnTriggerEnter(Collider col) {
         if (col.gameObject.CompareTag("Player") && affected.Contains(col.gameObject.GetComponent<CharacterStatus>().characterName)) {
 
-            icon = col.gameObject.GetComponentInChildren<CharacterIcon>();
-            icon.ActiveCanvas(true);
-            icon.SetImage(tooltipImage);
+            //icon = col.gameObject.GetComponentInChildren<CharacterIcon>();
+            //icon.ActiveCanvas(true);
+            //icon.SetImage(tooltipImage);
 
         }
     }
 
     void OnTriggerExit(Collider col) {
         if (col.gameObject.CompareTag("Player") && affected.Contains(col.gameObject.GetComponent<CharacterStatus>().characterName)) {
-            icon.ActiveCanvas(false);
+            //icon.ActiveCanvas(false);
         }
     }
 
@@ -41,9 +41,9 @@ public class WarningZone : MonoBehaviour {
     }
 
     public void DisableZone() {
-        if (icon != null) {
-            icon.ActiveCanvas(false);
-        }
+        //if (icon != null) {
+       //     icon.ActiveCanvas(false);
+       // }
         GetComponent<Collider>().enabled = false;
     }
 }
