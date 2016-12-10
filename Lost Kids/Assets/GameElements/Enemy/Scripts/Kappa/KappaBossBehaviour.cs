@@ -18,7 +18,7 @@ public class KappaBossBehaviour : MonoBehaviour {
     //Breaking = Se encuentra rompiendo una de las rocas que bloquea un poozo
     //Shooting = Disparandoa algun personaje
     //Dead = Derrotado
-    public enum States { Diving,Idle,Moving,Attacking,Breaking,Shooting,Dead};
+    public enum States { Diving,Idle,Raising,Attacking,Breaking,Shooting,Dead};
 
     private States currentState = States.Diving;
 
@@ -49,8 +49,10 @@ public class KappaBossBehaviour : MonoBehaviour {
     //Tiempo de recarga del disparo
     public float shootCooldown=1;
 
+    private bool onShootCooldown = false;
+
     //Tiempo de recarga para romper la piedra
-    public float breakCooldown = 2;
+    private float breakCooldown = 2;
 
     //Referencia al script de disparo
     private Shooter shooter;
@@ -92,9 +94,11 @@ public class KappaBossBehaviour : MonoBehaviour {
     // Listado con índices de los mensajes a mostrar
     public List<int> indexList;
 
+    private KappaAnimationCotroller animationController;
     // Use this for initialization
     void Start () {
-        
+
+        animationController = GetComponent<KappaAnimationCotroller>();
         audioLoader = GetComponent<AudioLoader>();
         shooter = GetComponent<Shooter>();
         availablePools = new List<Pool>();
@@ -119,10 +123,12 @@ public class KappaBossBehaviour : MonoBehaviour {
 
         if (currentState.Equals(States.Idle))
         {
-            if(closestPlayer!=null)
+
+            if( !onShootCooldown && closestPlayer!=null)
             {
                 ShootAtPlayer();               
             }
+            
         }
 	
 	}
@@ -136,6 +142,7 @@ public class KappaBossBehaviour : MonoBehaviour {
         transform.position = actualPool.kappaActivePosition.position;
         if (introCutscene != null)
         {
+            MusicPlayer.instance.ChangeBackGroundClip(1);
             introCutscene.GetComponent<CutScene>().BeginCutScene(BeginConversation);
             MessageManager.ConversationEndEvent += StartDiving;
         }
@@ -148,6 +155,7 @@ public class KappaBossBehaviour : MonoBehaviour {
 
     private void BeginConversation()
     {
+        Joke();
         messageManager.ShowConversation(indexList);
     }
 
@@ -156,12 +164,22 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// </summary>
     void ShootAtPlayer()
     {
-        //Actualiza su estado
-        ChangeState(States.Shooting);
-        //Sonido de disparo
-        //AudioManager.Play(audioLoader.GetSound("Spit"), false, 1);
-        //Eecuta el disparo del objeto disparador
-        shooter.ShootAtTarget(closestPlayer);
+        onShootCooldown = true;
+
+        //Hay una posibilidad de que en lugar de disparar, haga un vacile
+        if (Random.value <= 0.15f)
+        {
+            Joke();
+
+        }
+        else
+        {
+            //Actualiza su estado
+            ChangeState(States.Shooting);
+
+            shooter.ShowRock();
+        }
+
 
         //Lanza el reseteo de su estado en base al cooldown
         Invoke("ResetShootCoolDown",shootCooldown);
@@ -172,7 +190,24 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// </summary>
     void ResetShootCoolDown()
     {
-        ChangeState(States.Idle);
+        onShootCooldown = false;
+    }
+
+    public void ThrowRock()
+    {
+        shooter.ShootAtTarget(closestPlayer);
+
+        if (currentState == States.Shooting)
+        {
+            ChangeState(States.Idle);
+        }
+
+    }
+
+    void Joke()
+    {
+        shooter.HideRock();
+        animationController.JibeAnimation();
     }
 
     /// <summary>
@@ -210,7 +245,7 @@ public class KappaBossBehaviour : MonoBehaviour {
     {
         ChangeState(States.Diving);
         StopAllCoroutines();
-        CancelInvoke();
+        //CancelInvoke();   
         StartCoroutine(Dive());
     }
 
@@ -220,8 +255,7 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// </summary>
     public void StartAppearing()
     {
-        CancelInvoke();
-        StopAllCoroutines();
+ 
         if (availablePools.Count < 1)
         {
             StartCoroutine(DestroyRock());
@@ -240,6 +274,7 @@ public class KappaBossBehaviour : MonoBehaviour {
                 InputManagerTLK.BeginVibrationTimed(1, 1.5f, true);
                 messageManager.ShowMessage(currentRoom + 3);
                 currentRoom++;
+                CancelInvoke();
                 StartCoroutine(DestroyRock());
             }
         }
@@ -277,7 +312,7 @@ public class KappaBossBehaviour : MonoBehaviour {
             MoveToPool(nextPool);
             nextPool = null;
         }
-
+        onShootCooldown = false;
         //Planifica la aparicion pasado el tiempo inmersion
         Invoke("StartAppearing", divingTime);
 
@@ -290,10 +325,11 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// <returns></returns>
     public IEnumerator DestroyRock()
     {
-       
+        
         ChangeState(States.Breaking);   
         while (true)
         {
+           AudioManager.Play(audioLoader.GetSound("HitRock"),false,1);
            actualPool.HitRock();
            yield return new WaitForSeconds(breakCooldown);
 
@@ -315,6 +351,7 @@ public class KappaBossBehaviour : MonoBehaviour {
         }
         else
         {
+            ChangeState(States.Raising);
             //AudioManager.Play(audioLoader.GetSound("Splash"), false, 1);
 
             //Se calcula la posicion destino y se comprueba que no exceda los limites
@@ -331,8 +368,8 @@ public class KappaBossBehaviour : MonoBehaviour {
             }
     
             GetComponent<Collider>().enabled = true;
+            yield return new WaitForSeconds(0.5f);
             ChangeState(States.Idle);
-
 
             //Planifica su siguiente movimiento
             Invoke("StartDiving", activeTime);
@@ -381,7 +418,7 @@ public class KappaBossBehaviour : MonoBehaviour {
             //Si se bloquea el pozo actual, se tiene que sumergir
             if(pool.Equals(actualPool))
             {
-                CancelInvoke();
+                //CancelInvoke();
                 StartDiving();
             }
         }
@@ -441,7 +478,7 @@ public class KappaBossBehaviour : MonoBehaviour {
             //Si el boss esta sumergido, emerge en el pozo para matar al jugador
             if (currentState.Equals(States.Diving))
             {
-                CancelInvoke();
+                //CancelInvoke();
                 StartAppearing();
 
             }
@@ -484,6 +521,7 @@ public class KappaBossBehaviour : MonoBehaviour {
     /// </summary>
     public void EndAttack()
     {
+        shooter.HideRock();
         ChangeState(States.Idle);
         StartDiving();
     }
@@ -493,5 +531,28 @@ public class KappaBossBehaviour : MonoBehaviour {
 
         //Debug.Log("KAPPA CAMBIANDO A ESTADO: " + newState.ToString());
         currentState = newState;
+
+        switch(newState)
+        {
+            case States.Diving:
+                AudioManager.Play(audioLoader.GetSound("Dive"), false, 1f);
+                animationController.HideAnimation();
+                break;
+            case States.Attacking:
+                AudioManager.Play(audioLoader.GetSound("Attack"), false, 1f);
+                animationController.SwipeAnimation();
+                break;
+            case States.Shooting:
+                AudioManager.Play(audioLoader.GetSound("ThrowRock"), false, 1f);
+                animationController.ThrowRockAnimation();
+                break;
+            case States.Raising:
+                shooter.HideRock();
+                AudioManager.Play(audioLoader.GetSound("Dive"), false, 1f);
+                //animationController.RaiseAnimation();
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -42,7 +42,8 @@ public class BigJumpAbility : CharacterAbility {
             started = true;
             CallEventActivateAbility();
             AddEnergy(-initialConsumption);
-            characterMovement.Jump(jumpImpulseModifier * characterStatus.maxJumpImpulse, true);
+            characterMovement.Jump(jumpImpulseModifier * characterStatus.maxJumpImpulse, false);
+            AudioManager.Play(GetComponent<AudioLoader>().GetSound("BigJump"), false, 1);
         }
 
         return started;

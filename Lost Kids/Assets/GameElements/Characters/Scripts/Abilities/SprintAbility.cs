@@ -32,6 +32,7 @@ public class SprintAbility : CharacterAbility {
             active = false;
             //characterStatus.standingSpeed /= speedModifier;
             CallEventDeactivateAbility();
+            //AudioManager.Stop(GetComponent<AudioLoader>().GetSound("Sprint"));
         }
 
         return ended;
@@ -50,6 +51,7 @@ public class SprintAbility : CharacterAbility {
             AddEnergy(-initialConsumption);
             //characterStatus.standingSpeed *= speedModifier;
             CallEventActivateAbility();
+            //AudioManager.Play(GetComponent<AudioLoader>().GetSound("Sprint"), true, 1);
         }
 
         return started;

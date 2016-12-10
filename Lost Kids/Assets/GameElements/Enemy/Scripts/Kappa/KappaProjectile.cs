@@ -6,22 +6,27 @@ public class KappaProjectile : MonoBehaviour {
     public ParticleSystem destroyParticles;
 
     private AudioSource destroySound;
+
+
+    private bool isActivated = false;
+
     void OnEnable()
     {
-        
-    }
-
-    void Destroy()
-    {
-        
-        Instantiate(destroyParticles,transform.position,Quaternion.identity);
-        gameObject.SetActive(false);
+        Instantiate(destroyParticles, transform.position, Quaternion.identity);
     }
 
     void OnDisable()
     {
-        CancelInvoke();
+        Instantiate(destroyParticles, transform.position, Quaternion.identity);
     }
+
+    void Destroy()
+    {
+        isActivated = false;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        gameObject.SetActive(false);
+    }
+
 	// Use this for initialization
 	void Start () {
         destroySound = GetComponent<AudioSource>();
@@ -34,17 +39,27 @@ public class KappaProjectile : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (!col.isTrigger)
+        if (isActivated)
         {
-            if (col.gameObject.CompareTag("Player"))
+            if (!col.isTrigger)
             {
-                col.gameObject.GetComponent<CharacterStatus>().Kill();
+                if (col.gameObject.CompareTag("Player"))
+                {
+                    col.gameObject.GetComponent<CharacterStatus>().Kill();
+                }
+                if (!destroySound.isPlaying)
+                {
+                    AudioManager.Play(destroySound, false, 0.7f);
+                }
+                Invoke("Destroy", 0f);
             }
-            if (!destroySound.isPlaying)
-            {
-                AudioManager.Play(destroySound, false, 0.5f);
-            }
-            Invoke("Destroy", 0.1f);
         }
+    }
+
+
+    public void Activate()
+    {
+        isActivated = true;
+        transform.parent = null;
     }
 }

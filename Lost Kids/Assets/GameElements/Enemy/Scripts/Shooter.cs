@@ -26,6 +26,7 @@ public class Shooter : MonoBehaviour {
 
     public Transform KappaShooter;
 
+    private GameObject activeRock = null;
 
     // Use this for initialization
     void Start () {
@@ -37,7 +38,7 @@ public class Shooter : MonoBehaviour {
             proj.SetActive(false);
             projectiles.Add(proj);
         }
-        shooterPosition = transform;
+        shooterPosition = KappaShooter.transform;
 	
 	}
 	
@@ -46,26 +47,45 @@ public class Shooter : MonoBehaviour {
 	
 	}
 
-   public void  ShootAtTarget(GameObject target)
+    public void HideRock()
+    {
+        if(activeRock!=null)
+        {
+            activeRock.SetActive(false);
+        }
+    }
+
+    public void ShowRock()
     {
         for (int i = 0; i < projectiles.Count; i++)
         {
             if (!projectiles[i].activeInHierarchy)
             {
-                projectiles[i].transform.position = KappaShooter.position;
-                
-                projectiles[i].transform.LookAt(target.transform.position+Vector3.up);
-                if (!straightShot)
-                {
-                    projectiles[i].GetComponent<Rigidbody>().velocity = projectiles[i].transform.forward * projectileSpeed;
-                }
-                else
-                {
-                    projectiles[i].GetComponent<Rigidbody>().velocity = transform.forward * projectileSpeed;
-                }
-                projectiles[i].SetActive(true);
+                activeRock = projectiles[i];
+                activeRock.transform.parent = shooterPosition;
+                activeRock.transform.localPosition = Vector3.zero;
+                activeRock.SetActive(true);
                 break;
-          }
+            }
+        }
+
+    }
+
+   public void  ShootAtTarget(GameObject target)
+    {
+        if (activeRock != null)
+        {
+            activeRock.transform.LookAt(target.transform.position + Vector3.up);
+            if (!straightShot)
+            {
+                activeRock.GetComponent<Rigidbody>().velocity = activeRock.transform.forward * projectileSpeed;
+            }
+            else
+            {
+                activeRock.GetComponent<Rigidbody>().velocity = transform.forward * projectileSpeed;
+            }
+            activeRock.GetComponent<KappaProjectile>().Activate();
+            activeRock = null;
         }
     }
 }

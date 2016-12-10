@@ -6,7 +6,7 @@ public class KappaAnimationCotroller : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        animatorController = GetComponent<Animator>();
+        animatorController = GetComponentInChildren<Animator>();
 	}
 	
     public bool HideAnimation() {

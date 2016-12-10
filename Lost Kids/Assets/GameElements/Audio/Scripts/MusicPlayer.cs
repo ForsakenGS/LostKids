@@ -12,6 +12,8 @@ public class MusicPlayer : MonoBehaviour {
     private bool initialized = false;
     public bool dontDestroy = false;
 
+    public bool autoLoop = true;
+
     void OnDestroy()
     {
         if(initialized)
@@ -62,7 +64,7 @@ public class MusicPlayer : MonoBehaviour {
 
     IEnumerator PlayBackgroundMusic()
     {
-        while (soundClips.Length > 1)
+        while (soundClips.Length > 1 && autoLoop)
         {
             audio.clip = soundClips[clipIndex];
             AudioManager.PlayMusic(audio,false, 1);
@@ -75,6 +77,19 @@ public class MusicPlayer : MonoBehaviour {
         }
         audio.clip = soundClips[clipIndex];
         AudioManager.PlayMusic(audio, true, 1);
+    }
+
+
+    public void ChangeBackGroundClip(int index)
+    {
+        if (soundClips.Length >= index)
+        {
+            AudioManager.StopMusic(audio);
+            clipIndex = index;
+            audio.clip = soundClips[clipIndex];
+            AudioManager.PlayMusic(audio, true, 1);
+        }
+
     }
 
 }
