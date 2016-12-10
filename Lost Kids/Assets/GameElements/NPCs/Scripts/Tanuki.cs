@@ -81,7 +81,7 @@ public class Tanuki : UsableObject {
         } else {
             fearCutScene.BeginCutScene(base.Use);
         }
-        Invoke("ShowThanksConversation", fearCutScene.cutSceneTime + 0.5f);
+        Invoke("ShowThanksConversation", cutScene.cutSceneTime + 0.5f);
     }
 
     override public void Use() {
