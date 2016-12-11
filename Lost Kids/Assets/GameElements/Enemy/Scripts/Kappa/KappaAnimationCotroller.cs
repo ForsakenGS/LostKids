@@ -21,6 +21,12 @@ public class KappaAnimationCotroller : MonoBehaviour {
         return true;
     }
 
+    public bool ShowAnimation() {
+        animatorController.SetTrigger("Show");
+
+        return true;
+    }
+
     public bool SwipeAnimation() {
         animatorController.SetTrigger("Swipe");
 
@@ -32,23 +38,4 @@ public class KappaAnimationCotroller : MonoBehaviour {
 
         return true;
     }
-
-    //void Update() {
-    //    if (Input.GetKeyDown(KeyCode.Z)) {
-    //        Debug.Log("hide");
-    //        HideAnimation();
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.X)) {
-    //        Debug.Log("jibe");
-    //        JibeAnimation();
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.C)) {
-    //        Debug.Log("swipe");
-    //        SwipeAnimation();
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.V)) {
-    //        Debug.Log("rock");
-    //        ThrowRockAnimation();
-    //    }
-    //}
 }
