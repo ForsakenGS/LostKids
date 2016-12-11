@@ -3,6 +3,21 @@ using UnityEngine.SceneManagement;
     using InControl;
 
 public class SkipVideoManager : MonoBehaviour {
+    public GameObject videoSP;
+    public GameObject videoEN;
+
+    // Use his for references
+    void Awake() {
+        // Elimina el vídeo del idioma que no se haya seleccionado
+        if (LocalizationManager.language.Equals(LocalizationManager.ESLanguage)) {
+            videoEN.SetActive(false);
+            Destroy(videoEN);
+        } else {
+            videoSP.SetActive(false);
+            Destroy(videoSP);
+        }
+    }
+
 	// Update is called once per frame
 	void Update () {
         // Comprueba si se pulsa algún botón del mando

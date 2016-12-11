@@ -21,12 +21,16 @@ public class LocalizationManager : MonoBehaviour {
     // Instancia de LocalizationManager
     private static LocalizationManager instance;
 
+    // Constantes con los idiomas
+    public static string ENLanguage = "en";
+    public static string ESLanguage = "es";
+
     void Awake() {
         if (instance == null) {
             // Primera instancia de LocalizationManager
             instance = this;
             DontDestroyOnLoad(gameObject);
-            _language = "es";
+            _language = ESLanguage;
             InitializationAndLocalization();
         } else if (!instance.Equals(this)) {
             // Otra instancia creada
