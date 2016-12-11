@@ -139,4 +139,22 @@ public class CharacterAnimationController {
         // Activa el trigger correspondiente
         characterAnimator.SetTrigger(trigger);
     }
+
+    public static void CheckFallAnimation(CharacterName characterName, bool characterIsgrounded) {
+        if (characterIsgrounded) {
+            // Selecciona el Animator del personaje
+            Animator characterAnimator;
+            if (characterName.Equals(CharacterName.Aoi)) {
+                characterAnimator = aoiAnimator;
+            } else if (characterName.Equals(CharacterName.Akai)) {
+                characterAnimator = akaiAnimator;
+            } else {
+                characterAnimator = kiAnimator;
+            }
+            // Comprueba si está en animación de caída
+            if (characterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Fall")) {
+                SetAnimatorTrigger(characterName,LAND);
+            }
+        }
+    }
 }
