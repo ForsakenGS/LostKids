@@ -542,6 +542,8 @@ public class CharacterStatus : MonoBehaviour {
                 }
                 break;
         }
+        // Controla que el personaje no se quede en animación de caída
+        CharacterAnimationController.CheckFallAnimation(characterName, characterMovement.CharacterIsGrounded());
     }
 
     /// <summary>
