@@ -27,6 +27,7 @@ public class CharacterAnimationController {
     public static readonly int PROP_IS_PUSHING = Animator.StringToHash("isPushing");
     public static readonly int PROP_SPEED = Animator.StringToHash("speed");
     public static readonly int PROP_USING = Animator.StringToHash("using");
+    public static readonly int PROP_SLOW = Animator.StringToHash("slow");
 
     // Referencias a componentes Animator
     private static Animator aoiAnimator;
@@ -98,6 +99,20 @@ public class CharacterAnimationController {
                 break;
             case CharacterName.Ki:
                 kiAnimator.SetBool(PROP_USING, value);
+                break;
+        }
+    }
+
+    public static void SetAnimatorPropSlow(CharacterName characterName, bool value) {
+        switch (characterName) {
+            case CharacterName.Aoi:
+                aoiAnimator.SetBool(PROP_SLOW, value);
+                break;
+            case CharacterName.Akai:
+                akaiAnimator.SetBool(PROP_SLOW, value);
+                break;
+            case CharacterName.Ki:
+                kiAnimator.SetBool(PROP_SLOW, value);
                 break;
         }
     }
