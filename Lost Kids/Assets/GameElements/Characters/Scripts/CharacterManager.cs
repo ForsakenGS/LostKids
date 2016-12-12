@@ -140,7 +140,7 @@ public class CharacterManager : MonoBehaviour {
             activeCS.playerParticles.AttenuateColor();
             // Si se trata de Akai y tiene activada PushAbility, se desactiva la habilidad para evitar que otro personaje pueda empujar
             if ((activeCS.characterName.Equals(CharacterName.Akai)) && (activeCS.CurrentStateIs(CharacterStatus.State.Pushing))) {
-                activeCharacter.GetComponent<AbilityController>().DeactivateActiveAbility();
+                activeCharacter.GetComponent<AbilityController>().DeactivateActiveAbility(false);
             }
             // Nuevo personaje activo
             activeCharacter = characterList[index];

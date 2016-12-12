@@ -72,7 +72,7 @@ public class PushAbility : CharacterAbility {
     /// Finaliza la ejecución de la habilidad de empujar
     /// </summary>
     /// <returns><c>true</c>, si se pudo parar la ejecución, <c>false</c> si no fue posible.</returns>
-    public override bool DeactivateAbility() {
+    public override bool DeactivateAbility(bool force) {
         if (active) {
             active = false;
             ReleaseObject();

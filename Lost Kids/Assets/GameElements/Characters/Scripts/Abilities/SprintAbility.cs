@@ -25,7 +25,7 @@ public class SprintAbility : CharacterAbility {
     /// Termina la ejecución de la habilidad, reestableciendo la velocidad del personaje
     /// </summary>
     /// <returns><c>true</c>, si la ejecución se terminó realmente, <c>false</c> en otro caso.</returns>
-    public override bool DeactivateAbility() {
+    public override bool DeactivateAbility(bool force) {
         bool ended = active;
         if (active) {
             // Se para la ejecución de la habilidad

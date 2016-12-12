@@ -1,3 +1,3 @@
 <kodama> Uhm... already here? Do you enjoy your new mask? Well, I need to make sure that you are prepared before going any further. Find me in the next room to start the trials!
-<kodama> Your first trial... The mask that I gave to you not only makes you look AWESOME, but it also increases your skills! Press -Skill1- to use your new Great Jump Ability and find me in the next room once you are familiar with it!
-<kodama> WOA! Did you see how high you can jump!? INCREDIBLE!! Now you gotta be fast, very fast... Use -Skill2- to use your Sprint Ability and go trough the door in time. Good luck!
+<kodama> Your first trial... The mask that I gave to you not only makes you look AWESOME, but it also increases your skills! Use your new Great Jump Ability and find me in the next room once you are familiar with it!
+<kodama> WOA! Did you see how high you can jump!? INCREDIBLE!! Now you gotta be fast, very fast... Use your Sprint Ability and go trough the door in time. Good luck!

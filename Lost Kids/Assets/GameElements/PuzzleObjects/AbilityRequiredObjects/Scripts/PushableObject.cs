@@ -39,7 +39,7 @@ public class PushableObject : MonoBehaviour {
         gameObject.layer = LayerMask.NameToLayer("Default");
         if (pushAbility != null)
         {
-            pushAbility.gameObject.GetComponent<AbilityController>().DeactivateActiveAbility();
+            pushAbility.gameObject.GetComponent<AbilityController>().DeactivateActiveAbility(false);
             pushAbility = null;
         }
     }
@@ -93,7 +93,7 @@ public class PushableObject : MonoBehaviour {
 
     void OnCollisionExit(Collision col) {
         if (!CharacterManager.IsActiveCharacter(col.gameObject) && pushAbility != null && !IsGrounded() && !col.gameObject.CompareTag("Breakable") && !col.gameObject.CompareTag("KappaRunway")) {
-            pushAbility.gameObject.GetComponent<AbilityController>().DeactivateActiveAbility();
+            pushAbility.gameObject.GetComponent<AbilityController>().DeactivateActiveAbility(false);
         }
     }
 
