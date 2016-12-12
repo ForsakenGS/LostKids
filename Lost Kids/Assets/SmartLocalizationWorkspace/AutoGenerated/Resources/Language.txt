@@ -138,7 +138,7 @@
 		<value>Personaje Anterior</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Ambos a la vez) Sacrificio</value>
+		<value>(Ambos a la vez) Volver al último checkpoint</value>
 	</data>
 	<data name="TLK.PauseMenu.Managers.PausePanel.ControlsPanel.ControlsFrame.Skill1AkaiText" xml:space="preserve">
 		<value>Romper</value>
@@ -267,7 +267,7 @@
 		<value>Personaje Anterior</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.SacrificeText" xml:space="preserve">
-		<value>(Ambos a la vez) Sacrificio</value>
+		<value>(Ambos a la vez) Volver al último checkpoint</value>
 	</data>
 	<data name="TLK.UI.Controls.Canvas.ControlsFrame.Skill1Text" xml:space="preserve">
 		<value>Habilidad 1</value>
