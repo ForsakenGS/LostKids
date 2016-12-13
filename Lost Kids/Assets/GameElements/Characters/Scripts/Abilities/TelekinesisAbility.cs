@@ -57,11 +57,11 @@ public class TelekinesisAbility : CharacterAbility {
     /// Cambia el estado de la habilidad para que no esté en ejecución
     /// </summary>
     /// <returns><c>true</c> si se modificó el estado de la habilidad, o <c>false</c> si la habilidad ya no estaba en ejecución</returns>
-    public override bool DeactivateAbility() {
+    public override bool DeactivateAbility(bool force) {
         bool changed = active;
         if (active) {
-            // Comprueba si la animación terminó
-            if (animationEnded) {
+            // Comprueba si la animación terminó o si se fuerza el final
+            if ((animationEnded) || (force)) {
                 active = false;
                 // Deja de usar el objeto, si procede
                 if (isUsing) {
@@ -107,7 +107,7 @@ public class TelekinesisAbility : CharacterAbility {
         //if (usableObj == null) {
         if (!isUsing) {
             // Se da por finalizada la habilidad
-            GetComponent<AbilityController>().DeactivateActiveAbility();
+            GetComponent<AbilityController>().DeactivateActiveAbility(false);
         }
     }
 }

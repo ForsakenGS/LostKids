@@ -23,7 +23,7 @@ public class BigJumpAbility : CharacterAbility {
     /// Cambia el estado de la habilidad para que no esté en ejecución
     /// </summary>
     /// <returns><c>true</c> si se modificó el estado de la habilidad, o <c>false</c> si la habilidad ya no estaba en ejecución</returns>
-    public override bool DeactivateAbility() {
+    public override bool DeactivateAbility(bool force) {
         bool changed = active;
         active = false;
         CallEventDeactivateAbility();

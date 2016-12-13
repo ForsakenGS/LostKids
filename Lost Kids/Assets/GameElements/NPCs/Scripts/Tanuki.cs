@@ -19,6 +19,10 @@ public class Tanuki : UsableObject {
     private GameObject canvas;
     private MessageManager messageManager;
     private Animator animator;
+    private AudioSource strongHit;
+    private AudioSource softHit;
+    private AudioSource idleSound1;
+    private AudioSource idleSound2;
 
     // Use this for references
     void Awake() {
@@ -35,6 +39,11 @@ public class Tanuki : UsableObject {
         base.Start();
         type = UsableTypes.Instant;
         requestedObjectName = requested.GetComponent<InventoryObject>().objectName;
+        AudioLoader audioLoader = GetComponent<AudioLoader>();
+        strongHit = audioLoader.GetSound("StrongHit");
+        softHit = audioLoader.GetSound("SoftHit");
+        idleSound1 = audioLoader.GetSound("Idle1");
+        idleSound2 = audioLoader.GetSound("Idle2");
     }
 
     void BeginAskConversation() {
@@ -60,6 +69,11 @@ public class Tanuki : UsableObject {
     public void IdleFinished() {
         if (Random.Range(0,3) == 2) {
             animator.SetTrigger("SoftHits");
+        }
+        if (Random.Range(0,5) == 0) {
+            AudioManager.Play(idleSound1, false, 1);
+        } else {
+            AudioManager.Play(idleSound2, false, 1);
         }
     }
 
@@ -122,5 +136,13 @@ public class Tanuki : UsableObject {
             cutScene.BeginCutScene(BeginThanksConversation);
             Invoke("MoveCharacterToFront", 0.5f);
         }
+    }
+
+    public void StrongHit() {
+        AudioManager.Play(strongHit, false, 1);
+    }
+
+    public void SoftHit() {
+        AudioManager.Play(softHit, false, 1, 0.9f, 1.1f);
     }
 }

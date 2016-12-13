@@ -54,7 +54,7 @@ public class AbilityController : MonoBehaviour {
             ActivateAbility(ability1);
         } else if (activeAbility.Equals(ability1)) {
             // Se desactiva la habilidad 1
-            DeactivateAbility(ability1);
+            DeactivateAbility(ability1, false);
         }
     }
 
@@ -67,15 +67,15 @@ public class AbilityController : MonoBehaviour {
             ActivateAbility(ability2);
         } else if (activeAbility.Equals(ability2)) {
             // Se desactiva la habilidad 2
-            DeactivateAbility(ability2);
+            DeactivateAbility(ability2, false);
         }
     }
 
     // Desactiva la habilidad pasada como parámetro
-    bool DeactivateAbility(CharacterAbility ability) {
+    bool DeactivateAbility(CharacterAbility ability, bool force) {
         bool res = (ability != null);
         if (res) {
-            res = ability.DeactivateAbility();
+            res = ability.DeactivateAbility(force);
             if (res) {
                 characterStatus.EndAbility(ability);
                 if (ability.Equals(activeAbility)) {
@@ -91,8 +91,8 @@ public class AbilityController : MonoBehaviour {
     /// Función para desactivar la habilidad activa en el momento de la llamada
     /// </summary>
     /// <returns></returns>
-    public bool DeactivateActiveAbility() {
-        return DeactivateAbility(activeAbility);
+    public bool DeactivateActiveAbility(bool force) {
+        return DeactivateAbility(activeAbility, force);
     }
 
     /// <summary>

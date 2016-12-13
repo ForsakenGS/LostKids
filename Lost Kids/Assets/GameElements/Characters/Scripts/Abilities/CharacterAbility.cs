@@ -67,7 +67,7 @@ public abstract class CharacterAbility : MonoBehaviour {
     public void AbilityAnimationEnded() {
         // Desbloquea el personaje y finaliza la ejecución de la habilidad
         characterStatus.UnlockByAnimation();
-        GetComponent<AbilityController>().DeactivateActiveAbility();
+        GetComponent<AbilityController>().DeactivateActiveAbility(false);
     }
 
     /// <summary>
@@ -132,7 +132,7 @@ public abstract class CharacterAbility : MonoBehaviour {
     /// Desactiva la ejecución de la habilidad si es posible
     /// </summary>
 	/// <returns><c>true</c> si se ha podido desactivar, <c>false</c> si no ha sido posible</returns>
-    public abstract bool DeactivateAbility();
+    public abstract bool DeactivateAbility(bool force);
 
     /// <summary>
     /// Devuelve la cantidad de energía disponible de la habilidad
@@ -183,7 +183,7 @@ public abstract class CharacterAbility : MonoBehaviour {
             }
             // Comprueba si la habilidad debe terminar su ejecución
             if (energy <= 0.0f) {
-                GetComponent<AbilityController>().DeactivateActiveAbility();
+                GetComponent<AbilityController>().DeactivateActiveAbility(false);
             }
         } else if (energy < maxEnergy) {
             // No en ejecución y la energía restante no está completa, luego se va recuperando

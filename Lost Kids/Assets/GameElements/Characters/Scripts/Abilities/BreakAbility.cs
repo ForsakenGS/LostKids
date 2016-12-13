@@ -26,8 +26,8 @@ public class BreakAbility : CharacterAbility {
     /// Finaliza la ejecución de la habilidad de romper
     /// </summary>
     /// <returns><c>true</c> si se pudo parar la ejecución, <c>false</c> si no fue posible.</returns>
-    public override bool DeactivateAbility() {
-        bool res = (active && breakPoint);
+    public override bool DeactivateAbility(bool force) {
+        bool res = ((active && breakPoint) || (force));
         if (res) {
             // Termina ejecución y bloquea al jugador para evitar que se mueva durante la animación
             active = false;

@@ -257,7 +257,7 @@ public class CharacterStatus : MonoBehaviour {
                     break;
                 case State.Sprint:
                     // Termina la habilidad de Sprint
-                    if (GetComponent<AbilityController>().DeactivateActiveAbility()) {
+                    if (GetComponent<AbilityController>().DeactivateActiveAbility(false)) {
                         characterState = State.Jumping;
                         characterMovement.Jump(firstJumpImpulse, true);
                         totalJumpImpulse = firstJumpImpulse;
@@ -290,7 +290,7 @@ public class CharacterStatus : MonoBehaviour {
         switch (characterState) {
             case State.AstralProjection:
                 // La habilidad debe terminar su ejecución
-                GetComponent<AbilityController>().DeactivateActiveAbility();
+                GetComponent<AbilityController>().DeactivateActiveAbility(true);
                 // El personaje no debe morir
                 kill = false;
                 break;
@@ -300,7 +300,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.Telekinesis:
             case State.Sprint:
                 // La habilidad debe terminar su ejecución
-                GetComponent<AbilityController>().DeactivateActiveAbility();
+                GetComponent<AbilityController>().DeactivateActiveAbility(true);
                 break;
             case State.Dead:
             case State.Sacrifice:
@@ -424,7 +424,7 @@ public class CharacterStatus : MonoBehaviour {
         switch (characterState) {
             case State.Breaking:
                 // La habilidad debe terminarse
-                GetComponent<AbilityController>().DeactivateActiveAbility();
+                GetComponent<AbilityController>().DeactivateActiveAbility(false);
                 characterState = State.Idle;
                 break;
             case State.Victory:
@@ -482,7 +482,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.BigJumping:
                 // Si empieza a caer, cambia de estado
                 if (characterMovement.CharacterIsFalling()) {
-                    GetComponent<AbilityController>().DeactivateActiveAbility();
+                    GetComponent<AbilityController>().DeactivateActiveAbility(false);
                     characterState = State.Falling;
                     CharacterAnimationController.SetAnimatorTrigger(characterName, CharacterAnimationController.FALL);
                 }
@@ -490,7 +490,7 @@ public class CharacterStatus : MonoBehaviour {
             case State.Pushing:
                 //TEMPORAL!! Suelta el objeto si el personaje se cae
                 if (!characterMovement.CharacterIsGrounded()) {
-                    GetComponent<AbilityController>().DeactivateActiveAbility();
+                    GetComponent<AbilityController>().DeactivateActiveAbility(false);
                     characterState = State.Falling;
                     CharacterAnimationController.SetAnimatorTrigger(characterName, CharacterAnimationController.FALL);
                 }
@@ -502,11 +502,11 @@ public class CharacterStatus : MonoBehaviour {
             case State.Sprint:
                 // Si está en el aire, cambia de estado
                 if (!characterMovement.CharacterIsGrounded()) {
-                    GetComponent<AbilityController>().DeactivateActiveAbility();
+                    GetComponent<AbilityController>().DeactivateActiveAbility(false);
                     characterState = State.Falling;
                     CharacterAnimationController.SetAnimatorTrigger(characterName, CharacterAnimationController.FALL);
                 } else if (characterMovement.PlayerIsStopped()) { // Comprueba si el jugador está en movimiento
-                    GetComponent<AbilityController>().DeactivateActiveAbility();
+                    GetComponent<AbilityController>().DeactivateActiveAbility(false);
                     characterState = State.Idle;
                     CharacterAnimationController.SetAnimatorTrigger(characterName, CharacterAnimationController.IDLE);
                 }
