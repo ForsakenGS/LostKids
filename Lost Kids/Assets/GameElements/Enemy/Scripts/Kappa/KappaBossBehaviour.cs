@@ -195,7 +195,10 @@ public class KappaBossBehaviour : MonoBehaviour {
 
     public void ThrowRock()
     {
-        shooter.ShootAtTarget(closestPlayer);
+        if (closestPlayer != null)
+        {
+            shooter.ShootAtTarget(closestPlayer);
+        }
 
         if (currentState == States.Shooting)
         {
@@ -207,6 +210,7 @@ public class KappaBossBehaviour : MonoBehaviour {
     void Joke()
     {
         shooter.HideRock();
+        AudioManager.Play(audioLoader.GetSound("Joke"), false, 1);
         animationController.JibeAnimation();
     }
 

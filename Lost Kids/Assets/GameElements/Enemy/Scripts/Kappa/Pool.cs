@@ -42,11 +42,23 @@ public class Pool : MonoBehaviour {
             {
                 rock.GetComponent<PushableObject>().Release();
                 Destroy(rock.GetComponent<PushableObject>());
-                
+
             }
+
+            rock.GetComponent<SphereCollider>().enabled = true;
+            if (rock.GetComponent<BoxCollider>() != null)
+            {
+                rock.GetComponent<BoxCollider>().enabled = false;
+            }
+            rock.tag = "Rock";
+            //rock.GetComponent<Rigidbody>().isKinematic = true;
             rock.GetComponent<Rigidbody>().velocity = Vector3.zero;
             rock.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
             rock.transform.position = finalRockPosition.position;
+
+            GetComponents<BoxCollider>()[0].enabled = false;
+            GetComponents<BoxCollider>()[1].size = GetComponents<BoxCollider>()[1].size + new Vector3(0.5f, 5, 0.5f);
+            gameObject.layer = LayerMask.NameToLayer("PlayerDetection");
         }
     }
 

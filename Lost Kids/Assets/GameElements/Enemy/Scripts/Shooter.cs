@@ -73,9 +73,9 @@ public class Shooter : MonoBehaviour {
 
    public void  ShootAtTarget(GameObject target)
     {
-        if (activeRock != null)
+        if (activeRock !=null)
         {
-            activeRock.transform.LookAt(target.transform.position + Vector3.up);
+            activeRock.transform.LookAt(target.transform.position + Vector3.up*1.1f);
             if (!straightShot)
             {
                 activeRock.GetComponent<Rigidbody>().velocity = activeRock.transform.forward * projectileSpeed;

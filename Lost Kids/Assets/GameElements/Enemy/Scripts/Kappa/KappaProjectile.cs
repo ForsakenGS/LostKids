@@ -49,9 +49,9 @@ public class KappaProjectile : MonoBehaviour {
                 }
                 if (!destroySound.isPlaying)
                 {
-                    AudioManager.Play(destroySound, false, 0.7f);
+                    AudioManager.Play(destroySound, false, 0.5f);
                 }
-                Invoke("Destroy", 0f);
+                Invoke("Destroy", 0.1f);
             }
         }
     }

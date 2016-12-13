@@ -67,7 +67,7 @@ public class MusicPlayer : MonoBehaviour {
         while (soundClips.Length > 1 && autoLoop)
         {
             audio.clip = soundClips[clipIndex];
-            AudioManager.PlayMusic(audio,false, 1);
+            AudioManager.PlayMusic(audio,false, 0.4f);
             clipIndex++;
             if(clipIndex>=soundClips.Length)
             {
@@ -76,7 +76,7 @@ public class MusicPlayer : MonoBehaviour {
             yield return new WaitForSeconds(audio.clip.length);
         }
         audio.clip = soundClips[clipIndex];
-        AudioManager.PlayMusic(audio, true, 1);
+        AudioManager.PlayMusic(audio, true, 0.4f);
     }
 
 
@@ -87,7 +87,7 @@ public class MusicPlayer : MonoBehaviour {
             AudioManager.StopMusic(audio);
             clipIndex = index;
             audio.clip = soundClips[clipIndex];
-            AudioManager.PlayMusic(audio, true, 1);
+            AudioManager.PlayMusic(audio, true, 0.4f);
         }
 
     }

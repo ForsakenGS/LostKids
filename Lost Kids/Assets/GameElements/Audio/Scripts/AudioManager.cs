@@ -189,6 +189,7 @@ public class AudioManager : MonoBehaviour {
         int randomIndex = Random.Range(0, sources.Count);
 
         AudioSource source = (AudioSource) sources[randomIndex];
+        source.volume = 0.3f;
         source.Play();
         Instance.playingSounds.Add(source);
 
@@ -409,8 +410,19 @@ public class AudioManager : MonoBehaviour {
         get { return instance ?? (instance = new GameObject("AudioManager").AddComponent<AudioManager>()); }
     }
 
+
+    public void LoadAudioMixer()
+    {
+        audioMixer = Resources.Load("AudioMixerTLK") as AudioMixer;
+    }
+
+
     public static AudioMixer GetAudioMixer()
     {
+        if(Instance.audioMixer==null)
+        {
+            Instance.LoadAudioMixer();
+        }
         return Instance.audioMixer;
     }
 

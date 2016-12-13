@@ -67,7 +67,7 @@ public class TransitionSceneManager : MonoBehaviour {
     // Devuelve si el jugador desea pasar el mensaje
     bool SkipMessageInput() {
         InputControl skipInput = InputManager.ActiveDevice.GetControl(InputControlType.Action1);
-        return ((Input.GetButton("Submit")) || (skipInput.IsPressed) || (skipInput.WasPressed));
+        return ((Input.GetButton("Submit")) || (skipInput.IsPressed) || (skipInput.WasPressed) || Input.anyKeyDown);
     }
 
 

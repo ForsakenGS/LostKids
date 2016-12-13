@@ -32,7 +32,7 @@ public class GameSettings :MonoBehaviour {
 
             instance = this;
 
-            masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
+            masterVolume = 1;
             
             musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
             soundsVolume = PlayerPrefs.GetFloat("SoundsVolume", 1f);

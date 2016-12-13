@@ -59,17 +59,8 @@ public class SettingsManager : MonoBehaviour {
     /// Actualiza los valores que se muestran en la pantalla de opciones, leyendolos de las preferencias de juego
     /// </summary>
     public void UpdateSettings() {
-        float volume = GameSettings.GetMasterVolume();
-        masterSlider.value = volume;
-
-        if (masterToggle.isOn && volume > 0) {
-            masterToggle.isOn = false;
-        } else if (!masterToggle.isOn && volume <= 0) {
-            masterToggle.isOn = true;
-        }
-
-
-        volume = GameSettings.GetMusicVolume();
+ 
+        float volume = GameSettings.GetMusicVolume();
         musicSlider.value = volume;
 
         if (musicToggle.isOn && volume > 0) {

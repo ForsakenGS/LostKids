@@ -388,6 +388,7 @@ public class CharacterStatus : MonoBehaviour {
         if ((!lockedByAnimation) && ((characterState.Equals(State.Walking) || characterState.Equals(State.Idle)))) {
             // Ejecuta la animación y bloquea al personaje
             CharacterAnimationController.SetAnimatorTrigger(characterName, CharacterAnimationController.NEGATION);
+            AudioManager.Play(audioLoader.GetSound("Negation"), false, 1);
             LockByAnimation();
         }
     }

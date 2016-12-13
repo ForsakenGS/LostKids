@@ -6,7 +6,14 @@ public class FlashingImage : MonoBehaviour {
 
     void OnEnable()
     {
-        iTween.FadeTo(gameObject, iTween.Hash("alpha", 0f, "time", 0.2f, "delay",0.5f,"looptype", iTween.LoopType.pingPong));
+        if (GetComponent<iTween>() == null)
+        {
+            iTween.FadeTo(gameObject, iTween.Hash("alpha", 0f, "time", 0.2f, "delay", 0.5f, "looptype", iTween.LoopType.pingPong));
+        }
+        else
+        {
+            GetComponent<iTween>().isRunning = true;
+        }
     }
 	// Use this for initialization
 	void Start () {
