@@ -83,4 +83,9 @@ public class BreakAbility : CharacterAbility {
 
         return ready;
     }
+
+    public void BreakAnimationEnded() {
+        // Se ha terminado la animación, la habilidad debe finalizar
+        GetComponent<AbilityController>().DeactivateActiveAbility(false);
+    }
 }
