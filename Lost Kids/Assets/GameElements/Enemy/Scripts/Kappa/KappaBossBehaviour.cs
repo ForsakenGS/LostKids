@@ -482,7 +482,7 @@ public class KappaBossBehaviour : MonoBehaviour {
             //Si el boss esta sumergido, emerge en el pozo para matar al jugador
             if (currentState.Equals(States.Diving))
             {
-                //CancelInvoke();
+                CancelInvoke();
                 StartAppearing();
 
             }
@@ -553,7 +553,7 @@ public class KappaBossBehaviour : MonoBehaviour {
             case States.Raising:
                 shooter.HideRock();
                 AudioManager.Play(audioLoader.GetSound("Dive"), false, 1f);
-                //animationController.RaiseAnimation();
+                animationController.ShowAnimation();
                 break;
             default:
                 break;

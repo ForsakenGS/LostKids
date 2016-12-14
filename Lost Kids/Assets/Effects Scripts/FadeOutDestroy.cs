@@ -16,7 +16,7 @@ public class FadeOutDestroy : MonoBehaviour {
 
     public void FadeAndDestroy()
     {
-        iTween.FadeTo(this.gameObject, iTween.Hash( "alpha",0f,"time",fadeTime, "onComplete","DestroyThis"));
+        iTween.ScaleTo(this.gameObject, iTween.Hash( "scale",Vector3.zero,"time",fadeTime, "onComplete","DestroyThis"));
     }
 
     void DestroyThis()

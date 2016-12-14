@@ -90,7 +90,7 @@ public class GameData  {
 
     public static void AddCollectible(Collections name, CollectionPieces piece)
     {
-
+        /*
         //Se busca si ya existe esa coleccion en la partida
         Collection col = GetCollection(name);
         if (col != null)
@@ -105,8 +105,13 @@ public class GameData  {
             coll.AddPiece(piece);
             Instance.collections.Add(coll);
         }
+        */
+        PlayerPrefs.SetInt(name.ToString(), 1);
+        PlayerPrefs.SetInt(name.ToString() + piece.ToString(), 1);
 
-        DataManager.Save();
+        Debug.Log("Obtenido collectionable: " + name.ToString() + piece.ToString());
+
+        //DataManager.Save();
     }
 
     /// <summary>
@@ -118,10 +123,10 @@ public class GameData  {
     {
         bool collected = false;
         //Se busca si ya existe esa coleccion en la partida
-        Collection col = GetCollection(name);
-        if (col != null)
+        //Collection col = GetCollection(name);
+        if (PlayerPrefs.HasKey(name.ToString()+piece.ToString()))
         {
-            collected = col.CollectedPiece(piece);
+            collected = true;
         }
         return collected;
     }

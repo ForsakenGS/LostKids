@@ -236,6 +236,9 @@
 	<data name="TLK.PauseMenu.Managers.PausePanel.Settings.Sounds.SoundsSubtitle" xml:space="preserve">
 		<value>Configuración Sonido</value>
 	</data>
+	<data name="TLK.UI.Collection.Canvas.Title" xml:space="preserve">
+		<value>Coleccion</value>
+	</data>
 	<data name="TLK.UI.Controls.Canvas.BackButton.Text" xml:space="preserve">
 		<value>Atrás</value>
 	</data>
@@ -367,5 +370,8 @@
 	</data>
 	<data name="TLK.UI.Settings.Canvas.Title" xml:space="preserve">
 		<value>Configuración</value>
+	</data>
+	<data name="TLK.UI.Collection.Canvas.BackButton.Text" xml:space="preserve">
+		<value>Atrás</value>
 	</data>
 </root>

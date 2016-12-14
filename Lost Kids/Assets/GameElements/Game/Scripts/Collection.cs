@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public enum Collections { Kodama, Kappa, Kasha, YukiOna, Neko }
+public enum Collections { Kodama, Kappa, Tanuki }
 public enum CollectionPieces {Image,Description,Text1,Text2,Text3}
 
 /// <summary>

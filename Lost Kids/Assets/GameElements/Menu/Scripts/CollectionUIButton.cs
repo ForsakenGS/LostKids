@@ -7,17 +7,16 @@ public class CollectionUIButton : MonoBehaviour {
 
     public Collections collectionName;
     private Text buttonText;
-    public GameObject CollectionManager;
-    private CollectionManager collectionManager;
+
     public string lockedText = "?????";
     public bool unlocked = false;
     private Collection collection;
 	// Use this for initialization
 	void Start () {
-        collectionManager = CollectionManager.GetComponent<CollectionManager>();
-        collection = GameData.GetCollection(collectionName);
+
+        //collection = GameData.GetCollection(collectionName);
         buttonText = GetComponentInChildren<Text>();
-        if (collection ==null)
+        if (!PlayerPrefs.HasKey(collectionName.ToString()))
         {
             buttonText.text = lockedText;
             //unlocked = false;
@@ -25,7 +24,7 @@ public class CollectionUIButton : MonoBehaviour {
         }
         else
         {
-            buttonText.text = collectionName.ToString();
+            buttonText.text = collectionName.ToString().Replace("_", "-");
             unlocked = true;
         }
 	}
@@ -39,7 +38,8 @@ public class CollectionUIButton : MonoBehaviour {
     {
         if(unlocked)
         {
-            collectionManager.ShowCollection(collection);
+            
+            CollectionManager.Instance.ShowCollection(collectionName);
         }
     }
 }

@@ -52,20 +52,24 @@ public class Shooter : MonoBehaviour {
         if(activeRock!=null)
         {
             activeRock.SetActive(false);
+            activeRock = null;
         }
     }
 
     public void ShowRock()
     {
-        for (int i = 0; i < projectiles.Count; i++)
+        if (activeRock == null)
         {
-            if (!projectiles[i].activeInHierarchy)
+            for (int i = 0; i < projectiles.Count; i++)
             {
-                activeRock = projectiles[i];
-                activeRock.transform.parent = shooterPosition;
-                activeRock.transform.localPosition = Vector3.zero;
-                activeRock.SetActive(true);
-                break;
+                if (!projectiles[i].activeInHierarchy)
+                {
+                    activeRock = projectiles[i];
+                    activeRock.transform.parent = shooterPosition;
+                    activeRock.transform.localPosition = Vector3.zero;
+                    activeRock.SetActive(true);
+                    break;
+                }
             }
         }
 

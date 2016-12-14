@@ -10,7 +10,8 @@ public class LevelSelectionButton : MonoBehaviour {
     public UnityEngine.UI.Button levelButton;  
     public bool unlocked=false;
 
-    public string levelName;
+    public string levelName_EN;
+    public string levelName_ES;
     public Text levelLabel;
 
 	// Use this for initialization
@@ -49,7 +50,14 @@ public class LevelSelectionButton : MonoBehaviour {
 
     public void Selected()
     {
-        levelLabel.text = levelName;
+        if (LocalizationManager.language.Equals("es"))
+        {
+            levelLabel.text = levelName_EN;
+        }
+        else
+        {
+            levelLabel.text = levelName_ES;
+        }
     }
 
 }

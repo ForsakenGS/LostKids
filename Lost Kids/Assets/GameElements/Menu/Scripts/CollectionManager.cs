@@ -10,10 +10,31 @@ public class CollectionManager : MonoBehaviour {
     public Text UIHistory;
     public Sprite lockedImage;
     public string lockedDescription = "?????";
+
+    private string languageSuffix;
 	// Use this for initialization
+
+    public static CollectionManager Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    void OnDestroy()
+    {
+        Instance = null;
+    }
 	void Start () {
-	
-	}
+        if ((LocalizationManager.language == null) || (LocalizationManager.language.Equals("es")))
+        {
+            languageSuffix = "_ES";
+        }
+        else {
+            languageSuffix = "_EN";
+        }
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -21,11 +42,12 @@ public class CollectionManager : MonoBehaviour {
 	}
 
 
-    public void ShowCollection(Collection collection)
+    public void ShowCollection(Collections collection)
     {
-        string collectionName = collection.collection.ToString();
+        string collectionName = collection.ToString();
         UIName.text = collectionName;
-        if(collection.collectedPieces.Contains(CollectionPieces.Image))
+        //if(collection.collectedPieces.Contains(CollectionPieces.Image))
+        if(PlayerPrefs.HasKey(collection.ToString()+CollectionPieces.Image.ToString()))
         {
             LoadImage(collectionName);
         }
@@ -34,7 +56,8 @@ public class CollectionManager : MonoBehaviour {
             UIImage.sprite = lockedImage;
         }
 
-        if (collection.collectedPieces.Contains(CollectionPieces.Description))
+        //if (collection.collectedPieces.Contains(CollectionPieces.Description))
+        if(PlayerPrefs.HasKey(collection.ToString() + CollectionPieces.Description.ToString()))
         {
             LoadDescription(collectionName);
         }
@@ -66,7 +89,7 @@ public class CollectionManager : MonoBehaviour {
 
     void LoadDescription(string collectionName)
     {
-        Text txt = Resources.Load<Text>("Collections/" + collectionName+"/" + "Description");
+        TextAsset txt = Resources.Load<TextAsset>("Collections/" + collectionName+"/" + "Description"+languageSuffix);
         if (txt != null)
         {
             UIDescription.text = txt.text;
@@ -77,15 +100,16 @@ public class CollectionManager : MonoBehaviour {
         }
     }
 
-    void LoadText(Collection collection)
+    void LoadText(Collections collection)
     {
-        string collectionName = collection.collection.ToString();
+        string collectionName = collection.ToString();
         string resultText = "";
-        Text txt = null;
+        TextAsset txt = null;
 
-        if (collection.collectedPieces.Contains(CollectionPieces.Text1))
+        //if (collection.collectedPieces.Contains(CollectionPieces.Text1))
+        if (PlayerPrefs.HasKey(collection.ToString() + CollectionPieces.Text1.ToString()))
         {
-            txt = Resources.Load<Text>("Collections/" + collectionName + "/" + "Text1");
+            txt = Resources.Load<TextAsset>("Collections/" + collectionName + "/" + "Text1"+languageSuffix);
             if (txt != null)
             {
                 resultText += txt.text + "\n";
@@ -102,9 +126,10 @@ public class CollectionManager : MonoBehaviour {
 
         txt = null;
 
-        if (collection.collectedPieces.Contains(CollectionPieces.Text2))
+        //if (collection.collectedPieces.Contains(CollectionPieces.Text2))
+        if (PlayerPrefs.HasKey(collection.ToString() + CollectionPieces.Text2.ToString()))
         {
-            txt = Resources.Load<Text>("Collections/" + collectionName + "/" + "Text2");
+            txt = Resources.Load<TextAsset>("Collections/" + collectionName + "/" + "Text2"+languageSuffix);
             if (txt != null)
             {
                 resultText += txt.text + "\n";
@@ -121,9 +146,10 @@ public class CollectionManager : MonoBehaviour {
 
 
         txt = null;
-        if (collection.collectedPieces.Contains(CollectionPieces.Text3))
+        //if (collection.collectedPieces.Contains(CollectionPieces.Text3))
+        if (PlayerPrefs.HasKey(collection.ToString() + CollectionPieces.Text3.ToString()))
         {
-            txt = Resources.Load<Text>("Collections/" + collectionName + "/" + "Text3");
+            txt = Resources.Load<TextAsset>("Collections/" + collectionName + "/" + "Text3"+languageSuffix);
             if (txt != null)
             {
                 resultText += txt.text + "\n";
