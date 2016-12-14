@@ -1,21 +1,19 @@
 fileFormatVersion: 2
-guid: d0882da95153541c09fc1451e68b2ec1
-labels:
-- Prop
+guid: 1dd6c2523406b89468f1fa114dd91279
+timeCreated: 1481754132
+licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: scroll
-    100002: //RootNode
-    400000: scroll
-    400002: //RootNode
-    2300000: scroll
-    3300000: scroll
-    4300000: scroll
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Scroll
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
-    materialSearch: 0
+    materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -50,11 +48,11 @@ ModelImporter:
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 0
+    useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 60
+    normalSmoothAngle: 180
     normalImportMode: 1
-    tangentImportMode: 4
+    tangentImportMode: 3
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
