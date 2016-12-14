@@ -338,7 +338,7 @@ Back to last checkpoint</value>
 		<value>Settings</value>
 	</data>
 	<data name="TLK.UI.Menu.Canvas.Panel.TrophiesButton.Text" xml:space="preserve">
-		<value>Trophies</value>
+		<value>Collection</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.BackButton.Text" xml:space="preserve">
 		<value>Back</value>

@@ -338,7 +338,7 @@ Volver al último checkpoint</value>
 		<value>Configuración</value>
 	</data>
 	<data name="TLK.UI.Menu.Canvas.Panel.TrophiesButton.Text" xml:space="preserve">
-		<value>Trofeos</value>
+		<value>Colección</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.BackButton.Text" xml:space="preserve">
 		<value>Atrás</value>

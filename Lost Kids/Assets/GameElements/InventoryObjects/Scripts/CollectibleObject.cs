@@ -49,7 +49,7 @@ public class CollectibleObject : MonoBehaviour {
     {
         if (!used)
         {
-            if (CharacterManager.IsActiveCharacter(col.gameObject))
+            if (col.CompareTag("Player"))
             {
                 used = true;
                 GameData.AddCollectible(collectionName, collectionPiece);
