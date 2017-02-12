@@ -30,7 +30,7 @@ public class LocalizationManager : MonoBehaviour {
             // Primera instancia de LocalizationManager
             instance = this;
             DontDestroyOnLoad(gameObject);
-            _language = ESLanguage;
+            _language = ENLanguage;
             InitializationAndLocalization();
         } else if (!instance.Equals(this)) {
             // Otra instancia creada
@@ -82,7 +82,7 @@ public class LocalizationManager : MonoBehaviour {
         // Actualiza los componentes Text con key
         foreach (string key in keys) {
             string path = key.Substring(category.Length + 1).Replace('.', '/');
-            GameObject.Find(path).GetComponent<Text>().text = languageManager.GetTextValue(key);
+                GameObject.Find(path).GetComponent<Text>().text = languageManager.GetTextValue(key);
         }
     }
 }

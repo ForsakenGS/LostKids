@@ -352,20 +352,8 @@ Back to last checkpoint</value>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Graphics.Tooltips.TooltipsCheck.Label" xml:space="preserve">
 		<value>Hints on screen</value>
 	</data>
-	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Master.MasterLabel" xml:space="preserve">
-		<value>Global Sound</value>
-	</data>
-	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Master.MuteMasterCheck.Label" xml:space="preserve">
-		<value>Mute</value>
-	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Music.MusicLabel" xml:space="preserve">
 		<value>Music</value>
-	</data>
-	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Music.MuteMusicCheck.Label" xml:space="preserve">
-		<value>Mute</value>
-	</data>
-	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Sounds.MuteSoundsCheck.Label" xml:space="preserve">
-		<value>Mute</value>
 	</data>
 	<data name="TLK.UI.Settings.Canvas.SettingsUI.Sounds.Sounds.SoundsLabel" xml:space="preserve">
 		<value>SFX</value>
